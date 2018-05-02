@@ -8,7 +8,7 @@ http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
   
 <bean id="ds" class="org.springframework.jdbc.datasource.DriverManagerDataSource">  
 	<property name="driverClassName" value="com.mysql.jdbc.Driver" />  
-	<property name="url" value="jdbc:mysql://10.128.52.1:3306/compli" />  
+	<property name="url" value="jdbc:mysql://jws-app-mysql-2:3306/compli" />  
 	<property name="username" value="user" />  
 	<property name="password" value="password" />  
 </bean>  

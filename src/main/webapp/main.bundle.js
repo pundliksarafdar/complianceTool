@@ -1714,8 +1714,9 @@ module.exports = "/******************************/\r\n* { -webkit-box-sizing:bor
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_common_http__ = __webpack_require__("./node_modules/@angular/common/esm5/http.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__typeBean_loginBean__ = __webpack_require__("./src/app/typeBean/loginBean.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__service_loginService__ = __webpack_require__("./src/app/service/loginService.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_rxjs_add_operator_toPromise__ = __webpack_require__("./node_modules/rxjs/_esm5/add/operator/toPromise.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_rxjs_add_operator_toPromise___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_rxjs_add_operator_toPromise__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__environments_environment__ = __webpack_require__("./src/environments/environment.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_rxjs_add_operator_toPromise__ = __webpack_require__("./node_modules/rxjs/_esm5/add/operator/toPromise.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_rxjs_add_operator_toPromise___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5_rxjs_add_operator_toPromise__);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -1730,11 +1731,14 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
+
 var ActivityService = /** @class */ (function () {
     function ActivityService(http, loginService) {
         this.http = http;
         this.loginService = loginService;
+        this.appUrl = "";
         this.loginBean = new __WEBPACK_IMPORTED_MODULE_2__typeBean_loginBean__["a" /* LoginBean */]();
+        this.appUrl = __WEBPACK_IMPORTED_MODULE_4__environments_environment__["a" /* environment */].appUrl ? __WEBPACK_IMPORTED_MODULE_4__environments_environment__["a" /* environment */].appUrl : "";
     }
     ActivityService.prototype.handleError = function (error) {
         console.error('An error occurred', error); // for demo purposes only
@@ -1742,7 +1746,7 @@ var ActivityService = /** @class */ (function () {
     };
     ActivityService.prototype.getActivityData = function (companyID) {
         var headers = this.loginService.getHeaders();
-        var url = "/rest/activity/" + companyID;
+        var url = this.appUrl + "/rest/activity/" + companyID;
         return this.http.get(url, headers).toPromise().then(function (response) { return response; }).catch(this.handleError);
     };
     ActivityService = __decorate([
@@ -1765,8 +1769,9 @@ var ActivityService = /** @class */ (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_common_http__ = __webpack_require__("./node_modules/@angular/common/esm5/http.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__typeBean_loginBean__ = __webpack_require__("./src/app/typeBean/loginBean.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__service_loginService__ = __webpack_require__("./src/app/service/loginService.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_rxjs_add_operator_toPromise__ = __webpack_require__("./node_modules/rxjs/_esm5/add/operator/toPromise.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_rxjs_add_operator_toPromise___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_rxjs_add_operator_toPromise__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__environments_environment__ = __webpack_require__("./src/environments/environment.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_rxjs_add_operator_toPromise__ = __webpack_require__("./node_modules/rxjs/_esm5/add/operator/toPromise.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_rxjs_add_operator_toPromise___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5_rxjs_add_operator_toPromise__);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -1781,11 +1786,14 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
+
 var DashboardService = /** @class */ (function () {
     function DashboardService(http, loginService) {
         this.http = http;
         this.loginService = loginService;
+        this.appUrl = "";
         this.loginBean = new __WEBPACK_IMPORTED_MODULE_2__typeBean_loginBean__["a" /* LoginBean */]();
+        this.appUrl = __WEBPACK_IMPORTED_MODULE_4__environments_environment__["a" /* environment */].appUrl ? __WEBPACK_IMPORTED_MODULE_4__environments_environment__["a" /* environment */].appUrl : "";
     }
     DashboardService.prototype.handleError = function (error) {
         console.error('An error occurred', error); // for demo purposes only
@@ -1793,7 +1801,7 @@ var DashboardService = /** @class */ (function () {
     };
     DashboardService.prototype.getDashboardData = function (companyID) {
         var headers = this.loginService.getHeaders();
-        var url = "/rest/dashboard/" + companyID;
+        var url = this.appUrl + "/rest/dashboard/" + companyID;
         return this.http.get(url, headers).toPromise().then(function (response) { return response; }).catch(this.handleError);
     };
     DashboardService = __decorate([
@@ -1916,8 +1924,9 @@ var LoginService = /** @class */ (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_common_http__ = __webpack_require__("./node_modules/@angular/common/esm5/http.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__typeBean_loginBean__ = __webpack_require__("./src/app/typeBean/loginBean.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__service_loginService__ = __webpack_require__("./src/app/service/loginService.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_rxjs_add_operator_toPromise__ = __webpack_require__("./node_modules/rxjs/_esm5/add/operator/toPromise.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_rxjs_add_operator_toPromise___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_rxjs_add_operator_toPromise__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__environments_environment__ = __webpack_require__("./src/environments/environment.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_rxjs_add_operator_toPromise__ = __webpack_require__("./node_modules/rxjs/_esm5/add/operator/toPromise.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_rxjs_add_operator_toPromise___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5_rxjs_add_operator_toPromise__);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -1932,11 +1941,14 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
+
 var ReportService = /** @class */ (function () {
     function ReportService(http, loginService) {
         this.http = http;
         this.loginService = loginService;
+        this.appUrl = "";
         this.loginBean = new __WEBPACK_IMPORTED_MODULE_2__typeBean_loginBean__["a" /* LoginBean */]();
+        this.appUrl = __WEBPACK_IMPORTED_MODULE_4__environments_environment__["a" /* environment */].appUrl ? __WEBPACK_IMPORTED_MODULE_4__environments_environment__["a" /* environment */].appUrl : "";
     }
     ReportService.prototype.handleError = function (error) {
         console.error('An error occurred', error); // for demo purposes only
@@ -1944,7 +1956,7 @@ var ReportService = /** @class */ (function () {
     };
     ReportService.prototype.getReportData = function (frequency, companyID, isMonth) {
         var headers = this.loginService.getHeaders();
-        var url = isMonth ? "/rest/report?month=" + frequency + '&companyId=' + companyID : "/rest/report?year=" + frequency + '&companyId=' + companyID;
+        var url = isMonth ? this.appUrl + "/rest/report?month=" + frequency + '&companyId=' + companyID : this.appUrl + "/rest/report?year=" + frequency + '&companyId=' + companyID;
         return this.http.get(url, headers).toPromise().then(function (response) { return response; }).catch(this.handleError);
     };
     ReportService = __decorate([

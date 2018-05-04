@@ -474,7 +474,7 @@ var AppModule = /** @class */ (function () {
                         path: 'register',
                         component: __WEBPACK_IMPORTED_MODULE_6__register_app_register_component__["a" /* RegisterComponent */]
                     }
-                ])
+                ], { useHash: true })
             ],
             providers: [],
             bootstrap: [__WEBPACK_IMPORTED_MODULE_3__app_component__["a" /* AppComponent */]],
@@ -1524,7 +1524,7 @@ var LoginLoginComponent = /** @class */ (function () {
         var _this = this;
         this.loginService.loginUserPost(this.loginBean.username, this.loginBean.password).then(function (responseStr) {
             _this.responseStr = responseStr;
-            window.location.href = "dashboard";
+            window.location.href = "#/dashboard";
         })
             .catch(function (err) { _this.handleError(err); _this.hasError = true; });
     };
@@ -1553,7 +1553,7 @@ var LoginLoginComponent = /** @class */ (function () {
 /***/ "./src/app/login/app.login.login.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"container\">\r\n  <div class=\"row\">\r\n    <div class=\"col-sm\">\r\n      <br/>\r\n      <div class=\"card\" >\r\n\t\t  <img class=\"card-img-top\" src=\"assets/IndCompli_4_new.png\" alt=\"indCompli\" height=\"200rem\" width=\"200rem\">\r\n\t\t  <div class=\"card-body\">\r\n\t\t\t<h4 class=\"card-title\">IndCompli</h4>\r\n\t\t\t<p class=\"card-text\">Some quick example text to build on the card title and make up the bulk of the card's content.</p>\r\n\t\t\t\r\n\t\t  </div>\r\n\t\t</div>\r\n    </div>\r\n    <div class=\"col-sm\">\r\n\t\t<br/>\r\n\t\t<div class=\"card\">\r\n\t\t<div class=\"card-body\">\r\n\t\t<form>\r\n\t\t\r\n\t\t  <div *ngIf=\"hasError\" class=\"alert alert-danger alert-dismissible fade show\" role=\"alert\">\r\n\t\t\t  <strong>Error!</strong> Invalid username or password\r\n\t\t\t  <button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\" (click)=\"hideError()\">\r\n\t\t\t\t<span aria-hidden=\"true\">&times;</span>\r\n\t\t\t  </button>\r\n\t\t\t</div>\t\r\n\t\t  <div class=\"form-group\">\r\n\t\t\t<label for=\"exampleInputEmail1\">Username</label>\r\n\t\t\t<input [(ngModel)]=\"loginBean.username\" type=\"text\" class=\"form-control\" id=\"exampleInputEmail1\" aria-describedby=\"emailHelp\" placeholder=\"Username\" name=\"username\">\r\n\t\t\t<small id=\"emailHelp\" class=\"form-text text-muted\">We'll never share your email with anyone else.</small>\r\n\t\t  </div>\r\n\t\t  <div class=\"form-group\">\r\n\t\t\t<label style=\"width:50%\" for=\"exampleInputPassword1\">Password</label>\r\n\t\t\t<label style=\"width:49%\"><a href=\"forget\">Forgot password?</a></label>\r\n\t\t\t<input [(ngModel)]=\"loginBean.password\" type=\"password\" class=\"form-control\" id=\"exampleInputPassword1\" placeholder=\"Password\" name=\"password\">\r\n\t\t  </div>\r\n\t\t  <div class=\"form-check\">\r\n\t\t\t<label class=\"form-check-label\">\r\n\t\t\t  <input type=\"checkbox\" class=\"form-check-input\">\r\n\t\t\t  Remember me (for 30 days)\r\n\t\t\t</label>\r\n\t\t  </div>\r\n\t\t  <input type=\"button\" class=\"btn btn-indcompli\" value=\"Login\" (click)=\"login()\"/>\r\n\t\t</form>\r\n\t\t</div>\r\n\t\t</div>\r\n\t\t<br/>\r\n\t\t<div class=\"card\">\r\n\t\t<div class=\"card-body\">\r\n\t\t\tNew to IndCompli ? <a href=\"register\">Register</a>\r\n\t\t</div>\r\n\t\t</div>\r\n    </div>\r\n  </div>\r\n</div>"
+module.exports = "<div class=\"container\">\r\n  <div class=\"row\">\r\n    <div class=\"col-sm\">\r\n      <br/>\r\n      <div class=\"card\" >\r\n\t\t  <img class=\"card-img-top\" src=\"assets/IndCompli_4_new.png\" alt=\"indCompli\" height=\"200rem\" width=\"200rem\">\r\n\t\t  <div class=\"card-body\">\r\n\t\t\t<h4 class=\"card-title\">IndCompli</h4>\r\n\t\t\t<p class=\"card-text\">Some quick example text to build on the card title and make up the bulk of the card's content.</p>\r\n\t\t\t\r\n\t\t  </div>\r\n\t\t</div>\r\n    </div>\r\n    <div class=\"col-sm\">\r\n\t\t<br/>\r\n\t\t<div class=\"card\">\r\n\t\t<div class=\"card-body\">\r\n\t\t<form>\r\n\t\t\r\n\t\t  <div *ngIf=\"hasError\" class=\"alert alert-danger alert-dismissible fade show\" role=\"alert\">\r\n\t\t\t  <strong>Error!</strong> Invalid username or password\r\n\t\t\t  <button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\" (click)=\"hideError()\">\r\n\t\t\t\t<span aria-hidden=\"true\">&times;</span>\r\n\t\t\t  </button>\r\n\t\t\t</div>\t\r\n\t\t  <div class=\"form-group\">\r\n\t\t\t<label for=\"exampleInputEmail1\">Username</label>\r\n\t\t\t<input [(ngModel)]=\"loginBean.username\" type=\"text\" class=\"form-control\" id=\"exampleInputEmail1\" aria-describedby=\"emailHelp\" placeholder=\"Username\" name=\"username\">\r\n\t\t\t<small id=\"emailHelp\" class=\"form-text text-muted\">We'll never share your email with anyone else.</small>\r\n\t\t  </div>\r\n\t\t  <div class=\"form-group\">\r\n\t\t\t<label style=\"width:50%\" for=\"exampleInputPassword1\">Password</label>\r\n\t\t\t<label style=\"width:49%\"><a href=\"forget\">Forgot password?</a></label>\r\n\t\t\t<input [(ngModel)]=\"loginBean.password\" type=\"password\" class=\"form-control\" id=\"exampleInputPassword1\" placeholder=\"Password\" name=\"password\">\r\n\t\t  </div>\r\n\t\t  <div class=\"form-check\">\r\n\t\t\t<label class=\"form-check-label\">\r\n\t\t\t  <input type=\"checkbox\" class=\"form-check-input\">\r\n\t\t\t  Remember me (for 30 days)\r\n\t\t\t</label>\r\n\t\t  </div>\r\n\t\t  <input type=\"button\" class=\"btn btn-indcompli\" value=\"Login\" (click)=\"login()\"/>\r\n\t\t</form>\r\n\t\t</div>\r\n\t\t</div>\r\n\t\t<br/>\r\n\t\t<div class=\"card\">\r\n\t\t<div class=\"card-body\">\r\n\t\t\tNew to IndCompli ? <a href=\"#/register\">Register</a>\r\n\t\t</div>\r\n\t\t</div>\r\n    </div>\r\n  </div>\r\n</div>"
 
 /***/ }),
 
@@ -1814,8 +1814,9 @@ var DashboardService = /** @class */ (function () {
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return LoginService; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("./node_modules/@angular/core/esm5/core.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_common_http__ = __webpack_require__("./node_modules/@angular/common/esm5/http.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_add_operator_toPromise__ = __webpack_require__("./node_modules/rxjs/_esm5/add/operator/toPromise.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_add_operator_toPromise___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_rxjs_add_operator_toPromise__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__environments_environment__ = __webpack_require__("./src/environments/environment.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_add_operator_toPromise__ = __webpack_require__("./node_modules/rxjs/_esm5/add/operator/toPromise.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_add_operator_toPromise___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_rxjs_add_operator_toPromise__);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -1828,9 +1829,13 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
+
 var LoginService = /** @class */ (function () {
     function LoginService(http) {
         this.http = http;
+        this.appUrl = "";
+        console.log({ environment: __WEBPACK_IMPORTED_MODULE_2__environments_environment__["a" /* environment */] });
+        this.appUrl = __WEBPACK_IMPORTED_MODULE_2__environments_environment__["a" /* environment */].appUrl ? __WEBPACK_IMPORTED_MODULE_2__environments_environment__["a" /* environment */].appUrl : "";
     }
     LoginService.prototype.handleError = function (error) {
         console.error('An error occurred', error); // for demo purposes only
@@ -1861,15 +1866,15 @@ var LoginService = /** @class */ (function () {
     };
     LoginService.prototype.loginUserPost = function (username, password) {
         var _this = this;
-        var url = "/rest/user/login";
+        var url = this.appUrl + "/rest/user/login";
         return this.http.post(url, { username: username, password: password }).toPromise().then(function (response) { response; _this.handleUserAction(response); }).catch(this.handleError);
     };
     LoginService.prototype.register = function (registerBean) {
-        var url = "/rest/user/register";
+        var url = this.appUrl + "/rest/user/register";
         return this.http.post(url, registerBean).toPromise().then(function (response) { return response; /*this.handleUserAction()*/ }).catch(this.handleError);
     };
     LoginService.prototype.loginUser = function (username, password) {
-        var url = "/rest/user/login";
+        var url = this.appUrl + "/rest/user/login";
         return this.http.post(url, {}).toPromise().then(function (response) {
             console.log(response);
             return response;
@@ -1877,15 +1882,15 @@ var LoginService = /** @class */ (function () {
     };
     LoginService.prototype.loggedInUser = function () {
         var headers = this.getHeaders();
-        var url = "/rest/user";
+        var url = this.appUrl + "/rest/user";
         return this.http.get(url, headers).toPromise().then(function (response) { console.log(response); return response; }).catch(this.handleError);
     };
     LoginService.prototype.getAllLocations = function () {
-        var url = "/rest/location";
+        var url = this.appUrl + "/rest/location";
         return this.http.get(url).toPromise().then(function (response) { console.log(response); return response; }).catch(this.handleError);
     };
     LoginService.prototype.isUserExist = function (userName) {
-        var url = "/rest/user/userAvailaible/" + userName;
+        var url = this.appUrl + "/rest/user/userAvailaible/" + userName;
         return this.http.get(url).toPromise().then(function (response) { console.log(response); return response; }).catch(this.handleError);
     };
     LoginService.prototype.clearUserLogin = function () {
@@ -2023,12 +2028,10 @@ var LoginBean = /** @class */ (function () {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return environment; });
-// The file contents for the current environment will overwrite these during build.
-// The build system defaults to the dev environment which uses `environment.ts`, but if you do
-// `ng build --env=prod` then `environment.prod.ts` will be used instead.
-// The list of which env maps to which file can be found in `.angular-cli.json`.
 var environment = {
-    production: false
+    openshift: true,
+    production: false,
+    appUrl: "/ComplianceTool"
 };
 
 

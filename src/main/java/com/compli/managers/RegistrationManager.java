@@ -1,5 +1,7 @@
 package com.compli.managers;
 
+import java.util.concurrent.ExecutionException;
+
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -52,5 +54,10 @@ public class RegistrationManager {
 	
 	public boolean validateEmail(String registrationId) {
 		return this.userDao.validateEmail(registrationId);		
+	}
+	public void sendActivationLinkFor(String auth) throws ExecutionException {
+		com.compli.db.bean.UserBean userBean = AuthorisationManager.getUserCatche(auth);
+		SendMailSSL mailSSL = new SendMailSSL();
+		mailSSL.reSendRegistrationMail(userBean.getRegId(), userBean.getUserId(), userBean.getEmail());
 	}
 }

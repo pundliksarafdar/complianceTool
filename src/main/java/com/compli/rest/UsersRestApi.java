@@ -66,6 +66,8 @@ public class UsersRestApi extends Application{
 			hashMap.put("authKey", authId);
 			AuthorisationManager authorisationManager = new AuthorisationManager();
 			hashMap.put("companies", authorisationManager.getCompanies(userBean.getUsername()));
+			boolean isUserActive = AuthorisationManager.isUserActive(userBean);
+			hashMap.put("isUserActive", isUserActive);
 			return Response.ok(hashMap).build();
 		}
 	}
@@ -98,6 +100,14 @@ public class UsersRestApi extends Application{
 		boolean isValid = registrationManager.validateEmail(registrationId);
 		URI location = new URI("https://www.google.com");
 		return Response.seeOther(location).build();
+	}
+	
+	@POST
+	@Path("/resendActivationEmail")
+	public Response resendActivationEmail(@HeaderParam("auth")String auth) throws ExecutionException{
+		RegistrationManager registrationManager = new RegistrationManager();
+		registrationManager.sendActivationLinkFor(auth);
+		return Response.accepted().build();
 	}
 }
 

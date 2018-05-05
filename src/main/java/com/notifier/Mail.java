@@ -28,4 +28,15 @@ public class Mail {
 	    writer.flush();
 	    return str;
   }
+  
+  public static String getResendMailContent(Object tempObj) throws IOException {
+		HashMap<String, String> dataObj = new HashMap<String, String>();
+	    MustacheFactory mf = new DefaultMustacheFactory();
+	    Mustache mustache = mf.compile("resendRegistrationComplete.mustache");
+	    Writer writerStr = new StringWriter();
+	    Writer writer = mustache.execute(writerStr, tempObj);
+	    String str = writerStr.toString();
+	    writer.flush();
+	    return str;
+}
 }

@@ -14,7 +14,7 @@ public class UserBean {
 	String phone;
 	String pass;
 	String regId = com.compli.util.UUID.getUID();
-	boolean isActive = false;
+	boolean isactive = false;
 	boolean isDeleted = false;
 	String createdBy;
 	Date cratedOn;
@@ -59,11 +59,12 @@ public class UserBean {
 	public void setPass(String pass) {
 		this.pass = pass;
 	}
-	public boolean isActive() {
-		return isActive;
+	
+	public boolean isIsactive() {
+		return isactive;
 	}
-	public void setActive(boolean isActive) {
-		this.isActive = isActive;
+	public void setIsactive(boolean isactive) {
+		this.isactive = isactive;
 	}
 	public boolean isDeleted() {
 		return isDeleted;

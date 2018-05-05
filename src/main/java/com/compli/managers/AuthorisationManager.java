@@ -8,6 +8,8 @@ import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
+import javax.management.RuntimeErrorException;
+
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -39,6 +41,12 @@ public class AuthorisationManager {
 			cache.put(authId, userBean2);
 		}
 		return authId;
+	}
+	
+	public static boolean isUserActive(UserBean userBean) throws ExecutionException{
+		AuthorisationManager authorisationManager = new AuthorisationManager();
+		com.compli.db.bean.UserBean userBean2 = authorisationManager.loginData(userBean.getUsername(), userBean.getPassword());
+		return userBean2.isIsactive();
 	}
 	
 	public com.compli.db.bean.UserBean loginData(String username,String password){

@@ -376,22 +376,23 @@ var AppComponent = /** @class */ (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__register_app_register_component__ = __webpack_require__("./src/app/register/app.register.component.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__customComponents_combobox_app_combobox_component__ = __webpack_require__("./src/app/customComponents/combobox/app.combobox.component.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__login_app_login_forget_component__ = __webpack_require__("./src/app/login/app.login.forget.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__angular_router__ = __webpack_require__("./node_modules/@angular/router/esm5/router.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__angular_forms__ = __webpack_require__("./node_modules/@angular/forms/esm5/forms.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11_angular_font_awesome__ = __webpack_require__("./node_modules/angular-font-awesome/dist/angular-font-awesome.es5.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__sidebar_sidebar_component__ = __webpack_require__("./src/app/sidebar/sidebar.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__angular_platform_browser_animations__ = __webpack_require__("./node_modules/@angular/platform-browser/esm5/animations.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14_angular_calendar__ = __webpack_require__("./node_modules/angular-calendar/esm5/angular-calendar.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__ng_bootstrap_ng_bootstrap__ = __webpack_require__("./node_modules/@ng-bootstrap/ng-bootstrap/index.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__demo_utils_module__ = __webpack_require__("./src/app/demo-utils/module.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__complience_calendar_complience_calendar_component__ = __webpack_require__("./src/app/complience-calendar/complience-calendar.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__compliance_dashboard_compliance_dashboard_component__ = __webpack_require__("./src/app/compliance-dashboard/compliance-dashboard.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_19_ng2_charts__ = __webpack_require__("./node_modules/ng2-charts/index.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_19_ng2_charts___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_19_ng2_charts__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_20__compliance_report_compliance_report_component__ = __webpack_require__("./src/app/compliance-report/compliance-report.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_21__compliance_activities_compliance_activities_component__ = __webpack_require__("./src/app/compliance-activities/compliance-activities.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_22__filters_filter_pipe__ = __webpack_require__("./src/app/filters/filter.pipe.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_23__customComponents_error_show_errors_component__ = __webpack_require__("./src/app/customComponents/error/show-errors.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__notactive_notactive_component__ = __webpack_require__("./src/app/notactive/notactive.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__angular_router__ = __webpack_require__("./node_modules/@angular/router/esm5/router.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__angular_forms__ = __webpack_require__("./node_modules/@angular/forms/esm5/forms.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12_angular_font_awesome__ = __webpack_require__("./node_modules/angular-font-awesome/dist/angular-font-awesome.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__sidebar_sidebar_component__ = __webpack_require__("./src/app/sidebar/sidebar.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__angular_platform_browser_animations__ = __webpack_require__("./node_modules/@angular/platform-browser/esm5/animations.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15_angular_calendar__ = __webpack_require__("./node_modules/angular-calendar/esm5/angular-calendar.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__ng_bootstrap_ng_bootstrap__ = __webpack_require__("./node_modules/@ng-bootstrap/ng-bootstrap/index.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__demo_utils_module__ = __webpack_require__("./src/app/demo-utils/module.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__complience_calendar_complience_calendar_component__ = __webpack_require__("./src/app/complience-calendar/complience-calendar.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_19__compliance_dashboard_compliance_dashboard_component__ = __webpack_require__("./src/app/compliance-dashboard/compliance-dashboard.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_20_ng2_charts__ = __webpack_require__("./node_modules/ng2-charts/index.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_20_ng2_charts___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_20_ng2_charts__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_21__compliance_report_compliance_report_component__ = __webpack_require__("./src/app/compliance-report/compliance-report.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_22__compliance_activities_compliance_activities_component__ = __webpack_require__("./src/app/compliance-activities/compliance-activities.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_23__filters_filter_pipe__ = __webpack_require__("./src/app/filters/filter.pipe.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_24__customComponents_error_show_errors_component__ = __webpack_require__("./src/app/customComponents/error/show-errors.component.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -423,29 +424,30 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 
 
 
+
 var AppModule = /** @class */ (function () {
     function AppModule() {
     }
     AppModule = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["NgModule"])({
             declarations: [
-                __WEBPACK_IMPORTED_MODULE_3__app_component__["a" /* AppComponent */], __WEBPACK_IMPORTED_MODULE_23__customComponents_error_show_errors_component__["a" /* ShowErrorsComponent */], __WEBPACK_IMPORTED_MODULE_4__login_app_login_login_component__["a" /* LoginLoginComponent */], __WEBPACK_IMPORTED_MODULE_6__register_app_register_component__["a" /* RegisterComponent */], __WEBPACK_IMPORTED_MODULE_8__login_app_login_forget_component__["a" /* LoginForgetComponent */], __WEBPACK_IMPORTED_MODULE_5__loggedin_app_logedin_component__["a" /* LogedInComponent */],
-                __WEBPACK_IMPORTED_MODULE_12__sidebar_sidebar_component__["a" /* SidebarComponent */], __WEBPACK_IMPORTED_MODULE_17__complience_calendar_complience_calendar_component__["a" /* ComplienceCalendarComponent */], __WEBPACK_IMPORTED_MODULE_18__compliance_dashboard_compliance_dashboard_component__["a" /* ComplianceDashboardComponent */], __WEBPACK_IMPORTED_MODULE_20__compliance_report_compliance_report_component__["a" /* ComplianceReportComponent */],
-                __WEBPACK_IMPORTED_MODULE_21__compliance_activities_compliance_activities_component__["a" /* ComplianceActivitiesComponent */], __WEBPACK_IMPORTED_MODULE_22__filters_filter_pipe__["a" /* FilterPipe */], __WEBPACK_IMPORTED_MODULE_7__customComponents_combobox_app_combobox_component__["a" /* ComboboxComponent */]
+                __WEBPACK_IMPORTED_MODULE_3__app_component__["a" /* AppComponent */], __WEBPACK_IMPORTED_MODULE_24__customComponents_error_show_errors_component__["a" /* ShowErrorsComponent */], __WEBPACK_IMPORTED_MODULE_4__login_app_login_login_component__["a" /* LoginLoginComponent */], __WEBPACK_IMPORTED_MODULE_6__register_app_register_component__["a" /* RegisterComponent */], __WEBPACK_IMPORTED_MODULE_8__login_app_login_forget_component__["a" /* LoginForgetComponent */], __WEBPACK_IMPORTED_MODULE_5__loggedin_app_logedin_component__["a" /* LogedInComponent */],
+                __WEBPACK_IMPORTED_MODULE_13__sidebar_sidebar_component__["a" /* SidebarComponent */], __WEBPACK_IMPORTED_MODULE_18__complience_calendar_complience_calendar_component__["a" /* ComplienceCalendarComponent */], __WEBPACK_IMPORTED_MODULE_19__compliance_dashboard_compliance_dashboard_component__["a" /* ComplianceDashboardComponent */], __WEBPACK_IMPORTED_MODULE_21__compliance_report_compliance_report_component__["a" /* ComplianceReportComponent */],
+                __WEBPACK_IMPORTED_MODULE_22__compliance_activities_compliance_activities_component__["a" /* ComplianceActivitiesComponent */], __WEBPACK_IMPORTED_MODULE_23__filters_filter_pipe__["a" /* FilterPipe */], __WEBPACK_IMPORTED_MODULE_7__customComponents_combobox_app_combobox_component__["a" /* ComboboxComponent */], __WEBPACK_IMPORTED_MODULE_9__notactive_notactive_component__["a" /* NotActiveComponent */]
             ],
             imports: [
-                __WEBPACK_IMPORTED_MODULE_10__angular_forms__["c" /* FormsModule */],
-                __WEBPACK_IMPORTED_MODULE_10__angular_forms__["f" /* ReactiveFormsModule */],
-                __WEBPACK_IMPORTED_MODULE_11_angular_font_awesome__["a" /* AngularFontAwesomeModule */],
+                __WEBPACK_IMPORTED_MODULE_11__angular_forms__["c" /* FormsModule */],
+                __WEBPACK_IMPORTED_MODULE_11__angular_forms__["f" /* ReactiveFormsModule */],
+                __WEBPACK_IMPORTED_MODULE_12_angular_font_awesome__["a" /* AngularFontAwesomeModule */],
                 __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser__["a" /* BrowserModule */],
                 __WEBPACK_IMPORTED_MODULE_2__angular_common_http__["b" /* HttpClientModule */],
-                __WEBPACK_IMPORTED_MODULE_13__angular_platform_browser_animations__["a" /* BrowserAnimationsModule */],
-                __WEBPACK_IMPORTED_MODULE_14_angular_calendar__["a" /* CalendarModule */].forRoot(),
-                __WEBPACK_IMPORTED_MODULE_15__ng_bootstrap_ng_bootstrap__["c" /* NgbModalModule */].forRoot(),
-                __WEBPACK_IMPORTED_MODULE_19_ng2_charts__["ChartsModule"],
-                __WEBPACK_IMPORTED_MODULE_16__demo_utils_module__["a" /* DemoUtilsModule */],
-                __WEBPACK_IMPORTED_MODULE_15__ng_bootstrap_ng_bootstrap__["d" /* NgbModule */].forRoot(),
-                __WEBPACK_IMPORTED_MODULE_9__angular_router__["a" /* RouterModule */].forRoot([
+                __WEBPACK_IMPORTED_MODULE_14__angular_platform_browser_animations__["a" /* BrowserAnimationsModule */],
+                __WEBPACK_IMPORTED_MODULE_15_angular_calendar__["a" /* CalendarModule */].forRoot(),
+                __WEBPACK_IMPORTED_MODULE_16__ng_bootstrap_ng_bootstrap__["c" /* NgbModalModule */].forRoot(),
+                __WEBPACK_IMPORTED_MODULE_20_ng2_charts__["ChartsModule"],
+                __WEBPACK_IMPORTED_MODULE_17__demo_utils_module__["a" /* DemoUtilsModule */],
+                __WEBPACK_IMPORTED_MODULE_16__ng_bootstrap_ng_bootstrap__["d" /* NgbModule */].forRoot(),
+                __WEBPACK_IMPORTED_MODULE_10__angular_router__["a" /* RouterModule */].forRoot([
                     {
                         path: '',
                         component: __WEBPACK_IMPORTED_MODULE_4__login_app_login_login_component__["a" /* LoginLoginComponent */]
@@ -460,25 +462,29 @@ var AppModule = /** @class */ (function () {
                     },
                     {
                         path: 'dashboard',
-                        component: __WEBPACK_IMPORTED_MODULE_18__compliance_dashboard_compliance_dashboard_component__["a" /* ComplianceDashboardComponent */],
+                        component: __WEBPACK_IMPORTED_MODULE_19__compliance_dashboard_compliance_dashboard_component__["a" /* ComplianceDashboardComponent */],
                     },
                     {
                         path: 'activities',
-                        component: __WEBPACK_IMPORTED_MODULE_17__complience_calendar_complience_calendar_component__["a" /* ComplienceCalendarComponent */]
+                        component: __WEBPACK_IMPORTED_MODULE_18__complience_calendar_complience_calendar_component__["a" /* ComplienceCalendarComponent */]
                     },
                     {
                         path: 'report',
-                        component: __WEBPACK_IMPORTED_MODULE_20__compliance_report_compliance_report_component__["a" /* ComplianceReportComponent */]
+                        component: __WEBPACK_IMPORTED_MODULE_21__compliance_report_compliance_report_component__["a" /* ComplianceReportComponent */]
                     },
                     {
                         path: 'register',
                         component: __WEBPACK_IMPORTED_MODULE_6__register_app_register_component__["a" /* RegisterComponent */]
+                    },
+                    {
+                        path: 'notactive',
+                        component: __WEBPACK_IMPORTED_MODULE_9__notactive_notactive_component__["a" /* NotActiveComponent */]
                     }
                 ], { useHash: true })
             ],
             providers: [],
             bootstrap: [__WEBPACK_IMPORTED_MODULE_3__app_component__["a" /* AppComponent */]],
-            exports: [__WEBPACK_IMPORTED_MODULE_17__complience_calendar_complience_calendar_component__["a" /* ComplienceCalendarComponent */]]
+            exports: [__WEBPACK_IMPORTED_MODULE_18__complience_calendar_complience_calendar_component__["a" /* ComplienceCalendarComponent */]]
         })
     ], AppModule);
     return AppModule;
@@ -747,27 +753,26 @@ var ComplianceReportComponent = /** @class */ (function () {
     ComplianceReportComponent.prototype.chartHovered = function (e) {
         console.log(e);
     };
-    ComplianceReportComponent.prototype.randomize = function () {
-        // Only Change 3 values
-        var data = [
-            Math.round(Math.random() * 100),
-            59,
-            80,
-            (Math.random() * 100),
-            56,
-            (Math.random() * 100),
-            40
-        ];
-        var clone = JSON.parse(JSON.stringify(this.barChartData));
-        clone[0].data = data;
-        this.barChartData = clone;
-        /**
-         * (My guess), for Angular to recognize the change in the dataset
-         * it has to change the dataset variable directly,
-         * so one way around it, is to clone the data, change it and then
-         * assign it;
-         */
-    };
+    /*public randomize():void {
+      // Only Change 3 values
+      let data = [
+        Math.round(Math.random() * 100),
+        59,
+        80,
+        (Math.random() * 100),
+        56,
+        (Math.random() * 100),
+        40];
+      let clone = JSON.parse(JSON.stringify(this.barChartData));
+      clone[0].data = data;
+      this.barChartData = clone;
+      /**
+       * (My guess), for Angular to recognize the change in the dataset
+       * it has to change the dataset variable directly,
+       * so one way around it, is to clone the data, change it and then
+       * assign it;
+       */
+    /*}*/
     ComplianceReportComponent.prototype.handleError = function (error) {
         console.error('An error occurred', error); // for demo purposes only
         return Promise.reject(error.message || error);
@@ -788,7 +793,7 @@ var ComplianceReportComponent = /** @class */ (function () {
         return fiscalYr;
     };
     ComplianceReportComponent.prototype.buildReport = function (response) {
-        var risktable = { Low: { complied: 1, open: 4 }, Medium: { complied: 5, open: 1 }, High: { complied: 3, open: 2 } };
+        var risktable = response.riskCount; //{Low: {complied: 1, open : 4 }, Medium: {complied: 5, open : 1 }, High: {complied: 3, open : 2 }}
         this.riskTableData = risktable;
         var compliedData = [];
         var openData = [];
@@ -799,12 +804,11 @@ var ComplianceReportComponent = /** @class */ (function () {
         this.barChartData[0].data = compliedData;
         this.barChartData[1].data = openData;
         this.barChartOptions.title.text = this.monthSet[this.reportMonth] + " (FY " + this.getCurrentFiscalYear() + " )";
-        var activities = [{ "companyId": "comp", "abbriviation": "com", "lawId": "labourLaw", "lawDesc": "Assam Goods & Service Tax", "lawName": "Labour Law", "locationId": "haryana", "locationName": "Haryana", "activityId": "4", "activityName": "Monthly outward supplies return", "riskId": "low", "riskDes": "Low", "periodicityId": "Feb18", "periodicityDesc": "Feb'18", "periodicityDateId": "2018-04-10", "duedate": "2018-04-10", "isComplied": true, "isComplianceApproved": null, "isComplianceRejected": null }, { "companyId": "comp", "abbriviation": "com", "lawId": "AAA", "lawDesc": "Income tax", "lawName": "Direct Tax", "locationId": "haryana", "locationName": "Haryana", "activityId": "1", "activityName": "TDS on Salary Payment", "riskId": "medium", "riskDes": "Medium", "periodicityId": "Feb18", "periodicityDesc": "Feb'18", "periodicityDateId": "2018-04-30", "duedate": "2018-04-30", "isComplied": null, "isComplianceApproved": null, "isComplianceRejected": null }, { "companyId": "comp", "abbriviation": "com", "lawId": "indirectTaxHar", "lawDesc": "Haryana Goods & Service Tax", "lawName": "Indirect Tax", "locationId": "haryana", "locationName": "Haryana", "activityId": "3", "activityName": "Payment of TDS on overseas Remittance", "riskId": "medium", "riskDes": "Medium", "periodicityId": "Mar18", "periodicityDesc": "Mar'18", "periodicityDateId": "2018-04-30", "duedate": "2018-04-30", "isComplied": null, "isComplianceApproved": null, "isComplianceRejected": null }, { "companyId": "comp", "abbriviation": "com", "lawId": "labourLaw", "lawDesc": "Assam Goods & Service Tax", "lawName": "Labour Law", "locationId": "haryana", "locationName": "Haryana", "activityId": "5", "activityName": "Submission of monthly return (PART B)", "riskId": "low", "riskDes": "Low", "periodicityId": "Mar18", "periodicityDesc": "Mar'18", "periodicityDateId": "2018-04-20", "duedate": "2018-04-20", "isComplied": null, "isComplianceApproved": null, "isComplianceRejected": null }, { "companyId": "comp", "abbriviation": "com", "lawId": "AAA", "lawDesc": "Income tax", "lawName": "Direct Tax", "locationId": "haryana", "locationName": "Haryana", "activityId": "2", "activityName": "TDS on other resident payment", "riskId": "medium", "riskDes": "Medium", "periodicityId": "Mar18", "periodicityDesc": "Mar'18", "periodicityDateId": "2018-04-30", "duedate": "2018-04-30", "isComplied": null, "isComplianceApproved": null, "isComplianceRejected": null }];
+        var activities = response.activities; //[{"companyId":"comp","abbriviation":"com","lawId":"labourLaw","lawDesc":"Assam Goods & Service Tax","lawName":"Labour Law","locationId":"haryana","locationName":"Haryana","activityId":"4","activityName":"Monthly outward supplies return","riskId":"low","riskDes":"Low","periodicityId":"Feb18","periodicityDesc":"Feb'18","periodicityDateId":"2018-04-10","duedate":"2018-04-10","isComplied":true,"isComplianceApproved":null,"isComplianceRejected":null},{"companyId":"comp","abbriviation":"com","lawId":"AAA","lawDesc":"Income tax","lawName":"Direct Tax","locationId":"haryana","locationName":"Haryana","activityId":"1","activityName":"TDS on Salary Payment","riskId":"medium","riskDes":"Medium","periodicityId":"Feb18","periodicityDesc":"Feb'18","periodicityDateId":"2018-04-30","duedate":"2018-04-30","isComplied":null,"isComplianceApproved":null,"isComplianceRejected":null},{"companyId":"comp","abbriviation":"com","lawId":"indirectTaxHar","lawDesc":"Haryana Goods & Service Tax","lawName":"Indirect Tax","locationId":"haryana","locationName":"Haryana","activityId":"3","activityName":"Payment of TDS on overseas Remittance","riskId":"medium","riskDes":"Medium","periodicityId":"Mar18","periodicityDesc":"Mar'18","periodicityDateId":"2018-04-30","duedate":"2018-04-30","isComplied":null,"isComplianceApproved":null,"isComplianceRejected":null},{"companyId":"comp","abbriviation":"com","lawId":"labourLaw","lawDesc":"Assam Goods & Service Tax","lawName":"Labour Law","locationId":"haryana","locationName":"Haryana","activityId":"5","activityName":"Submission of monthly return (PART B)","riskId":"low","riskDes":"Low","periodicityId":"Mar18","periodicityDesc":"Mar'18","periodicityDateId":"2018-04-20","duedate":"2018-04-20","isComplied":null,"isComplianceApproved":null,"isComplianceRejected":null},{"companyId":"comp","abbriviation":"com","lawId":"AAA","lawDesc":"Income tax","lawName":"Direct Tax","locationId":"haryana","locationName":"Haryana","activityId":"2","activityName":"TDS on other resident payment","riskId":"medium","riskDes":"Medium","periodicityId":"Mar18","periodicityDesc":"Mar'18","periodicityDateId":"2018-04-30","duedate":"2018-04-30","isComplied":null,"isComplianceApproved":null,"isComplianceRejected":null}]
         this.activities = activities;
     };
     ComplianceReportComponent.prototype.getReportData = function () {
         var _this = this;
-        console.log(this.reportCompany);
         var companyId = this.reportCompany;
         var freqency = null;
         var isMonth = false;
@@ -817,7 +821,7 @@ var ComplianceReportComponent = /** @class */ (function () {
         }
         this.reportService.getReportData(freqency, companyId, isMonth).then(function (response) { _this.buildReport(response); })
             .catch(function (err) { _this.handleError(err); });
-        this.buildReport("");
+        //this.buildReport("");
     };
     ComplianceReportComponent.prototype.ngOnInit = function () {
         __WEBPACK_IMPORTED_MODULE_2_jquery__('.cloasedactivities').css('display', 'none');
@@ -1515,6 +1519,8 @@ var LoginLoginComponent = /** @class */ (function () {
         this.password = "";
         this.hasError = false;
         this.loginBean = new __WEBPACK_IMPORTED_MODULE_2__typeBean_loginBean__["a" /* LoginBean */]();
+        this.userNotActive = false;
+        this.loginInProgress = "enabled";
     }
     LoginLoginComponent.prototype.handleError = function (error) {
         console.error('An error occurred', error); // for demo purposes only
@@ -1522,14 +1528,31 @@ var LoginLoginComponent = /** @class */ (function () {
     };
     LoginLoginComponent.prototype.login = function () {
         var _this = this;
+        this.loginInProgress = "disabled";
         this.loginService.loginUserPost(this.loginBean.username, this.loginBean.password).then(function (responseStr) {
+            _this.loginInProgress = "enabled";
             _this.responseStr = responseStr;
-            window.location.href = "#/dashboard";
+            if (_this.responseStr.isUserActive) {
+                window.location.href = "#/dashboard";
+            }
+            else {
+                //window.location.href="#/notactive"
+                //User is not active show sendActivation email
+                _this.userNotActive = true;
+            }
         })
-            .catch(function (err) { _this.handleError(err); _this.hasError = true; });
+            .catch(function (err) {
+            _this.handleError(err);
+            _this.hasError = true;
+            _this.loginInProgress = "enabled";
+        });
     };
     LoginLoginComponent.prototype.hideError = function () {
         this.hasError = false;
+    };
+    LoginLoginComponent.prototype.reSendRegistrationCode = function () {
+        console.log("Send registation code....");
+        this.loginService.reSendUserActivationCode();
     };
     LoginLoginComponent.prototype.ngOnInit = function () {
         var that = this;
@@ -1553,7 +1576,53 @@ var LoginLoginComponent = /** @class */ (function () {
 /***/ "./src/app/login/app.login.login.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"container\">\r\n  <div class=\"row\">\r\n    <div class=\"col-sm\">\r\n      <br/>\r\n      <div class=\"card\" >\r\n\t\t  <img class=\"card-img-top\" src=\"assets/IndCompli_4_new.png\" alt=\"indCompli\" height=\"200rem\" width=\"200rem\">\r\n\t\t  <div class=\"card-body\">\r\n\t\t\t<h4 class=\"card-title\">IndCompli</h4>\r\n\t\t\t<p class=\"card-text\">Some quick example text to build on the card title and make up the bulk of the card's content.</p>\r\n\t\t\t\r\n\t\t  </div>\r\n\t\t</div>\r\n    </div>\r\n    <div class=\"col-sm\">\r\n\t\t<br/>\r\n\t\t<div class=\"card\">\r\n\t\t<div class=\"card-body\">\r\n\t\t<form>\r\n\t\t\r\n\t\t  <div *ngIf=\"hasError\" class=\"alert alert-danger alert-dismissible fade show\" role=\"alert\">\r\n\t\t\t  <strong>Error!</strong> Invalid username or password\r\n\t\t\t  <button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\" (click)=\"hideError()\">\r\n\t\t\t\t<span aria-hidden=\"true\">&times;</span>\r\n\t\t\t  </button>\r\n\t\t\t</div>\t\r\n\t\t  <div class=\"form-group\">\r\n\t\t\t<label for=\"exampleInputEmail1\">Username</label>\r\n\t\t\t<input [(ngModel)]=\"loginBean.username\" type=\"text\" class=\"form-control\" id=\"exampleInputEmail1\" aria-describedby=\"emailHelp\" placeholder=\"Username\" name=\"username\">\r\n\t\t\t<small id=\"emailHelp\" class=\"form-text text-muted\">We'll never share your email with anyone else.</small>\r\n\t\t  </div>\r\n\t\t  <div class=\"form-group\">\r\n\t\t\t<label style=\"width:50%\" for=\"exampleInputPassword1\">Password</label>\r\n\t\t\t<label style=\"width:49%\"><a href=\"forget\">Forgot password?</a></label>\r\n\t\t\t<input [(ngModel)]=\"loginBean.password\" type=\"password\" class=\"form-control\" id=\"exampleInputPassword1\" placeholder=\"Password\" name=\"password\">\r\n\t\t  </div>\r\n\t\t  <div class=\"form-check\">\r\n\t\t\t<label class=\"form-check-label\">\r\n\t\t\t  <input type=\"checkbox\" class=\"form-check-input\">\r\n\t\t\t  Remember me (for 30 days)\r\n\t\t\t</label>\r\n\t\t  </div>\r\n\t\t  <input type=\"button\" class=\"btn btn-indcompli\" value=\"Login\" (click)=\"login()\"/>\r\n\t\t</form>\r\n\t\t</div>\r\n\t\t</div>\r\n\t\t<br/>\r\n\t\t<div class=\"card\">\r\n\t\t<div class=\"card-body\">\r\n\t\t\tNew to IndCompli ? <a href=\"#/register\">Register</a>\r\n\t\t</div>\r\n\t\t</div>\r\n    </div>\r\n  </div>\r\n</div>"
+module.exports = "<div class=\"container\">\r\n  <div class=\"row\">\r\n    <div class=\"col-sm\">\r\n      <br/>\r\n      <div class=\"card\" >\r\n\t\t  <img class=\"card-img-top\" src=\"assets/IndCompli_4_new.png\" alt=\"indCompli\" height=\"200rem\" width=\"200rem\">\r\n\t\t  <div class=\"card-body\">\r\n\t\t\t<h4 class=\"card-title\">IndCompli</h4>\r\n\t\t\t<p class=\"card-text\">Some quick example text to build on the card title and make up the bulk of the card's content.</p>\r\n\t\t\t\r\n\t\t  </div>\r\n\t\t</div>\r\n    </div>\r\n    <div class=\"col-sm\">\r\n\t\t<br/>\r\n\t\t<div class=\"card\">\r\n\t\t<div class=\"card-body\">\r\n\t\t<form>\r\n\t\t\r\n\t\t  <div *ngIf=\"hasError\" class=\"alert alert-danger alert-dismissible fade show\" role=\"alert\">\r\n\t\t\t  <strong>Error!</strong> Invalid username or password\r\n\t\t\t  <button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\" (click)=\"hideError()\">\r\n\t\t\t\t<span aria-hidden=\"true\">&times;</span>\r\n\t\t\t  </button>\r\n\t\t\t</div>\t\r\n\t\t  <div class=\"form-group\">\r\n\t\t\t<label for=\"exampleInputEmail1\">Username</label>\r\n\t\t\t<input [(ngModel)]=\"loginBean.username\" type=\"text\" class=\"form-control\" id=\"exampleInputEmail1\" aria-describedby=\"emailHelp\" placeholder=\"Username\" name=\"username\">\r\n\t\t\t<small id=\"emailHelp\" class=\"form-text text-muted\">We'll never share your email with anyone else.</small>\r\n\t\t  </div>\r\n\t\t  <div class=\"form-group\">\r\n\t\t\t<label style=\"width:50%\" for=\"exampleInputPassword1\">Password</label>\r\n\t\t\t<label style=\"width:49%\"><a href=\"forget\">Forgot password?</a></label>\r\n\t\t\t<input [(ngModel)]=\"loginBean.password\" type=\"password\" class=\"form-control\" id=\"exampleInputPassword1\" placeholder=\"Password\" name=\"password\">\r\n\t\t  </div>\r\n\t\t  <div *ngIf=\"userNotActive\">\r\n\t\t\t<div class=\"alert alert-warning\" role=\"alert\">\r\n\t\t\t  User is not active<input type=\"button\" class=\"btn btn-link btn-sm\" (click)=\"reSendRegistrationCode()\" value=\"Click here\">to resend activation email\r\n\t\t\t</div>\r\n\t\t  </div>\r\n\t\t  <input type=\"button\" class=\"btn btn-indcompli {{loginInProgress}}\" value=\"Login\" (click)=\"login()\"/>\r\n\t\t</form>\r\n\t\t</div>\r\n\t\t</div>\r\n\t\t<br/>\r\n\t\t<div class=\"card\">\r\n\t\t<div class=\"card-body\">\r\n\t\t\tNew to IndCompli ? <a href=\"#/register\">Register</a>\r\n\t\t</div>\r\n\t\t</div>\r\n    </div>\r\n  </div>\r\n</div>"
+
+/***/ }),
+
+/***/ "./src/app/notactive/notactive.component.css":
+/***/ (function(module, exports) {
+
+module.exports = ""
+
+/***/ }),
+
+/***/ "./src/app/notactive/notactive.component.html":
+/***/ (function(module, exports) {
+
+module.exports = "<section class=\"content\">\r\n\tUser not active\r\n</section>"
+
+/***/ }),
+
+/***/ "./src/app/notactive/notactive.component.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return NotActiveComponent; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("./node_modules/@angular/core/esm5/core.js");
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+
+var NotActiveComponent = /** @class */ (function () {
+    function NotActiveComponent() {
+    }
+    NotActiveComponent.prototype.ngOnInit = function () {
+    };
+    NotActiveComponent = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
+            selector: 'user-notactive',
+            template: __webpack_require__("./src/app/notactive/notactive.component.html"),
+            styles: [__webpack_require__("./src/app/notactive/notactive.component.css")]
+        })
+    ], NotActiveComponent);
+    return NotActiveComponent;
+}());
+
+
 
 /***/ }),
 
@@ -1875,7 +1944,11 @@ var LoginService = /** @class */ (function () {
     LoginService.prototype.loginUserPost = function (username, password) {
         var _this = this;
         var url = this.appUrl + "/rest/user/login";
-        return this.http.post(url, { username: username, password: password }).toPromise().then(function (response) { response; _this.handleUserAction(response); }).catch(this.handleError);
+        return this.http.post(url, { username: username, password: password }).toPromise().then(function (response) {
+            response;
+            _this.handleUserAction(response);
+            return response;
+        }).catch(this.handleError);
     };
     LoginService.prototype.register = function (registerBean) {
         var url = this.appUrl + "/rest/user/register";
@@ -1900,6 +1973,11 @@ var LoginService = /** @class */ (function () {
     LoginService.prototype.isUserExist = function (userName) {
         var url = this.appUrl + "/rest/user/userAvailaible/" + userName;
         return this.http.get(url).toPromise().then(function (response) { console.log(response); return response; }).catch(this.handleError);
+    };
+    LoginService.prototype.reSendUserActivationCode = function () {
+        var headers = this.getHeaders();
+        var url = this.appUrl + "/rest/user/resendActivationEmail";
+        return this.http.post(url, {}, headers).toPromise().then(function (response) { console.log(response); return response; }).catch(this.handleError);
     };
     LoginService.prototype.clearUserLogin = function () {
         sessionStorage.clear();

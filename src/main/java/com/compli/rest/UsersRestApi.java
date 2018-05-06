@@ -97,7 +97,7 @@ public class UsersRestApi extends Application{
 	public Response activateEmail(@PathParam("registrationId") String registrationId) throws URISyntaxException{
 		RegistrationManager registrationManager = new RegistrationManager();
 		boolean isValid = registrationManager.validateEmail(registrationId);
-		URI location = new URI("http://jws-app-pundlik.193b.starter-ca-central-1.openshiftapps.com/#/activated");
+		URI location = new URI("http://jws-app-pundlik.193b.starter-ca-central-1.openshiftapps.com/ComplianceTool/#/activated");
 		return Response.seeOther(location).build();
 	}
 	

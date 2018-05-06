@@ -84,7 +84,7 @@ public class DashBoardDao {
 	}
 	
 	public List<Map<String, Object>> getAllActivitiesForCompany(String companyId){
-		List<Map<String, Object>> activities = this.jdbcTemplate.queryForList("select * from activityMaster inner join (select activityId from activityassociation where locationId = (select locationId from companylocation where companyId=?)) activityLocation on activityMaster.activityId = activityLocation.activityId;", companyId);
+		List<Map<String, Object>> activities = this.jdbcTemplate.queryForList("select * from activitymaster inner join (select activityId from activityassociation where locationId = (select locationId from companylocation where companyId=?)) activityLocation on activitymaster.activityId = activityLocation.activityId;", companyId);
 		return activities;
 	}
 	

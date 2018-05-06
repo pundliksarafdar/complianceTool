@@ -20,12 +20,13 @@ public class ActivityManager {
 		return this.dashBoardDao.getAllActivitiesWithDescriptionForCompany(companyId);
 	}
 	
-	public List<Map<String, Object>> getAllActivitiesWithDescriptionForCompanyByMonth(String companyId,String month){
-		return this.dashBoardDao.getAllActivitiesWithDescriptionForCompanyByMonth(companyId,month);
-	}
-	
 	public boolean changeActivityStatus(String companyId,String activityId,boolean isComplied){
 		return this.dashBoardDao.changeActivityStatus(companyId,activityId, isComplied);
+	}
+	
+	
+	public List<Map<String, Object>> getAllActivitiesWithDescriptionForCompanyLast3Months(String companyId,int monthCount){
+		return this.dashBoardDao.getAllActivitiesWithDescriptionForCompanyLast3Months(companyId,monthCount);
 	}
 	
 }

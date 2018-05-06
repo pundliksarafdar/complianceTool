@@ -20,6 +20,7 @@ public class DashBoardManager {
 	private String PENDING_REVEIW = "pendingReview";
 	private String PENDING_DELAYED = "delayedCompliance";
 	private String PENDING_INTIME = "intimeCompliance";
+	private String COMPLIED = "complied";
 	
 	private String companyId; 
 	 DashBoardDao dashBoardDao;
@@ -39,6 +40,9 @@ public class DashBoardManager {
 		
 		Map<String, Integer> compliceOverview = getComplianceOverview();
 		dashBoardData.put("compliceOverview", compliceOverview);
+		
+		Map<Integer,Map<String, Integer>> compliceOverviewLast3Month = getComplianceOverviewLast3Month();
+		dashBoardData.put("compliceOverviewLast3Month", compliceOverviewLast3Month);
 		
 		Map<String, Map<String, Integer>> complainceOverviewByLaw = getComplainceOverviewByLaw();
 		dashBoardData.put("complainceOverviewByLaw", complainceOverviewByLaw);
@@ -73,6 +77,7 @@ public class DashBoardManager {
 		complainceOverview.put(PENDING_DELAYED, 0);
 		complainceOverview.put(PENDING_INTIME, 0);
 		complainceOverview.put(PENDING_REVEIW, 0);
+		complainceOverview.put(COMPLIED, 0);
 		ActivityManager activityManager = new ActivityManager();
 		List<Map<String, Object>> allActivity = activityManager.getAllActivitiesWithDescriptionForCompany(this.companyId);
 		
@@ -82,9 +87,43 @@ public class DashBoardManager {
 				complainceOverview.put(PENDING_COMPLIANCE, complainceOverview.get(PENDING_COMPLIANCE)+1);
 			}else if(activity.get("isComplianceApproved")==null && activity.get("isComplianceRejected")==null){
 				complainceOverview.put(PENDING_REVEIW, complainceOverview.get(PENDING_REVEIW)+1);
+			}else{
+				complainceOverview.put(PENDING_INTIME, complainceOverview.get(PENDING_INTIME)+1);
 			}
 		}
 		return complainceOverview;
+	}
+	
+	Map<Integer,Map<String, Integer>> getComplianceOverviewLast3Month(){
+		
+		int month = 5; 
+		Map<Integer,Map<String, Integer>> complianceOverviewForLast3Month = new HashMap<>();
+		
+		for(int index=2;index>=0;index--){
+			Map<String,Integer> complainceOverview = new HashMap<>();
+			complainceOverview.put(PENDING_COMPLIANCE, 0);
+			complainceOverview.put(PENDING_DELAYED, 0);
+			complainceOverview.put(PENDING_INTIME, 0);
+			complainceOverview.put(PENDING_REVEIW, 0);
+			complainceOverview.put(COMPLIED, 0);
+			complianceOverviewForLast3Month.put(month-index, complainceOverview);
+		}
+		
+		ActivityManager activityManager = new ActivityManager();
+		List<Map<String, Object>> allActivity = activityManager.getAllActivitiesWithDescriptionForCompanyLast3Months(this.companyId,month);
+		
+		for(int i=0;i<allActivity.size();i++){
+			Map<String,Integer> complainceOverview = complianceOverviewForLast3Month.get(Integer.parseInt(allActivity.get(i).get("dueMonth")+""));
+			Map<String,Object> activity = allActivity.get(i);
+			if(null==activity.get("isComplied") || "false".equals(activity.get("isComplied").toString())){
+				complainceOverview.put(PENDING_COMPLIANCE, complainceOverview.get(PENDING_COMPLIANCE)+1);
+			}else if(activity.get("isComplianceApproved")==null && activity.get("isComplianceRejected")==null){
+				complainceOverview.put(PENDING_REVEIW, complainceOverview.get(PENDING_REVEIW)+1);
+			}else{
+				complainceOverview.put(PENDING_INTIME, complainceOverview.get(PENDING_INTIME)+1);
+			}
+		}
+		return complianceOverviewForLast3Month;
 	}
 	
 	public Map<String,Map<String,Integer>> getComplainceOverviewByLaw(){
@@ -111,6 +150,8 @@ public class DashBoardManager {
 				complainceOverview.put(PENDING_COMPLIANCE, complainceOverview.get(PENDING_COMPLIANCE)+1);
 			}else if(activity.get("isComplianceApproved")==null && activity.get("isComplianceRejected")==null){
 				complainceOverview.put(PENDING_REVEIW, complainceOverview.get(PENDING_REVEIW)+1);
+			}else{
+				complainceOverview.put(PENDING_INTIME, complainceOverview.get(PENDING_INTIME)+1);
 			}
 		}
 		

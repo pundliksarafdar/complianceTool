@@ -20,7 +20,7 @@ import com.google.common.cache.CacheBuilder;
 
 public class AuthorisationManager {
 	
-	static Cache<String, com.compli.db.bean.UserBean> cache = CacheBuilder.newBuilder().expireAfterAccess(1, TimeUnit.MINUTES).build();
+	static Cache<String, com.compli.db.bean.UserBean> cache = CacheBuilder.newBuilder().expireAfterAccess(2, TimeUnit.HOURS).build();
 	UserDao userDao;
 	
 	public AuthorisationManager() {

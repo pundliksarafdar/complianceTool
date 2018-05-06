@@ -64,19 +64,35 @@ public class ReportsManager {
 	public Map<String,Map<String,Integer>> getComplainceOverviewByRisk(List<Map<String, Object>> allActivity){
 		Map<String,Map<String,Integer>> complianceDetailByLaw = new HashMap<>();
 		ActivityManager activityManager = new ActivityManager();
-
+		{
+		/*********************************************************/
+		Map<String,Integer> complainceOverview = new HashMap<>();
+		complainceOverview.put(COMPLIED, 0);
+		complainceOverview.put(OPEN, 0);
+		complianceDetailByLaw.put("Low", complainceOverview);
 		
+		complainceOverview = new HashMap<>();
+		complainceOverview.put(COMPLIED, 0);
+		complainceOverview.put(OPEN, 0);
+		complianceDetailByLaw.put("Medium", complainceOverview);
+		
+		complainceOverview = new HashMap<>();
+		complainceOverview.put(COMPLIED, 0);
+		complainceOverview.put(OPEN, 0);
+		complianceDetailByLaw.put("High", complainceOverview);
+		/******************************************************/
+		}
 		for(int i=0;i<allActivity.size();i++){
 			Map<String,Object> activity = allActivity.get(i);
 			String riskDes = (String) activity.get("riskDes");
-			
+			/*
 			if(!complianceDetailByLaw.containsKey(riskDes)){
 				Map<String,Integer> complainceOverview = new HashMap<>();
 				complainceOverview.put(COMPLIED, 0);
 				complainceOverview.put(OPEN, 0);
 				complianceDetailByLaw.put(riskDes, complainceOverview);
 			}
-			
+			*/
 			Map<String,Integer>  complainceOverview = complianceDetailByLaw.get(riskDes);
 			if(null==activity.get("isComplied") || "false".equals(activity.get("isComplied").toString())){
 				complainceOverview.put(OPEN, complainceOverview.get(OPEN)+1);

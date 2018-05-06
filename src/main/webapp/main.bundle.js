@@ -1848,7 +1848,7 @@ var ActivityService = /** @class */ (function () {
     };
     ActivityService.prototype.setActivityStatus = function (activityId, companyId) {
         var headers = this.loginService.getHeaders();
-        var url = this.appUrl + "rest/activity/changeStatus/" + companyId + "/" + activityId + "?complied=true";
+        var url = this.appUrl + "/rest/activity/changeStatus/" + companyId + "/" + activityId + "?complied=true";
         return this.http.post(url, {}, headers).toPromise().then(function (response) { return response; }).catch(this.handleError);
     };
     ActivityService = __decorate([

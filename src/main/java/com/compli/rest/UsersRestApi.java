@@ -81,8 +81,10 @@ public class UsersRestApi extends Application{
 		boolean success = registrationManager.registerUser(registerBean.getUserBean());
 		if(success){
 			registrationManager.addCompany(registerBean.getCompanyBean(),registerBean.getUserBean());
+			return Response.ok(registerBean).build();
+		}else{ 
+			return Response.notModified().build();
 		}
-		return Response.ok(registerBean).build();
 	}
 	
 	@GET

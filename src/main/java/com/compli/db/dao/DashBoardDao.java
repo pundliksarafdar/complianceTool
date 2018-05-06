@@ -77,7 +77,7 @@ public class DashBoardDao {
 	"on periodicitydatemaster.periodicityDateId = companyWithPeriodicity.periodicityDateId  where month(periodicitydatemaster.duedate)=?) companyWithPerDate  "+
 		"on companyWithPerDate.companyId = activity.companyId and companyWithPerDate.activityId = activity.activityId";
 	
-	String changeActivityStatusQuery = "INSERT INTO activity (companyId,activityId, isComplied) VALUES(?, ?, ?) ON DUPLICATE KEY UPDATE companyId=?,activityId=?, isComplied=?";
+	String changeActivityStatusQuery = "INSERT INTO activity (companyId,activityId, isComplied,isComplianceApproved) VALUES(?, ?, ?, ?) ON DUPLICATE KEY UPDATE companyId=?,activityId=?, isComplied=?,isComplianceApproved=?";
 	
 	public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
 		this.jdbcTemplate = jdbcTemplate;
@@ -99,7 +99,8 @@ public class DashBoardDao {
 	}
 
 	public boolean changeActivityStatus(String companyId, String activityId,boolean status) {
-		this.jdbcTemplate.update(changeActivityStatusQuery, companyId,activityId,status, companyId,activityId,status);
+		boolean isDemoUser = true;
+		this.jdbcTemplate.update(changeActivityStatusQuery, companyId,activityId,status,isDemoUser, companyId,activityId,status,isDemoUser);
 		return true;
 	}
 

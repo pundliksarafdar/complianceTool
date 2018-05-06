@@ -56,19 +56,12 @@ public class AuthorisationManager {
 		return this.userDao.getUserData(username,password);		
 	}
 	
-	public void saveUserData(){
-		com.compli.db.bean.UserBean bean = new com.compli.db.bean.UserBean();
-		bean.setCreatedBy("Hello");
-		bean.setUserId("username");
-		bean.setModifiedOn(new Date());
-		this.userDao.insertUserValues(bean);
-	}
-	
+	/*
 	public boolean registerUser(com.compli.db.bean.UserBean registerBean){
 		this.userDao.insertUserValues(registerBean);
 		return true;
 	}
-	
+	*/
 	public List<Map<String, Object>> getCompanies(String userId){
 		return this.userDao.geetUserCompanies(userId);
 	}

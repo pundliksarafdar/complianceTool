@@ -23,8 +23,8 @@ public class RegistrationManager {
 		this.companyDao = (CompanyDao) ctx.getBean("companyDao");
 		
 	}
-	public void registerUser(com.compli.db.bean.UserBean registerBean){
-		this.userDao.insertUserValues(registerBean);
+	public boolean registerUser(com.compli.db.bean.UserBean registerBean){
+		return this.userDao.insertUserValues(registerBean);
 	}
 	
 	public boolean isUserExists(String userid){

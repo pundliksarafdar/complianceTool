@@ -286,6 +286,52 @@ webpackEmptyAsyncContext.id = "./src/$$_lazy_route_resource lazy recursive";
 
 /***/ }),
 
+/***/ "./src/app/accountActive/accountactive.component.css":
+/***/ (function(module, exports) {
+
+module.exports = "h5 { width:100%; text-align:center; border-bottom: 1px solid #000; line-height:0.1em; margin:10px 0 20px; } \r\nh5 span { background:#e9ecef; padding:0 10px; } \r\np.msg{text-align:center}"
+
+/***/ }),
+
+/***/ "./src/app/accountActive/accountactive.component.html":
+/***/ (function(module, exports) {
+
+module.exports = "<br/>\r\n<div class=\"jumbotron\">/\r\n  <h1 class=\"display-4\">Hello, Congrats!</h1>\r\n  <p class=\"lead\">Your account is active now</p>\r\n  <hr class=\"my-4\">\r\n  <p class=\"msg\">Please <a href=\"#\">login</a> again to login to your account</p>\r\n\t<h5><span>Or</span></h5> \r\n  <p class=\"msg\">Request <a href=\"#\">full version</a> for complete features</p>\r\n</div>"
+
+/***/ }),
+
+/***/ "./src/app/accountActive/accountactive.component.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AccountActiveComponent; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("./node_modules/@angular/core/esm5/core.js");
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+
+var AccountActiveComponent = /** @class */ (function () {
+    function AccountActiveComponent() {
+    }
+    AccountActiveComponent.prototype.ngOnInit = function () {
+    };
+    AccountActiveComponent = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
+            selector: 'user-notactive',
+            template: __webpack_require__("./src/app/accountActive/accountactive.component.html"),
+            styles: [__webpack_require__("./src/app/accountActive/accountactive.component.css")]
+        })
+    ], AccountActiveComponent);
+    return AccountActiveComponent;
+}());
+
+
+
+/***/ }),
+
 /***/ "./src/app/app.component.css":
 /***/ (function(module, exports) {
 
@@ -296,7 +342,7 @@ module.exports = ".main-content {\r\n    width: 80% !important;\r\n    float: ri
 /***/ "./src/app/app.component.html":
 /***/ (function(module, exports) {
 
-module.exports = " <nav *ngIf=\"!loggedIn\" class=\"navbar navbar-dark bg-primary\">\r\n  <a class=\"navbar-brand\" href=\"#\">IndCompli</a>\r\n</nav>\r\n\r\n\r\n\r\n\r\n\r\n<nav *ngIf=\"loggedIn\" class=\"navbar navbar-expand-lg navbar-dark bg-primary\">\r\n <div class=\"container\">\r\n        \r\n\r\n    <ul class=\"nav navbar-nav navbar-logo mx-auto\">\r\n      <li class=\"nav-item\">\r\n        <a class=\"navbar-brand\" href=\"#\">IndCompli</a>\r\n      </li>\r\n    </ul>\r\n    <ul class=\"nav navbar-nav pull-sm-right\" style=\"color: #fff; margin-right: -9%;\">\r\n\r\n      \r\n                <li class=\"dropdown\">\r\n                    <a class=\"dropdown-toggle\" data-toggle=\"dropdown\" role=\"button\" aria-haspopup=\"true\" aria-expanded=\"false\">\r\n                        <div class=\"img-rounded profile-img\"></div>\r\n                        Welcome, {{userData.firstName}} <span class=\"caret\"></span>\r\n                    </a>\r\n                    <ul class=\"dropdown-menu compliance-font userdropdown\">\r\n                        <div class=\"userInfo\">\r\n\t\t\t\t\t\t\t<div>\r\n\t\t\t\t\t\t\t\t<table width=\"100%\">\r\n\t\t\t\t\t\t\t\t<tr>\r\n\t\t\t\t\t\t\t\t<td><img class=\"card-img-top\" src=\"assets/user.svg\" alt=\"Card image cap\" style=\"width:48px;\"></td>\r\n\t\t\t\t\t\t\t\t<td align=\"center\">\r\n\t\t\t\t\t\t\t\t\t<span>{{userData.firstName}}</span>\r\n\t\t\t\t\t\t\t\t\t<span>{{userData.lastName}}</span>\r\n\t\t\t\t\t\t\t\t</td>\r\n\t\t\t\t\t\t\t\t</tr>\t\t\r\n\t\t\t\t\t\t\t\t</table>\r\n\t\t\t\t\t\t\t</div>\r\n\t\t\t\t\t\t\t<div class=\"progress\">\r\n\t\t\t\t\t\t\t  <div class=\"progress-bar\" role=\"progressbar\" style=\"width: 25%;\" aria-valuenow=\"25\" aria-valuemin=\"0\" aria-valuemax=\"100\">25%</div>\r\n\t\t\t\t\t\t\t</div>\r\n\t\t\t\t\t\t\t<div>\r\n\t\t\t\t\t\t\t\t<div style=\"font-size: small;\" class=\"textItemNoWrap\">\r\n\t\t\t\t\t\t\t\t\t<img *ngIf=\"userData && !userData.isEmailVerified\" class=\"\" src=\"assets/verified.png\" alt=\"Card image cap\" style=\"width:18px;\">\r\n\t\t\t\t\t\t\t\t\t<span>{{userData.email}}</span>\r\n\t\t\t\t\t\t\t\t</div>\r\n\t\t\t\t\t\t\t\t<div style=\"font-size: small;\" class=\"textItemNoWrap\">\r\n\t\t\t\t\t\t\t\t\t<a *ngIf=\"userData && !userData.isPhoneVerified\" href=\"#\">Verify</a>\r\n\t\t\t\t\t\t\t\t\t<span>{{userData.phone}}</span>\r\n\t\t\t\t\t\t\t\t</div>\r\n\t\t\t\t\t\t\t</div>\r\n\t\t\t\t\t\t</div>\r\n\t\t\t\t\t\t<div class=\"dropMenu\">\r\n\t\t\t\t\t\t  <!-- <a href=\"/\" class=\"btn btn-link float-left\">Profile</a> -->\r\n\t\t\t\t\t\t  <a href=\"/\" class=\"btn btn-link float-right\">Logout</a>\r\n\t\t\t\t\t\t</div>\r\n                    </ul>\r\n                </li>\r\n\r\n                <ng-template #notificationPop>\r\n\t\t<div class=\"popNotification\">\r\n\t\t\t<div class=\"alert alert-danger\" role=\"alert\">\r\n\t\t\t  You are running trial version, <a href=''>click here</a> for paid version\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t</ng-template>\r\n    </ul>\r\n\r\n    </div>\r\n<!-- <nav *ngIf=\"!loggedIn\" class=\"navbar navbar-expand-sm navbar-light alert-dark\">\r\n  <a class=\"navbar-brand\" href=\"#\" style={color:#00000;}>IndCompli</a>\r\n</nav>\r\n<nav *ngIf=\"loggedIn\" class=\"navbar navbar-expand-lg navbar-light  alert-dark\">\r\n  <a class=\"navbar-brand\" href=\"#\">\r\n\t<img src=\"/assets/logon_only.png\" width=\"30\" height=\"30\" alt=\"\">IndCompli\r\n  </a>\r\n   \r\n  <button class=\"navbar-toggler\" type=\"button\" data-toggle=\"collapse\" data-target=\"#navbarSupportedContent\" aria-controls=\"navbarSupportedContent\" aria-expanded=\"false\" aria-label=\"Toggle navigation\">\r\n    <span class=\"navbar-toggler-icon\"></span>\r\n  </button>\r\n  <div class=\"collapse navbar-collapse\" id=\"navbarSupportedContent\">\r\n    <ul class=\"navbar-nav mr-auto\">\r\n    </ul>\r\n\t<ng-template #notificationPop>\r\n\t\t<div class=\"popNotification\">\r\n\t\t\t<div class=\"alert alert-danger\" role=\"alert\">\r\n\t\t\t  You are running trial version, <a href=''>click here</a> for paid version\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t</ng-template>\r\n\t<div class=\"notification show-count\" data-count=\"3\" [ngbPopover]=\"notificationPop\" placement=\"bottom\"></div>\t\r\n\t<form class=\"form-inline my-2 my-lg-0\">\r\n\t\t<ng-template #popContent>\r\n\t\t\t<div class=\"userInfo\">\r\n\t\t\t\t<div>\r\n\t\t\t\t\t<table width=\"100%\">\r\n\t\t\t\t\t<tr>\r\n\t\t\t\t\t<td><img class=\"card-img-top\" src=\"assets/settings.png\" alt=\"Card image cap\" style=\"width:48px;\"></td>\r\n\t\t\t\t\t<td align=\"center\">\r\n\t\t\t\t\t\t<span>{{userData.firstName}}</span>\r\n\t\t\t\t\t\t<span>{{userData.lastName}}</span>\r\n\t\t\t\t\t</td>\r\n\t\t\t\t\t</tr>\t\t\r\n\t\t\t\t\t</table>\r\n\t\t\t\t</div>\r\n\t\t\t\t<div class=\"progress\">\r\n\t\t\t\t  <div class=\"progress-bar\" role=\"progressbar\" style=\"width: 25%;\" aria-valuenow=\"25\" aria-valuemin=\"0\" aria-valuemax=\"100\">25%</div>\r\n\t\t\t\t</div>\r\n\t\t\t\t<div>\r\n\t\t\t\t\t<div style=\"font-size: small;\" class=\"textItemNoWrap\">\r\n\t\t\t\t\t\t<img *ngIf=\"userData && !userData.isEmailVerified\" class=\"\" src=\"assets/verified.png\" alt=\"Card image cap\" style=\"width:18px;\">\r\n\t\t\t\t\t\t<span>{{userData.email}}</span>\r\n\t\t\t\t\t</div>\r\n\t\t\t\t\t<div style=\"font-size: small;\" class=\"textItemNoWrap\">\r\n\t\t\t\t\t\t<a *ngIf=\"userData && !userData.isPhoneVerified\" href=\"#\">Verify</a>\r\n\t\t\t\t\t\t<span>{{userData.phone}}</span>\r\n\t\t\t\t\t</div>\r\n\t\t\t\t</div>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"dropMenu\" style=\"width: 12rem;\">\r\n\t\t\t  <button type=\"button\" class=\"btn btn-link\">Profile</button>\r\n\t\t\t  <a href=\"/\" class=\"btn btn-link float-right\">Logout</a>\r\n\t\t\t</div>\r\n\t\t</ng-template>\r\n\t\t<button *ngIf=\"userData && userData.firstName\" type=\"button\" class=\"btn\" [ngbPopover]=\"popContent\" placement=\"bottom\">\r\n\t\t  {{userData.firstName}}\r\n\t\t</button>\r\n    </form>\r\n  </div> -->\r\n</nav>\r\n<app-sidebar *ngIf=\"loggedIn\"></app-sidebar>\r\n<div class=\"container-fluid main-content\">\r\n\t\t<router-outlet></router-outlet>\r\n</div>"
+module.exports = " <nav *ngIf=\"!loggedIn\" class=\"navbar navbar-dark bg-primary\">\r\n  <a class=\"navbar-brand\" href=\"#\">IndCompli</a>\r\n</nav>\r\n\r\n\r\n\r\n\r\n\r\n<nav *ngIf=\"loggedIn\" class=\"navbar navbar-expand-lg navbar-dark bg-primary\">\r\n <div class=\"container\">\r\n        \r\n\r\n    <ul class=\"nav navbar-nav navbar-logo mx-auto\">\r\n      <li class=\"nav-item\">\r\n        <a class=\"navbar-brand\" href=\"#\">IndCompli</a>\r\n      </li>\r\n    </ul>\r\n    <ul class=\"nav navbar-nav pull-sm-right\" style=\"color: #fff; margin-right: -9%;\">\r\n\r\n      \r\n                <li class=\"dropdown\">\r\n                    <a class=\"dropdown-toggle\" data-toggle=\"dropdown\" role=\"button\" aria-haspopup=\"true\" aria-expanded=\"false\">\r\n                        <div class=\"img-rounded profile-img\"></div>\r\n                        Welcome, {{userData.firstName}} <span class=\"caret\"></span>\r\n                    </a>\r\n                    <ul class=\"dropdown-menu compliance-font userdropdown\">\r\n                        <div class=\"userInfo\">\r\n\t\t\t\t\t\t\t<div>\r\n\t\t\t\t\t\t\t\t<table width=\"100%\">\r\n\t\t\t\t\t\t\t\t<tr>\r\n\t\t\t\t\t\t\t\t<td><img class=\"card-img-top\" src=\"assets/user.svg\" alt=\"Card image cap\" style=\"width:48px;\"></td>\r\n\t\t\t\t\t\t\t\t<td align=\"center\">\r\n\t\t\t\t\t\t\t\t\t<span>{{userData.firstName}}</span>\r\n\t\t\t\t\t\t\t\t\t<span>{{userData.lastName}}</span>\r\n\t\t\t\t\t\t\t\t</td>\r\n\t\t\t\t\t\t\t\t</tr>\t\t\r\n\t\t\t\t\t\t\t\t</table>\r\n\t\t\t\t\t\t\t</div>\r\n\t\t\t\t\t\t\t<div class=\"progress\">\r\n\t\t\t\t\t\t\t  <div class=\"progress-bar\" role=\"progressbar\" style=\"width: 25%;\" aria-valuenow=\"25\" aria-valuemin=\"0\" aria-valuemax=\"100\">25%</div>\r\n\t\t\t\t\t\t\t</div>\r\n\t\t\t\t\t\t\t<div>\r\n\t\t\t\t\t\t\t\t<div style=\"font-size: small;\" class=\"textItemNoWrap\">\r\n\t\t\t\t\t\t\t\t\t<img *ngIf=\"userData && !userData.isEmailVerified\" class=\"\" src=\"assets/verified.png\" alt=\"Card image cap\" style=\"width:18px;\">\r\n\t\t\t\t\t\t\t\t\t<span>{{userData.email}}</span>\r\n\t\t\t\t\t\t\t\t</div>\r\n\t\t\t\t\t\t\t\t<div style=\"font-size: small;\" class=\"textItemNoWrap\">\r\n\t\t\t\t\t\t\t\t\t<a *ngIf=\"userData && !userData.isPhoneVerified\" href=\"#\">Verify</a>\r\n\t\t\t\t\t\t\t\t\t<span>{{userData.phone}}</span>\r\n\t\t\t\t\t\t\t\t</div>\r\n\t\t\t\t\t\t\t</div>\r\n\t\t\t\t\t\t</div>\r\n\t\t\t\t\t\t<div class=\"dropMenu\">\r\n\t\t\t\t\t\t  <!-- <a href=\"/\" class=\"btn btn-link float-left\">Profile</a> -->\r\n\t\t\t\t\t\t  <a href=\"/#\" class=\"btn btn-link float-right\">Logout</a>\r\n\t\t\t\t\t\t</div>\r\n                    </ul>\r\n                </li>\r\n\r\n                <ng-template #notificationPop>\r\n\t\t<div class=\"popNotification\">\r\n\t\t\t<div class=\"alert alert-danger\" role=\"alert\">\r\n\t\t\t  You are running trial version, <a href=''>click here</a> for paid version\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t</ng-template>\r\n    </ul>\r\n\r\n    </div>\r\n<!-- <nav *ngIf=\"!loggedIn\" class=\"navbar navbar-expand-sm navbar-light alert-dark\">\r\n  <a class=\"navbar-brand\" href=\"#\" style={color:#00000;}>IndCompli</a>\r\n</nav>\r\n<nav *ngIf=\"loggedIn\" class=\"navbar navbar-expand-lg navbar-light  alert-dark\">\r\n  <a class=\"navbar-brand\" href=\"#\">\r\n\t<img src=\"/assets/logon_only.png\" width=\"30\" height=\"30\" alt=\"\">IndCompli\r\n  </a>\r\n   \r\n  <button class=\"navbar-toggler\" type=\"button\" data-toggle=\"collapse\" data-target=\"#navbarSupportedContent\" aria-controls=\"navbarSupportedContent\" aria-expanded=\"false\" aria-label=\"Toggle navigation\">\r\n    <span class=\"navbar-toggler-icon\"></span>\r\n  </button>\r\n  <div class=\"collapse navbar-collapse\" id=\"navbarSupportedContent\">\r\n    <ul class=\"navbar-nav mr-auto\">\r\n    </ul>\r\n\t<ng-template #notificationPop>\r\n\t\t<div class=\"popNotification\">\r\n\t\t\t<div class=\"alert alert-danger\" role=\"alert\">\r\n\t\t\t  You are running trial version, <a href=''>click here</a> for paid version\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t</ng-template>\r\n\t<div class=\"notification show-count\" data-count=\"3\" [ngbPopover]=\"notificationPop\" placement=\"bottom\"></div>\t\r\n\t<form class=\"form-inline my-2 my-lg-0\">\r\n\t\t<ng-template #popContent>\r\n\t\t\t<div class=\"userInfo\">\r\n\t\t\t\t<div>\r\n\t\t\t\t\t<table width=\"100%\">\r\n\t\t\t\t\t<tr>\r\n\t\t\t\t\t<td><img class=\"card-img-top\" src=\"assets/settings.png\" alt=\"Card image cap\" style=\"width:48px;\"></td>\r\n\t\t\t\t\t<td align=\"center\">\r\n\t\t\t\t\t\t<span>{{userData.firstName}}</span>\r\n\t\t\t\t\t\t<span>{{userData.lastName}}</span>\r\n\t\t\t\t\t</td>\r\n\t\t\t\t\t</tr>\t\t\r\n\t\t\t\t\t</table>\r\n\t\t\t\t</div>\r\n\t\t\t\t<div class=\"progress\">\r\n\t\t\t\t  <div class=\"progress-bar\" role=\"progressbar\" style=\"width: 25%;\" aria-valuenow=\"25\" aria-valuemin=\"0\" aria-valuemax=\"100\">25%</div>\r\n\t\t\t\t</div>\r\n\t\t\t\t<div>\r\n\t\t\t\t\t<div style=\"font-size: small;\" class=\"textItemNoWrap\">\r\n\t\t\t\t\t\t<img *ngIf=\"userData && !userData.isEmailVerified\" class=\"\" src=\"assets/verified.png\" alt=\"Card image cap\" style=\"width:18px;\">\r\n\t\t\t\t\t\t<span>{{userData.email}}</span>\r\n\t\t\t\t\t</div>\r\n\t\t\t\t\t<div style=\"font-size: small;\" class=\"textItemNoWrap\">\r\n\t\t\t\t\t\t<a *ngIf=\"userData && !userData.isPhoneVerified\" href=\"#\">Verify</a>\r\n\t\t\t\t\t\t<span>{{userData.phone}}</span>\r\n\t\t\t\t\t</div>\r\n\t\t\t\t</div>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"dropMenu\" style=\"width: 12rem;\">\r\n\t\t\t  <button type=\"button\" class=\"btn btn-link\">Profile</button>\r\n\t\t\t  <a href=\"/\" class=\"btn btn-link float-right\">Logout</a>\r\n\t\t\t</div>\r\n\t\t</ng-template>\r\n\t\t<button *ngIf=\"userData && userData.firstName\" type=\"button\" class=\"btn\" [ngbPopover]=\"popContent\" placement=\"bottom\">\r\n\t\t  {{userData.firstName}}\r\n\t\t</button>\r\n    </form>\r\n  </div> -->\r\n</nav>\r\n<app-sidebar *ngIf=\"loggedIn\"></app-sidebar>\r\n<div class=\"container-fluid main-content\">\r\n\t\t<router-outlet></router-outlet>\r\n</div>"
 
 /***/ }),
 
@@ -330,8 +376,14 @@ var AppComponent = /** @class */ (function () {
         //window.location.href="/"
     };
     AppComponent.prototype.hashChangeHandler = function (e) {
-        this.loggedIn = this.loginService.isLoggedIn() ? true : false;
-        this.getLoggedInUser();
+        if (window.location.hash == '' || window.location.hash == "#/") {
+            this.loggedIn = false;
+            this.loginService.clearUserLogin();
+        }
+        else {
+            this.loggedIn = this.loginService.isLoggedIn() ? true : false;
+            this.getLoggedInUser();
+        }
     };
     AppComponent.prototype.getLoggedInUser = function () {
         var _this = this;
@@ -342,13 +394,6 @@ var AppComponent = /** @class */ (function () {
     };
     AppComponent.prototype.ngOnInit = function () {
         var that = this;
-        if (window.location.hash == "#/") {
-            this.loggedIn = false;
-            this.loginService.clearUserLogin();
-        }
-        else {
-            this.getLoggedInUser();
-        }
     };
     __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["HostListener"])('window:hashchange', ['$event']),
@@ -387,22 +432,23 @@ var AppComponent = /** @class */ (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__customComponents_combobox_app_combobox_component__ = __webpack_require__("./src/app/customComponents/combobox/app.combobox.component.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__login_app_login_forget_component__ = __webpack_require__("./src/app/login/app.login.forget.component.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__notactive_notactive_component__ = __webpack_require__("./src/app/notactive/notactive.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__angular_router__ = __webpack_require__("./node_modules/@angular/router/esm5/router.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__angular_forms__ = __webpack_require__("./node_modules/@angular/forms/esm5/forms.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12_angular_font_awesome__ = __webpack_require__("./node_modules/angular-font-awesome/dist/angular-font-awesome.es5.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__sidebar_sidebar_component__ = __webpack_require__("./src/app/sidebar/sidebar.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__angular_platform_browser_animations__ = __webpack_require__("./node_modules/@angular/platform-browser/esm5/animations.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15_angular_calendar__ = __webpack_require__("./node_modules/angular-calendar/esm5/angular-calendar.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__ng_bootstrap_ng_bootstrap__ = __webpack_require__("./node_modules/@ng-bootstrap/ng-bootstrap/index.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__demo_utils_module__ = __webpack_require__("./src/app/demo-utils/module.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__complience_calendar_complience_calendar_component__ = __webpack_require__("./src/app/complience-calendar/complience-calendar.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_19__compliance_dashboard_compliance_dashboard_component__ = __webpack_require__("./src/app/compliance-dashboard/compliance-dashboard.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_20_ng2_charts__ = __webpack_require__("./node_modules/ng2-charts/index.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_20_ng2_charts___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_20_ng2_charts__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_21__compliance_report_compliance_report_component__ = __webpack_require__("./src/app/compliance-report/compliance-report.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_22__compliance_activities_compliance_activities_component__ = __webpack_require__("./src/app/compliance-activities/compliance-activities.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_23__filters_filter_pipe__ = __webpack_require__("./src/app/filters/filter.pipe.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_24__customComponents_error_show_errors_component__ = __webpack_require__("./src/app/customComponents/error/show-errors.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__accountActive_accountactive_component__ = __webpack_require__("./src/app/accountActive/accountactive.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__angular_router__ = __webpack_require__("./node_modules/@angular/router/esm5/router.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__angular_forms__ = __webpack_require__("./node_modules/@angular/forms/esm5/forms.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13_angular_font_awesome__ = __webpack_require__("./node_modules/angular-font-awesome/dist/angular-font-awesome.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__sidebar_sidebar_component__ = __webpack_require__("./src/app/sidebar/sidebar.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__angular_platform_browser_animations__ = __webpack_require__("./node_modules/@angular/platform-browser/esm5/animations.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_16_angular_calendar__ = __webpack_require__("./node_modules/angular-calendar/esm5/angular-calendar.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__ng_bootstrap_ng_bootstrap__ = __webpack_require__("./node_modules/@ng-bootstrap/ng-bootstrap/index.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__demo_utils_module__ = __webpack_require__("./src/app/demo-utils/module.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_19__complience_calendar_complience_calendar_component__ = __webpack_require__("./src/app/complience-calendar/complience-calendar.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_20__compliance_dashboard_compliance_dashboard_component__ = __webpack_require__("./src/app/compliance-dashboard/compliance-dashboard.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_21_ng2_charts__ = __webpack_require__("./node_modules/ng2-charts/index.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_21_ng2_charts___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_21_ng2_charts__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_22__compliance_report_compliance_report_component__ = __webpack_require__("./src/app/compliance-report/compliance-report.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_23__compliance_activities_compliance_activities_component__ = __webpack_require__("./src/app/compliance-activities/compliance-activities.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_24__filters_filter_pipe__ = __webpack_require__("./src/app/filters/filter.pipe.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_25__customComponents_error_show_errors_component__ = __webpack_require__("./src/app/customComponents/error/show-errors.component.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -435,29 +481,30 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 
 
 
+
 var AppModule = /** @class */ (function () {
     function AppModule() {
     }
     AppModule = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["NgModule"])({
             declarations: [
-                __WEBPACK_IMPORTED_MODULE_3__app_component__["a" /* AppComponent */], __WEBPACK_IMPORTED_MODULE_24__customComponents_error_show_errors_component__["a" /* ShowErrorsComponent */], __WEBPACK_IMPORTED_MODULE_4__login_app_login_login_component__["a" /* LoginLoginComponent */], __WEBPACK_IMPORTED_MODULE_6__register_app_register_component__["a" /* RegisterComponent */], __WEBPACK_IMPORTED_MODULE_8__login_app_login_forget_component__["a" /* LoginForgetComponent */], __WEBPACK_IMPORTED_MODULE_5__loggedin_app_logedin_component__["a" /* LogedInComponent */],
-                __WEBPACK_IMPORTED_MODULE_13__sidebar_sidebar_component__["a" /* SidebarComponent */], __WEBPACK_IMPORTED_MODULE_18__complience_calendar_complience_calendar_component__["a" /* ComplienceCalendarComponent */], __WEBPACK_IMPORTED_MODULE_19__compliance_dashboard_compliance_dashboard_component__["a" /* ComplianceDashboardComponent */], __WEBPACK_IMPORTED_MODULE_21__compliance_report_compliance_report_component__["a" /* ComplianceReportComponent */],
-                __WEBPACK_IMPORTED_MODULE_22__compliance_activities_compliance_activities_component__["a" /* ComplianceActivitiesComponent */], __WEBPACK_IMPORTED_MODULE_23__filters_filter_pipe__["a" /* FilterPipe */], __WEBPACK_IMPORTED_MODULE_7__customComponents_combobox_app_combobox_component__["a" /* ComboboxComponent */], __WEBPACK_IMPORTED_MODULE_9__notactive_notactive_component__["a" /* NotActiveComponent */]
+                __WEBPACK_IMPORTED_MODULE_3__app_component__["a" /* AppComponent */], __WEBPACK_IMPORTED_MODULE_25__customComponents_error_show_errors_component__["a" /* ShowErrorsComponent */], __WEBPACK_IMPORTED_MODULE_4__login_app_login_login_component__["a" /* LoginLoginComponent */], __WEBPACK_IMPORTED_MODULE_6__register_app_register_component__["a" /* RegisterComponent */], __WEBPACK_IMPORTED_MODULE_8__login_app_login_forget_component__["a" /* LoginForgetComponent */], __WEBPACK_IMPORTED_MODULE_5__loggedin_app_logedin_component__["a" /* LogedInComponent */],
+                __WEBPACK_IMPORTED_MODULE_14__sidebar_sidebar_component__["a" /* SidebarComponent */], __WEBPACK_IMPORTED_MODULE_19__complience_calendar_complience_calendar_component__["a" /* ComplienceCalendarComponent */], __WEBPACK_IMPORTED_MODULE_20__compliance_dashboard_compliance_dashboard_component__["a" /* ComplianceDashboardComponent */], __WEBPACK_IMPORTED_MODULE_22__compliance_report_compliance_report_component__["a" /* ComplianceReportComponent */],
+                __WEBPACK_IMPORTED_MODULE_23__compliance_activities_compliance_activities_component__["a" /* ComplianceActivitiesComponent */], __WEBPACK_IMPORTED_MODULE_24__filters_filter_pipe__["a" /* FilterPipe */], __WEBPACK_IMPORTED_MODULE_7__customComponents_combobox_app_combobox_component__["a" /* ComboboxComponent */], __WEBPACK_IMPORTED_MODULE_9__notactive_notactive_component__["a" /* NotActiveComponent */], __WEBPACK_IMPORTED_MODULE_10__accountActive_accountactive_component__["a" /* AccountActiveComponent */]
             ],
             imports: [
-                __WEBPACK_IMPORTED_MODULE_11__angular_forms__["c" /* FormsModule */],
-                __WEBPACK_IMPORTED_MODULE_11__angular_forms__["f" /* ReactiveFormsModule */],
-                __WEBPACK_IMPORTED_MODULE_12_angular_font_awesome__["a" /* AngularFontAwesomeModule */],
+                __WEBPACK_IMPORTED_MODULE_12__angular_forms__["c" /* FormsModule */],
+                __WEBPACK_IMPORTED_MODULE_12__angular_forms__["f" /* ReactiveFormsModule */],
+                __WEBPACK_IMPORTED_MODULE_13_angular_font_awesome__["a" /* AngularFontAwesomeModule */],
                 __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser__["a" /* BrowserModule */],
                 __WEBPACK_IMPORTED_MODULE_2__angular_common_http__["b" /* HttpClientModule */],
-                __WEBPACK_IMPORTED_MODULE_14__angular_platform_browser_animations__["a" /* BrowserAnimationsModule */],
-                __WEBPACK_IMPORTED_MODULE_15_angular_calendar__["a" /* CalendarModule */].forRoot(),
-                __WEBPACK_IMPORTED_MODULE_16__ng_bootstrap_ng_bootstrap__["c" /* NgbModalModule */].forRoot(),
-                __WEBPACK_IMPORTED_MODULE_20_ng2_charts__["ChartsModule"],
-                __WEBPACK_IMPORTED_MODULE_17__demo_utils_module__["a" /* DemoUtilsModule */],
-                __WEBPACK_IMPORTED_MODULE_16__ng_bootstrap_ng_bootstrap__["d" /* NgbModule */].forRoot(),
-                __WEBPACK_IMPORTED_MODULE_10__angular_router__["a" /* RouterModule */].forRoot([
+                __WEBPACK_IMPORTED_MODULE_15__angular_platform_browser_animations__["a" /* BrowserAnimationsModule */],
+                __WEBPACK_IMPORTED_MODULE_16_angular_calendar__["a" /* CalendarModule */].forRoot(),
+                __WEBPACK_IMPORTED_MODULE_17__ng_bootstrap_ng_bootstrap__["c" /* NgbModalModule */].forRoot(),
+                __WEBPACK_IMPORTED_MODULE_21_ng2_charts__["ChartsModule"],
+                __WEBPACK_IMPORTED_MODULE_18__demo_utils_module__["a" /* DemoUtilsModule */],
+                __WEBPACK_IMPORTED_MODULE_17__ng_bootstrap_ng_bootstrap__["d" /* NgbModule */].forRoot(),
+                __WEBPACK_IMPORTED_MODULE_11__angular_router__["a" /* RouterModule */].forRoot([
                     {
                         path: '',
                         component: __WEBPACK_IMPORTED_MODULE_4__login_app_login_login_component__["a" /* LoginLoginComponent */]
@@ -472,15 +519,15 @@ var AppModule = /** @class */ (function () {
                     },
                     {
                         path: 'dashboard',
-                        component: __WEBPACK_IMPORTED_MODULE_19__compliance_dashboard_compliance_dashboard_component__["a" /* ComplianceDashboardComponent */],
+                        component: __WEBPACK_IMPORTED_MODULE_20__compliance_dashboard_compliance_dashboard_component__["a" /* ComplianceDashboardComponent */],
                     },
                     {
                         path: 'activities',
-                        component: __WEBPACK_IMPORTED_MODULE_18__complience_calendar_complience_calendar_component__["a" /* ComplienceCalendarComponent */]
+                        component: __WEBPACK_IMPORTED_MODULE_19__complience_calendar_complience_calendar_component__["a" /* ComplienceCalendarComponent */]
                     },
                     {
                         path: 'report',
-                        component: __WEBPACK_IMPORTED_MODULE_21__compliance_report_compliance_report_component__["a" /* ComplianceReportComponent */]
+                        component: __WEBPACK_IMPORTED_MODULE_22__compliance_report_compliance_report_component__["a" /* ComplianceReportComponent */]
                     },
                     {
                         path: 'register',
@@ -489,12 +536,16 @@ var AppModule = /** @class */ (function () {
                     {
                         path: 'notactive',
                         component: __WEBPACK_IMPORTED_MODULE_9__notactive_notactive_component__["a" /* NotActiveComponent */]
+                    },
+                    {
+                        path: 'activated',
+                        component: __WEBPACK_IMPORTED_MODULE_10__accountActive_accountactive_component__["a" /* AccountActiveComponent */]
                     }
                 ], { useHash: true })
             ],
             providers: [],
             bootstrap: [__WEBPACK_IMPORTED_MODULE_3__app_component__["a" /* AppComponent */]],
-            exports: [__WEBPACK_IMPORTED_MODULE_18__complience_calendar_complience_calendar_component__["a" /* ComplienceCalendarComponent */]]
+            exports: [__WEBPACK_IMPORTED_MODULE_19__complience_calendar_complience_calendar_component__["a" /* ComplienceCalendarComponent */]]
         })
     ], AppModule);
     return AppModule;
@@ -840,7 +891,7 @@ var ComplianceReportComponent = /** @class */ (function () {
         var freqency = null;
         var isMonth = false;
         if (this.view == 'month') {
-            freqency = this.reportMonth;
+            freqency = parseInt(this.reportMonth) + 1;
             isMonth = true;
         }
         else {
@@ -1119,7 +1170,7 @@ var ComboboxComponent = /** @class */ (function () {
 /***/ "./src/app/customComponents/combobox/app.combobox.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div ngbDropdown class=\"d-inline-block group\" #myDrop=\"ngbDropdown\">\r\n\t  <span class=\"highlight\"></span>\r\n\t  <span class=\"bar\"></span>\r\n\t  <label>Location</label>\r\n\t  <input type=\"text\" ngbDropdownToggle name=\"searchText\" [(ngModel)]=\"searchText\" (input)=\"$event.stopPropagation()\" autocomplete=\"off\"/>\r\n\t \r\n\t  <div ngbDropdownMenu  aria-labelledby=\"dropdownBasic1\">\r\n\t\t<a class=\"dropdown-item\" *ngFor=\"let item of options | filter:searchText\" (click)=\"setFilter(item.text,item.id);\">{{item.text}}</a>        \r\n\t  </div>\r\n\t\r\n</div>"
+module.exports = "<div ngbDropdown class=\"d-inline-block group\" #myDrop=\"ngbDropdown\">\r\n\t  <input type=\"text\" ngbDropdownToggle name=\"searchText\" [(ngModel)]=\"searchText\" \r\n\t\t(input)=\"$event.stopPropagation()\" autocomplete=\"off\" (focus)=\"myDrop.open()\"/>\r\n\t  <span class=\"highlight\"></span>\r\n\t  <span class=\"bar\"></span>\r\n\t  <label>Location</label>\r\n\t  \r\n\t  <div ngbDropdownMenu  aria-labelledby=\"dropdownBasic1\">\r\n\t\t<a class=\"dropdown-item\" *ngFor=\"let item of options | filter:searchText\" (click)=\"setFilter(item.text,item.id);\">{{item.text}}</a>        \r\n\t  </div>\r\n\t\r\n</div>"
 
 /***/ }),
 
@@ -1154,6 +1205,7 @@ var ShowErrorsComponent = /** @class */ (function () {
             .map(function (field) { return _this.getMessage(field, _this.control.errors[field]); });
     };
     ShowErrorsComponent.prototype.getMessage = function (type, params) {
+        console.log({ type: type, params: params });
         return ShowErrorsComponent_1.errorMessages[type](params);
     };
     ShowErrorsComponent.errorMessages = {
@@ -1756,7 +1808,6 @@ var RegisterComponent = /** @class */ (function () {
     RegisterComponent.prototype.onSubmit = function (user) {
         delete user.retypePassword;
         delete user.address;
-        console.log(this.form.valid());
         if (this.form.valid) {
             var registerd = this.register(this.formObject(user));
             this.showSuccessMessage = true;
@@ -1791,7 +1842,7 @@ var RegisterComponent = /** @class */ (function () {
 /***/ "./src/app/register/app.register.html":
 /***/ (function(module, exports) {
 
-module.exports = "<!--https://codepen.io/sevilayha/pen/IdGKH-->\r\n<div class=\"container\">\r\n\r\n <form [formGroup] = \"form\" (ngSubmit) = \"onSubmit(form.value)\" *ngIf=\"!showSuccessMessage\">\r\n\t <div class=\"form-group row\">\r\n\t\t<h3>Register</h3>\r\n\t </div>\r\n\t\r\n\t<div class=\"form-group row\">\r\n\t\t<h5>User</h5>\r\n\t </div>\t\r\n   <div class=\"form-group row\">\r\n   <div class=\"group\">      \r\n      <input type=\"text\" formControlName=\"firstName\" name=\"firstName\" id=\"firstName\" required>\r\n      <span class=\"highlight\"></span>\r\n      <span class=\"bar\"></span>\r\n      <label>First name</label>\r\n\t  <show-errors [control]=\"form.controls.firstName\"></show-errors>\r\n    </div>\t\r\n\t<div class=\"group\">      \r\n      <input type=\"text\" formControlName=\"lastName\" required>\r\n      <span class=\"highlight\"></span>\r\n      <span class=\"bar\"></span>\r\n      <label>Last name</label>\r\n\t  <show-errors [control]=\"form.controls.lastName\"></show-errors>\r\n    </div>\t\r\n\t</div>\t\r\n  <div class=\"form-group row\">    \r\n\t<div class=\"group\">      \r\n      <input type=\"text\" formControlName=\"userId\" (blur)=\"isUserExist(form.value.userId)\" required>\r\n      <span class=\"highlight\"></span>\r\n      <span class=\"bar\"></span>\r\n      <label><img class=\"card-img-top\" src=\"assets/identity.png\" alt=\"Card image cap\" style=\"width:18px;margin-right:0.5rem;\">Username</label>\r\n\t  <div *ngIf=isPresent>\r\n\t\t<li style=\"color: red\">This User already exist</li>\r\n\t  </div>\r\n\t  <show-errors [control]=\"form.controls.userId\"></show-errors>\t  \r\n    </div>\r\n  </div>\r\n  <div class=\"form-group row\">\r\n   <div class=\"group\">      \r\n      <input type=\"password\"  formControlName=\"pass\" required>\r\n      <span class=\"highlight\"></span>\r\n      <span class=\"bar\"></span>\r\n      <label><img class=\"card-img-top\" src=\"assets/lock.png\" alt=\"Card image cap\" style=\"width:18px;margin-right:0.5rem;\">Password</label>\r\n\t  <show-errors [control]=\"form.controls.pass\"></show-errors>\r\n    </div>\t\r\n\t<div class=\"group\">      \r\n      <input type=\"password\"  formControlName=\"retypePassword\" required>\r\n      <span class=\"highlight\"></span>\r\n      <span class=\"bar\"></span>\r\n      <label><img class=\"card-img-top\" src=\"assets/lock.png\" alt=\"\" style=\"width:18px;margin-right:0.5rem;\">Confirm password</label>\r\n\t  <show-errors [control]=\"form.controls.retypePassword\"></show-errors>\r\n    </div>\t\r\n  </div>\t\r\n  <hr/>\r\n  <div class=\"form-group row\">\r\n\t\t<h5>Contact</h5>\r\n\t </div>\t\r\n  <div class=\"form-group row\">\r\n  <div class=\"group\">      \r\n      <input type=\"text\"  formControlName=\"email\" required>\r\n      <span class=\"highlight\"></span>\r\n      <span class=\"bar\"></span>\r\n      <label><img class=\"card-img-top\" src=\"assets/mail.png\" alt=\"\" style=\"width:18px;margin-right:0.5rem;\">Email</label>\r\n\t  <show-errors [control]=\"form.controls.email\"></show-errors>\r\n    </div>\r\n    \r\n\t<div class=\"group\">      \r\n      <input type=\"text\"  formControlName=\"phone\" required>\r\n      <span class=\"highlight\"></span>\r\n      <span class=\"bar\"></span>\r\n      <label><img class=\"card-img-top\" src=\"assets/call.png\" alt=\"\" style=\"width:18px;margin-right:0.5rem;\">Phone</label>\r\n\t  <show-errors [control]=\"form.controls.phone\"></show-errors>\r\n    </div>\r\n  </div>\r\n  <hr/>\r\n  <div class=\"form-group row\">\r\n\t\t<h5>Company</h5>\r\n  </div>\t\r\n  <div class=\"form-group row\">\r\n\t<div class=\"group\">      \r\n      <input type=\"text\"  formControlName=\"companyName\" required>\r\n      <span class=\"highlight\"></span>\r\n      <span class=\"bar\"></span>\r\n      <label>Name</label>\r\n\t  <show-errors [control]=\"form.controls.companyName\"></show-errors>\r\n    </div>\r\n  </div>\r\n   <div class=\"form-group row\">\r\n   \r\n\t<!--<ng-autocomplete (selected)=\"Selected($event)\" [classes]=\"['']\" [group]=\"group\"  formControlName=\"location\" [(ngModel)]=\"form.value.location\" ></ng-autocomplete>-->\r\n\t<div *ngIf=locationLoading>\r\n\t\tLoading...\r\n\t</div>\r\n\t<div *ngIf=!locationLoading>\r\n\t\t<ComboBox [options]=locations formControlName=\"location\" required [ngModel]=\"locationComp\" name=\"location\"></ComboBox>\r\n\t\t<show-errors [control]=\"form.controls.locationComp\"></show-errors>\r\n\t</div>\r\n\t\r\n  </div>\r\n  <div class=\"form-group row\">\r\n\t<div class=\"group\">      \r\n      <input type=\"text\"  formControlName=\"city\" required>\r\n      <span class=\"highlight\"></span>\r\n      <span class=\"bar\"></span>\r\n      <label>City</label>\r\n\t  \r\n    </div>\r\n  </div>\r\n  <div class=\"form-group row\">\r\n\t<div class=\"group\">      \r\n      <input type=\"text\"  formControlName=\"state\" required>\r\n      <span class=\"highlight\"></span>\r\n      <span class=\"bar\"></span>\r\n      <label>State</label>\r\n    </div>\r\n  </div>\r\n  <button type=\"submit\" class=\"btn btn-primary\" >Submit</button>\r\n</form>\r\n\r\n\r\n<div *ngIf=\"showSuccessMessage\" [@slideInOut]>\r\n<div class=\"jumbotron\">\r\n  <h3 class=\"display-4\">Registered</h3>\r\n  <p class=\"lead\">You have registerd successfuly</p>\r\n  <p class=\"lead\">Activation email sent to your email address {{form.value.email}} please follow link to activate you account with us</p>\r\n  <hr class=\"my-4\">\r\n  <table class=\"table table-striped\">\r\n\t<thead>\r\n\t\t<tr><td>Key feature</td><td>Trial version</td><td>Full version</td></tr>\r\n\t</thead>\r\n\t<tbody>\r\n\t\t<tr><td>Feature 1</td><td><img src=\"assets/verified.png\" width=\"18px\"></td><td><img src=\"assets/verified.png\" width=\"18px\"></td></tr>\r\n\t\t<tr><td>Feature 2</td><td><img src=\"assets/verified.png\" width=\"18px\"></td><td><img src=\"assets/verified.png\" width=\"18px\"></td></tr>\r\n\t\t<tr><td>Feature 3</td><td><img src=\"assets/verified.png\" width=\"18px\"></td><td><img src=\"assets/notverified.png\" width=\"18px\"></td></tr>\r\n\t\t<tr><td>Feature 4</td><td><img src=\"assets/verified.png\" width=\"18px\"></td><td><img src=\"assets/notverified.png\" width=\"18px\"></td></tr>\r\n\t\t<tr><td>Feature 5</td><td><img src=\"assets/verified.png\" width=\"18px\"></td><td><img src=\"assets/notverified.png\" width=\"18px\"></td></tr>\r\n\t\t<tr><td>Feature 6</td><td><img src=\"assets/verified.png\" width=\"18px\"></td><td><img src=\"assets/notverified.png\" width=\"18px\"></td></tr>\r\n\t\t<tr><td>Feature 7</td><td><img src=\"assets/verified.png\" width=\"18px\"></td><td><img src=\"assets/notverified.png\" width=\"18px\"></td></tr>\r\n\t\t<tr><td>Feature 8</td><td><img src=\"assets/verified.png\" width=\"18px\"></td><td><img src=\"assets/notverified.png\" width=\"18px\"></td></tr>\r\n\t\t<tr><td>Feature 9</td><td><img src=\"assets/verified.png\" width=\"18px\"></td><td><img src=\"assets/notverified.png\" width=\"18px\"></td></tr>\r\n\t</tbody>\r\n\t\r\n  </table>\r\n\t<footer>\r\n\t\t<div>Request for full version</div>\r\n\t\t<a href=\"#\" class=\"btn btn-primary\">Yes</a>\r\n\t\t<a href=\"#\" class=\"btn btn-primary\">Not now</a>\r\n\t</footer>\r\n  </div>\r\n</div>\r\n</div>"
+module.exports = "<!--https://codepen.io/sevilayha/pen/IdGKH-->\r\n<div class=\"container\">\r\n\r\n <form [formGroup] = \"form\" (ngSubmit) = \"onSubmit(form.value)\" *ngIf=\"!showSuccessMessage\">\r\n\t <div class=\"form-group row\">\r\n\t\t<h3>Register</h3>\r\n\t </div>\r\n\t\r\n\t<div class=\"form-group row\">\r\n\t\t<h5>User</h5>\r\n\t </div>\t\r\n   <div class=\"form-group row\">\r\n   <div class=\"group\">      \r\n      <input type=\"text\" formControlName=\"firstName\" name=\"firstName\" id=\"firstName\" required>\r\n      <span class=\"highlight\"></span>\r\n      <span class=\"bar\"></span>\r\n      <label>First name</label>\r\n\t  <show-errors [control]=\"form.controls.firstName\"></show-errors>\r\n    </div>\t\r\n\t<div class=\"group\">      \r\n      <input type=\"text\" formControlName=\"lastName\" required>\r\n      <span class=\"highlight\"></span>\r\n      <span class=\"bar\"></span>\r\n      <label>Last name</label>\r\n\t  <show-errors [control]=\"form.controls.lastName\"></show-errors>\r\n    </div>\t\r\n\t</div>\t\r\n  <div class=\"form-group row\">    \r\n\t<div class=\"group\">      \r\n      <input type=\"text\" formControlName=\"userId\" (blur)=\"isUserExist(form.value.userId)\" required>\r\n      <span class=\"highlight\"></span>\r\n      <span class=\"bar\"></span>\r\n      <label><img class=\"card-img-top\" src=\"assets/identity.png\" alt=\"Card image cap\" style=\"width:18px;margin-right:0.5rem;\">Username</label>\r\n\t  <div *ngIf=isPresent>\r\n\t\t<li style=\"color: red\">This User already exist</li>\r\n\t  </div>\r\n\t  <show-errors [control]=\"form.controls.userId\"></show-errors>\t  \r\n    </div>\r\n  </div>\r\n  <div class=\"form-group row\">\r\n   <div class=\"group\">      \r\n      <input type=\"password\"  formControlName=\"pass\" required>\r\n      <span class=\"highlight\"></span>\r\n      <span class=\"bar\"></span>\r\n      <label><img class=\"card-img-top\" src=\"assets/lock.png\" alt=\"Card image cap\" style=\"width:18px;margin-right:0.5rem;\">Password</label>\r\n\t  <show-errors [control]=\"form.controls.pass\"></show-errors>\r\n    </div>\t\r\n\t<div class=\"group\">      \r\n      <input type=\"password\"  formControlName=\"retypePassword\" required>\r\n      <span class=\"highlight\"></span>\r\n      <span class=\"bar\"></span>\r\n      <label><img class=\"card-img-top\" src=\"assets/lock.png\" alt=\"\" style=\"width:18px;margin-right:0.5rem;\">Confirm password</label>\r\n\t  <show-errors [control]=\"form.controls.retypePassword\"></show-errors>\r\n    </div>\t\r\n  </div>\t\r\n  <hr/>\r\n  <div class=\"form-group row\">\r\n\t\t<h5>Contact</h5>\r\n\t </div>\t\r\n  <div class=\"form-group row\">\r\n  <div class=\"group\">      \r\n      <input type=\"text\"  formControlName=\"email\" required>\r\n      <span class=\"highlight\"></span>\r\n      <span class=\"bar\"></span>\r\n      <label><img class=\"card-img-top\" src=\"assets/mail.png\" alt=\"\" style=\"width:18px;margin-right:0.5rem;\">Email</label>\r\n\t  <show-errors [control]=\"form.controls.email\"></show-errors>\r\n    </div>\r\n    \r\n\t<div class=\"group\">      \r\n      <input type=\"text\"  formControlName=\"phone\" required>\r\n      <span class=\"highlight\"></span>\r\n      <span class=\"bar\"></span>\r\n      <label><img class=\"card-img-top\" src=\"assets/call.png\" alt=\"\" style=\"width:18px;margin-right:0.5rem;\">Phone</label>\r\n\t  <show-errors [control]=\"form.controls.phone\"></show-errors>\r\n    </div>\r\n  </div>\r\n  <hr/>\r\n  <div class=\"form-group row\">\r\n\t\t<h5>Company</h5>\r\n  </div>\t\r\n  <div class=\"form-group row\">\r\n\t<div class=\"group\">      \r\n      <input type=\"text\"  formControlName=\"companyName\" required>\r\n      <span class=\"highlight\"></span>\r\n      <span class=\"bar\"></span>\r\n      <label>Name</label>\r\n\t  <show-errors [control]=\"form.controls.companyName\"></show-errors>\r\n    </div>\r\n  </div>\r\n   <div class=\"form-group row\">\r\n   \r\n\t<!--<ng-autocomplete (selected)=\"Selected($event)\" [classes]=\"['']\" [group]=\"group\"  formControlName=\"location\" [(ngModel)]=\"form.value.location\" ></ng-autocomplete>-->\r\n\t<div *ngIf=locationLoading>\r\n\t\tLoading...\r\n\t</div>\r\n\t\t<ComboBox *ngIf=!locationLoading [options]=locations formControlName=\"location\" required [ngModel]=\"locationComp\" name=\"location\"></ComboBox>\r\n\t\t<show-errors [control]=\"form.controls.locationComp\"></show-errors>\r\n\t\r\n  </div>\r\n  <div class=\"form-group row\">\r\n\t<div class=\"group\">      \r\n      <input type=\"text\"  formControlName=\"city\" required>\r\n      <span class=\"highlight\"></span>\r\n      <span class=\"bar\"></span>\r\n      <label>City</label>\r\n\t  \r\n    </div>\r\n  </div>\r\n  <div class=\"form-group row\">\r\n\t<div class=\"group\">      \r\n      <input type=\"text\"  formControlName=\"state\" required>\r\n      <span class=\"highlight\"></span>\r\n      <span class=\"bar\"></span>\r\n      <label>State</label>\r\n    </div>\r\n  </div>\r\n  <button type=\"submit\" class=\"btn btn-primary\" >Submit</button>\r\n</form>\r\n\r\n\r\n<div *ngIf=\"showSuccessMessage\" [@slideInOut]>\r\n<div class=\"jumbotron\">\r\n  <h3 class=\"display-4\">Registered</h3>\r\n  <p class=\"lead\">You have registerd successfuly</p>\r\n  <p class=\"lead\">Activation email sent to your email address {{form.value.email}} please follow link to activate you account with us</p>\r\n  <hr class=\"my-4\">\r\n  <table class=\"table table-striped\">\r\n\t<thead>\r\n\t\t<tr><td>Key feature</td><td>Trial version</td><td>Full version</td></tr>\r\n\t</thead>\r\n\t<tbody>\r\n\t\t<tr><td>Feature 1</td><td><img src=\"assets/verified.png\" width=\"18px\"></td><td><img src=\"assets/verified.png\" width=\"18px\"></td></tr>\r\n\t\t<tr><td>Feature 2</td><td><img src=\"assets/verified.png\" width=\"18px\"></td><td><img src=\"assets/verified.png\" width=\"18px\"></td></tr>\r\n\t\t<tr><td>Feature 3</td><td><img src=\"assets/verified.png\" width=\"18px\"></td><td><img src=\"assets/notverified.png\" width=\"18px\"></td></tr>\r\n\t\t<tr><td>Feature 4</td><td><img src=\"assets/verified.png\" width=\"18px\"></td><td><img src=\"assets/notverified.png\" width=\"18px\"></td></tr>\r\n\t\t<tr><td>Feature 5</td><td><img src=\"assets/verified.png\" width=\"18px\"></td><td><img src=\"assets/notverified.png\" width=\"18px\"></td></tr>\r\n\t\t<tr><td>Feature 6</td><td><img src=\"assets/verified.png\" width=\"18px\"></td><td><img src=\"assets/notverified.png\" width=\"18px\"></td></tr>\r\n\t\t<tr><td>Feature 7</td><td><img src=\"assets/verified.png\" width=\"18px\"></td><td><img src=\"assets/notverified.png\" width=\"18px\"></td></tr>\r\n\t\t<tr><td>Feature 8</td><td><img src=\"assets/verified.png\" width=\"18px\"></td><td><img src=\"assets/notverified.png\" width=\"18px\"></td></tr>\r\n\t\t<tr><td>Feature 9</td><td><img src=\"assets/verified.png\" width=\"18px\"></td><td><img src=\"assets/notverified.png\" width=\"18px\"></td></tr>\r\n\t</tbody>\r\n\t\r\n  </table>\r\n\t<footer>\r\n\t\t<div>Request for full version</div>\r\n\t\t<a href=\"#\" class=\"btn btn-primary\">Yes</a>\r\n\t\t<a href=\"#\" class=\"btn btn-primary\">Not now</a>\r\n\t</footer>\r\n  </div>\r\n</div>\r\n</div>"
 
 /***/ }),
 

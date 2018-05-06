@@ -43,7 +43,8 @@ public class UserDao {
 		return userBean;
 	}
 	
-	public void insertUserValues(UserBean userBean){
+	public boolean insertUserValues(UserBean userBean){
+		/*
 		try {
 			HashMap<String, List> instval = DatabaseUtils.formInsertStatement(userBean);
 			System.out.println(instval);
@@ -62,8 +63,10 @@ public class UserDao {
 			// TODO Auto-generated catch block
 			e.printStackTrace(); 
 		}
-		
-		
+		*/
+		String insertUserQuery = "INSERT INTO user(isPrimaryUser, phone, regId, userId, isDeleted, email, pass, firstName, lastName, isactive) VALUES(?,?,?,?,?,?,?,?,?,?)";
+		return this.jdbcTemplate.update(insertUserQuery,true,userBean.getPhone(),userBean.getRegId(),userBean.getUserId(),false,userBean.getEmail(),
+				userBean.getPass(),userBean.getFirstName(),userBean.getLastName(),false)>0;
 	}
 	
 	public void insertCompanyValues(CompanyBean companyBean){

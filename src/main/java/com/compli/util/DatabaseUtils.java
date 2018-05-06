@@ -46,6 +46,9 @@ public class DatabaseUtils {
 				if((methodName.startsWith("get") || methodName.startsWith("is")) && (e.invoke(dataObject)!=null)){
 					
 					int removeIndex = methodName.startsWith("get")?3:0;
+					if(removeIndex==0){
+						removeIndex = methodName.startsWith("isIs")?2:0;
+					}
 					String fieldName = methodName.substring(removeIndex);
 					fieldName = fieldName.substring(0, 1).toLowerCase() + fieldName.substring(1);
 					types.add(getType(e.getReturnType()));

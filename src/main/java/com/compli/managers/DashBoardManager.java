@@ -114,6 +114,9 @@ public class DashBoardManager {
 		
 		for(int i=0;i<allActivity.size();i++){
 			Map<String,Integer> complainceOverview = complianceOverviewForLast3Month.get(Integer.parseInt(allActivity.get(i).get("dueMonth")+""));
+			if(null==complainceOverview){
+				continue;
+			}
 			Map<String,Object> activity = allActivity.get(i);
 			if(null==activity.get("isComplied") || "false".equals(activity.get("isComplied").toString())){
 				complainceOverview.put(PENDING_COMPLIANCE, complainceOverview.get(PENDING_COMPLIANCE)+1);

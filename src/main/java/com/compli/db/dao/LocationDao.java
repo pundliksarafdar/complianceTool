@@ -15,6 +15,11 @@ import com.compli.util.DatabaseUtils;
 public class LocationDao {
 	private JdbcTemplate jdbcTemplate;
 
+	private String companyLocations = "select companyId,abbriviation,location.locationId,locationName from location inner join "+	
+			"(select cc.companyId,abbriviation,locationId from company cc inner join companylocation "+
+					"on cc.companyId = companylocation.companyId where cc.companyId=?) companyWithLocation "+ 
+			"on location.locationId = companyWithLocation.locationId";
+	
 	public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
 		this.jdbcTemplate = jdbcTemplate;
 	}
@@ -59,6 +64,10 @@ public class LocationDao {
 	
 	public boolean deleteLocation(String locationId){
 		return this.jdbcTemplate.update("delete from location where locationId=?",locationId)>0;
+	}
+	
+	public List getCompanyLocation(String companyId){
+		return this.jdbcTemplate.queryForList(this.companyLocations,companyId);
 	}
 
 

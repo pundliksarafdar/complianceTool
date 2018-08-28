@@ -22,6 +22,7 @@ public class UserBean {
 	Date modifiedOn;
 	boolean isPrimaryUser;
 	String userTypeId;
+	boolean isFullUser;
 	
 	public String getUserId() {
 		return userId;
@@ -113,6 +114,12 @@ public class UserBean {
 	}
 	public void setRegId(String regId) {
 		this.regId = regId;
+	}
+	public boolean isFullUser() {
+		return isFullUser;
+	}
+	public void setIsFullUser(boolean isFullUser) {
+		this.isFullUser = isFullUser;
 	}
 	
 	

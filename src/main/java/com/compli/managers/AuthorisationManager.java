@@ -43,10 +43,18 @@ public class AuthorisationManager {
 		return authId;
 	}
 	
-	public static boolean isUserActive(UserBean userBean) throws ExecutionException{
-		AuthorisationManager authorisationManager = new AuthorisationManager();
-		com.compli.db.bean.UserBean userBean2 = authorisationManager.loginData(userBean.getUsername(), userBean.getPassword());
+	public static boolean isUserActive(String authId) throws ExecutionException{
+		com.compli.db.bean.UserBean userBean2 = cache.getIfPresent(authId);
 		return userBean2.isIsactive();
+	}
+	
+	public static String getUserType(String authToken){
+		try {
+			return getUserCatche(authToken).getUserTypeId();
+		} catch (ExecutionException e) {
+			e.printStackTrace();
+		}
+		return "";
 	}
 	
 	public com.compli.db.bean.UserBean loginData(String username,String password){

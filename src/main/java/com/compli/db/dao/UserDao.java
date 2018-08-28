@@ -36,7 +36,7 @@ public class UserDao {
 	
 	public UserBean getUserData(String username,String password){
 		UserBean userBean = null;
-		List<UserBean> userBeans = (List<UserBean>) this.jdbcTemplate.query("select * from user where userId=? and pass=?",new Object[]{username,password}, new BeanPropertyRowMapper(UserBean.class));
+		List<UserBean> userBeans = (List<UserBean>) this.jdbcTemplate.query("select * from user where ((userId=? or email=?) and pass=?)",new Object[]{username,username,password}, new BeanPropertyRowMapper(UserBean.class));
 		if(userBeans!=null && userBeans.size() >0){
 			userBean = userBeans.get(0);
 		}

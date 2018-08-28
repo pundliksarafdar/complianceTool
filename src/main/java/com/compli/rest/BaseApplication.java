@@ -16,6 +16,7 @@ public class BaseApplication extends Application{
         singletons.add(new DashboardRestApi());
         singletons.add(new ActivityRestApi());
         singletons.add(new ReportRestApi());
+        singletons.add(new FilesRestApi());
     }
     @Override
     public Set<Object> getSingletons() {

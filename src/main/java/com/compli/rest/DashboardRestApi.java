@@ -4,9 +4,11 @@ import java.util.HashMap;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.HeaderParam;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -18,8 +20,8 @@ public class DashboardRestApi {
 	
 	@GET
 	@Path("/{companyId}")
-	public Response getAllData(@PathParam("companyId")String companyId){
-		DashBoardManager boardManager = new DashBoardManager(companyId);
+	public Response getAllData(@PathParam("companyId")String companyId,@HeaderParam("auth")String auth,@QueryParam("location")String locationId){
+		DashBoardManager boardManager = new DashBoardManager(companyId,auth,locationId);
 		HashMap<String, Object> dashBoardData = boardManager.getDashBoardData();
 		return Response.ok(dashBoardData).build();
 	}

@@ -1,5 +1,6 @@
 package com.compli.managers;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -10,23 +11,199 @@ import com.compli.db.dao.DashBoardDao;
 
 public class ActivityManager {
 	DashBoardDao dashBoardDao;
-	public ActivityManager() {
+	boolean isFullUser;
+	String locationId;
+	public ActivityManager(String auth) {
 		String path = getClass().getResource("/applicationContext.xml").getPath();
 		ApplicationContext ctx=new ClassPathXmlApplicationContext("applicationContext.xml");
 		this.dashBoardDao = (DashBoardDao) ctx.getBean("dashBoardDao");		
+		this.isFullUser = AuthorisationManager.cache.getIfPresent(auth).isFullUser();
+	}
+	
+	public ActivityManager(String auth,String locationId) {
+		this.locationId = locationId;
+		String path = getClass().getResource("/applicationContext.xml").getPath();
+		ApplicationContext ctx=new ClassPathXmlApplicationContext("applicationContext.xml");
+		this.dashBoardDao = (DashBoardDao) ctx.getBean("dashBoardDao");		
+		this.isFullUser = AuthorisationManager.cache.getIfPresent(auth).isFullUser();
 	}
 	
 	public List<Map<String, Object>> getAllActivitiesWithDescriptionForCompany(String companyId){
-		return this.dashBoardDao.getAllActivitiesWithDescriptionForCompany(companyId);
+		return this.dashBoardDao.getAllActivitiesWithDescriptionForCompany(companyId,this.isFullUser);
 	}
 	
-	public boolean changeActivityStatus(String companyId,String activityId,boolean isComplied){
-		return this.dashBoardDao.changeActivityStatus(companyId,activityId, isComplied);
+	public List<Map<String, Object>> getAllActivitiesWithDescriptionForCompany(String companyId,String locationId){
+		return this.dashBoardDao.getAllActivitiesWithDescriptionForCompany(companyId,this.isFullUser,locationId);
+	}
+	
+	public List<Map<String, Object>> getAllActivitiesWithDescriptionForCompanyWithRisk(String companyId,String riskId){
+		List<Map<String, Object>> activities ;
+		if(!"all".equals(riskId)){
+			activities = this.dashBoardDao.getAllActivitiesWithDescriptionForCompanyWithRisk(companyId,riskId,this.isFullUser);
+		}else{
+			activities = this.dashBoardDao.getAllActivitiesWithDescriptionForCompanyWithRisk(companyId,"%",this.isFullUser);
+		}
+		return activities;
+	}
+	
+	public List<Map<String, Object>> getAllActivitiesWithDescriptionForCompanyWithSeverityAndLaw(String companyId,String status,String law){
+		List<Map<String, Object>> allActivity = this.dashBoardDao.getAllActivitiesWithDescriptionForCompanyByLawAndStatus(companyId,law,status,true);
+		return allActivity;
+	}
+	
+	public List<Map<String, Object>> getAllActivitiesWithDescriptionForCompanyWithSeverity(String companyId,String severity){
+		List<Map<String, Object>> allActivity = null;
+		if(this.locationId==null){	
+			allActivity = this.dashBoardDao.getAllActivitiesWithDescriptionForCompany(companyId,true);
+		}else{
+			allActivity = this.dashBoardDao.getAllActivitiesWithDescriptionForCompany(companyId,true,this.locationId);
+		}
+		List<Map<String, Object>> filteredActivity = new ArrayList<Map<String,Object>>();
+		for(int i=0;i<allActivity.size();i++){
+			Map<String,Object> activity = allActivity.get(i);
+			if((activity.get("isComplied")!=null && "0".equals(activity.get("isComplied").toString())) &&
+					(activity.get("isComplianceApproved")!=null && "0".equals(activity.get("isComplianceApproved").toString())) 
+					&& (activity.get("isComplianceRejected")!=null && "0".equals(activity.get("isComplianceRejected").toString())) && "Pending compliance".equalsIgnoreCase(severity)){
+				//complainceOverview.put(PENDING_COMPLIANCE, complainceOverview.get(PENDING_COMPLIANCE)+1);
+				filteredActivity.add(activity);
+			}else if((activity.get("isComplainceDelayed")!=null && "1".equals(activity.get("isComplainceDelayed").toString())) && "Complied-Delayed".equalsIgnoreCase(severity)){
+				//complainceOverview.put(COMPLIANCE_DELAYED, complainceOverview.get(COMPLIANCE_DELAYED)+1);
+				filteredActivity.add(activity);
+			}else if((activity.get("isComplied")!=null && "1".equals(activity.get("isComplied").toString())) &&
+					(activity.get("isComplianceApproved")!=null && "0".equals(activity.get("isComplianceApproved").toString())) 
+					&& (activity.get("isComplianceRejected")!=null && "0".equals(activity.get("isComplianceRejected").toString())) && "Pending for review".equalsIgnoreCase(severity)){
+				//complainceOverview.put(COMPLAINCE_REVEIW, complainceOverview.get(COMPLAINCE_REVEIW)+1);
+				filteredActivity.add(activity);
+			}else if((activity.get("isComplied")!=null && "1".equals(activity.get("isComplied").toString()) && activity.get("isComplainceDelayed")!=null && "0".equals(activity.get("isComplainceDelayed").toString())  
+					&& activity.get("isComplianceApproved")!=null && "1".equals(activity.get("isComplianceApproved").toString()) && activity.get("isComplianceRejected")!=null)
+					&& "Complied- In time".equalsIgnoreCase(severity) ){
+				//complainceOverview.put(COMPLAINCE_INTIME, complainceOverview.get(COMPLAINCE_INTIME)+1);
+				filteredActivity.add(activity);
+			}
+		}
+		return filteredActivity;
+	}
+	
+	public List<Map<String, Object>> getAllActivitiesWithDescriptionForCompanyWithSeverityForMonth(String companyId,String severity,String month){
+		List<Map<String, Object>> allActivity = null;
+		if(this.locationId==null){
+			allActivity = this.dashBoardDao.getAllActivitiesWithDescriptionForCompanyByMonth(companyId,month,true);
+		}else{
+			allActivity = this.dashBoardDao.getAllActivitiesWithDescriptionForCompanyByMonth(companyId,month,true,this.locationId);
+		}
+		List<Map<String, Object>> filteredActivity = new ArrayList<Map<String,Object>>();
+		for(int i=0;i<allActivity.size();i++){
+			Map<String,Object> activity = allActivity.get(i);
+			if((activity.get("isComplied")!=null && "0".equals(activity.get("isComplied").toString())) &&
+					(activity.get("isComplianceApproved")!=null && "0".equals(activity.get("isComplianceApproved").toString())) 
+					&& (activity.get("isComplianceRejected")!=null && "0".equals(activity.get("isComplianceRejected").toString())) && "Pending compliance".equalsIgnoreCase(severity)){
+				//complainceOverview.put(PENDING_COMPLIANCE, complainceOverview.get(PENDING_COMPLIANCE)+1);
+				filteredActivity.add(activity);
+			}else if((activity.get("isComplainceDelayed")!=null && "1".equals(activity.get("isComplainceDelayed").toString())) && "Complied-Delayed".equalsIgnoreCase(severity)){
+				//complainceOverview.put(COMPLIANCE_DELAYED, complainceOverview.get(COMPLIANCE_DELAYED)+1);
+				filteredActivity.add(activity);
+			}else if((activity.get("isComplied")!=null && "1".equals(activity.get("isComplied").toString())) &&
+					(activity.get("isComplianceApproved")!=null && "0".equals(activity.get("isComplianceApproved").toString())) 
+					&& (activity.get("isComplianceRejected")!=null && "0".equals(activity.get("isComplianceRejected").toString())) && "Pending for review".equalsIgnoreCase(severity)){
+				//complainceOverview.put(COMPLAINCE_REVEIW, complainceOverview.get(COMPLAINCE_REVEIW)+1);
+				filteredActivity.add(activity);
+			}else if((activity.get("isComplied")!=null && "1".equals(activity.get("isComplied").toString()) && activity.get("isComplainceDelayed")!=null && "0".equals(activity.get("isComplainceDelayed").toString())  
+					&& activity.get("isComplianceApproved")!=null && "1".equals(activity.get("isComplianceApproved").toString()) && activity.get("isComplianceRejected")!=null)
+					&& "Complied- In time".equalsIgnoreCase(severity) ){
+				//complainceOverview.put(COMPLAINCE_INTIME, complainceOverview.get(COMPLAINCE_INTIME)+1);
+				filteredActivity.add(activity);
+			}
+		}
+		return filteredActivity;
+	}
+	
+	public List<Map<String, Object>> getAllActivitiesWithDescriptionForCompanyWithSeverityForYear(String companyId,String severity,String year){
+		List<Map<String, Object>> allActivity = null;
+		if(this.locationId==null){
+			allActivity = this.dashBoardDao.getAllActivitiesWithDescriptionForCompanyByYear(companyId,year,true);
+		}else{
+			allActivity = this.dashBoardDao.getAllActivitiesWithDescriptionForCompanyByYear(companyId,year,true,this.locationId);
+		}
+		List<Map<String, Object>> filteredActivity = new ArrayList<Map<String,Object>>();
+		for(int i=0;i<allActivity.size();i++){
+			Map<String,Object> activity = allActivity.get(i);
+			if((activity.get("isComplied")!=null && "0".equals(activity.get("isComplied").toString())) &&
+					(activity.get("isComplianceApproved")!=null && "0".equals(activity.get("isComplianceApproved").toString())) 
+					&& (activity.get("isComplianceRejected")!=null && "0".equals(activity.get("isComplianceRejected").toString())) && "Pending compliance".equalsIgnoreCase(severity)){
+				//complainceOverview.put(PENDING_COMPLIANCE, complainceOverview.get(PENDING_COMPLIANCE)+1);
+				filteredActivity.add(activity);
+			}else if((activity.get("isComplainceDelayed")!=null && "1".equals(activity.get("isComplainceDelayed").toString())) && "Complied-Delayed".equalsIgnoreCase(severity)){
+				//complainceOverview.put(COMPLIANCE_DELAYED, complainceOverview.get(COMPLIANCE_DELAYED)+1);
+				filteredActivity.add(activity);
+			}else if((activity.get("isComplied")!=null && "1".equals(activity.get("isComplied").toString())) &&
+					(activity.get("isComplianceApproved")!=null && "0".equals(activity.get("isComplianceApproved").toString())) 
+					&& (activity.get("isComplianceRejected")!=null && "0".equals(activity.get("isComplianceRejected").toString())) && "Pending for review".equalsIgnoreCase(severity)){
+				//complainceOverview.put(COMPLAINCE_REVEIW, complainceOverview.get(COMPLAINCE_REVEIW)+1);
+				filteredActivity.add(activity);
+			}else if((activity.get("isComplied")!=null && "1".equals(activity.get("isComplied").toString()) && activity.get("isComplainceDelayed")!=null && "0".equals(activity.get("isComplainceDelayed").toString())  
+					&& activity.get("isComplianceApproved")!=null && "1".equals(activity.get("isComplianceApproved").toString()) && activity.get("isComplianceRejected")!=null)
+					&& "Complied- In time".equalsIgnoreCase(severity) ){
+				//complainceOverview.put(COMPLAINCE_INTIME, complainceOverview.get(COMPLAINCE_INTIME)+1);
+				filteredActivity.add(activity);
+			}
+		}
+		return filteredActivity;
+	}
+	
+	public List<Map<String, Object>> getAllActivitiesWithDescriptionForCompanyWithSeverityForQuarter(String companyId,String severity,String quarter){
+		List<Map<String, Object>> allActivity = null;
+		if(this.locationId==null){
+			allActivity = this.dashBoardDao.getAllActivitiesWithDescriptionForCompanyByQuarter(companyId,true,quarter);
+		}else{
+			allActivity = this.dashBoardDao.getAllActivitiesWithDescriptionForCompanyByQuarter(companyId,true,quarter,this.locationId);
+		}
+		List<Map<String, Object>> filteredActivity = new ArrayList<Map<String,Object>>();
+		for(int i=0;i<allActivity.size();i++){
+			Map<String,Object> activity = allActivity.get(i);
+			if((activity.get("isComplied")!=null && "0".equals(activity.get("isComplied").toString())) &&
+					(activity.get("isComplianceApproved")!=null && "0".equals(activity.get("isComplianceApproved").toString())) 
+					&& (activity.get("isComplianceRejected")!=null && "0".equals(activity.get("isComplianceRejected").toString())) && "Pending compliance".equalsIgnoreCase(severity)){
+				//complainceOverview.put(PENDING_COMPLIANCE, complainceOverview.get(PENDING_COMPLIANCE)+1);
+				filteredActivity.add(activity);
+			}else if((activity.get("isComplainceDelayed")!=null && "1".equals(activity.get("isComplainceDelayed").toString())) && "Complied-Delayed".equalsIgnoreCase(severity)){
+				//complainceOverview.put(COMPLIANCE_DELAYED, complainceOverview.get(COMPLIANCE_DELAYED)+1);
+				filteredActivity.add(activity);
+			}else if((activity.get("isComplied")!=null && "1".equals(activity.get("isComplied").toString())) &&
+					(activity.get("isComplianceApproved")!=null && "0".equals(activity.get("isComplianceApproved").toString())) 
+					&& (activity.get("isComplianceRejected")!=null && "0".equals(activity.get("isComplianceRejected").toString())) && "Pending for review".equalsIgnoreCase(severity)){
+				//complainceOverview.put(COMPLAINCE_REVEIW, complainceOverview.get(COMPLAINCE_REVEIW)+1);
+				filteredActivity.add(activity);
+			}else if((activity.get("isComplied")!=null && "1".equals(activity.get("isComplied").toString()) && activity.get("isComplainceDelayed")!=null && "0".equals(activity.get("isComplainceDelayed").toString())  
+					&& activity.get("isComplianceApproved")!=null && "1".equals(activity.get("isComplianceApproved").toString()) && activity.get("isComplianceRejected")!=null)
+					&& "Complied- In time".equalsIgnoreCase(severity) ){
+				//complainceOverview.put(COMPLAINCE_INTIME, complainceOverview.get(COMPLAINCE_INTIME)+1);
+				filteredActivity.add(activity);
+			}
+		}
+		return filteredActivity;
+	}
+	
+public boolean changeActivityStatus(String companyId,String activityId,boolean isComplied,boolean pendingComplied,boolean compliedInTime,boolean compliedDelayed,
+		boolean pendingDescrepancy,String remark){
+		if(isComplied){
+			return this.dashBoardDao.changeActivityStatus(companyId,activityId, isComplied,remark);
+		}else if(compliedInTime){
+			return this.dashBoardDao.changeActivityStatusApproved(companyId, activityId);
+		}else if(compliedDelayed){
+			return this.dashBoardDao.changeActivityStatusComplainceDelayed(companyId, activityId);
+		}else if(pendingDescrepancy){
+			return this.dashBoardDao.changeActivityStatusPendingDecrepancy(companyId, activityId);
+		}else {
+			return this.dashBoardDao.changeActivityStatusPendingComplied(companyId, activityId);
+		}
 	}
 	
 	
-	public List<Map<String, Object>> getAllActivitiesWithDescriptionForCompanyLast3Months(String companyId,int monthCount){
-		return this.dashBoardDao.getAllActivitiesWithDescriptionForCompanyLast3Months(companyId,monthCount);
+	public List<Map<String, Object>> getAllActivitiesWithDescriptionForCompanyLast3Months(String companyId,int monthCount,boolean isFullUser){
+		return this.dashBoardDao.getAllActivitiesWithDescriptionForCompanyLast3Months(companyId,monthCount,isFullUser);
 	}
 	
+	public List<Map<String, Object>> getAllActivitiesWithDescriptionForCompanyLast3Months(String companyId,int monthCount,boolean isFullUser,String locationId){
+		return this.dashBoardDao.getAllActivitiesWithDescriptionForCompanyLast3Months(companyId,monthCount,isFullUser,locationId);
+	}
 }

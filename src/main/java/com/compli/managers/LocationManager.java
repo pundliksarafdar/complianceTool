@@ -33,4 +33,8 @@ public class LocationManager {
 	public boolean deleteLocation(String locationId){
 		return locationDao.deleteLocation(locationId);
 	}
+	
+	public List getCompanyLocation(String companyId){
+		return locationDao.getCompanyLocation(companyId);
+	}
 }

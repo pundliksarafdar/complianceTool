@@ -37,4 +37,11 @@ public class LocationRestApi extends Application{
 		LocationManager locationManager = new LocationManager();
 		return Response.ok(locationManager.deleteLocation(locationId)).build();
 	}
+	
+	@GET
+	@Path("/companylocations/{companyId}")
+	public Response getAllLocationForUser(@PathParam("companyId")String companyId) {
+		LocationManager locationManager = new LocationManager();
+		return Response.ok(locationManager.getCompanyLocation(companyId)).build();
+	}
 }

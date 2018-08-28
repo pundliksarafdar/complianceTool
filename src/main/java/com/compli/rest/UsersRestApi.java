@@ -64,10 +64,15 @@ public class UsersRestApi extends Application{
 			}
 			HashMap<String, Object>  hashMap = new HashMap<>();
 			hashMap.put("authKey", authId);
+			userBean.setSessionToken(authId);
+			com.compli.db.bean.UserBean userBeanFull = AuthorisationManager.getUserCatche(authId);
 			AuthorisationManager authorisationManager = new AuthorisationManager();
-			hashMap.put("companies", authorisationManager.getCompanies(userBean.getUsername()));
-			boolean isUserActive = AuthorisationManager.isUserActive(userBean);
+			hashMap.put("companies", authorisationManager.getCompanies(userBeanFull.getUserId()));
+			boolean isUserActive = AuthorisationManager.isUserActive(authId);
 			hashMap.put("isUserActive", isUserActive);
+			
+			String userType = AuthorisationManager.getUserType(authId);
+			hashMap.put("userType", userType);
 			return Response.ok(hashMap).build();
 		}
 	}
@@ -82,9 +87,10 @@ public class UsersRestApi extends Application{
 		if(success){
 			registrationManager.addCompany(registerBean.getCompanyBean(),registerBean.getUserBean());
 			return Response.ok(registerBean).build();
-		}else{ 
+		}else{
 			return Response.notModified().build();
 		}
+		
 	}
 	
 	@GET
@@ -99,7 +105,7 @@ public class UsersRestApi extends Application{
 	public Response activateEmail(@PathParam("registrationId") String registrationId) throws URISyntaxException{
 		RegistrationManager registrationManager = new RegistrationManager();
 		boolean isValid = registrationManager.validateEmail(registrationId);
-		URI location = new URI("http://jws-app-pundlik.193b.starter-ca-central-1.openshiftapps.com/ComplianceTool/#/activated");
+		URI location = new URI("http://localhost:4200/#/activated");
 		return Response.seeOther(location).build();
 	}
 	

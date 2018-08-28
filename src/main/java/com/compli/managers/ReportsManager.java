@@ -19,7 +19,17 @@ public class ReportsManager {
 	private String OPEN = "open";
 	
 	DashBoardDao dashBoardDao;
+	private boolean isFullUser = true;
+	private String location = null;
+	
 	public ReportsManager() {
+		String path = getClass().getResource("/applicationContext.xml").getPath();
+		ApplicationContext ctx=new ClassPathXmlApplicationContext("applicationContext.xml");
+		this.dashBoardDao = (DashBoardDao) ctx.getBean("dashBoardDao");		
+	}
+	
+	public ReportsManager(String location) {
+		this.location = location;
 		String path = getClass().getResource("/applicationContext.xml").getPath();
 		ApplicationContext ctx=new ClassPathXmlApplicationContext("applicationContext.xml");
 		this.dashBoardDao = (DashBoardDao) ctx.getBean("dashBoardDao");		
@@ -27,7 +37,43 @@ public class ReportsManager {
 	
 	public HashMap<String,Object> getReportsObject(String companyId,String month){
 		 HashMap<String,Object> reportsMap = new HashMap<>();
-		 List<Map<String, Object>> activities = getAllActivitiesWithDescriptionForCompanyByMonth(companyId, month);
+		 List<Map<String, Object>> activities = null;
+		 if(this.location==null){		 
+		 	activities = getAllActivitiesWithDescriptionForCompanyByMonth(companyId, month);
+		 }else{
+			 activities = getAllActivitiesWithDescriptionForCompanyByMonth(companyId, month,this.location);
+		 }
+		 Map<String, Map<String, Integer>> riskCount = getComplainceOverviewByRisk(activities);
+		 
+		 reportsMap.put("activities", activities);
+		 reportsMap.put("riskCount", riskCount);
+		 return reportsMap;
+	}
+	
+	public HashMap<String,Object> getReportsObjectByQuarter(String companyId,String quarter){
+		 HashMap<String,Object> reportsMap = new HashMap<>();
+		 List<Map<String, Object>> activities = null;
+		 if(this.location==null){	
+		 	activities = getAllActivitiesWithDescriptionForCompanyByQuarter(companyId, quarter);
+		 }else{
+			 activities = getAllActivitiesWithDescriptionForCompanyByQuarter(companyId, quarter,this.location);
+		 }
+		 Map<String, Map<String, Integer>> riskCount = getComplainceOverviewByRisk(activities);
+		 
+		 reportsMap.put("activities", activities);
+		 reportsMap.put("riskCount", riskCount);
+		 return reportsMap;
+	}
+	
+	
+	public HashMap<String,Object> getReportsObjectByYear(String companyId,String year){
+		 HashMap<String,Object> reportsMap = new HashMap<>();
+		 List<Map<String, Object>> activities = null;
+		 if(this.location==null){
+			 activities = getAllActivitiesWithDescriptionForCompanyByYear(companyId, year);
+		 }else{
+			 activities = getAllActivitiesWithDescriptionForCompanyByYear(companyId, year,this.location);
+		 }
 		 Map<String, Map<String, Integer>> riskCount = getComplainceOverviewByRisk(activities);
 		 
 		 reportsMap.put("activities", activities);
@@ -37,7 +83,27 @@ public class ReportsManager {
 	
 	
 	public List<Map<String, Object>> getAllActivitiesWithDescriptionForCompanyByMonth(String companyId,String month){
-		return this.dashBoardDao.getAllActivitiesWithDescriptionForCompanyByMonth(companyId,month);
+		return this.dashBoardDao.getAllActivitiesWithDescriptionForCompanyByMonth(companyId,month,this.isFullUser);
+	}
+	
+	public List<Map<String, Object>> getAllActivitiesWithDescriptionForCompanyByMonth(String companyId,String month,String location){
+		return this.dashBoardDao.getAllActivitiesWithDescriptionForCompanyByMonth(companyId,month,this.isFullUser,location);
+	}
+	
+	public List<Map<String, Object>> getAllActivitiesWithDescriptionForCompanyByQuarter(String companyId,String quarter){
+		return this.dashBoardDao.getAllActivitiesWithDescriptionForCompanyByQuarter(companyId,this.isFullUser,quarter);
+	}
+	
+	public List<Map<String, Object>> getAllActivitiesWithDescriptionForCompanyByQuarter(String companyId,String quarter,String location){
+		return this.dashBoardDao.getAllActivitiesWithDescriptionForCompanyByQuarter(companyId,this.isFullUser,quarter,location);
+	}
+	
+	public List<Map<String, Object>> getAllActivitiesWithDescriptionForCompanyByYear(String companyId,String year){
+		return this.dashBoardDao.getAllActivitiesWithDescriptionForCompanyByYear(companyId,year,this.isFullUser);
+	}
+	
+	public List<Map<String, Object>> getAllActivitiesWithDescriptionForCompanyByYear(String companyId,String year,String location){
+		return this.dashBoardDao.getAllActivitiesWithDescriptionForCompanyByYear(companyId,year,this.isFullUser,location);
 	}
 	
 	public HashMap<String, Integer> getRiskCount(List<Map<String, Object>> activities){
@@ -63,7 +129,6 @@ public class ReportsManager {
 	
 	public Map<String,Map<String,Integer>> getComplainceOverviewByRisk(List<Map<String, Object>> allActivity){
 		Map<String,Map<String,Integer>> complianceDetailByLaw = new HashMap<>();
-		ActivityManager activityManager = new ActivityManager();
 		{
 		/*********************************************************/
 		Map<String,Integer> complainceOverview = new HashMap<>();
@@ -94,9 +159,9 @@ public class ReportsManager {
 			}
 			*/
 			Map<String,Integer>  complainceOverview = complianceDetailByLaw.get(riskDes);
-			if(null==activity.get("isComplied") || "false".equals(activity.get("isComplied").toString())){
+			if(null==activity.get("isComplied") || "0".equals(activity.get("isComplied").toString())){
 				complainceOverview.put(OPEN, complainceOverview.get(OPEN)+1);
-			}else if(null!=activity.get("isComplied") && "true".equals(activity.get("isComplied").toString())){
+			}else if(null!=activity.get("isComplied") && "1".equals(activity.get("isComplied").toString())){
 				complainceOverview.put(COMPLIED, complainceOverview.get(COMPLIED)+1);
 			}
 		}

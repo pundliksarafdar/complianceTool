@@ -3,6 +3,7 @@ package com.compli.rest;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -88,7 +89,9 @@ public class FilesRestApi {
 				 e.printStackTrace();
 			 }
 		} 
-		return Response.ok().build();
+		HashMap<String, String>statusMap = new HashMap<>();
+		statusMap.put("uploaded", "yes");
+		return Response.ok(statusMap).build();
 	}
 	
 	private String getFileName(MultivaluedMap<String, String> header) {

@@ -3095,8 +3095,9 @@ var LoginBean = (function () {
 // The list of which env maps to which file can be found in `.angular-cli.json`.
 // The file contents for the current environment will overwrite these during build.
 var environment = {
+	openshift: true,
     production: false,
-    appUrl: ""
+    appUrl: "/ComplianceTool"
 };
 //# sourceMappingURL=environment.js.map
 

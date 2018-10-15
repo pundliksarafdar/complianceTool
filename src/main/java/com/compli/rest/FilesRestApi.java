@@ -3,6 +3,7 @@ package com.compli.rest;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -93,11 +94,28 @@ public class FilesRestApi {
 		statusMap.put("uploaded", "yes");
 		return Response.ok(statusMap).build();
 	}
+	
+	@GET
+	@Path("/listAllFiles")
+	public Response getAllUploadedFiles() throws IOException{
+		HashMap<String, Object>fileData = new HashMap<String, Object>();
+		String filePath = UPLOADED_FILE_PATH;
+		File file = new File(filePath);
+		File[] files = file.listFiles();
+		List<String> alFiles = new ArrayList<String>();
+		for(File file2:files){
+			alFiles.add(file2.getName());
+		}
+		fileData.put("files", alFiles);
+		fileData.put("filecount", alFiles.size());
+		fileData.put("filesLocation", file.getCanonicalFile());
+		return Response.ok(fileData).build();
+	}
 
 	@POST
 	@Path("/uploadSimply")
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
-	public Response uploadSimplyFile(@PathParam("companyId")String companyId,@PathParam("activityId")String activityId,MultipartFormDataInput  input){
+	public Response uploadSimplyFile(MultipartFormDataInput  input){
 		Map<String, List<InputPart>> uploadForm = input.getFormDataMap();
 		List<InputPart> inputParts = uploadForm.get("uploadedFile");
 		for (InputPart inputPart : inputParts) {
@@ -145,7 +163,7 @@ public class FilesRestApi {
 		if (!file.exists()) {
 			file.createNewFile();
 		}
-
+		System.out.println(file.getCanonicalPath());
 		FileOutputStream fop = new FileOutputStream(file);
 
 		fop.write(content);

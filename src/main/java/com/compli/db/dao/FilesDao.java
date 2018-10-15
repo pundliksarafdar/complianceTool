@@ -33,4 +33,8 @@ public class FilesDao {
 		return this.jdbcTemplate.update(savefilesForUser,new Object[]{activityId,companyId,fileId,filename})>0;		
 	}
 	
+	public List<Files> getAlFiles() {
+		List<Files> files = (List<Files>) this.jdbcTemplate.query("select * from files", new BeanPropertyRowMapper(Files.class));
+		return files;
+	}
 }

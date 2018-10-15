@@ -8,6 +8,7 @@ import java.util.Map;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.JdbcTemplate;
 
+import com.compli.db.bean.CompanyBean;
 import com.compli.db.bean.LocationBean;
 import com.compli.db.bean.UserBean;
 import com.compli.util.DatabaseUtils;
@@ -46,6 +47,21 @@ public class LocationDao {
 		}
 		return locationStatus;
 		
+	}
+	
+	public boolean addCompanyForUpload(LocationBean locationBean){
+		String sql = "insert into location(locationId,locationName) values(?,?)";
+		return this.jdbcTemplate.update(sql,locationBean.getLocationId(),locationBean.getLocationName())>0;
+	}
+	
+	public boolean addCompanyLocationForUpload(String locationId,String companyId){
+		String sql = "insert into companylocation(locationId,companyId) values(?,?)";
+		try{
+			return this.jdbcTemplate.update(sql,locationId,companyId)>0;
+		}catch(Exception e){
+			System.out.println("Location id:"+locationId+" CompanyId:"+companyId);
+		}
+		return false;
 	}
 	
 	public static void main(String[] args) {

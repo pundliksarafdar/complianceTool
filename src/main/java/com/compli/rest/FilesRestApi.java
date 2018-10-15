@@ -93,7 +93,35 @@ public class FilesRestApi {
 		statusMap.put("uploaded", "yes");
 		return Response.ok(statusMap).build();
 	}
-	
+
+	@POST
+	@Path("/uploadSimply")
+	@Consumes(MediaType.MULTIPART_FORM_DATA)
+	public Response uploadSimplyFile(@PathParam("companyId")String companyId,@PathParam("activityId")String activityId,MultipartFormDataInput  input){
+		Map<String, List<InputPart>> uploadForm = input.getFormDataMap();
+		List<InputPart> inputParts = uploadForm.get("uploadedFile");
+		for (InputPart inputPart : inputParts) {
+			 try {
+				MultivaluedMap<String, String> header = inputPart.getHeaders();
+				String fileName = getFileName(header);
+				System.out.println(fileName);
+				
+				//convert the uploaded file to inputstream
+				java.io.InputStream inputStream = inputPart.getBody(java.io.InputStream.class,null);
+
+				byte [] bytes = IOUtils.toByteArray(inputStream);
+					
+				//constructs upload file path
+				String filePath = UPLOADED_FILE_PATH+File.separator + fileName;
+					
+				writeFile(bytes,filePath);				
+			 }catch(Exception e){
+				 e.printStackTrace();
+			 }
+		} 
+		return Response.ok().build();
+	}
+
 	private String getFileName(MultivaluedMap<String, String> header) {
 
 		String[] contentDisposition = header.getFirst("Content-Disposition").split(";");

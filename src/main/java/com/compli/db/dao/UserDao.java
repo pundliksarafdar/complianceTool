@@ -25,13 +25,10 @@ public class UserDao {
 		this.jdbcTemplate = jdbcTemplate;
 	}
 	
-	public UserBean getAllData(){
+	public List<UserBean> getAllData(){
 		UserBean userBean = null;
 		List<UserBean> userBeans = (List<UserBean>) this.jdbcTemplate.query("select * from user", new BeanPropertyRowMapper(UserBean.class));
-		if(userBeans!=null && userBeans.size() >0){
-			userBean = userBeans.get(0);
-		}
-		return userBean;
+		return userBeans;
 	}
 	
 	public UserBean getUserData(String username,String password){
@@ -67,6 +64,12 @@ public class UserDao {
 		String insertUserQuery = "INSERT INTO user(isPrimaryUser, phone, regId, userId, isDeleted, email, pass, firstName, lastName, isactive) VALUES(?,?,?,?,?,?,?,?,?,?)";
 		return this.jdbcTemplate.update(insertUserQuery,true,userBean.getPhone(),userBean.getRegId(),userBean.getUserId(),false,userBean.getEmail(),
 				userBean.getPass(),userBean.getFirstName(),userBean.getLastName(),false)>0;
+	}
+	
+	public boolean insertUserValuesForUpload(UserBean userBean){
+		String insertUserQuery = "INSERT INTO user(isPrimaryUser, phone, regId, userId, isDeleted, email, pass, firstName, lastName, isactive,userTypeId,isFullUser) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)";
+		return this.jdbcTemplate.update(insertUserQuery,true,"",userBean.getRegId(),userBean.getUserId(),false,userBean.getEmail(),
+				userBean.getPass(),"","",true,userBean.getUserTypeId(),true)>0;
 	}
 	
 	public void insertCompanyValues(CompanyBean companyBean){

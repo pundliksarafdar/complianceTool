@@ -2,10 +2,14 @@ package com.compli.db.dao;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
+
 import com.compli.db.bean.CompanyBean;
 import com.compli.db.bean.CompanyLocationBean;
+import com.compli.db.bean.UserBean;
 import com.compli.db.bean.UserCompanyBean;
 import com.compli.util.DatabaseUtils;
 
@@ -16,6 +20,10 @@ public class CompanyDao {
 		this.jdbcTemplate = jdbcTemplate;
 	}
 	
+	public List<CompanyBean> getAllCompany(){
+		List<CompanyBean> companyBeans = (List<CompanyBean>) this.jdbcTemplate.query("select * from company", new BeanPropertyRowMapper(CompanyBean.class));
+		return companyBeans;
+	}
 	
 	public boolean addCompany(CompanyBean companyBean){
 		/*
@@ -42,6 +50,12 @@ public class CompanyDao {
 		String sql = "insert into company(companyId,name) values(?,?)";
 		this.jdbcTemplate.update(sql,companyBean.getCompanyId(),companyBean.getName());
 		return true;
+	}
+	
+	public boolean addCompanyForUpload(CompanyBean companyBean){
+		String sql = "insert into company(companyId,name,abbriviation) values(?,?,?)";
+		return this.jdbcTemplate.update(sql,companyBean.getCompanyId(),companyBean.getName(),companyBean.getAbbriviation())>0;
+		
 	}
 	
 	public boolean setUserCompany(UserCompanyBean userCompanyBean){
@@ -71,5 +85,9 @@ public class CompanyDao {
 		String sql = "insert into companylocation(locationId,companyId) values(?,?)";
 		this.jdbcTemplate.update(sql,companyLocationBean.getLocationId(),companyLocationBean.getCompanyId());
 		return true;
+	}
+	
+	public List<Map<String, Object>> getAllComapanyAndLocations(){
+		return this.jdbcTemplate.queryForList("Select company.companyId,name,abbriviation,locationId from company left join compli.companylocation on company.companyId=companylocation.companyId;");
 	}
 }

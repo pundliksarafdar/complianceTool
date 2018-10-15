@@ -1,0 +1,119 @@
+package com.compli.util.datamigration.v2;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+import com.compli.db.bean.CompanyBean;
+import com.compli.db.bean.migration.v2.ActivityAssociationBean;
+import com.compli.db.bean.migration.v2.ActivityBean;
+import com.compli.db.bean.migration.v2.ActivityMasterBean;
+import com.compli.db.bean.migration.v2.LawMasterBean;
+import com.compli.db.bean.migration.v2.PeriodicityMasterBean;
+import com.compli.db.dao.ActivityAssociationDao;
+import com.compli.db.dao.ActivityDao;
+import com.compli.db.dao.ActivityMasterDao;
+import com.compli.db.dao.CompanyDao;
+import com.compli.db.dao.LawMasterDao;
+import com.compli.db.dao.LocationDao;
+import com.compli.db.dao.PeriodicityDateMasterDao;
+import com.compli.db.dao.PeriodicityMasterDao;
+import com.compli.util.Util;
+
+public class DBMigrationUtilV2Activity {
+	private static int ID = 0;
+	private static int COMPANY_NAME = 1;
+	private static int COMPANY_ABBR = 2;
+	private static int COMPLAINCE_STATUS = 15;
+	private static int ASSIGNED_USER =16;
+	private static int REMARK = 17;
+	
+	static ActivityDao activityDao;
+	static CompanyDao companyDao;
+	static List<Map<String,Object>> allLocations;
+	static List<CompanyBean> companies;
+	public DBMigrationUtilV2Activity() {
+		String path = getClass().getResource("/applicationContext.xml").getPath();
+		ApplicationContext ctx=new ClassPathXmlApplicationContext("applicationContext.xml");
+		activityDao = (ActivityDao) ctx.getBean("activityDao");
+		companyDao = (CompanyDao)ctx.getBean("companyDao");
+		companies = companyDao.getAllCompany();
+	}
+	
+	public static void init(){
+		new DBMigrationUtilV2Activity();
+	}
+	
+	public static void createActivity(Sheet datatypeSheet){
+		List<ActivityBean> activityBeanSheet = new ArrayList<ActivityBean>();
+		Iterator<Row> iterator = datatypeSheet.iterator();
+		boolean isFirst = false;
+		//Form userBean from uploaded sheet
+		while (iterator.hasNext()) {
+			if(!isFirst){
+				isFirst = true;
+				iterator.next();
+				continue;
+			}
+			
+			Row currentRow = iterator.next();
+			String activityId = (int)currentRow.getCell(ID, Row.CREATE_NULL_AS_BLANK).getNumericCellValue()+"";
+			String companyName = currentRow.getCell(COMPANY_NAME, Row.CREATE_NULL_AS_BLANK).toString().trim();
+			
+			if(companyName.equals("")){
+				continue;
+			}
+			String companyAbbr = currentRow.getCell(COMPANY_ABBR, Row.CREATE_NULL_AS_BLANK).toString().trim();
+			int statusNum = (int)currentRow.getCell(COMPLAINCE_STATUS, Row.CREATE_NULL_AS_BLANK).getNumericCellValue();
+			String assignedUser = currentRow.getCell(ASSIGNED_USER, Row.CREATE_NULL_AS_BLANK).toString().trim();
+			String remark = currentRow.getCell(REMARK, Row.CREATE_NULL_AS_BLANK).toString().trim();
+			
+			String companyId = getCompanyId(companyAbbr, companyName);
+			
+			ActivityBean activityBean = new ActivityBean(activityId, companyId, remark, assignedUser, false, false, false, false, false);
+			if(statusNum==1){//In time
+				activityBean = new ActivityBean(activityId, companyId, remark, assignedUser, true, true, false, false, false);
+			}else if(statusNum==2){//Delayd
+				activityBean = new ActivityBean(activityId, companyId, remark, assignedUser, true, true, false, false, true);
+			}else if(statusNum==3){//Pending review
+				activityBean = new ActivityBean(activityId, companyId, remark, assignedUser, true, false, false, false, false);
+			}else if(statusNum==4){//Pending
+				activityBean = new ActivityBean(activityId, companyId, remark, assignedUser, false, false, false, false, false);
+			}
+				
+			activityBeanSheet.add(activityBean);
+		}
+		
+		List<ActivityBean> activitiesFromDb = activityDao.getAllActivityData();
+		List<ActivityBean> filterdActivities = activityBeanSheet.parallelStream().filter(activityBean->{
+			return !activitiesFromDb.parallelStream().anyMatch(activityDb->{
+				return activityDb.getActivityId().equals(activityBean.getActivityId()) &&
+						activityDb.getCompanyId().equals(activityBean.getCompanyId());
+			});
+		}).collect(Collectors.toList());
+		
+		DataBaseMigrationUtilV2UpdateDB updateDB = new DataBaseMigrationUtilV2UpdateDB();
+		updateDB.updateActivity(filterdActivities);
+	}
+	
+	
+	private static String getCompanyId(String abbr,String name){
+		for(CompanyBean companyBean:companies){
+			if(companyBean.getAbbriviation().trim().equals(abbr) && companyBean.getName().trim().equals(name)){
+				return companyBean.getCompanyId();
+			}
+		}
+		return "";
+	}
+}

@@ -192,8 +192,8 @@ public class DashBoardManager {
 		
 		for(int i=0;i<allActivity.size();i++){
 			Map<String,Object> activity = allActivity.get(i);
-			String lawId = (String) activity.get("lawId");
-			lawId = getActivityType(lawId);
+			String lawId = (String) activity.get("lawName");
+			//lawId = getActivityType(lawId);
 			
 			if(!complianceDetailByLaw.containsKey(lawId)){
 				Map<String,Integer> complainceOverview = new HashMap<>();

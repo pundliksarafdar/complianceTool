@@ -1,12 +1,35 @@
 package com.compli.managers;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import net.sf.dynamicreports.jasper.builder.JasperReportBuilder;
+import net.sf.dynamicreports.report.builder.DynamicReports;
+import net.sf.dynamicreports.report.builder.column.Columns;
+import net.sf.dynamicreports.report.builder.component.Components;
+import net.sf.dynamicreports.report.builder.datatype.DataTypes;
+import net.sf.dynamicreports.report.constant.HorizontalAlignment;
+import net.sf.dynamicreports.report.exception.DRException;
+import net.sf.jasperreports.engine.JRDataSource;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.component.Component;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import net.sf.jasperreports.engine.export.tabulator.Column;
+
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import com.compli.bean.BeanWithList;
 import com.compli.db.dao.DashBoardDao;
 
 public class ReportsManager {
@@ -168,4 +191,43 @@ public class ReportsManager {
 		
 		return complianceDetailByLaw;
 	}
+	
+	public boolean generateReport(List<Map<String, Object>> data) throws DRException, FileNotFoundException{
+		try {
+	        Map<String, Object> params = new HashMap<String, Object>();
+	        JasperReport jasperReport = JasperCompileManager.compileReport("C:/report/report1.xml");
+	        
+	        JRBeanCollectionDataSource beanCollectionDataSource = new JRBeanCollectionDataSource(data); 
+	        JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, params, beanCollectionDataSource);
+
+	        JasperExportManager.exportReportToPdfFile(jasperPrint, "c:/report/report.pdf");
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        System.out.println(e.getMessage());
+	    }
+	return true;
+	}
+	
+	private static void format(List<Map<String, Object>> data){
+		for(Map<String, Object> dt :data){
+			if((Integer)dt.get("isComplied")==1 && (Integer)dt.get("isComplianceApproved")==1){
+					dt.put("complianceState", "Complied activities");
+			}else if((Integer)dt.get("isComplainceDelayed")==1){
+				dt.put("complianceState", "Compliance delayed");
+			}else if((Integer)dt.get("isComplied")==0){
+				dt.put("complianceState", "Open activities");
+			}
+		}
+	}
+	
+	public static void main(String[] args) throws DRException, FileNotFoundException {
+		ReportsManager manager = new ReportsManager();
+		HashMap<String, Object> d = manager.getReportsObject("11f90c2223744aba", "10");
+		System.out.println(d);
+		List<Map<String, Object>> data = (List<Map<String, Object>>) d.get("activities");
+		format(data);
+		manager.generateReport(data);
+		
+	}
 }
+

@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.6.0.final using JasperReports Library version 6.6.0  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report2" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="e614db6f-86ae-4506-a7f8-24e8a4efaf08">
+	<property name="ireport.zoom" value="1.4641000000000006"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="New Data Adapter "/>
+	<style name="Title" fontName="Arial" fontSize="26" isBold="true"/>
+	<style name="SubTitle" forecolor="#666666" fontName="Arial" fontSize="18"/>
+	<style name="Column header" forecolor="#666666" fontName="Arial" fontSize="12" isBold="true"/>
+	<style name="Detail" fontName="Arial" fontSize="12"/>
+	<subDataset name="New Dataset 1" uuid="7a3e03f4-8e29-425a-981d-3b812226cf18"/>
+	<field name="locationName" class="java.lang.String"/>
+	<field name="activityName" class="java.lang.String"/>
+	<field name="riskDes" class="java.lang.String"/>
+	<field name="duedate" class="java.sql.Date"/>
+	<field name="consequence" class="java.lang.String"/>
+	<field name="complianceState" class="java.lang.String"/>
+	<sortField name="complianceState"/>
+	<group name="ActiviesGroup" minHeightToStartNewPage="60">
+		<groupExpression><![CDATA[$F{complianceState}]]></groupExpression>
+		<groupHeader>
+			<band height="20">
+				<textField evaluationTime="Group" evaluationGroup="ActiviesGroup" bookmarkLevel="1">
+					<reportElement mode="Opaque" x="0" y="5" width="565" height="15" backcolor="#C0C0C0" uuid="4b1cae52-8a51-482b-8869-5d715dbd27c7"/>
+					<box leftPadding="10">
+						<bottomPen lineWidth="1.0"/>
+					</box>
+					<textFieldExpression><![CDATA[String.valueOf($F{complianceState})]]></textFieldExpression>
+					<anchorNameExpression><![CDATA[String.valueOf($F{complianceState})]]></anchorNameExpression>
+				</textField>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="20">
+				<staticText>
+					<reportElement x="400" y="1" width="60" height="15" uuid="da21dd7c-30ee-4a0a-8089-ca29cca60faa"/>
+					<textElement textAlignment="Right"/>
+					<text><![CDATA[Count :]]></text>
+				</staticText>
+				<textField>
+					<reportElement x="460" y="1" width="30" height="15" uuid="463b4403-a442-4bbb-91b2-469a436ddc41"/>
+					<textElement textAlignment="Right"/>
+					<textFieldExpression><![CDATA[$V{ActiviesGroup_COUNT}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupFooter>
+	</group>
+	<title>
+		<band height="540" splitType="Stretch">
+			<image>
+				<reportElement x="93" y="46" width="355" height="289" uuid="88796d59-cd8c-43c1-853f-dd6acfa88258"/>
+				<imageExpression><![CDATA["logo.png"]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement style="Title" x="0" y="-10" width="263" height="33" uuid="bcf29663-c4b8-483e-a197-e5f6920fd2a2"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[Indcompli]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="SubTitle" x="370" y="360" width="200" height="22" uuid="c089ef81-84c2-4243-a7e9-0e0a8992e71a"/>
+				<textElement textAlignment="Right"/>
+				<text><![CDATA[Compliance Report]]></text>
+			</staticText>
+			<barChart>
+				<chart evaluationTime="Report">
+					<reportElement x="180" y="340" width="200" height="200" uuid="6b26b8a1-e333-41d5-aa16-bc932f8e9b1d"/>
+					<chartTitle/>
+					<chartSubtitle/>
+					<chartLegend/>
+				</chart>
+				<categoryDataset>
+					<categorySeries>
+						<seriesExpression><![CDATA["SERIES 1"]]></seriesExpression>
+						<categoryExpression><![CDATA[0]]></categoryExpression>
+						<valueExpression><![CDATA[10]]></valueExpression>
+						<labelExpression><![CDATA[Activity]]></labelExpression>
+					</categorySeries>
+				</categoryDataset>
+				<barPlot>
+					<plot/>
+					<itemLabel/>
+					<categoryAxisFormat>
+						<axisFormat labelColor="#000000" tickLabelColor="#000000" axisLineColor="#000000"/>
+					</categoryAxisFormat>
+					<valueAxisFormat>
+						<axisFormat labelColor="#000000" tickLabelColor="#000000" axisLineColor="#000000"/>
+					</valueAxisFormat>
+				</barPlot>
+			</barChart>
+		</band>
+	</title>
+	<columnHeader>
+		<band height="33">
+			<staticText>
+				<reportElement x="10" y="4" width="50" height="20" uuid="ed3af5c5-22cf-49ff-b1a4-48bc563d99a6"/>
+				<textElement>
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Location]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="70" y="5" width="100" height="20" uuid="af8cca0c-2507-4d5f-86f3-f6a17f89fec7"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Compliance Activity]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="200" y="5" width="50" height="20" uuid="bf62e333-4a91-4814-b9e6-62290981cf43"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Risk Profile]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="245" y="5" width="50" height="20" uuid="e0b12ba8-9877-4ebb-aaf3-927cd03d38d6"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Due Date]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="315" y="5" width="200" height="20" uuid="9036b19a-df78-4b3b-b533-1ddf77ae8dc6"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Consequence]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="36">
+			<textField>
+				<reportElement x="10" y="7" width="50" height="20" uuid="dd734a06-97a4-482e-9e44-f3bae9397623"/>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{locationName}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="70" y="7" width="100" height="20" uuid="29f9e7c2-fdcc-4d3a-bc4b-e9581bc9052b"/>
+				<textFieldExpression><![CDATA[$F{activityName}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="200" y="7" width="50" height="20" uuid="86d314f7-dfcb-4dd0-94e4-80522aff9042"/>
+				<textFieldExpression><![CDATA[$F{riskDes}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="245" y="7" width="35" height="20" uuid="7d6d1711-b665-496d-bb9b-d5388bb95cb2"/>
+				<textFieldExpression><![CDATA[$F{duedate}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="315" y="7" width="245" height="20" uuid="edf4b716-6986-4535-8b61-6fcb3462965b"/>
+				<textFieldExpression><![CDATA[$F{consequence}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="30">
+			<textField evaluationTime="Master">
+				<reportElement x="0" y="10" width="515" height="20" uuid="5c02f94d-6287-4413-b3e9-cf29f6ada0a4"/>
+				<textElement textAlignment="Left"/>
+				<textFieldExpression><![CDATA[msg("Page {0} of {1}", $V{MASTER_CURRENT_PAGE}, $V{MASTER_TOTAL_PAGES})]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+</jasperReport>

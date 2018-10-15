@@ -41,6 +41,10 @@ public class FilesRestApi {
 		ResteasyProviderFactory instance=ResteasyProviderFactory.getInstance();
 	    RegisterBuiltin.register(instance);
 	    instance.registerProvider(MimeMultipartProvider.class);
+	    File file = new File(UPLOADED_FILE_PATH);
+	    if(!file.exists()){
+	    	file.mkdirs();
+	    }
 	}
 	@GET
 	@Path("/{companyId}/{activityId}")
@@ -103,12 +107,14 @@ public class FilesRestApi {
 		File file = new File(filePath);
 		File[] files = file.listFiles();
 		List<String> alFiles = new ArrayList<String>();
-		for(File file2:files){
-			alFiles.add(file2.getName());
-		}
-		fileData.put("files", alFiles);
-		fileData.put("filecount", alFiles.size());
-		fileData.put("filesLocation", file.getCanonicalFile());
+		if(null!=files){
+			for(File file2:files){
+				alFiles.add(file2.getName());
+			}
+			fileData.put("files", alFiles);
+			fileData.put("filecount", alFiles.size());
+			fileData.put("filesLocation", file.getCanonicalFile());
+			}
 		return Response.ok(fileData).build();
 	}
 

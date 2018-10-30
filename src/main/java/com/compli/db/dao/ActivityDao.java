@@ -18,10 +18,10 @@ public class ActivityDao {
 	}
 	//Using migration beans only
 	public boolean addActivityForUpload(ActivityBean activityBean){
-		String sql = "insert into activity(activityId,companyId,isComplied,isComplianceApproved,isProofRequired,isComplianceRejected,isComplainceDelayed,remark,assignedUser) values(?,?,?,?,?,?,?,?,?)";
+		String sql = "insert into activity(activityId,companyId,isComplied,isComplianceApproved,isProofRequired,isComplianceRejected,isComplainceDelayed,remark,assignedUser,completionDate) values(?,?,?,?,?,?,?,?,?,?)";
 		return this.jdbcTemplate.update(sql,activityBean.getActivityId(),activityBean.getCompanyId(),activityBean.isComplied(),
 				activityBean.isComplianceApproved(),activityBean.isProofRequired(),activityBean.isComplianceRejected(),activityBean.isComplainceDelayed(),
-				activityBean.getRemark(),activityBean.getAssignedUser())>0;
+				activityBean.getRemark(),activityBean.getAssignedUser(),activityBean.getCompletionDate())>0;
 	}
 	
 	public List<ActivityBean> getAllActivityData(){

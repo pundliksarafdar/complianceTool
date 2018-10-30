@@ -90,4 +90,9 @@ public class CompanyDao {
 	public List<Map<String, Object>> getAllComapanyAndLocations(){
 		return this.jdbcTemplate.queryForList("Select company.companyId,name,abbriviation,locationId from company left join compli.companylocation on company.companyId=companylocation.companyId;");
 	}
+	
+	public CompanyBean getCompanyById(String companyId){
+		List<CompanyBean> companyBeans = (List<CompanyBean>) this.jdbcTemplate.query("select * from company where companyId = ?",new Object[]{companyId}, new BeanPropertyRowMapper(CompanyBean.class));
+		return companyBeans!=null && companyBeans.size()>0?companyBeans.get(0):null;
+	}
 }

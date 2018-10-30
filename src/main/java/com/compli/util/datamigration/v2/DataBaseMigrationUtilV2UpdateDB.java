@@ -220,6 +220,13 @@ public class DataBaseMigrationUtilV2UpdateDB {
 		int errorRow = 0;
 		for(int i=0;i<len;i++){
 			boolean isSucess = this.filesDao.saveFile(filesBean.get(i).getActivityId(), filesBean.get(i).getCompanyId(), filesBean.get(i).getDocumentName(), filesBean.get(i).getDocumentFile());
+			if(len%500==0){
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
 			if(isSucess){
 				errorRow++;
 			}	

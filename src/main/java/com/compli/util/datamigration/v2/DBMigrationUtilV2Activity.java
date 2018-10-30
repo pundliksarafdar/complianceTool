@@ -1,6 +1,11 @@
 package com.compli.util.datamigration.v2;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -9,6 +14,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.apache.poi.hssf.usermodel.HSSFDateUtil;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -35,6 +41,7 @@ public class DBMigrationUtilV2Activity {
 	private static int ID = 0;
 	private static int COMPANY_NAME = 1;
 	private static int COMPANY_ABBR = 2;
+	private static int COMPLETION_DATE = 14;
 	private static int COMPLAINCE_STATUS = 15;
 	private static int ASSIGNED_USER =16;
 	private static int REMARK = 17;
@@ -79,17 +86,24 @@ public class DBMigrationUtilV2Activity {
 			String assignedUser = currentRow.getCell(ASSIGNED_USER, Row.CREATE_NULL_AS_BLANK).toString().trim();
 			String remark = currentRow.getCell(REMARK, Row.CREATE_NULL_AS_BLANK).toString().trim();
 			
+			Cell cell = currentRow.getCell(COMPLETION_DATE,Row.CREATE_NULL_AS_BLANK);
+			Date completionDate = null;
+			if(cell.getCellType()== Cell.CELL_TYPE_NUMERIC && HSSFDateUtil.isCellDateFormatted(cell)){
+				completionDate = currentRow.getCell(COMPLETION_DATE,Row.CREATE_NULL_AS_BLANK).getDateCellValue();
+			}
 			String companyId = getCompanyId(companyAbbr, companyName);
 			
-			ActivityBean activityBean = new ActivityBean(activityId, companyId, remark, assignedUser, false, false, false, false, false);
+			ActivityBean activityBean = new ActivityBean(activityId, companyId, remark, assignedUser, completionDate,false, false, false, false, false);
 			if(statusNum==1){//In time
-				activityBean = new ActivityBean(activityId, companyId, remark, assignedUser, true, true, false, false, false);
+				activityBean = new ActivityBean(activityId, companyId, remark, assignedUser, completionDate,true, true, false, false, false);
 			}else if(statusNum==2){//Delayd
-				activityBean = new ActivityBean(activityId, companyId, remark, assignedUser, true, true, false, false, true);
+				activityBean = new ActivityBean(activityId, companyId, remark, assignedUser, completionDate,true, true, false, false, true);
 			}else if(statusNum==3){//Pending review
-				activityBean = new ActivityBean(activityId, companyId, remark, assignedUser, true, false, false, false, false);
+				activityBean = new ActivityBean(activityId, companyId, remark, assignedUser, completionDate,true, false, false, false, false);
 			}else if(statusNum==4){//Pending
-				activityBean = new ActivityBean(activityId, companyId, remark, assignedUser, false, false, false, false, false);
+				activityBean = new ActivityBean(activityId, companyId, remark, assignedUser, completionDate,false, false, false, false, false);
+			}else if(statusNum==5){//Pending
+				activityBean = new ActivityBean(activityId, companyId, remark, assignedUser, completionDate,false, false, false, true, false);
 			}
 				
 			activityBeanSheet.add(activityBean);

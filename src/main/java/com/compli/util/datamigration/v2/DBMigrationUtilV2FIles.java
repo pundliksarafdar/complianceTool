@@ -71,11 +71,12 @@ public class DBMigrationUtilV2FIles {
 			Row currentRow = iterator.next();
 			String activityId = (int)currentRow.getCell(ACTIVITY_ID, Row.CREATE_NULL_AS_BLANK).getNumericCellValue()+"";
 			String docName = currentRow.getCell(DOCUMENT_NAME, Row.CREATE_NULL_AS_BLANK).toString().trim();
-			if(docName.equals("")){
-				continue;
-			}
 			String submitDate = currentRow.getCell(SUBMIT_DATE, Row.CREATE_NULL_AS_BLANK).toString().trim();
 			 String fileName = currentRow.getCell(DOCUMENT_FILE, Row.CREATE_NULL_AS_BLANK).toString().trim();
+			if(docName.equals("")){
+				docName = fileName;
+			}
+			
 			 if(fileName.equals("")){
 					continue;
 				}			

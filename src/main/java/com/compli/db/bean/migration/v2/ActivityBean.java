@@ -1,26 +1,30 @@
 package com.compli.db.bean.migration.v2;
 
+import java.util.Date;
+
 public class ActivityBean {
 	String activityId,companyId,remark,assignedUser;
 	boolean isComplied,isComplianceApproved,isProofRequired,isComplianceRejected,isComplainceDelayed;
-
+	Date completionDate;
 	public ActivityBean() {
 	
 	}
 
 	public ActivityBean(String activityId, String companyId, String remark,
-			String assignedUser, boolean isComplied,
+			String assignedUser,Date completionDate,boolean isComplied,
 			boolean isComplianceApproved, boolean isProofRequired,
 			boolean isComplianceRejected, boolean isComplainceDelayed) {
 		this.activityId = activityId;
 		this.companyId = companyId;
 		this.remark = remark;
 		this.assignedUser = assignedUser;
+		this.completionDate = completionDate;
 		this.isComplied = isComplied;
 		this.isComplianceApproved = isComplianceApproved;
 		this.isProofRequired = isProofRequired;
 		this.isComplianceRejected = isComplianceRejected;
 		this.isComplainceDelayed = isComplainceDelayed;
+		
 	}
 
 	public String getActivityId() {
@@ -93,6 +97,14 @@ public class ActivityBean {
 
 	public void setComplainceDelayed(boolean isComplainceDelayed) {
 		this.isComplainceDelayed = isComplainceDelayed;
+	}
+
+	public Date getCompletionDate() {
+		return completionDate;
+	}
+
+	public void setCompletionDate(Date completionDate) {
+		this.completionDate = completionDate;
 	}
 	
 	

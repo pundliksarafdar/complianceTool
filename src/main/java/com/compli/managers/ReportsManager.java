@@ -1,35 +1,29 @@
 package com.compli.managers;
 
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
+import java.text.DateFormatSymbols;
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import net.sf.dynamicreports.jasper.builder.JasperReportBuilder;
-import net.sf.dynamicreports.report.builder.DynamicReports;
-import net.sf.dynamicreports.report.builder.column.Columns;
-import net.sf.dynamicreports.report.builder.component.Components;
-import net.sf.dynamicreports.report.builder.datatype.DataTypes;
-import net.sf.dynamicreports.report.constant.HorizontalAlignment;
 import net.sf.dynamicreports.report.exception.DRException;
-import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
-import net.sf.jasperreports.engine.component.Component;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
-import net.sf.jasperreports.engine.export.tabulator.Column;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import com.compli.bean.BeanWithList;
+import com.compli.bean.ChartBean;
+import com.compli.bean.GraphBean;
+import com.compli.db.bean.CompanyBean;
+import com.compli.db.dao.CompanyDao;
 import com.compli.db.dao.DashBoardDao;
 
 public class ReportsManager {
@@ -42,13 +36,15 @@ public class ReportsManager {
 	private String OPEN = "open";
 	
 	DashBoardDao dashBoardDao;
+	CompanyDao companyDao;
 	private boolean isFullUser = true;
 	private String location = null;
 	
 	public ReportsManager() {
 		String path = getClass().getResource("/applicationContext.xml").getPath();
 		ApplicationContext ctx=new ClassPathXmlApplicationContext("applicationContext.xml");
-		this.dashBoardDao = (DashBoardDao) ctx.getBean("dashBoardDao");		
+		this.dashBoardDao = (DashBoardDao) ctx.getBean("dashBoardDao");
+		this.companyDao = (CompanyDao)ctx.getBean("companyDao");
 	}
 	
 	public ReportsManager(String location) {
@@ -192,41 +188,155 @@ public class ReportsManager {
 		return complianceDetailByLaw;
 	}
 	
-	public boolean generateReport(List<Map<String, Object>> data) throws DRException, FileNotFoundException{
+	public static String finnancialYear(String month){
+		String finnacialYear = "";
+		int monthInt = Integer.parseInt(month);
+		int currentYear = LocalDate.now().getYear();
+		if(monthInt>3){
+			finnacialYear = currentYear + "-" + (currentYear+1);
+		}else{
+			finnacialYear = (currentYear-1) + "-" + (currentYear);
+		}
+		return finnacialYear;
+	}
+	
+	public Map<String,Object> generateReportNew(List<Map<String, Object>> compliedInTime,List<Map<String, Object>> compliedDelayed,
+			List<Map<String, Object>> compliedOpen,List<GraphBean> graphBeans,List<ChartBean> chartBean,String companyId,String monthNum) throws DRException, FileNotFoundException{
+		String month = new DateFormatSymbols().getMonths()[Integer.parseInt(monthNum)-1];
+		String finnancialYear = finnancialYear(monthNum);
+		CompanyBean company = companyDao.getCompanyById(companyId);
+		String companyName = company.getName();
+		
+		String fileName = companyName+"-"+month+"("+finnancialYear+").pdf";
+		byte[] pdfFile = null;
+		Map<String, Object>resp = new HashMap<String, Object>(){{put("filename", fileName);}};
 		try {
-	        Map<String, Object> params = new HashMap<String, Object>();
-	        JasperReport jasperReport = JasperCompileManager.compileReport("C:/report/report1.xml");
+			Map<String, Object> params = new HashMap<String, Object>();
+			JRBeanCollectionDataSource beanCollectionDataAll = new JRBeanCollectionDataSource(new ArrayList(){{add(0);}});
+			JRBeanCollectionDataSource beanCollectionDataSourceInTime = new JRBeanCollectionDataSource(compliedInTime);
+	        JRBeanCollectionDataSource beanCollectionDataSourceInDelayed = new JRBeanCollectionDataSource(compliedDelayed);
+	        JRBeanCollectionDataSource beanCollectionDataSourceInOpen = new JRBeanCollectionDataSource(compliedOpen);
+	        JRBeanCollectionDataSource graphBeanDataSource = new JRBeanCollectionDataSource(graphBeans);
+	        JRBeanCollectionDataSource chartBeanDataSource = new JRBeanCollectionDataSource(chartBean);
 	        
-	        JRBeanCollectionDataSource beanCollectionDataSource = new JRBeanCollectionDataSource(data); 
-	        JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, params, beanCollectionDataSource);
+	        params.put("CompliedInTimeDataSource", beanCollectionDataSourceInTime);
+	        params.put("CompliedDelayedDataSource", beanCollectionDataSourceInDelayed);
+	        params.put("CompliedOpenDataSource", beanCollectionDataSourceInOpen);
+	        params.put("GraphDataSource", graphBeanDataSource);
+	        params.put("ChartBeanDataSource", chartBeanDataSource);
+	        params.put("TIME_PERIOD_MONTH",month);
+	        params.put("COMPANY_NAME",companyName);
+	        params.put("TIME_PERIOD",month+" ("+finnancialYear+")");
+	        String path2 = "C:\\DDrive\\Source\\Compliance\\compliance-tool\\ComplianceToolServer\\ComplianceTool\\src\\main\\resources\\reports\\";
+	        String path1 = "C:/report/reports/";
+	        String path = path2;
+	        JasperReport jasperCompliReport = JasperCompileManager.compileReport(this.getClass().getResourceAsStream("/reports/ComplianceReport.jrxml"));
+	        JasperPrint jasperPrint = JasperFillManager.fillReport(jasperCompliReport, params,beanCollectionDataAll);
 
-	        JasperExportManager.exportReportToPdfFile(jasperPrint, "c:/report/report.pdf");
+//	        JasperExportManager.exportReportToPdfFile(jasperPrint, "c:/report/report.pdf");
+	        pdfFile = JasperExportManager.exportReportToPdf(jasperPrint);
 	    } catch (Exception e) {
 	        e.printStackTrace();
 	        System.out.println(e.getMessage());
 	    }
-	return true;
+		resp.put("pdfFile", pdfFile);
+	return resp;
 	}
 	
-	private static void format(List<Map<String, Object>> data){
+	private static HashMap<String, List> format(List<Map<String, Object>> data){
+		HashMap<String, List> dataMap = new HashMap<String, List>();
+		List<Map<String, Object>> compliedInTime = new ArrayList<Map<String,Object>>();
+		List<Map<String, Object>> compliedDelayed = new ArrayList<Map<String,Object>>();
+		List<Map<String, Object>> compliedOpen = new ArrayList<Map<String,Object>>();
+		
+		int lowComplied = 0;
+		int mediumComplied = 0;
+		int highComplied = 0;
+		
+		int lowOpen = 0;
+		int mediumOpen = 0;
+		int highOpen = 0;
+		
 		for(Map<String, Object> dt :data){
-			if((Integer)dt.get("isComplied")==1 && (Integer)dt.get("isComplianceApproved")==1){
+			if((Integer)dt.get("isComplied")==1 && (Integer)dt.get("isComplianceApproved")==1 && (Integer)dt.get("isComplainceDelayed")==0){
 					dt.put("complianceState", "Complied activities");
+					compliedInTime.add(dt);	
+					if(dt.get("riskDes").toString().toLowerCase().equals("low")){
+						lowComplied++;
+					}else if(dt.get("riskDes").toString().toLowerCase().equals("medium")){
+						mediumComplied++;
+					}else if(dt.get("riskDes").toString().toLowerCase().equals("high")){
+						highComplied++;
+					}
 			}else if((Integer)dt.get("isComplainceDelayed")==1){
 				dt.put("complianceState", "Compliance delayed");
+				compliedDelayed.add(dt);
+				if(dt.get("riskDes").toString().toLowerCase().equals("low")){
+					lowComplied++;
+				}else if(dt.get("riskDes").toString().toLowerCase().equals("medium")){
+					mediumComplied++;
+				}else if(dt.get("riskDes").toString().toLowerCase().equals("high")){
+					highComplied++;
+				}
 			}else if((Integer)dt.get("isComplied")==0){
 				dt.put("complianceState", "Open activities");
+				compliedOpen.add(dt);
+				if(dt.get("riskDes").toString().toLowerCase().equals("low")){
+					lowOpen++;
+				}else if(dt.get("riskDes").toString().toLowerCase().equals("medium")){
+					mediumOpen++;
+				}else if(dt.get("riskDes").toString().toLowerCase().equals("high")){
+					highOpen++;
+				}
+			}else{
+				System.out.println(dt);
 			}
 		}
+		
+		GraphBean low = new GraphBean("Low", lowOpen, lowComplied);
+		GraphBean medium = new GraphBean("Medium", mediumOpen, mediumComplied);
+		GraphBean high = new GraphBean("High", highOpen, highComplied);
+		List<GraphBean> graphBeans = new ArrayList<GraphBean>(){{add(low);add(medium);add(high);}};
+		
+		ChartBean chartBeanLowOpen = new ChartBean("Low", "Open", lowOpen);
+		ChartBean chartBeanMediumOpen = new ChartBean("Medium", "Open", mediumOpen);
+		ChartBean chartBeanHighOpen = new ChartBean("High", "Open", highOpen);
+		ChartBean chartBeanLowCompl = new ChartBean("Low", "Complied", lowComplied);
+		ChartBean chartBeanMediumCompl = new ChartBean("Medium", "Complied", mediumComplied);
+		ChartBean chartBeanHighCompl = new ChartBean("High", "Complied", highComplied);
+		List<ChartBean> chartBeans = new ArrayList<ChartBean>(){{add(chartBeanLowOpen);add(chartBeanMediumOpen);add(chartBeanHighOpen);
+		add(chartBeanLowCompl);add(chartBeanMediumCompl);add(chartBeanHighCompl);}};
+		
+		dataMap.put("compliedInTime", compliedInTime);
+		dataMap.put("compliedDelayed", compliedDelayed);
+		dataMap.put("compliedOpen", compliedOpen);
+		dataMap.put("graphBeans", graphBeans);
+		dataMap.put("chartBeans", chartBeans);
+		
+		return dataMap;
+	}
+	
+	public Map<String, Object> generateReport(String companyId,String month) throws FileNotFoundException, DRException{
+		ReportsManager manager = new ReportsManager();
+		HashMap<String, Object> d = manager.getReportsObject(companyId, month);
+		
+		List<Map<String, Object>> data = (List<Map<String, Object>>) d.get("activities");
+		HashMap<String, List> formattedDataMap = format(data);
+		Map<String, Object> fileObject = manager.generateReportNew(formattedDataMap.get("compliedInTime"),formattedDataMap.get("compliedDelayed"),
+				formattedDataMap.get("compliedOpen"),formattedDataMap.get("graphBeans"),formattedDataMap.get("chartBeans"),companyId,month
+				);	
+		return fileObject;
 	}
 	
 	public static void main(String[] args) throws DRException, FileNotFoundException {
 		ReportsManager manager = new ReportsManager();
-		HashMap<String, Object> d = manager.getReportsObject("11f90c2223744aba", "10");
-		System.out.println(d);
+		HashMap<String, Object> d = manager.getReportsObject("ff2dbbe29f7d4073", "4");
+		
 		List<Map<String, Object>> data = (List<Map<String, Object>>) d.get("activities");
-		format(data);
-		manager.generateReport(data);
+		HashMap<String, List> formattedDataMap = format(data);
+		manager.generateReportNew(formattedDataMap.get("compliedInTime"),formattedDataMap.get("compliedDelayed"),
+				formattedDataMap.get("compliedOpen"),formattedDataMap.get("graphBeans"),formattedDataMap.get("chartBeans"),
+				"ff2dbbe29f7d4073","4");
 		
 	}
 }

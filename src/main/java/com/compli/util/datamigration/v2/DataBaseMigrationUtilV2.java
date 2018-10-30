@@ -39,7 +39,7 @@ public class DataBaseMigrationUtilV2 {
 		boolean isValidSheet = validateSheet(sheet);
 		System.out.println("Is valid "+isValidSheet);
 		if(isValidSheet){
-			DBMigrationUtilV2User.init();
+			/*DBMigrationUtilV2User.init();
 			DBMigrationUtilV2User.createUsers(sheet);
 			try {	Thread.sleep(DELAY);} catch (InterruptedException e) {e.printStackTrace();}
 			
@@ -78,7 +78,7 @@ public class DataBaseMigrationUtilV2 {
 			DBMigrationUtilV2ActivityAssociation.init();
 			DBMigrationUtilV2ActivityAssociation.createActivityAssociation(sheet);
 			try {	Thread.sleep(DELAY);} catch (InterruptedException e) {e.printStackTrace();}
-			
+			*/
 			DBMigrationUtilV2Activity.init();
 			DBMigrationUtilV2Activity.createActivity(sheet);
 			try {	Thread.sleep(DELAY);} catch (InterruptedException e) {e.printStackTrace();}

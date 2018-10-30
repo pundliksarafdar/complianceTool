@@ -117,6 +117,16 @@ public class ActivityManager {
 		return filteredActivity;
 	}
 	
+	public List<Map<String, Object>> getAllActivitiesWithDescriptionForCompanyForMonth(String companyId,String month){
+		List<Map<String, Object>> allActivity = null;
+		if(this.locationId==null){
+			allActivity = this.dashBoardDao.getAllActivitiesWithDescriptionForCompanyByMonthWithRejected(companyId,month,true);
+		}else{
+			allActivity = this.dashBoardDao.getAllActivitiesWithDescriptionForCompanyByMonthWithRejected(companyId,month,true,this.locationId);
+		}
+		return allActivity;
+	}
+	
 	public List<Map<String, Object>> getAllActivitiesWithDescriptionForCompanyWithSeverityForYear(String companyId,String severity,String year){
 		List<Map<String, Object>> allActivity = null;
 		if(this.locationId==null){

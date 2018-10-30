@@ -61,6 +61,17 @@ public class ActivityRestApi {
 			}
 			activityList1.addAll(activityList2);
 			return Response.ok(activityList1).build();
+		}else if("all".equalsIgnoreCase(activitySeverity)){
+			List<Map<String, Object>> activityList1 = null;
+			if(month!=null){
+				activityList1 = activityManager.getAllActivitiesWithDescriptionForCompanyForMonth(companyId,month);
+			}else if(year!=null){
+				year = year.split("-")[0];
+				activityList1 = activityManager.getAllActivitiesWithDescriptionForCompanyWithSeverityForYear(companyId,"Complied- In time",year);			
+			}else if(quarter!=null){
+				activityList1 = activityManager.getAllActivitiesWithDescriptionForCompanyWithSeverityForQuarter(companyId,"Complied- In time",quarter);
+			}
+			return Response.ok(activityList1).build();
 		}else if("low".equalsIgnoreCase(activitySeverity) || "medium".equalsIgnoreCase(activitySeverity) || "high".equalsIgnoreCase(activitySeverity) || "all".equalsIgnoreCase(activitySeverity)){
 			return Response.ok(activityManager.getAllActivitiesWithDescriptionForCompanyWithRisk(companyId,activitySeverity)).build();
 		}else{

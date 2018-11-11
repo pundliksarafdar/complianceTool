@@ -39,7 +39,7 @@ public class ActivityRestApi {
 		}else{
 			activityManager = new ActivityManager(auth,location);
 		}
-		if(null==activitySeverity || activitySeverity.isEmpty() || "undefined".equals(activitySeverity))  {
+		if(null==activitySeverity || activitySeverity.isEmpty() || "undefined".equals(activitySeverity) || "total".equals(activitySeverity))  {
 			return Response.ok(activityManager.getAllActivitiesWithDescriptionForCompanyWithSeverity(companyId,"Pending compliance")).build();
 		}else if("both".equalsIgnoreCase(activitySeverity)){//Both comes from repositories if both are not checked
 			List<Map<String, Object>> activityList1 = new ArrayList<Map<String,Object>>();

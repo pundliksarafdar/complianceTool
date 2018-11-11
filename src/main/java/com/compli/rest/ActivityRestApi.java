@@ -17,6 +17,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
 
+import com.compli.annotation.Authorised;
+import com.compli.annotation.Authorised.ROLE;
 import com.compli.bean.ComplyStatusBean;
 import com.compli.managers.ActivityManager;
 
@@ -26,6 +28,7 @@ public class ActivityRestApi {
 	
 	@GET
 	@Path("/{companyId}")
+	@Authorised(role=ROLE.ALL)
 	public Response getAllActivityWithDescription(@PathParam("companyId")String companyId,
 			@QueryParam("activitySeverity")String activitySeverity,@QueryParam("month")String month,@QueryParam("year")String year,
 			@QueryParam("quarter")String quarter, 
@@ -90,6 +93,7 @@ public class ActivityRestApi {
 	
 	@POST
 	@Path("/changeStatus/{companyId}/{activityId}")
+	@Authorised(role=ROLE.ALL)
 	public Response changeActivityStatus(@PathParam("companyId")String companyId,@PathParam("activityId")String activityId,
 			@QueryParam("complied")boolean isComplied,@QueryParam("pendingComplied")boolean pendingComplied,@QueryParam("compliedInTime")boolean compliedInTime,
 			@QueryParam("compliedDelayed")boolean compliedDelayed,@QueryParam("pendingDescrepancy")boolean pendingDescrepancy,
@@ -100,6 +104,7 @@ public class ActivityRestApi {
 	
 	@GET
 	@Path("/document/{documentId}")
+	@Authorised(role=ROLE.ALL)
 	public Response downloadDocument(@PathParam("documentId")String documentId){
 		File file = new File("documents"+File.separator+documentId);
 		System.out.println(file.getAbsolutePath());
@@ -114,6 +119,7 @@ public class ActivityRestApi {
 	
 	@GET
 	@Path("/{companyId}/bylawandstatus")
+	@Authorised(role=ROLE.ALL)
 	public Response getAllActivityWithLawAndStatus(@PathParam("companyId")String companyId,
 			@QueryParam("lawArea")String activityLaw,@QueryParam("activitySeverity")String status,
 			@HeaderParam("auth")String auth){

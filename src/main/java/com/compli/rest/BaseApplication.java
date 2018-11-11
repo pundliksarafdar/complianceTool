@@ -5,6 +5,7 @@ import java.util.Set;
 
 import javax.ws.rs.core.Application;
 
+import com.compli.exceptions.ApplicationExceptionMapper;
 import com.compli.filter.AuthFIlter;
 
 public class BaseApplication extends Application{
@@ -17,6 +18,8 @@ public class BaseApplication extends Application{
         singletons.add(new ActivityRestApi());
         singletons.add(new ReportRestApi());
         singletons.add(new FilesRestApi());
+        
+        singletons.add(new ApplicationExceptionMapper());
     }
     @Override
     public Set<Object> getSingletons() {

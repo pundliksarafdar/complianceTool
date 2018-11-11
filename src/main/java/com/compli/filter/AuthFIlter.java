@@ -27,8 +27,7 @@ public class AuthFIlter implements ContainerRequestFilter{
 	 @Context private ResourceInfo resourceInfo;
 	public void filter(ContainerRequestContext req) throws IOException {
 		Method name = resourceInfo.getResourceMethod();
-		 Authorised authorised = name.getAnnotation(Authorised.class);
-		 System.out.println(authorised);
+		 Authorised authorised = name.getAnnotation(Authorised.class);		 
 		if(null!=authorised){
 			List<String> authToken = req.getHeaders().get("auth");
 			if(authToken == null || authToken.isEmpty()){

@@ -49,7 +49,7 @@ public class DashBoardDao {
 				"on companyWithActivity.lawId = lawmaster.lawId) companyWithLaw	"+	
 			"on riskmaster.riskId = companyWithLaw.riskId) companyWithRisk "+
 		"on periodicitymaster.periodicityId = companyWithRisk.periodicityId) companyWithPeriodicity "+ 
-	"on periodicitydatemaster.periodicityDateId = companyWithPeriodicity.periodicityDateId and periodicitydatemaster.duedate<DATE_ADD(NOW(), INTERVAL 10 DAY)) companyWithPerDate  "+
+	"on periodicitydatemaster.periodicityDateId = companyWithPeriodicity.periodicityDateId and periodicitydatemaster.duedate<NOW()) companyWithPerDate  "+
 		"on companyWithPerDate.companyId = activity.companyId and companyWithPerDate.activityId = activity.activityId and activity.isComplianceRejected=false order by periodicityDateId desc;";
 	
 	private String activityQueryWithLocation = 
@@ -69,7 +69,7 @@ public class DashBoardDao {
 				"on companyWithActivity.lawId = lawmaster.lawId) companyWithLaw	"+	
 			"on riskmaster.riskId = companyWithLaw.riskId) companyWithRisk "+
 		"on periodicitymaster.periodicityId = companyWithRisk.periodicityId) companyWithPeriodicity "+ 
-	"on periodicitydatemaster.periodicityDateId = companyWithPeriodicity.periodicityDateId and periodicitydatemaster.duedate<DATE_ADD(NOW(), INTERVAL 10 DAY)) companyWithPerDate  "+
+	"on periodicitydatemaster.periodicityDateId = companyWithPeriodicity.periodicityDateId and periodicitydatemaster.duedate<NOW()) companyWithPerDate  "+
 		"on companyWithPerDate.companyId = activity.companyId and companyWithPerDate.activityId = activity.activityId and activity.isComplianceRejected=false order by periodicityDateId desc; ";
 	
 	private String activityQueryFullUserWithLocation = 
@@ -89,7 +89,7 @@ public class DashBoardDao {
 				"on companyWithActivity.lawId = lawmaster.lawId) companyWithLaw	"+	
 			"on riskmaster.riskId = companyWithLaw.riskId) companyWithRisk "+
 		"on periodicitymaster.periodicityId = companyWithRisk.periodicityId) companyWithPeriodicity "+ 
-	"on periodicitydatemaster.periodicityDateId = companyWithPeriodicity.periodicityDateId and periodicitydatemaster.duedate<DATE_ADD(NOW(), INTERVAL 10 DAY)) companyWithPerDate  "+
+	"on periodicitydatemaster.periodicityDateId = companyWithPeriodicity.periodicityDateId and periodicitydatemaster.duedate<NOW()) companyWithPerDate  "+
 		"on companyWithPerDate.companyId = activity.companyId and companyWithPerDate.activityId = activity.activityId and activity.isComplianceRejected=false order by periodicityDateId desc;";
 	
 	///////////////////////////////////////////////// Thiese are only open activities //////////////////////////////////////////////////////////////////////////////
@@ -110,7 +110,7 @@ public class DashBoardDao {
 				"on companyWithActivity.lawId = lawmaster.lawId) companyWithLaw	"+	
 			"on riskmaster.riskId = companyWithLaw.riskId and companyWithLaw.riskId like ?) companyWithRisk "+
 		"on periodicitymaster.periodicityId = companyWithRisk.periodicityId) companyWithPeriodicity "+ 
-	"on periodicitydatemaster.periodicityDateId = companyWithPeriodicity.periodicityDateId and periodicitydatemaster.duedate<DATE_ADD(NOW(), INTERVAL 10 DAY)) companyWithPerDate  "+
+	"on periodicitydatemaster.periodicityDateId = companyWithPeriodicity.periodicityDateId and periodicitydatemaster.duedate<NOW()) companyWithPerDate  "+
 		"on companyWithPerDate.companyId = activity.companyId and companyWithPerDate.activityId = activity.activityId and activity.isComplianceRejected=false and isComplied=false order by periodicityDateId desc";
 	
 	private String activityQueryForRiskFullUser = 
@@ -130,7 +130,7 @@ public class DashBoardDao {
 				"on companyWithActivity.lawId = lawmaster.lawId) companyWithLaw	"+	
 			"on riskmaster.riskId = companyWithLaw.riskId and companyWithLaw.riskId like ?) companyWithRisk "+
 		"on periodicitymaster.periodicityId = companyWithRisk.periodicityId) companyWithPeriodicity "+ 
-	"on periodicitydatemaster.periodicityDateId = companyWithPeriodicity.periodicityDateId and periodicitydatemaster.duedate<DATE_ADD(NOW(), INTERVAL 10 DAY)) companyWithPerDate  "+
+	"on periodicitydatemaster.periodicityDateId = companyWithPeriodicity.periodicityDateId and periodicitydatemaster.duedate<NOW()) companyWithPerDate  "+
 		"on companyWithPerDate.companyId = activity.companyId and companyWithPerDate.activityId = activity.activityId and activity.isComplianceRejected=false and  isComplied=false order by periodicityDateId desc;";
 	
 	/**************************** Activity for last 3 month********************************************/
@@ -565,34 +565,34 @@ public class DashBoardDao {
 	/********************************* Dashboard pending activity Count for next10days. *****************************************************/
 
 	private String rCountPending10Days = "select count(*) as count,pp.riskId from periodicitydatemaster right join (select periodicityDateId,riskId from activity right join activitymaster on activity.activityId = activitymaster.activityId where isComplianceApproved =false and isComplianceRejected=false and isComplied=false and isComplainceDelayed=false  and activity.companyId in (?)) pp "+
-				"on periodicitydatemaster.periodicityDateId=pp.periodicityDateId where periodicitydatemaster.duedate<DATE_ADD(NOW(), INTERVAL 10 DAY) group by pp.riskId;";
+				"on periodicitydatemaster.periodicityDateId=pp.periodicityDateId where periodicitydatemaster.duedate<NOW() group by pp.riskId;";
 		
 	
 	private String rCountPending10DaysFullUser = "select count(*) as count,pp.riskId from periodicitydatemaster inner join (select periodicityDateId,riskId from activity inner join activitymaster on activity.activityId = activitymaster.activityId where isComplianceApproved =false and isComplianceRejected=false and isComplied=false and isComplainceDelayed=false  and activity.companyId in (?)) pp "+
-			"on periodicitydatemaster.periodicityDateId=pp.periodicityDateId where periodicitydatemaster.duedate<DATE_ADD(NOW(), INTERVAL 10 DAY) group by pp.riskId;";
+			"on periodicitydatemaster.periodicityDateId=pp.periodicityDateId where periodicitydatemaster.duedate<NOW() group by pp.riskId;";
 	
 	private String rCountPending10DaysWithLocation = "select count(*) as count,pp.riskId from periodicitydatemaster right join (select periodicityDateId,riskId from activity right join activitymaster on activity.activityId = activitymaster.activityId where isComplianceApproved =false and isComplianceRejected=false and isComplied=false and isComplainceDelayed=false  and activity.companyId in (?) and"+
 			" activitymaster.activityId in (select activityId from activityassociation where locationId=?)) pp "+
-			"on periodicitydatemaster.periodicityDateId=pp.periodicityDateId where periodicitydatemaster.duedate<DATE_ADD(NOW(), INTERVAL 10 DAY) group by pp.riskId;";
+			"on periodicitydatemaster.periodicityDateId=pp.periodicityDateId where periodicitydatemaster.duedate<NOW() group by pp.riskId;";
 	
 
 	private String rCountPending10DaysFullUserWithLocation = "select count(*) as count,pp.riskId from periodicitydatemaster inner join (select periodicityDateId,riskId from activity inner join activitymaster on activity.activityId = activitymaster.activityId where isComplianceApproved =false and isComplianceRejected=false and isComplied=false and isComplainceDelayed=false  and activity.companyId in (?) and" + 
 			" activitymaster.activityId in (select activityId from activityassociation where locationId=?)) pp "+
-			"on periodicitydatemaster.periodicityDateId=pp.periodicityDateId where periodicitydatemaster.duedate<DATE_ADD(NOW(), INTERVAL 10 DAY) group by pp.riskId;";
+			"on periodicitydatemaster.periodicityDateId=pp.periodicityDateId where periodicitydatemaster.duedate<NOW() group by pp.riskId;";
 	/**************************************************************************************/
 	private String complainceOverviewFullUser = "select "+ 
 			"sum(case when (isComplied=true and isComplianceApproved=true and isComplianceRejected=false and isComplainceDelayed=false) then 1 ELSE 0 END)as intimeCompliance, "+
 			"sum(case when (isComplied=true and isComplianceApproved=false and isComplianceRejected=false and isComplainceDelayed=false) then 1 ELSE 0 END)as pendingReview, "+
 			"sum(case when (isComplied=false and isComplianceApproved=false and isComplianceRejected=false and isComplainceDelayed=false) then 1 ELSE 0 END)as pendingCompliance, "+
 			"sum(case when (isComplied=true and isComplianceApproved=true and isComplianceRejected=false and isComplainceDelayed=true) then 1 ELSE 0 END)as delayedCompliance "+
-			"from activity where companyId in (?) and activityId in(select activityId from activitymaster where activitymaster.periodicityDateId<DATE_ADD(NOW(), INTERVAL 10 DAY));";
+			"from activity where companyId in (?) and activityId in(select activityId from activitymaster where activitymaster.periodicityDateId<NOW());";
 	
 	private String complainceOverviewFullUserWithLocation = "select "+ 
 			"sum(case when (isComplied=true and isComplianceApproved=true and isComplianceRejected=false and isComplainceDelayed=false) then 1 ELSE 0 END)as intimeCompliance, "+
 			"sum(case when (isComplied=true and isComplianceApproved=false and isComplianceRejected=false and isComplainceDelayed=false) then 1 ELSE 0 END)as pendingReview, "+
 			"sum(case when (isComplied=false and isComplianceApproved=false and isComplianceRejected=false and isComplainceDelayed=false) then 1 ELSE 0 END)as pendingCompliance, "+
 			"sum(case when (isComplied=true and isComplianceApproved=true and isComplianceRejected=false and isComplainceDelayed=true) then 1 ELSE 0 END)as delayedCompliance "+
-			"from activity where companyId in (?)	 and activityId in (select activityId from activityassociation where locationId=?) and activityId in(select activityId from activitymaster where activitymaster.periodicityDateId<DATE_ADD(NOW(), INTERVAL 10 DAY));";
+			"from activity where companyId in (?)	 and activityId in (select activityId from activityassociation where locationId=?) and activityId in(select activityId from activitymaster where activitymaster.periodicityDateId<NOW());";
 
 ///////////////////////////////////////// Activity query by lawarea and status//////////////////////////////////////////////////////////////////////////////////////
 private String activityQueryByLawAndStatus = 
@@ -612,27 +612,27 @@ private String activityQueryByLawAndStatus =
 "on companyWithActivity.lawId = lawmaster.lawId  and companyWithActivity.lawId like ?) companyWithLaw	"+	
 "on riskmaster.riskId = companyWithLaw.riskId) companyWithRisk "+
 "on periodicitymaster.periodicityId = companyWithRisk.periodicityId) companyWithPeriodicity "+ 
-"on periodicitydatemaster.periodicityDateId = companyWithPeriodicity.periodicityDateId and periodicitydatemaster.duedate<DATE_ADD(NOW(), INTERVAL 10 DAY)) companyWithPerDate  "+
+"on periodicitydatemaster.periodicityDateId = companyWithPeriodicity.periodicityDateId and periodicitydatemaster.duedate<NOW()) companyWithPerDate  "+
 "on companyWithPerDate.companyId = activity.companyId and companyWithPerDate.activityId = activity.activityId and activity.isComplianceRejected=false order by periodicityDateId desc;";
 
 private String activityQueryByLawAndStatusFullUser = 
 "select companyWithPerDate.companyId,abbriviation,lawId,lawDesc,lawName,locationId,locationName,companyWithPerDate.activityId,activityName,riskId,riskDes,periodicityId,periodicityDesc,periodicityDateId,consequence,duedate,ifnull(isComplied,false)as isComplied ,ifnull(isComplianceApproved,false) as isComplianceApproved,ifnull(isComplianceRejected,false) as isComplianceRejected,ifnull(isComplainceDelayed,false) as isComplainceDelayed,assignedUser,remark,completionDate from activity inner join "+
-"(select companyId,abbriviation,lawId,lawDesc,lawName,locationId,locationName,activityId,activityName,riskId,riskDes,periodicityId,periodicityDesc,periodicitydatemaster.periodicityDateId,consequence,periodicitydatemaster.duedate from periodicitydatemaster inner join "+
-"(select companyId,abbriviation,lawId,lawDesc,lawName,locationId,locationName,activityId,activityName,riskId,riskDes,periodicitymaster.periodicityId,periodicitymaster.description as periodicityDesc,periodicityDateId,consequence from periodicitymaster inner join "+
-"(select companyId,abbriviation,lawId,lawDesc,lawName,locationId,locationName,activityId,activityName,riskmaster.riskId,riskmaster.description riskDes,periodicityId,periodicityDateId,consequence from riskmaster inner join "+
-"(select companyId,abbriviation,locationId,locationName,activityId,activityName,riskId,lawmaster.lawName,lawmaster.lawId,lawmaster.lawDesc,periodicityId,periodicityDateId,consequence from lawmaster inner join "+
-"(select companyId,abbriviation,lawId,locationId,locationName,activitymaster.activityId,activitymaster.activityName,riskId,periodicityId,periodicityDateId,consequence from activitymaster inner join "+
-"(select companyId,abbriviation,activityassociation.locationId,locationName,activityId from activityassociation inner join "+ 
-"(select companyId,abbriviation,location.locationId,locationName from location inner join	"+
-"(select cc.companyId,abbriviation,locationId from company cc inner join companylocation "+
-"on cc.companyId = companylocation.companyId where cc.companyId in (?)) companyWithLocation "+
-"on location.locationId = companyWithLocation.locationId) companyWithLocationName "+
-"on companyWithLocationName.locationId = activityassociation.locationId) companyWithActivityId "+
-"on companyWithActivityId.activityId = activitymaster.activityId) companyWithActivity "+
-"on companyWithActivity.lawId = lawmaster.lawId and companyWithActivity.lawId like ?) companyWithLaw	"+	
-"on riskmaster.riskId = companyWithLaw.riskId) companyWithRisk "+
-"on periodicitymaster.periodicityId = companyWithRisk.periodicityId) companyWithPeriodicity "+ 
-"on periodicitydatemaster.periodicityDateId = companyWithPeriodicity.periodicityDateId and periodicitydatemaster.duedate<DATE_ADD(NOW(), INTERVAL 10 DAY)) companyWithPerDate  "+
+	"(select companyId,abbriviation,lawId,lawDesc,lawName,locationId,locationName,activityId,activityName,riskId,riskDes,periodicityId,periodicityDesc,periodicitydatemaster.periodicityDateId,consequence,periodicitydatemaster.duedate from periodicitydatemaster inner join "+
+		"(select companyId,abbriviation,lawId,lawDesc,lawName,locationId,locationName,activityId,activityName,riskId,riskDes,periodicitymaster.periodicityId,periodicitymaster.description as periodicityDesc,periodicityDateId,consequence from periodicitymaster inner join "+
+			"(select companyId,abbriviation,lawId,lawDesc,lawName,locationId,locationName,activityId,activityName,riskmaster.riskId,riskmaster.description riskDes,periodicityId,periodicityDateId,consequence from riskmaster inner join "+
+				"(select companyId,abbriviation,locationId,locationName,activityId,activityName,riskId,lawmaster.lawName,lawmaster.lawId,lawmaster.lawDesc,periodicityId,periodicityDateId,consequence from lawmaster inner join "+
+					"(select companyId,abbriviation,lawId,locationId,locationName,activitymaster.activityId,activitymaster.activityName,riskId,periodicityId,periodicityDateId,consequence from activitymaster inner join "+
+						"(select companyId,abbriviation,activityassociation.locationId,locationName,activityId from activityassociation inner join "+ 
+							"(select companyId,abbriviation,location.locationId,locationName from location inner join	"+
+								"(select cc.companyId,abbriviation,locationId from company cc inner join companylocation "+
+								"on cc.companyId = companylocation.companyId where cc.companyId in (?)) companyWithLocation "+
+							"on location.locationId = companyWithLocation.locationId) companyWithLocationName "+
+						"on companyWithLocationName.locationId = activityassociation.locationId) companyWithActivityId "+
+					"on companyWithActivityId.activityId = activitymaster.activityId) companyWithActivity "+
+				"on companyWithActivity.lawId = lawmaster.lawId and lawmaster.lawName = ?) companyWithLaw	"+	
+			"on riskmaster.riskId = companyWithLaw.riskId) companyWithRisk "+
+		"on periodicitymaster.periodicityId = companyWithRisk.periodicityId) companyWithPeriodicity "+ 
+	"on periodicitydatemaster.periodicityDateId = companyWithPeriodicity.periodicityDateId and periodicitydatemaster.duedate<NOW()) companyWithPerDate  "+
 "on companyWithPerDate.companyId = activity.companyId and companyWithPerDate.activityId = activity.activityId and activity.isComplianceRejected=false and isComplied=? and isComplianceApproved=? and isComplainceDelayed=? and isComplianceRejected=? order by periodicityDateId desc;";
 
 	public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
@@ -861,11 +861,11 @@ private String activityQueryByLawAndStatusFullUser =
 		
 		if(isFullUser){
 			activityQueryByLawAndStatusFullUser = activityQueryByLawAndStatusFullUser.replace("(?)", companyId);
-			List<Map<String, Object>> activitiesCount = this.jdbcTemplate.queryForList(activityQueryByLawAndStatusFullUser,lawId+"%",isComplied,isComplianceApproved,isComplainceDelayed,isComplianceRejected);
+			List<Map<String, Object>> activitiesCount = this.jdbcTemplate.queryForList(activityQueryByLawAndStatusFullUser,lawId,isComplied,isComplianceApproved,isComplainceDelayed,isComplianceRejected);
 			return activitiesCount;
 		}else{
 			activityQueryByLawAndStatus = activityQueryByLawAndStatus.replace("(?)", companyId);
-			List<Map<String, Object>> activitiesCount = this.jdbcTemplate.queryForList(activityQueryByLawAndStatus,lawId+"%",isComplied,isComplianceApproved,isComplainceDelayed,isComplianceRejected);
+			List<Map<String, Object>> activitiesCount = this.jdbcTemplate.queryForList(activityQueryByLawAndStatus,lawId,isComplied,isComplianceApproved,isComplainceDelayed,isComplianceRejected);
 			return activitiesCount;
 		}
 	}

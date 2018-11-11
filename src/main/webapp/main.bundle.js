@@ -637,7 +637,7 @@ module.exports = ".table-curved td, .table-curved th {\r\n    border-left: 1px s
 /***/ "./src/app/compliance-activities/compliance-activities.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "\r\n\r\n\r\n<section class=\"content\" *ngIf=\"!loaded\">\r\n      <div class=\"row top-buffer\">\r\n        <div class=\"col-md-12 text-center\">\r\n         <i class=\"fa fa-spinner fa-spin\" style=\"font-size:40px\"></i><br/>\r\n         <span>Loading...</span>\r\n        </div>\r\n      </div>\r\n</section>\r\n\r\n\r\n<section class=\"content report\" *ngIf=\"loaded\">\r\n      <!-- Info boxes -->\r\n      <ng-template #popupcontent let-c=\"close\" let-d=\"dismiss\">\r\n          <div class=\"modal-header\">\r\n            <h4 class=\"modal-title\">Activity</h4>\r\n            <button type=\"button\" class=\"close\" aria-label=\"Close\" (click)=\"d('Cross click')\">\r\n              <span aria-hidden=\"true\">&times;</span>\r\n            </button>\r\n          </div>\r\n          <div class=\"modal-body\">\r\n            <table class=\"popuptable\">\r\n              <tbody>\r\n                <tr>\r\n                  <td>Activity Name: </td>\r\n                  <td>{{popupDetails.activityName}}</td>\r\n                </tr>\r\n                <tr>\r\n                  <td>Location: </td>\r\n                  <td>{{popupDetails.locationName}}</td>\r\n                </tr>\r\n                <tr>\r\n                  <td>Compliance Area: </td>\r\n                  <td>{{popupDetails.lawName}}</td>\r\n                </tr>\r\n                <tr>\r\n                  <td>Law Description: </td>\r\n                  <td>{{popupDetails.lawDesc}}</td>\r\n                </tr>\r\n                <tr>\r\n                  <td>Risk: </td>\r\n                  <td>{{popupDetails.riskDes}}</td>\r\n                </tr>\r\n                <tr>\r\n                  <td>Periodicity Due Date: </td>\r\n                  <td>{{popupDetails.duedate}}</td>\r\n                </tr>\r\n                <tr>\r\n                  <td>Period Description: </td>\r\n                  <td>{{popupDetails.periodicityDesc}}</td>\r\n                </tr>\r\n                <tr>\r\n                  <td>Actvity Assign User: </td>\r\n                  <td>{{popupDetails.assignedUser}}</td>\r\n                </tr>\r\n                <tr *ngIf=\"popupDetails.remark != ''\">\r\n                  <td>Remarks: </td>\r\n                  <td>{{popupDetails.remark}}</td>\r\n                </tr>\r\n                <tr>\r\n                  <td>Documents: </td>\r\n                  <td>\r\n                    <div *ngIf=\"!filesDetails\">\r\n                      Loading...\r\n                    </div>\r\n                    <div *ngIf=\"filesDetails && filesDetails.length==0\">\r\n                      No documents\r\n                    </div>\r\n                    <table class=\"doctable\" *ngIf=\"filesDetails && filesDetails.length!=0\">\r\n                      <thead>\r\n                        <tr>\r\n                        <th>Document </th>\r\n                        <th>Date of Submit</th>\r\n                        <th>Modified On</th>\r\n                        </tr>\r\n                      </thead>\r\n                      <tbody>\r\n                        <tr *ngFor=\"let filesDetail of filesDetails\">\r\n                          <td>{{filesDetail.filename}} <i (click)='downloadFile(filesDetail.fileId)' class='fa fa-download fa-lg downloadFile'></i></td>\r\n                          <td>{{filesDetail.uploaddate}}</td>\r\n                          <td>2015-10-19 10:15:19\t</td>\r\n                        </tr>\t\t\t\t\t\t\t\t\r\n                      </tbody>\r\n                    </table>\r\n                  </td>\r\n                </tr>\r\n        \r\n              </tbody>\r\n            </table>\r\n            <label class=\"btn btn-primary\" for=\"my-file-selector\" *ngIf=\"userType != 'ArTechUser'\">\r\n              <input type=\"file\" id=\"my-file-selector\" name=\"uploadfile\" multiple (change)=\"setFiles($event)\" [(ngModel)]=\"addedFiles\"  *ngIf=\"userType!='ArTechUser'\" style=\"display:none;\"/>\r\n              Choose document(s)\r\n            </label>  <br/> <span *ngIf=\"userType != 'ArTechUser'\"> (Multiple documenets can be uploaded at once.)</span>\r\n              <div *ngIf=\"filesUploading\">\r\n                      Uploading...\r\n              </div>\r\n            <div *ngIf=\"!filesUploading && filesToUpload.length!==0\">\r\n              <table calss=\"filesUpload\">\r\n                 <tr *ngFor=\"let fileToUpload of filesToUpload;let i = index\" >\r\n                    <td>{{fileToUpload.name}}</td>\r\n                    <td>{{(fileToUpload.size/1024).toFixed(2)}}Kb</td>\r\n                    <td><i class=\"fa fa-trash fa-lg\"(click)=\"removeFileFromList(i)\"></i></td>\r\n                </tr> \r\n              </table>\r\n              <input type=\"button\" class=\"btn btn-primary\" value=\"Upload\" (click)=\"uploadSelectedFiles(popupDetails.activityId,popupDetails.companyId)\"/>\r\n            </div>  \r\n          </div>\r\n          <div class=\"modal-footer\">\r\n            <button type=\"button\" class=\"btn btn-secondary\" (click)=\"c('Close click')\">Close</button>\r\n          </div>\r\n        </ng-template>\r\n        \r\n\r\n\r\n        <ng-template #confirmNotApplicable let-c=\"close\" let-d=\"dismiss\">\r\n          <div class=\"modal-header\">\r\n            <h4 class=\"modal-title\">Not Applicable</h4>\r\n            <button type=\"button\" class=\"close\" aria-label=\"Close\" (click)=\"remarks= undefined;d('Cross click')\">\r\n              <span aria-hidden=\"true\">&times;</span>\r\n            </button>\r\n          </div>\r\n          <div class=\"modal-body\">\r\n            <label for=\"remarks\">\r\n              Remarks\r\n            </label>  \r\n            <textarea rows=\"10\" cols=\"100\" id=\"remarks\" [(ngModel)]=\"remarks\" required placeholder=\"Please specify your comment if the activity is not applicable\"></textarea>\r\n            <span *ngIf=\"showerror\" style=\"color:red\">Remark mandatory for not applicable activities.</span>\r\n          </div>\r\n          <div class=\"modal-footer\">\r\n            <button type=\"button\" class=\"btn btn-primary\" (click)=\"NotApplicaleRemark()\">Submit</button>\r\n            <button type=\"button\" class=\"btn btn-secondary\" (click)=\"remarks= undefined;c('Close click')\">Close</button>\r\n          </div>\r\n        </ng-template>\r\n\r\n\r\n\r\n  <div class=\"col-md-12 text-center\" *ngIf=\"userType=='ArTechUser'\">\r\n    <div class=\"btn-group compliance-font\">\r\n            <label class=\"repocontainer\">Pending Compliance\r\n              <input type=\"checkbox\"  (change)=\"onFilterChange()\" [(ngModel)]=\"pendingCompliance\">\r\n              <span class=\"checkmark\"></span>\r\n            </label>\r\n            <label class=\"repocontainer\">Pending for review\r\n              <input type=\"checkbox\" (change)=\"onFilterChange()\" [(ngModel)]=\"pendingForReview\">\r\n              <span class=\"checkmark\"></span>\r\n            </label>\r\n            <button type=\"button\" style=\"margin-left: 10px\" class=\"btn btn-primary btn-small compliance-font\" (click)=\"rerender()\">\r\n                Fetch\r\n              </button>\r\n\r\n    </div>\r\n<!--     <div class=\"col-md-2 col-sm-6 col-xs-12\">\r\n            <label class=\"repocontainer\">Complied In time\r\n              <input type=\"checkbox\"  (change)=\"onFilterChange()\" [(ngModel)]=\"compliedInTime\">\r\n              <span class=\"checkmark\"></span>\r\n            </label>\r\n        </div>\r\n\r\n         <div class=\"col-md-2 col-sm-6 col-xs-12\">\r\n            <label class=\"repocontainer\">Complied Delayed\r\n              <input type=\"checkbox\" (change)=\"onFilterChange()\" [(ngModel)]=\"compliedDelayed\">\r\n              <span class=\"checkmark\"></span>\r\n            </label>\r\n        </div>\r\n -->  </div>\r\n      <div class=\"row top-buffer\" style=\"margin-left: -4%\">\r\n          \r\n\t<table datatable [dtOptions]=\"dtOptions\" [dtTrigger]=\"dtTrigger\" class=\"row-border hover\">\r\n     <tfoot>\r\n    <tr>\r\n        <th><input type=\"text\" style=\"width:100px\" placeholder=\"Abbriviation\" name=\"Abbriviation\" columnLocation=\"0\"/></th>\r\n      <th><input type=\"text\" style=\"width:100px\" placeholder=\"Location\" name=\"location\" columnLocation=\"1\"/></th>\r\n      <th><input type=\"text\" style=\"width:100px\" placeholder=\"Law Description\" name=\"search-lawDesc\" columnLocation=\"2\"/></th>\r\n      <th><input type=\"text\" style=\"width:200px\" placeholder=\"Activity Name\" name=\"search-activityname\" columnLocation=\"3\"/></th>\r\n      <th><input type=\"text\" style=\"width:100px\" placeholder=\"Periodicity Date\" name=\"search-periodicitydate\" columnLocation=\"4\"/></th>\r\n      <th><input type=\"text\" style=\"width:120px\" placeholder=\"Period Description\" name=\"search-periodDescription\" columnLocation=\"5\"/></th> \r\n      <th><input type=\"text\" style=\"width:100px\" placeholder=\"Actvity User\" name=\"actvityUser\" columnLocation=\"6\"/></th>\r\n      <th></th>\r\n    </tr>\r\n  </tfoot>\r\n </table>\r\n\t</div>\r\n </section>"
+module.exports = "\r\n\r\n\r\n<section class=\"content\" *ngIf=\"!loaded\">\r\n      <div class=\"row top-buffer\">\r\n        <div class=\"col-md-12 text-center\">\r\n         <i class=\"fa fa-spinner fa-spin\" style=\"font-size:40px\"></i><br/>\r\n         <span>Loading...</span>\r\n        </div>\r\n      </div>\r\n</section>\r\n\r\n\r\n<section class=\"content report\" *ngIf=\"loaded\">\r\n      <!-- Info boxes -->\r\n      <ng-template #popupcontent let-c=\"close\" let-d=\"dismiss\">\r\n          <div class=\"modal-header\">\r\n            <h4 class=\"modal-title\">Activity</h4>\r\n            <button type=\"button\" class=\"close\" aria-label=\"Close\" (click)=\"d('Cross click')\">\r\n              <span aria-hidden=\"true\">&times;</span>\r\n            </button>\r\n          </div>\r\n          <div class=\"modal-body\">\r\n            <table class=\"popuptable\">\r\n              <tbody>\r\n                <tr>\r\n                  <td>Activity Name: </td>\r\n                  <td>{{popupDetails.activityName}}</td>\r\n                </tr>\r\n                <tr>\r\n                  <td>Location: </td>\r\n                  <td>{{popupDetails.locationName}}</td>\r\n                </tr>\r\n                <tr>\r\n                  <td>Compliance Area: </td>\r\n                  <td>{{popupDetails.lawName}}</td>\r\n                </tr>\r\n                <tr>\r\n                  <td>Law Description: </td>\r\n                  <td>{{popupDetails.lawDesc}}</td>\r\n                </tr>\r\n                <tr>\r\n                  <td>Risk: </td>\r\n                  <td>{{popupDetails.riskDes}}</td>\r\n                </tr>\r\n                <tr>\r\n                  <td>Periodicity Due Date: </td>\r\n                  <td>{{popupDetails.duedate}}</td>\r\n                </tr>\r\n                <tr>\r\n                  <td>Period Description: </td>\r\n                  <td>{{popupDetails.periodicityDesc}}</td>\r\n                </tr>\r\n                <tr>\r\n                  <td>Actvity Assign User: </td>\r\n                  <td>{{popupDetails.assignedUser}}</td>\r\n                </tr>\r\n                <tr *ngIf=\"popupDetails.remark != ''\">\r\n                  <td>Remarks: </td>\r\n                  <td>{{popupDetails.remark}}</td>\r\n                </tr>\r\n                <tr>\r\n                  <td>Documents: </td>\r\n                  <td>\r\n                    <div *ngIf=\"!filesDetails\">\r\n                      Loading...\r\n                    </div>\r\n                    <div *ngIf=\"filesDetails && filesDetails.length==0\">\r\n                      No documents\r\n                    </div>\r\n                    <table class=\"doctable\" *ngIf=\"filesDetails && filesDetails.length!=0\">\r\n                      <thead>\r\n                        <tr>\r\n                        <th>Document </th>\r\n                        <th>Date of Submit</th>\r\n                        <th>Modified On</th>\r\n                        </tr>\r\n                      </thead>\r\n                      <tbody>\r\n                        <tr *ngFor=\"let filesDetail of filesDetails\">\r\n                          <td>{{filesDetail.filename}} <i (click)='downloadFile(filesDetail.fileId)' class='fa fa-download fa-lg downloadFile'></i></td>\r\n                          <td>{{filesDetail.uploaddate}}</td>\r\n                          <td>2015-10-19 10:15:19\t</td>\r\n                        </tr>\t\t\t\t\t\t\t\t\r\n                      </tbody>\r\n                    </table>\r\n                  </td>\r\n                </tr>\r\n        \r\n              </tbody>\r\n            </table>\r\n            <label class=\"btn btn-primary\" for=\"my-file-selector\" *ngIf=\"userType != 'ArTechUser'\">\r\n              <input type=\"file\" id=\"my-file-selector\" name=\"uploadfile\" multiple (change)=\"setFiles($event)\" [(ngModel)]=\"addedFiles\"  *ngIf=\"userType!='ArTechUser'\" style=\"display:none;\"/>\r\n              Choose document(s)\r\n            </label>  <br/> <span *ngIf=\"userType != 'ArTechUser'\"> (Multiple documenets can be uploaded at once.)</span>\r\n              <div *ngIf=\"filesUploading\">\r\n                      Uploading...\r\n              </div>\r\n            <div *ngIf=\"!filesUploading && filesToUpload.length!==0\">\r\n              <table calss=\"filesUpload\">\r\n                 <tr *ngFor=\"let fileToUpload of filesToUpload;let i = index\" >\r\n                    <td>{{fileToUpload.name}}</td>\r\n                    <td>{{(fileToUpload.size/1024).toFixed(2)}}Kb</td>\r\n                    <td><i class=\"fa fa-trash fa-lg\"(click)=\"removeFileFromList(i)\"></i></td>\r\n                </tr> \r\n              </table>\r\n              <input type=\"button\" class=\"btn btn-primary\" value=\"Upload\" (click)=\"uploadSelectedFiles(popupDetails.activityId,popupDetails.companyId)\"/>\r\n            </div>  \r\n          </div>\r\n          <div class=\"modal-footer\">\r\n            <button type=\"button\" class=\"btn btn-secondary\" (click)=\"c('Close click')\">Close</button>\r\n          </div>\r\n        </ng-template>\r\n        \r\n\r\n\r\n        <ng-template #confirmNotApplicable let-c=\"close\" let-d=\"dismiss\">\r\n          <div class=\"modal-header\">\r\n            <h4 class=\"modal-title\">Not Applicable</h4>\r\n            <button type=\"button\" class=\"close\" aria-label=\"Close\" (click)=\"remarks= undefined;d('Cross click')\">\r\n              <span aria-hidden=\"true\">&times;</span>\r\n            </button>\r\n          </div>\r\n          <div class=\"modal-body\">\r\n            <label for=\"remarks\">\r\n              Remarks\r\n            </label>  \r\n            <textarea rows=\"10\" cols=\"100\" id=\"remarks\" [(ngModel)]=\"remarks\" required placeholder=\"Please specify your comment if the activity is not applicable\"></textarea>\r\n            <span *ngIf=\"showerror\" style=\"color:red\">Remark mandatory for not applicable activities.</span>\r\n          </div>\r\n          <div class=\"modal-footer\">\r\n            <button type=\"button\" class=\"btn btn-primary\" (click)=\"NotApplicaleRemark()\">Submit</button>\r\n            <button type=\"button\" class=\"btn btn-secondary\" (click)=\"remarks= undefined;c('Close click')\">Close</button>\r\n          </div>\r\n        </ng-template>\r\n\r\n\r\n\r\n  <div class=\"col-md-12 text-center\" *ngIf=\"userType=='ArTechUser'\">\r\n    <div class=\"btn-group compliance-font\">\r\n            <label class=\"repocontainer\">Pending Compliance\r\n              <input type=\"checkbox\"  (change)=\"onFilterChange()\" [(ngModel)]=\"pendingCompliance\">\r\n              <span class=\"checkmark\"></span>\r\n            </label>\r\n            <label class=\"repocontainer\">Pending for review\r\n              <input type=\"checkbox\" (change)=\"onFilterChange()\" [(ngModel)]=\"pendingForReview\">\r\n              <span class=\"checkmark\"></span>\r\n            </label>\r\n            <button type=\"button\" style=\"margin-left: 10px\" class=\"btn btn-primary btn-small compliance-font\" (click)=\"rerender()\">\r\n                Fetch\r\n              </button>\r\n\r\n    </div>\r\n<!--     <div class=\"col-md-2 col-sm-6 col-xs-12\">\r\n            <label class=\"repocontainer\">Complied In time\r\n              <input type=\"checkbox\"  (change)=\"onFilterChange()\" [(ngModel)]=\"compliedInTime\">\r\n              <span class=\"checkmark\"></span>\r\n            </label>\r\n        </div>\r\n\r\n         <div class=\"col-md-2 col-sm-6 col-xs-12\">\r\n            <label class=\"repocontainer\">Complied Delayed\r\n              <input type=\"checkbox\" (change)=\"onFilterChange()\" [(ngModel)]=\"compliedDelayed\">\r\n              <span class=\"checkmark\"></span>\r\n            </label>\r\n        </div>\r\n -->  </div>\r\n      <div class=\"row top-buffer\" style=\"margin-left: -4%\">\r\n          \r\n\t<table datatable [dtOptions]=\"dtOptions\" [dtTrigger]=\"dtTrigger\" class=\"row-border hover\" style=\"width:100%;\">\r\n     <tfoot>\r\n    <tr>\r\n        <th><input type=\"text\" style=\"width:100px\" placeholder=\"Abbriviation\" name=\"Abbriviation\" columnLocation=\"0\"/></th>\r\n      <th><input type=\"text\" style=\"width:100px\" placeholder=\"Location\" name=\"location\" columnLocation=\"1\"/></th>\r\n      <th><input type=\"text\" style=\"width:100px\" placeholder=\"Law Description\" name=\"search-lawDesc\" columnLocation=\"2\"/></th>\r\n      <th><input type=\"text\" style=\"width:200px\" placeholder=\"Activity Name\" name=\"search-activityname\" columnLocation=\"3\"/></th>\r\n      <th><input type=\"text\" style=\"width:100px\" placeholder=\"Periodicity Date\" name=\"search-periodicitydate\" columnLocation=\"4\"/></th>\r\n      <th><input type=\"text\" style=\"width:120px\" placeholder=\"Period Description\" name=\"search-periodDescription\" columnLocation=\"5\"/></th> \r\n      <th><input type=\"text\" style=\"width:100px\" placeholder=\"Actvity User\" name=\"actvityUser\" columnLocation=\"6\"/></th>\r\n      <th></th>\r\n    </tr>\r\n  </tfoot>\r\n </table>\r\n\t</div>\r\n </section>"
 
 /***/ }),
 
@@ -829,29 +829,38 @@ var ComplianceActivitiesComponent = /** @class */ (function () {
         var issManagerDirectClick = false;
         this.dtOptions = {
             data: response,
+            autoWidth: false,
             columns: [{
-                    title: 'Abbreviation',
-                    data: 'abbriviation'
+                    title: 'Abbr',
+                    data: 'abbriviation',
+                    width: '2%'
                 }, {
                     title: 'Location',
-                    data: 'locationName'
+                    data: 'locationName',
+                    width: '15%'
                 }, {
                     title: 'Law Description',
-                    data: 'lawDesc'
+                    data: 'lawDesc',
+                    width: '20%'
                 }, {
                     title: 'Activity Name',
-                    data: 'activityName'
+                    data: 'activityName',
+                    width: '30%'
                 }, {
                     title: 'Periodicity Due Date',
-                    data: 'duedate'
+                    data: 'duedate',
+                    width: '10%'
                 }, {
                     title: 'Period Description',
-                    data: 'periodicityDesc'
+                    data: 'periodicityDesc',
+                    width: '10%'
                 }, {
                     title: 'Actvity Assign User',
-                    data: 'assignedUser'
+                    data: 'assignedUser',
+                    width: '10%'
                 }, {
                     title: '',
+                    bSortable: false,
                     render: function (data, type, full) {
                         if (full.isComplied && !(full.isComplianceApproved || full.isComplianceRejected)) {
                             if (self.userType == 'ArTechUser') {
@@ -889,11 +898,12 @@ var ComplianceActivitiesComponent = /** @class */ (function () {
                             //            "<option value='Pending for Discrepancy'>Pending for Discrepancy</option>" +
                             //            "</select>";    
                             // }
-                            return "<input type='button' id='statusChangeBtn' style='cursor:pointer' data-elemnt-obj=full class='btn btn-outline-primary' value='Comply' title='Change status to complied' />";
+                            return "<i id='statusChangeBtn' style='cursor:pointer' data-elemnt-obj=full class='fa fa-check fa-lg' value='Comply' title='Change status to complied'></i>";
                         }
                     }
                 }, {
                     title: '',
+                    bSortable: false,
                     render: function (data, type, full) {
                         if (self.userType != 'sManager') {
                             return "<i *ngIf='full.fileId' style='cursor:pointer' class='fa fa-file-archive-o fa-lg downloadFile'></i>";
@@ -2346,6 +2356,7 @@ module.exports = "<div class=\"container\">\r\n  <div class=\"row\">\r\n    <div
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("./node_modules/@angular/core/esm5/core.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__service_loginService__ = __webpack_require__("./src/app/service/loginService.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__typeBean_loginBean__ = __webpack_require__("./src/app/typeBean/loginBean.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_router__ = __webpack_require__("./node_modules/@angular/router/esm5/router.js");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -2358,9 +2369,11 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
+
 var LoginLoginComponent = /** @class */ (function () {
-    function LoginLoginComponent(loginService) {
+    function LoginLoginComponent(loginService, route) {
         this.loginService = loginService;
+        this.route = route;
         this.responseStr = {};
         this.username = "";
         this.password = "";
@@ -2380,7 +2393,13 @@ var LoginLoginComponent = /** @class */ (function () {
             _this.loginInProgress = "enabled";
             _this.responseStr = responseStr;
             if (_this.responseStr.isUserActive) {
-                window.location.href = "#/dashboard";
+                var redirectionUrl = _this.route.snapshot.queryParamMap.get('redirectionUrl');
+                if (redirectionUrl) {
+                    window.location.hash = redirectionUrl;
+                }
+                else {
+                    window.location.href = "#/dashboard";
+                }
             }
             else {
                 //window.location.href="#/notactive"
@@ -2411,7 +2430,7 @@ var LoginLoginComponent = /** @class */ (function () {
             styles: [__webpack_require__("./src/app/app.component.css")],
             providers: [__WEBPACK_IMPORTED_MODULE_1__service_loginService__["a" /* LoginService */]]
         }),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__service_loginService__["a" /* LoginService */]])
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__service_loginService__["a" /* LoginService */], __WEBPACK_IMPORTED_MODULE_3__angular_router__["a" /* ActivatedRoute */]])
     ], LoginLoginComponent);
     return LoginLoginComponent;
 }());
@@ -2621,6 +2640,47 @@ module.exports = "/******************************/\r\n* { -webkit-box-sizing:bor
 
 /***/ }),
 
+/***/ "./src/app/service/BaseService.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return BaseService; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("./node_modules/@angular/core/esm5/core.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_rxjs_add_operator_toPromise__ = __webpack_require__("./node_modules/rxjs/_esm5/add/operator/toPromise.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_rxjs_add_operator_toPromise___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_rxjs_add_operator_toPromise__);
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+var BaseService = /** @class */ (function () {
+    function BaseService() {
+    }
+    BaseService.prototype.handleError = function (error) {
+        console.error('An error occurred', error, error.status);
+        if ("401" == error.status) {
+            var redirectionUrl = encodeURI(window.location.hash.substr(1));
+            window.location.href = "#?redirectionUrl=" + redirectionUrl;
+        }
+        return Promise.reject(error.message || error);
+    };
+    BaseService = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])(),
+        __metadata("design:paramtypes", [])
+    ], BaseService);
+    return BaseService;
+}());
+
+
+
+/***/ }),
+
 /***/ "./src/app/service/activityService.ts":
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -2631,8 +2691,19 @@ module.exports = "/******************************/\r\n* { -webkit-box-sizing:bor
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__typeBean_loginBean__ = __webpack_require__("./src/app/typeBean/loginBean.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__service_loginService__ = __webpack_require__("./src/app/service/loginService.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__environments_environment__ = __webpack_require__("./src/environments/environment.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_rxjs_add_operator_toPromise__ = __webpack_require__("./node_modules/rxjs/_esm5/add/operator/toPromise.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_rxjs_add_operator_toPromise___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5_rxjs_add_operator_toPromise__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__BaseService__ = __webpack_require__("./src/app/service/BaseService.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_rxjs_add_operator_toPromise__ = __webpack_require__("./node_modules/rxjs/_esm5/add/operator/toPromise.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_rxjs_add_operator_toPromise___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6_rxjs_add_operator_toPromise__);
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -2648,18 +2719,22 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
-var ActivityService = /** @class */ (function () {
+
+var ActivityService = /** @class */ (function (_super) {
+    __extends(ActivityService, _super);
     function ActivityService(http, loginService) {
-        this.http = http;
-        this.loginService = loginService;
-        this.appUrl = "";
-        this.loginBean = new __WEBPACK_IMPORTED_MODULE_2__typeBean_loginBean__["a" /* LoginBean */]();
-        this.appUrl = __WEBPACK_IMPORTED_MODULE_4__environments_environment__["a" /* environment */].appUrl ? __WEBPACK_IMPORTED_MODULE_4__environments_environment__["a" /* environment */].appUrl : "";
+        var _this = _super.call(this) || this;
+        _this.http = http;
+        _this.loginService = loginService;
+        _this.appUrl = "";
+        _this.loginBean = new __WEBPACK_IMPORTED_MODULE_2__typeBean_loginBean__["a" /* LoginBean */]();
+        _this.appUrl = __WEBPACK_IMPORTED_MODULE_4__environments_environment__["a" /* environment */].appUrl ? __WEBPACK_IMPORTED_MODULE_4__environments_environment__["a" /* environment */].appUrl : "";
+        return _this;
     }
-    ActivityService.prototype.handleError = function (error) {
-        console.error('An error occurred', error); // for demo purposes only
-        return Promise.reject(error.message || error);
-    };
+    /* private handleError(error: any): Promise<any> {
+      console.error('An error occurred', error); // for demo purposes only
+      return Promise.reject(error.message || error);
+    } */
     ActivityService.prototype.getActivityData = function (activitySeverity, lawArea) {
         var headers = this.loginService.getHeaders();
         var companyId = this.loginService.getCompany();
@@ -2703,7 +2778,7 @@ var ActivityService = /** @class */ (function () {
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__angular_common_http__["a" /* HttpClient */], __WEBPACK_IMPORTED_MODULE_3__service_loginService__["a" /* LoginService */]])
     ], ActivityService);
     return ActivityService;
-}());
+}(__WEBPACK_IMPORTED_MODULE_5__BaseService__["a" /* BaseService */]));
 
 
 
@@ -2719,8 +2794,19 @@ var ActivityService = /** @class */ (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__typeBean_loginBean__ = __webpack_require__("./src/app/typeBean/loginBean.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__service_loginService__ = __webpack_require__("./src/app/service/loginService.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__environments_environment__ = __webpack_require__("./src/environments/environment.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_rxjs_add_operator_toPromise__ = __webpack_require__("./node_modules/rxjs/_esm5/add/operator/toPromise.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_rxjs_add_operator_toPromise___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5_rxjs_add_operator_toPromise__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__BaseService__ = __webpack_require__("./src/app/service/BaseService.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_rxjs_add_operator_toPromise__ = __webpack_require__("./node_modules/rxjs/_esm5/add/operator/toPromise.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_rxjs_add_operator_toPromise___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6_rxjs_add_operator_toPromise__);
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -2736,18 +2822,22 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
-var DashboardService = /** @class */ (function () {
+
+var DashboardService = /** @class */ (function (_super) {
+    __extends(DashboardService, _super);
     function DashboardService(http, loginService) {
-        this.http = http;
-        this.loginService = loginService;
-        this.appUrl = "";
-        this.loginBean = new __WEBPACK_IMPORTED_MODULE_2__typeBean_loginBean__["a" /* LoginBean */]();
-        this.appUrl = __WEBPACK_IMPORTED_MODULE_4__environments_environment__["a" /* environment */].appUrl ? __WEBPACK_IMPORTED_MODULE_4__environments_environment__["a" /* environment */].appUrl : "";
+        var _this = _super.call(this) || this;
+        _this.http = http;
+        _this.loginService = loginService;
+        _this.appUrl = "";
+        _this.loginBean = new __WEBPACK_IMPORTED_MODULE_2__typeBean_loginBean__["a" /* LoginBean */]();
+        _this.appUrl = __WEBPACK_IMPORTED_MODULE_4__environments_environment__["a" /* environment */].appUrl ? __WEBPACK_IMPORTED_MODULE_4__environments_environment__["a" /* environment */].appUrl : "";
+        return _this;
     }
-    DashboardService.prototype.handleError = function (error) {
-        console.error('An error occurred', error); // for demo purposes only
-        return Promise.reject(error.message || error);
-    };
+    /* private handleError(error: any): Promise<any> {
+      console.error('An error occurred', error); // for demo purposes only
+      return Promise.reject(error.message || error);
+    } */
     DashboardService.prototype.getDashboardData = function () {
         var headers = this.loginService.getHeaders();
         var companyId = this.loginService.getCompany();
@@ -2764,7 +2854,7 @@ var DashboardService = /** @class */ (function () {
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__angular_common_http__["a" /* HttpClient */], __WEBPACK_IMPORTED_MODULE_3__service_loginService__["a" /* LoginService */]])
     ], DashboardService);
     return DashboardService;
-}());
+}(__WEBPACK_IMPORTED_MODULE_5__BaseService__["a" /* BaseService */]));
 
 
 
@@ -2862,31 +2952,28 @@ var LoginService = /** @class */ (function () {
         return Promise.reject(error.message || error);
     };
     LoginService.prototype.getHeaders = function () {
-        //console.log(sessionStorage.getItem("location")+">>>>Loc");
         var locationId = sessionStorage.getItem("location");
-        console.log(locationId);
+        var httpOptions = { headers: new __WEBPACK_IMPORTED_MODULE_1__angular_common_http__["c" /* HttpHeaders */]({ 'Content-Type': 'application/json' }) };
         if (locationId && locationId != null) {
-            var httpOptions = {
+            httpOptions = {
                 headers: new __WEBPACK_IMPORTED_MODULE_1__angular_common_http__["c" /* HttpHeaders */]({
                     'Content-Type': 'application/json',
                     'auth': sessionStorage.getItem("auth"),
                     'location': locationId
                 })
             };
-            return httpOptions;
         }
-        else {
-            var httpOptions = {
+        else if (sessionStorage.getItem("auth") != undefined) {
+            httpOptions = {
                 headers: new __WEBPACK_IMPORTED_MODULE_1__angular_common_http__["c" /* HttpHeaders */]({
                     'Content-Type': 'application/json',
                     'auth': sessionStorage.getItem("auth")
                 })
             };
-            return httpOptions;
         }
+        return httpOptions;
     };
     LoginService.prototype.handleUserAction = function (response) {
-        console.log(response);
         sessionStorage.setItem("loggedIn", "true");
         sessionStorage.setItem("auth", response.authKey);
         sessionStorage.setItem("companies", JSON.stringify(response.companies));
@@ -2896,7 +2983,7 @@ var LoginService = /** @class */ (function () {
         return sessionStorage.getItem("loggedIn");
     };
     LoginService.prototype.test = function () {
-        var url = "http://Vinayak-PC:8080/ComplianceTool/rest/user/test";
+        var url = this.appUrl + "/rest/user/test";
         return this.http.get(url).toPromise().then(function (response) { return response; }).catch(this.handleError);
     };
     LoginService.prototype.loginUserPost = function (username, password) {

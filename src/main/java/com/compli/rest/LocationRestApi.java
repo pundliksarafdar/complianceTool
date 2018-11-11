@@ -12,6 +12,8 @@ import javax.ws.rs.core.Application;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import com.compli.annotation.Authorised;
+import com.compli.annotation.Authorised.ROLE;
 import com.compli.db.bean.LocationBean;
 import com.compli.managers.LocationManager;
 
@@ -20,12 +22,14 @@ import com.compli.managers.LocationManager;
 public class LocationRestApi extends Application{
 	
 	@GET
+	@Authorised(role=ROLE.ALL)
 	public Response getAllLocation() {
 		LocationManager locationManager = new LocationManager();
 		return Response.ok(locationManager.getAllLocations()).build();
 	}
 	
 	@POST
+	@Authorised(role=ROLE.ALL)
 	public Response addLocation(List<LocationBean> locationBeans){
 		LocationManager locationManager = new LocationManager();
 		return Response.ok(locationManager.addLocation(locationBeans)).build();
@@ -33,6 +37,7 @@ public class LocationRestApi extends Application{
 	
 	@DELETE
 	@Path("{locationId}")
+	@Authorised(role=ROLE.ALL)
 	public Response addLocation(@PathParam("locationId") String locationId){
 		LocationManager locationManager = new LocationManager();
 		return Response.ok(locationManager.deleteLocation(locationId)).build();
@@ -40,6 +45,7 @@ public class LocationRestApi extends Application{
 	
 	@GET
 	@Path("/companylocations/{companyId}")
+	@Authorised(role=ROLE.ALL)
 	public Response getAllLocationForUser(@PathParam("companyId")String companyId) {
 		LocationManager locationManager = new LocationManager();
 		return Response.ok(locationManager.getCompanyLocation(companyId)).build();

@@ -17,6 +17,8 @@ import javax.ws.rs.core.StreamingOutput;
 
 import net.sf.dynamicreports.report.exception.DRException;
 
+import com.compli.annotation.Authorised;
+import com.compli.annotation.Authorised.ROLE;
 import com.compli.managers.ActivityManager;
 import com.compli.managers.ReportsManager;
 
@@ -25,6 +27,7 @@ import com.compli.managers.ReportsManager;
 public class ReportRestApi {
 	
 	@GET
+	@Authorised(role=ROLE.ALL)
 	public Response getAllActivityWithDescription(@QueryParam("month")String month,@QueryParam("companyId")String companyId,
 			@QueryParam("year")String year,@QueryParam("quarter")String quarter,@HeaderParam("location")String location){
 		ReportsManager reportsManager = null;
@@ -45,6 +48,7 @@ public class ReportRestApi {
 	
 	@GET
 	@Path("generateReport")
+	@Authorised(role=ROLE.ALL)
 	public Response generateReport(@QueryParam("month")String month,@QueryParam("companyId")String companyId,
 			@QueryParam("year")String year,@QueryParam("quarter")String quarter,@HeaderParam("location")String location) throws FileNotFoundException, DRException{
 		

@@ -204,9 +204,17 @@ public class ReportsManager {
 			List<Map<String, Object>> compliedOpen,List<GraphBean> graphBeans,List<ChartBean> chartBean,String companyId,String monthNum) throws DRException, FileNotFoundException{
 		String month = new DateFormatSymbols().getMonths()[Integer.parseInt(monthNum)-1];
 		String finnancialYear = finnancialYear(monthNum);
-		CompanyBean company = companyDao.getCompanyById(companyId);
-		String companyName = company.getName();
+		String[] companieids = companyId.split(",");
 		
+		List<String>companyNameList = new ArrayList<String>();
+		for(String companieid:companieids){
+			CompanyBean company = companyDao.getCompanyById(companieid);
+			if(company!=null){
+				companyNameList.add(company.getName());
+			}
+		}
+		
+		String companyName = String.join(",", companyNameList);
 		String fileName = companyName+"-"+month+"("+finnancialYear+").pdf";
 		byte[] pdfFile = null;
 		Map<String, Object>resp = new HashMap<String, Object>(){{put("filename", fileName);}};

@@ -3,6 +3,7 @@ package com.compli.rest;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.Map;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.HeaderParam;
@@ -48,7 +49,7 @@ public class ReportRestApi {
 	
 	@GET
 	@Path("generateReport")
-	@Authorised(role=ROLE.ALL)
+	//@Authorised(role=ROLE.ALL)
 	public Response generateReport(@QueryParam("month")String month,@QueryParam("companyId")String companyId,
 			@QueryParam("year")String year,@QueryParam("quarter")String quarter,@HeaderParam("location")String location) throws FileNotFoundException, DRException{
 		
@@ -60,9 +61,9 @@ public class ReportRestApi {
 		}
 		
 		if(month!=null){
-			//return Response.ok(reportsManager.generateReport(companyId, month)).build();
-			byte[] fileBytes = (byte[]) reportsManager.generateReport(companyId, month).get("pdfFile");
-			String filename = (String) reportsManager.generateReport(companyId, month).get("filename");
+			Map<String, Object> companyReport = reportsManager.generateReport(companyId, month);
+			byte[] fileBytes = (byte[]) companyReport.get("pdfFile");
+			String filename = (String) companyReport.get("filename");
 			StreamingOutput output = new StreamingOutput() {
 	            @Override
 	            public void write(OutputStream outputStream) throws IOException, WebApplicationException {

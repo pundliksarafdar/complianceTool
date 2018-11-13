@@ -9,6 +9,7 @@ public class ApplicationExceptionMapper implements ExceptionMapper<Exception>{
 
 	@Override
 	public Response toResponse(Exception ex) {
+		ex.printStackTrace();
 		Response response = Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
 		if(ex instanceof SessionExpiredException){
 			response = Response.status(Response.Status.UNAUTHORIZED).build();

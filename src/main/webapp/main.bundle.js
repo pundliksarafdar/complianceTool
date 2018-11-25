@@ -1294,7 +1294,7 @@ var ComplianceReportComponent = /** @class */ (function () {
         }
         else if (this.view == "year") {
             this.startingReportNote = "for " + this.reportYear;
-            this.endingReportNote = "(till 30th of April'" + this.date.getFullYear() + ")";
+            this.endingReportNote = "(till 31st of March'" + this.date.getFullYear() + ")";
         }
     };
     ComplianceReportComponent.prototype.selectAvtivities = function (activity) {

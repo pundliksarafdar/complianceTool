@@ -234,8 +234,8 @@ public class ReportsManager {
 				finnancialYear = finnancialYear("5");
 			}else if(year!=null){
 				month = "";
-				monthEnd = "30th of April";
-				finnancialYear = year;
+				monthEnd = "31st of march";
+				finnancialYear = Integer.parseInt(year)+"-"+(Integer.parseInt(year)+1);
 			}
 		String[] companieids = companyId.split(",");
 		

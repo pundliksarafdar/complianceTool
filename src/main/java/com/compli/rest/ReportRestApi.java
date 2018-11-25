@@ -52,7 +52,8 @@ public class ReportRestApi {
 	//@Authorised(role=ROLE.ALL)
 	public Response generateReport(@QueryParam("month")String month,@QueryParam("companyId")String companyId,
 			@QueryParam("year")String year,@QueryParam("quarter")String quarter,@HeaderParam("location")String location) throws FileNotFoundException, DRException{
-		
+		final byte[] fileBytes;
+		String filename = null;
 		ReportsManager reportsManager = null;
 		if(location==null || "all".equals(location)){
 			reportsManager = new ReportsManager();
@@ -62,24 +63,34 @@ public class ReportRestApi {
 		
 		if(month!=null){
 			Map<String, Object> companyReport = reportsManager.generateReport(companyId, month);
-			byte[] fileBytes = (byte[]) companyReport.get("pdfFile");
-			String filename = (String) companyReport.get("filename");
-			StreamingOutput output = new StreamingOutput() {
-	            @Override
-	            public void write(OutputStream outputStream) throws IOException, WebApplicationException {
-	                int length = fileBytes.length;
-	                outputStream.write(fileBytes, 0, length);
-	                outputStream.flush();
-	            }
-	        };
-	        return Response.ok(output, MediaType.APPLICATION_OCTET_STREAM)
-	                .header("Content-Disposition", "attachment; filename=\"" + filename + "\"" )
-	                .build();
+			fileBytes = (byte[]) companyReport.get("pdfFile");
+			filename = (String) companyReport.get("filename");
+			
 		}else if(quarter!=null){
-			return Response.ok(reportsManager.getReportsObjectByQuarter(companyId, quarter)).build();
+			Map<String, Object> companyReport = reportsManager.generateReportForQuarter(companyId, quarter);
+			fileBytes = (byte[]) companyReport.get("pdfFile");
+			filename = (String) companyReport.get("filename");
 		}else{
 			year = year.split("-")[0];
-			return Response.ok(reportsManager.getReportsObjectByYear(companyId, year)).build();
+			Map<String, Object> companyReport = reportsManager.generateReportForYear(companyId, year);
+			fileBytes = (byte[]) companyReport.get("pdfFile");
+			filename = (String) companyReport.get("filename");
 		}
+		
+		if(fileBytes != null){
+		StreamingOutput output = new StreamingOutput() {
+            @Override
+            public void write(OutputStream outputStream) throws IOException, WebApplicationException {
+                int length = fileBytes.length;
+                outputStream.write(fileBytes, 0, length);
+                outputStream.flush();
+            }
+        };
+        
+        return Response.ok(output, MediaType.APPLICATION_OCTET_STREAM)
+                .header("Content-Disposition", "attachment; filename=\"" + filename + "\"" )
+                .build();
+		}
+		return null;
 	}
 }

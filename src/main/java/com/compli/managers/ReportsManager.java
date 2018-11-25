@@ -200,10 +200,43 @@ public class ReportsManager {
 		return finnacialYear;
 	}
 	
+	public static String quarter(String quarterNum){
+		String quarter = "April - June";
+		switch (quarterNum) {
+		case "0":
+			quarter = "April - June";
+			break;
+		case "1":
+			quarter = "July - September";
+			break;
+		case "2":
+			quarter = "October - December";
+			break;
+		case "3":
+			quarter = "January - March";
+			break;
+		default:
+			break;
+		}
+		return quarter;
+	}
+	
 	public Map<String,Object> generateReportNew(List<Map<String, Object>> compliedInTime,List<Map<String, Object>> compliedDelayed,
-			List<Map<String, Object>> compliedOpen,List<GraphBean> graphBeans,List<ChartBean> chartBean,String companyId,String monthNum) throws DRException, FileNotFoundException{
-		String month = new DateFormatSymbols().getMonths()[Integer.parseInt(monthNum)-1];
-		String finnancialYear = finnancialYear(monthNum);
+			List<Map<String, Object>> compliedOpen,List<GraphBean> graphBeans,List<ChartBean> chartBean,String companyId,String monthNum,String quarter,String year) throws DRException, FileNotFoundException{
+		String month = null,finnancialYear = null,monthEnd=null;
+			if(monthNum!=null){
+				monthEnd =month = new DateFormatSymbols().getMonths()[Integer.parseInt(monthNum)-1];
+				finnancialYear = finnancialYear(monthNum);
+			}else if(quarter!=null){
+				//month = new DateFormatSymbols().getMonths()[Integer.parseInt(monthNum)-1];
+				monthEnd = month = quarter(quarter);
+				//Quarter finnacial year is always same so taking fy for may
+				finnancialYear = finnancialYear("5");
+			}else if(year!=null){
+				month = "";
+				monthEnd = "30th of April";
+				finnancialYear = year;
+			}
 		String[] companieids = companyId.split(",");
 		
 		List<String>companyNameList = new ArrayList<String>();
@@ -233,8 +266,11 @@ public class ReportsManager {
 	        params.put("GraphDataSource", graphBeanDataSource);
 	        params.put("ChartBeanDataSource", chartBeanDataSource);
 	        params.put("TIME_PERIOD_MONTH",month);
+	        params.put("TIME_PERIOD_MONTH_END",monthEnd);
 	        params.put("COMPANY_NAME",companyName);
 	        params.put("TIME_PERIOD",month+" ("+finnancialYear+")");
+	        params.put("TIME_PERIOD_TYPE",monthNum!=null?"month":quarter!=null?"qurter":"year");
+	        
 	        String path2 = "C:\\DDrive\\Source\\Compliance\\compliance-tool\\ComplianceToolServer\\ComplianceTool\\src\\main\\resources\\reports\\";
 	        String path1 = "C:/report/reports/";
 	        String path = path2;
@@ -331,7 +367,31 @@ public class ReportsManager {
 		List<Map<String, Object>> data = (List<Map<String, Object>>) d.get("activities");
 		HashMap<String, List> formattedDataMap = format(data);
 		Map<String, Object> fileObject = manager.generateReportNew(formattedDataMap.get("compliedInTime"),formattedDataMap.get("compliedDelayed"),
-				formattedDataMap.get("compliedOpen"),formattedDataMap.get("graphBeans"),formattedDataMap.get("chartBeans"),companyId,month
+				formattedDataMap.get("compliedOpen"),formattedDataMap.get("graphBeans"),formattedDataMap.get("chartBeans"),companyId,month,null,null
+				);	
+		return fileObject;
+	}
+	
+	public Map<String, Object> generateReportForQuarter(String companyId,String quarter) throws FileNotFoundException, DRException{
+		ReportsManager manager = new ReportsManager();
+		HashMap<String, Object> d = manager.getReportsObjectByQuarter(companyId, quarter);
+		
+		List<Map<String, Object>> data = (List<Map<String, Object>>) d.get("activities");
+		HashMap<String, List> formattedDataMap = format(data);
+		Map<String, Object> fileObject = manager.generateReportNew(formattedDataMap.get("compliedInTime"),formattedDataMap.get("compliedDelayed"),
+				formattedDataMap.get("compliedOpen"),formattedDataMap.get("graphBeans"),formattedDataMap.get("chartBeans"),companyId,null,quarter,null
+				);	
+		return fileObject;
+	}
+	
+	public Map<String, Object> generateReportForYear(String companyId,String year) throws FileNotFoundException, DRException{
+		ReportsManager manager = new ReportsManager();
+		HashMap<String, Object> d = manager.getReportsObjectByYear(companyId, year);
+		
+		List<Map<String, Object>> data = (List<Map<String, Object>>) d.get("activities");
+		HashMap<String, List> formattedDataMap = format(data);
+		Map<String, Object> fileObject = manager.generateReportNew(formattedDataMap.get("compliedInTime"),formattedDataMap.get("compliedDelayed"),
+				formattedDataMap.get("compliedOpen"),formattedDataMap.get("graphBeans"),formattedDataMap.get("chartBeans"),companyId,null,null,year
 				);	
 		return fileObject;
 	}
@@ -344,7 +404,7 @@ public class ReportsManager {
 		HashMap<String, List> formattedDataMap = format(data);
 		manager.generateReportNew(formattedDataMap.get("compliedInTime"),formattedDataMap.get("compliedDelayed"),
 				formattedDataMap.get("compliedOpen"),formattedDataMap.get("graphBeans"),formattedDataMap.get("chartBeans"),
-				"ff2dbbe29f7d4073","4");
+				"ff2dbbe29f7d4073","4",null,null);
 		
 	}
 }

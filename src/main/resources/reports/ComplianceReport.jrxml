@@ -166,6 +166,8 @@
 	<parameter name="COMPANY_NAME" class="java.lang.String"/>
 	<parameter name="TIME_PERIOD" class="java.lang.String"/>
 	<parameter name="TIME_PERIOD_MONTH" class="java.lang.String"/>
+	<parameter name="TIME_PERIOD_MONTH_END" class="java.lang.String"/>
+	<parameter name="TIME_PERIOD_TYPE" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
@@ -245,10 +247,10 @@
 			</barChart>
 			<textField>
 				<reportElement x="0" y="270" width="555" height="30" uuid="73c042d7-456b-4258-8a0e-c129f95a863d"/>
-				<textFieldExpression><![CDATA["This Report contains compliance status for the month of "+$P{TIME_PERIOD}+", and entire outstanding non-compliance (till " +$P{TIME_PERIOD_MONTH} + " end)"]]></textFieldExpression>
+				<textFieldExpression><![CDATA["This Report contains compliance status for the "+$P{TIME_PERIOD_TYPE}+" of "+$P{TIME_PERIOD}+", and entire outstanding non-compliance (till " +$P{TIME_PERIOD_MONTH} + " end)"]]></textFieldExpression>
 			</textField>
 			<componentElement>
-				<reportElement positionType="Float" x="3" y="300" width="555" height="100" uuid="8ea101cd-2423-4194-8fe1-2b3c88555c80">
+				<reportElement positionType="Float" x="3" y="300" width="547" height="100" uuid="8ea101cd-2423-4194-8fe1-2b3c88555c80">
 					<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.VerticalRowLayout"/>
 					<property name="com.jaspersoft.studio.table.style.table_header" value="Table_TH"/>
 					<property name="com.jaspersoft.studio.table.style.column_header" value="Table_CH"/>
@@ -356,7 +358,7 @@
 								</staticText>
 							</jr:columnHeader>
 							<jr:detailCell style="Table_TD" height="30">
-								<textField>
+								<textField pattern="yyyy-MM-dd">
 									<reportElement x="0" y="0" width="50" height="30" uuid="235081ac-05f0-4364-940d-53285f8ac3a4"/>
 									<textElement textAlignment="Center" verticalAlignment="Middle"/>
 									<textFieldExpression><![CDATA[$F{duedate}]]></textFieldExpression>
@@ -375,7 +377,7 @@
 								</staticText>
 							</jr:columnHeader>
 							<jr:detailCell style="Table_TD" height="30">
-								<textField>
+								<textField pattern="yyyy-MM-dd">
 									<reportElement x="0" y="0" width="65" height="30" uuid="258a0b0c-618b-443e-9430-9d2de0ff1b52"/>
 									<textElement textAlignment="Center" verticalAlignment="Middle"/>
 									<textFieldExpression><![CDATA[$F{completionDate}]]></textFieldExpression>
@@ -386,7 +388,7 @@
 				</jr:table>
 			</componentElement>
 			<componentElement>
-				<reportElement positionType="Float" x="0" y="420" width="555" height="93" uuid="e005168b-147e-4b77-9a62-21624aea73dc">
+				<reportElement positionType="Float" x="0" y="420" width="550" height="93" uuid="e005168b-147e-4b77-9a62-21624aea73dc">
 					<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.VerticalRowLayout"/>
 					<property name="com.jaspersoft.studio.table.style.table_header" value="Table 1_TH"/>
 					<property name="com.jaspersoft.studio.table.style.column_header" value="Table 1_CH"/>
@@ -407,11 +409,11 @@
 								<text><![CDATA[Compliance delayed]]></text>
 							</staticText>
 						</jr:tableHeader>
-						<jr:column width="80" uuid="5d3a43ff-8523-4178-ac7c-df6b3dcf78c4">
+						<jr:column width="60" uuid="5d3a43ff-8523-4178-ac7c-df6b3dcf78c4">
 							<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column1"/>
 							<jr:columnHeader style="Table 1_CH" height="30" rowSpan="1">
 								<staticText>
-									<reportElement x="0" y="0" width="80" height="30" uuid="ffe4a01d-5640-4048-9d8e-4756e8fa7a07"/>
+									<reportElement x="0" y="0" width="60" height="30" uuid="ffe4a01d-5640-4048-9d8e-4756e8fa7a07"/>
 									<textElement textAlignment="Center" verticalAlignment="Middle">
 										<font isBold="true"/>
 									</textElement>
@@ -420,17 +422,17 @@
 							</jr:columnHeader>
 							<jr:detailCell style="Table 1_TD" height="30">
 								<textField>
-									<reportElement x="0" y="0" width="80" height="30" uuid="3c739b43-b17f-4f74-8607-4d631c85439b"/>
+									<reportElement x="0" y="0" width="60" height="30" uuid="3c739b43-b17f-4f74-8607-4d631c85439b"/>
 									<textElement textAlignment="Center" verticalAlignment="Middle"/>
 									<textFieldExpression><![CDATA[$F{locationName}]]></textFieldExpression>
 								</textField>
 							</jr:detailCell>
 						</jr:column>
-						<jr:column width="160" uuid="e0a0d369-3311-454f-8a92-22e627c73a5a">
+						<jr:column width="140" uuid="e0a0d369-3311-454f-8a92-22e627c73a5a">
 							<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column2"/>
 							<jr:columnHeader style="Table 1_CH" height="30" rowSpan="1">
 								<staticText>
-									<reportElement x="0" y="0" width="160" height="30" uuid="75211700-f55e-429c-80bd-d45d4e938b6e"/>
+									<reportElement x="0" y="0" width="140" height="30" uuid="75211700-f55e-429c-80bd-d45d4e938b6e"/>
 									<textElement textAlignment="Center" verticalAlignment="Middle">
 										<font isBold="true"/>
 									</textElement>
@@ -439,17 +441,17 @@
 							</jr:columnHeader>
 							<jr:detailCell style="Table 1_TD" height="30">
 								<textField isStretchWithOverflow="true">
-									<reportElement x="0" y="0" width="160" height="30" uuid="ffca8b99-9ec6-405d-a6fd-14b514b58a38"/>
+									<reportElement x="0" y="0" width="140" height="30" uuid="ffca8b99-9ec6-405d-a6fd-14b514b58a38"/>
 									<textElement textAlignment="Center" verticalAlignment="Middle"/>
 									<textFieldExpression><![CDATA[$F{activityName}]]></textFieldExpression>
 								</textField>
 							</jr:detailCell>
 						</jr:column>
-						<jr:column width="150" uuid="31054c49-7309-4c0e-887f-7d89fa0d60c4">
+						<jr:column width="140" uuid="31054c49-7309-4c0e-887f-7d89fa0d60c4">
 							<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column3"/>
 							<jr:columnHeader style="Table 1_CH" height="30" rowSpan="1">
 								<staticText>
-									<reportElement x="0" y="0" width="150" height="30" uuid="dffa2507-2e1b-42f4-98dd-1c4f9b6e6964"/>
+									<reportElement x="0" y="0" width="140" height="30" uuid="dffa2507-2e1b-42f4-98dd-1c4f9b6e6964"/>
 									<textElement textAlignment="Center" verticalAlignment="Middle">
 										<font isBold="true"/>
 									</textElement>
@@ -458,7 +460,7 @@
 							</jr:columnHeader>
 							<jr:detailCell style="Table 1_TD" height="30">
 								<textField>
-									<reportElement x="0" y="0" width="150" height="30" uuid="a9b14d9c-fa8c-4f31-a54e-1301fb38effa"/>
+									<reportElement x="0" y="0" width="140" height="30" uuid="a9b14d9c-fa8c-4f31-a54e-1301fb38effa"/>
 									<textElement textAlignment="Center" verticalAlignment="Middle"/>
 									<textFieldExpression><![CDATA[$F{lawDesc}]]></textFieldExpression>
 								</textField>
@@ -495,7 +497,7 @@
 								</staticText>
 							</jr:columnHeader>
 							<jr:detailCell style="Table_TD" height="30">
-								<textField>
+								<textField pattern="yyyy-MM-dd">
 									<reportElement x="0" y="0" width="50" height="30" uuid="235081ac-05f0-4364-940d-53285f8ac3a4"/>
 									<textElement textAlignment="Center" verticalAlignment="Middle"/>
 									<textFieldExpression><![CDATA[$F{duedate}]]></textFieldExpression>
@@ -514,10 +516,29 @@
 								</staticText>
 							</jr:columnHeader>
 							<jr:detailCell style="Table 1_TD" height="30">
-								<textField>
+								<textField pattern="yyyy-MM-dd">
 									<reportElement x="0" y="0" width="65" height="30" uuid="bc6fc673-da51-4d5a-ada6-547848c516f2"/>
 									<textElement textAlignment="Center" verticalAlignment="Middle"/>
 									<textFieldExpression><![CDATA[$F{completionDate}]]></textFieldExpression>
+								</textField>
+							</jr:detailCell>
+						</jr:column>
+						<jr:column width="50" uuid="13968d94-0f26-43b4-ad29-aa7cddc4fdc8">
+							<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column4"/>
+							<jr:columnHeader style="Table 1_CH" height="30" rowSpan="1">
+								<staticText>
+									<reportElement x="0" y="0" width="50" height="30" uuid="fa335f64-381f-4595-92df-a7dd9ad01d81"/>
+									<textElement textAlignment="Center" verticalAlignment="Middle">
+										<font isBold="true"/>
+									</textElement>
+									<text><![CDATA[Delayed days]]></text>
+								</staticText>
+							</jr:columnHeader>
+							<jr:detailCell style="Table_TD" height="30">
+								<textField>
+									<reportElement x="0" y="0" width="50" height="30" uuid="c1fdd13f-64e4-4d82-a354-e84b39501ff4"/>
+									<textElement textAlignment="Center" verticalAlignment="Middle"/>
+									<textFieldExpression><![CDATA[($F{completionDate}.getTime() - $F{duedate}.getTime())/(1000*60*60*24)]]></textFieldExpression>
 								</textField>
 							</jr:detailCell>
 						</jr:column>
@@ -615,7 +636,7 @@
 								</staticText>
 							</jr:columnHeader>
 							<jr:detailCell style="Table 2_TD" height="30">
-								<textField>
+								<textField pattern="yyyy-MM-dd">
 									<reportElement x="0" y="0" width="50" height="30" uuid="0f54522f-6cfb-454c-9777-484410a377d7"/>
 									<textElement textAlignment="Center" verticalAlignment="Middle"/>
 									<textFieldExpression><![CDATA[$F{duedate}]]></textFieldExpression>

@@ -202,6 +202,7 @@ public boolean changeActivityStatus(String companyId,String activityId,boolean i
 		}else if(compliedDelayed){
 			return this.dashBoardDao.changeActivityStatusComplainceDelayed(companyId, activityId);
 		}else if(pendingDescrepancy){
+			EmailManager.sendActivityPendingForDescripancy(activityId);
 			return this.dashBoardDao.changeActivityStatusPendingDecrepancy(companyId, activityId);
 		}else {
 			return this.dashBoardDao.changeActivityStatusPendingComplied(companyId, activityId);

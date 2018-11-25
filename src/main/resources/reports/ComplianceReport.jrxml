@@ -358,7 +358,7 @@
 								</staticText>
 							</jr:columnHeader>
 							<jr:detailCell style="Table_TD" height="30">
-								<textField pattern="yyyy-MM-dd">
+								<textField isStretchWithOverflow="true" pattern="yyyy-MM-dd">
 									<reportElement x="0" y="0" width="50" height="30" uuid="235081ac-05f0-4364-940d-53285f8ac3a4"/>
 									<textElement textAlignment="Center" verticalAlignment="Middle"/>
 									<textFieldExpression><![CDATA[$F{duedate}]]></textFieldExpression>
@@ -377,7 +377,7 @@
 								</staticText>
 							</jr:columnHeader>
 							<jr:detailCell style="Table_TD" height="30">
-								<textField pattern="yyyy-MM-dd">
+								<textField isStretchWithOverflow="true" pattern="yyyy-MM-dd">
 									<reportElement x="0" y="0" width="65" height="30" uuid="258a0b0c-618b-443e-9430-9d2de0ff1b52"/>
 									<textElement textAlignment="Center" verticalAlignment="Middle"/>
 									<textFieldExpression><![CDATA[$F{completionDate}]]></textFieldExpression>
@@ -497,7 +497,7 @@
 								</staticText>
 							</jr:columnHeader>
 							<jr:detailCell style="Table_TD" height="30">
-								<textField pattern="yyyy-MM-dd">
+								<textField isStretchWithOverflow="true" pattern="yyyy-MM-dd">
 									<reportElement x="0" y="0" width="50" height="30" uuid="235081ac-05f0-4364-940d-53285f8ac3a4"/>
 									<textElement textAlignment="Center" verticalAlignment="Middle"/>
 									<textFieldExpression><![CDATA[$F{duedate}]]></textFieldExpression>
@@ -516,7 +516,7 @@
 								</staticText>
 							</jr:columnHeader>
 							<jr:detailCell style="Table 1_TD" height="30">
-								<textField pattern="yyyy-MM-dd">
+								<textField isStretchWithOverflow="true" pattern="yyyy-MM-dd">
 									<reportElement x="0" y="0" width="65" height="30" uuid="bc6fc673-da51-4d5a-ada6-547848c516f2"/>
 									<textElement textAlignment="Center" verticalAlignment="Middle"/>
 									<textFieldExpression><![CDATA[$F{completionDate}]]></textFieldExpression>
@@ -531,7 +531,7 @@
 									<textElement textAlignment="Center" verticalAlignment="Middle">
 										<font isBold="true"/>
 									</textElement>
-									<text><![CDATA[Delayed days]]></text>
+									<text><![CDATA[Delayed in days]]></text>
 								</staticText>
 							</jr:columnHeader>
 							<jr:detailCell style="Table_TD" height="30">
@@ -636,7 +636,7 @@
 								</staticText>
 							</jr:columnHeader>
 							<jr:detailCell style="Table 2_TD" height="30">
-								<textField pattern="yyyy-MM-dd">
+								<textField isStretchWithOverflow="true" pattern="yyyy-MM-dd">
 									<reportElement x="0" y="0" width="50" height="30" uuid="0f54522f-6cfb-454c-9777-484410a377d7"/>
 									<textElement textAlignment="Center" verticalAlignment="Middle"/>
 									<textFieldExpression><![CDATA[$F{duedate}]]></textFieldExpression>

@@ -28,4 +28,9 @@ public class ActivityDao {
 		String sql = "select * from activity";
 		return this.jdbcTemplate.query(sql,new BeanPropertyRowMapper(ActivityBean.class));
 	}
+	
+	public List<ActivityBean> getActivityData(){
+		String sql = "select * from activity";
+		return this.jdbcTemplate.query(sql,new BeanPropertyRowMapper(ActivityBean.class));
+	}
 }

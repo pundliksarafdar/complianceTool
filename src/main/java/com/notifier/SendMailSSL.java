@@ -12,17 +12,42 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
 public class SendMailSSL {
-	final String username = "pundlikproject@gmail.com";
-	final String password = "Gaurav#26993";
+	final static String username = "pundlikproject@gmail.com";
+	final static String password = "Gaurav#26993";
 
-	Properties props = new Properties();
+	static Properties props = new Properties();
+	Session session;
+	static Message message;
 	
-	public SendMailSSL() {
+	static{
 		props.put("mail.smtp.auth", "true");
 		props.put("mail.smtp.starttls.enable", "true");
 		props.put("mail.smtp.host", "smtp.gmail.com");
 		props.put("mail.smtp.port", "587");
-		props.put("mail.smtp.ssl.trust", "smtp.gmail.com");		
+		props.put("mail.smtp.ssl.trust", "smtp.gmail.com");
+		
+		Session session = Session.getInstance(props,
+				  new javax.mail.Authenticator() {
+					protected PasswordAuthentication getPasswordAuthentication() {
+						return new PasswordAuthentication(username, password);
+					}
+				  });
+		message = new MimeMessage(session);
+	}
+	
+	public SendMailSSL() {}
+	
+	public static void sendEmail(String to,String subject,String content){
+		try {
+			message.setRecipients(Message.RecipientType.TO,
+				InternetAddress.parse(to));
+			message.setSubject(subject);
+			
+			message.setContent(content, "text/html; charset=utf-8");
+			Transport.send(message);
+		} catch (MessagingException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public void sendRegistrationMail(String registrationId,String userFirstName,String email){

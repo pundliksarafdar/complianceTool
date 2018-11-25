@@ -39,4 +39,19 @@ public class Mail {
 	    writer.flush();
 	    return str;
 }
+  
+  public static String formMailContent(String emailTemplate,Object tempObj) {
+		HashMap<String, String> dataObj = new HashMap<String, String>();
+	    MustacheFactory mf = new DefaultMustacheFactory();
+	    Mustache mustache = mf.compile(emailTemplate);
+	    Writer writerStr = new StringWriter();
+	    Writer writer = mustache.execute(writerStr, tempObj);
+	    String str = writerStr.toString();
+	    try {
+			writer.flush();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	    return str;
+}  
 }

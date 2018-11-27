@@ -234,8 +234,8 @@ public class ReportsManager {
 				finnancialYear = finnancialYear("5");
 			}else if(year!=null){
 				month = "";
-				monthEnd = "31st of march";
-				finnancialYear = Integer.parseInt(year)+"-"+(Integer.parseInt(year)+1);
+				finnancialYear = Integer.parseInt(year)+"-"+(Integer.parseInt(year)+1)+"";
+				monthEnd = "31st of March'"+(Integer.parseInt(year)+1);
 			}
 		String[] companieids = companyId.split(",");
 		
@@ -269,7 +269,7 @@ public class ReportsManager {
 	        params.put("TIME_PERIOD_MONTH_END",monthEnd);
 	        params.put("COMPANY_NAME",companyName);
 	        params.put("TIME_PERIOD",month+" ("+finnancialYear+")");
-	        params.put("TIME_PERIOD_TYPE",monthNum!=null?"month":quarter!=null?"qurter":"year");
+	        params.put("TIME_PERIOD_TYPE",monthNum!=null?"month":quarter!=null?"quarter":"year");
 	        
 	        String path2 = "C:\\DDrive\\Source\\Compliance\\compliance-tool\\ComplianceToolServer\\ComplianceTool\\src\\main\\resources\\reports\\";
 	        String path1 = "C:/report/reports/";

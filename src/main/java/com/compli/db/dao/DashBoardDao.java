@@ -425,7 +425,7 @@ public class DashBoardDao {
 			"on riskmaster.riskId = companyWithLaw.riskId) companyWithRisk "+
 		"on periodicitymaster.periodicityId = companyWithRisk.periodicityId) companyWithPeriodicity "+ 
 	"on periodicitydatemaster.periodicityDateId = companyWithPeriodicity.periodicityDateId) companyWithPerDate  "+
-		"on companyWithPerDate.companyId = activity.companyId and companyWithPerDate.activityId = activity.activityId and activity.isComplianceRejected=false  order by periodicityDateId desc) newtable  WHERE ((DATE_FORMAT(duedate,'%Y%m') >= DATE_FORMAT(?,'%Y%m') and DATE_FORMAT(duedate,'%Y%m') < DATE_FORMAT(?,'%Y%m')) and isComplied=true) or (DATE_FORMAT(duedate,'%Y%m') <= DATE_FORMAT(now(),'%Y%m') and isComplied=false)";
+		"on companyWithPerDate.companyId = activity.companyId and companyWithPerDate.activityId = activity.activityId and activity.isComplianceRejected=false  order by periodicityDateId desc) newtable  WHERE ((DATE_FORMAT(duedate,'%Y%m') >= DATE_FORMAT(?,'%Y%m') and DATE_FORMAT(duedate,'%Y%m') < DATE_FORMAT(?,'%Y%m')) and isComplied=true) or (DATE_FORMAT(duedate,'%Y%m') < DATE_FORMAT(?,'%Y%m') and isComplied=false)";
 
 	//Need to modify
 		private String activityForYearQueryWithLocation = 
@@ -468,7 +468,7 @@ public class DashBoardDao {
 				"on riskmaster.riskId = companyWithLaw.riskId) companyWithRisk "+
 			"on periodicitymaster.periodicityId = companyWithRisk.periodicityId) companyWithPeriodicity "+ 
 		"on periodicitydatemaster.periodicityDateId = companyWithPeriodicity.periodicityDateId) companyWithPerDate  "+
-			"on companyWithPerDate.companyId = activity.companyId and companyWithPerDate.activityId = activity.activityId and activity.isComplianceRejected=false  order by periodicityDateId desc) newtable  WHERE ((DATE_FORMAT(duedate,'%Y%m') >= DATE_FORMAT(?,'%Y%m') and DATE_FORMAT(duedate,'%Y%m') < DATE_FORMAT(?,'%Y%m')) and isComplied=true) or (DATE_FORMAT(duedate,'%Y%m') <= DATE_FORMAT(now(),'%Y%m') and isComplied=false)";
+			"on companyWithPerDate.companyId = activity.companyId and companyWithPerDate.activityId = activity.activityId and activity.isComplianceRejected=false  order by periodicityDateId desc) newtable  WHERE ((DATE_FORMAT(duedate,'%Y%m') >= DATE_FORMAT(?,'%Y%m') and DATE_FORMAT(duedate,'%Y%m') < DATE_FORMAT(?,'%Y%m')) and isComplied=true) or (DATE_FORMAT(duedate,'%Y%m') < DATE_FORMAT(?,'%Y%m') and isComplied=false)";
 
 
 	/******************************* Activity for year *****************************************/
@@ -513,7 +513,7 @@ public class DashBoardDao {
 			"on riskmaster.riskId = companyWithLaw.riskId) companyWithRisk "+
 		"on periodicitymaster.periodicityId = companyWithRisk.periodicityId) companyWithPeriodicity "+ 
 	"on periodicitydatemaster.periodicityDateId = companyWithPeriodicity.periodicityDateId) companyWithPerDate  "+
-		"on companyWithPerDate.companyId = activity.companyId and companyWithPerDate.activityId = activity.activityId and activity.isComplianceRejected=false  order by periodicityDateId desc) newtable  WHERE (quarter(duedate)=? and YEAR(duedate)=? and isComplied=true) or (DATE_FORMAT(duedate,'%Y%m') <= DATE_FORMAT(now(),'%Y%m') and isComplied=false)";
+		"on companyWithPerDate.companyId = activity.companyId and companyWithPerDate.activityId = activity.activityId and activity.isComplianceRejected=false  order by periodicityDateId desc) newtable  WHERE (quarter(duedate)=? and YEAR(duedate)=? and isComplied=true) or (quarter(duedate)<=? and YEAR(duedate)=? and isComplied=false)";
 
 	//Need to modify 
 		private String activityForQuarterQueryWithLocation = 
@@ -556,7 +556,7 @@ public class DashBoardDao {
 				"on riskmaster.riskId = companyWithLaw.riskId) companyWithRisk "+
 			"on periodicitymaster.periodicityId = companyWithRisk.periodicityId) companyWithPeriodicity "+ 
 		"on periodicitydatemaster.periodicityDateId = companyWithPeriodicity.periodicityDateId) companyWithPerDate  "+
-			"on companyWithPerDate.companyId = activity.companyId and companyWithPerDate.activityId = activity.activityId and activity.isComplianceRejected=false  order by periodicityDateId desc) newtable  WHERE (quarter(duedate)=? and YEAR(duedate)=? and isComplied=true) or (DATE_FORMAT(duedate,'%Y%m') <= DATE_FORMAT(now(),'%Y%m') and isComplied=false)";
+			"on companyWithPerDate.companyId = activity.companyId and companyWithPerDate.activityId = activity.activityId and activity.isComplianceRejected=false  order by periodicityDateId desc) newtable  WHERE (quarter(duedate)=? and YEAR(duedate)=? and isComplied=true) or (quarter(duedate)<=? and YEAR(duedate)=? and isComplied=false)";
 
 	
 	String changeActivityStatusQuery = "INSERT INTO activity (companyId,activityId, isComplied,isComplianceApproved,remark) VALUES(?, ?, ?, ?,?) ON DUPLICATE KEY UPDATE companyId =?,activityId=?, isComplied=?,isComplianceApproved=?,remark=?";
@@ -877,7 +877,7 @@ private String activityQueryByLawAndStatusFullUser =
 		String toYear = (Integer.parseInt(year)+1)+"-04-01";
 		if(isFullUser){
 			activityForYearQueryFullUser = activityForYearQueryFullUser.replace("(?)", companyId);
-			List<Map<String, Object>> activities = this.jdbcTemplate.queryForList(activityForYearQueryFullUser,fromYear,toYear);
+			List<Map<String, Object>> activities = this.jdbcTemplate.queryForList(activityForYearQueryFullUser,fromYear,toYear,toYear);
 			return activities;
 		}else{
 			activityForYearQuery = activityForYearQuery.replace("(?)", companyId);
@@ -893,7 +893,7 @@ private String activityQueryByLawAndStatusFullUser =
 		String toYear = (Integer.parseInt(year)+1)+"-04-01";
 		if(isFullUser){
 			activityForYearQueryFullUserWithLocation = activityForYearQueryFullUserWithLocation.replace("(?)", companyId);
-			List<Map<String, Object>> activities = this.jdbcTemplate.queryForList(activityForYearQueryFullUserWithLocation,location,fromYear,toYear);
+			List<Map<String, Object>> activities = this.jdbcTemplate.queryForList(activityForYearQueryFullUserWithLocation,location,fromYear,toYear,toYear);
 			return activities;
 		}else{
 			activityForYearQueryWithLocation = activityForYearQueryWithLocation.replace("(?)", companyId);
@@ -919,7 +919,7 @@ private String activityQueryByLawAndStatusFullUser =
 		quarter = quarterInt+"";
 		if(isFullUser){
 			activityForQuarterQueryFullUser = activityForQuarterQueryFullUser.replace("(?)", companyId);
-			List<Map<String, Object>> activities = this.jdbcTemplate.queryForList(activityForQuarterQueryFullUser,quarter,year);
+			List<Map<String, Object>> activities = this.jdbcTemplate.queryForList(activityForQuarterQueryFullUser,quarter,year,quarter,year);
 			return activities;
 		}else{
 			activityForQuarterQuery = activityForQuarterQuery.replace("(?)", companyId);
@@ -945,7 +945,7 @@ private String activityQueryByLawAndStatusFullUser =
 		quarter = quarterInt+"";
 		if(isFullUser){
 			activityForQuarterQueryFullUserWithLocation = activityForQuarterQueryFullUserWithLocation.replace("(?)", companyId);
-			List<Map<String, Object>> activities = this.jdbcTemplate.queryForList(activityForQuarterQueryFullUserWithLocation,location,quarter,year);
+			List<Map<String, Object>> activities = this.jdbcTemplate.queryForList(activityForQuarterQueryFullUserWithLocation,location,quarter,year,quarter,year);
 			return activities;
 		}else{
 			activityForQuarterQueryWithLocation = activityForQuarterQueryWithLocation.replace("(?)", companyId);

@@ -41,7 +41,7 @@ public class ActivityDao {
 		String sql = "select user.userId,firstname as user,userTypeId,email,activityName,dueDate as periodictyDate from user inner join "+ 
 									"(select userId,activityName,dueDate from usercompany inner join "+
 										"(select activity.activityId,activity.companyId,activityName,dueDate from activity inner join "+ 
-											"(SELECT activityId,activityName,dueDate FROM compli.activityMaster inner join periodicitydatemaster on activityMaster.periodicityDateId=periodicitydatemaster.periodicityDateId) tt "+ 
+											"(SELECT activityId,activityName,dueDate FROM compli.activitymaster inner join periodicitydatemaster on activitymaster.periodicityDateId=periodicitydatemaster.periodicityDateId) tt "+ 
 										"on activity.activityId = tt.activityId and tt.activityId=?) activityFull "+
 									"on usercompany.companyId= activityFull.companyId) userAndActivity "+
 									"on user.userId=userAndActivity.userId where userTypeId='cOwner';";
@@ -53,7 +53,7 @@ public class ActivityDao {
 		String sql = "select user.userId,firstname as user,userTypeId,email,activityName,dueDate as periodictyDate from user inner join "+ 
 									"(select userId,activityName,dueDate from usercompany inner join "+
 										"(select activity.activityId,activity.companyId,activityName,dueDate from activity inner join "+ 
-											"(SELECT activityId,activityName,dueDate FROM compli.activityMaster inner join periodicitydatemaster on activityMaster.periodicityDateId=periodicitydatemaster.periodicityDateId) tt "+ 
+											"(SELECT activityId,activityName,dueDate FROM compli.activitymaster inner join periodicitydatemaster on activitymaster.periodicityDateId=periodicitydatemaster.periodicityDateId) tt "+ 
 										"on activity.activityId = tt.activityId and tt.activityId=?) activityFull "+
 									"on usercompany.companyId= activityFull.companyId) userAndActivity "+
 									"on user.userId=userAndActivity.userId where userTypeId='ArTechUser';";
@@ -80,8 +80,8 @@ public class ActivityDao {
 				"(select lawId,periodicityId,companyId,activityId,activityName,user.userId,firstname,userTypeId,email,dueDate from user inner join  "+
 					"(select lawId,periodicityId,usercompany.companyId,isComplied,activityId,activityName,userId,dueDate from usercompany join "+ 
 						"(select lawId,periodicityId,companyId,isComplied,activityId,activityName,dueDate from periodicitydatemaster join  "+
-							"(SELECT activity.companyId,activityMaster.lawId,activityMaster.periodicityId,activityMaster.periodicityDateId,activity.isComplied,activity.activityId,activityMaster.activityName FROM activity join "+ 
-								"activityMaster on activity.activityId = activityMaster.activityId) activityDueDate  "+
+							"(SELECT activity.companyId,activitymaster.lawId,activitymaster.periodicityId,activitymaster.periodicityDateId,activity.isComplied,activity.activityId,activitymaster.activityName FROM activity join "+ 
+								"activitymaster on activity.activityId = activitymaster.activityId) activityDueDate  "+
 							"on periodicitydatemaster.periodicityDateId=activityDueDate.periodicityDateId where dueDate = adddate(DATE(now()),-?)  and isComplied=false) activityWithCompany "+ 
 						"on activityWithCompany.companyId = usercompany.companyId)userCOmpanyMergedTable "+ 
 				"on userCOmpanyMergedTable.userId = user.userId where userTypeId=?) activityUser "+

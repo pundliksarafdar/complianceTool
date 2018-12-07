@@ -1,0 +1,43 @@
+	<html>
+		<head>
+			<style>
+					table#pendingActivities thead{
+						
+					}
+					
+					table#pendingActivities{
+						border:solid 1px;
+					}
+					
+					table#pendingActivities tbody tr:nth-child(even){
+						background:aliceblue;
+					}
+			</style>
+		</head>
+		<body>
+			<b>Dear {{user}},</b>
+			<p>Kindly note that following Compliance activities are due </p>
+			<table border="1" style="border-collapse: collapse;text-align: center;width:100%;" id="pendingActivities">
+				<thead>
+					<tr><th>Location</th><th>Compliance activity</th><th>Compliance area</th><th>Timeline/Due Date</th><th>Period Description</th></tr>
+				</thead>
+				<tbody>
+				{{#pendingEmail}}
+					<tr><td>{{locationName}}</td><td>{{activityName}}</td><td>{{complianceArea}}</td><td>{{dueDateParsed}}</td><td>{{description}}</td></tr>
+					<tr><td>{{locationName}}</td><td>{{activityName}}</td><td>{{complianceArea}}</td><td>{{dueDateParsed}}</td><td>{{description}}</td></tr>
+				{{/pendingEmail}}
+			  </tbody>
+			  </table>
+			  
+			  <p>Please note the following actions are required in order to complete the Compliance Activity</p>
+			  
+			  <ul style="border: solid 5px;background: aliceblue;">
+				  <li>Click on http://indcompli.com</li>
+				  <li>Login using the email ID and your IndCompli Password</li>
+				  <li>Click on <b>"My Activity"</b> menu appears on the top menu bar</li>
+				  <li>Click on the <b>"Edit"</b> Icon that appears next </li>
+				  <li>Upload proof of compliance in a .pdf or .jpeg format</li>
+				  <li>Click on the Submit Button</li>
+			  </ul>
+		</body>
+	</html>

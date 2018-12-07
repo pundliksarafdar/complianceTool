@@ -65,4 +65,7 @@ http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 	<property name="jdbcTemplate" ref="jdbcTemplate"></property>  
 </bean>
 
+<bean id="settingsDao" class="com.compli.db.dao.SettingsDao">  
+	<property name="jdbcTemplate" ref="jdbcTemplate"></property>  
+</bean>
 </beans>  

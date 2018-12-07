@@ -21,6 +21,7 @@ public class DashBoardManager {
 	private String COMPLAINCE_REVEIW = "pendingReview";
 	private String COMPLIANCE_DELAYED = "delayedCompliance";
 	private String COMPLAINCE_INTIME = "intimeCompliance";
+	private String PENDING_DESCREPANCY = "pendingDescrepancy";
 	private String COMPLIED = "complied";
 	
 	private String companyId; 
@@ -201,7 +202,7 @@ public class DashBoardManager {
 				complainceOverview.put(COMPLIANCE_DELAYED, 0);
 				complainceOverview.put(COMPLAINCE_INTIME, 0);
 				complainceOverview.put(COMPLAINCE_REVEIW, 0);
-				
+				complainceOverview.put(PENDING_DESCREPANCY, 0);
 				complianceDetailByLaw.put(lawId, complainceOverview);
 			}
 			
@@ -213,13 +214,17 @@ public class DashBoardManager {
 			}else if(activity.get("isComplainceDelayed")!=null && "1".equals(activity.get("isComplainceDelayed").toString())){
 				complainceOverview.put(COMPLIANCE_DELAYED, complainceOverview.get(COMPLIANCE_DELAYED)+1);
 			}else if((activity.get("isComplied")!=null && "1".equals(activity.get("isComplied").toString())) &&
-					(activity.get("isComplianceApproved")!=null && "0".equals(activity.get("isComplianceApproved").toString())) 
+					(activity.get("isComplianceApproved")!=null && "0".equals(activity.get("isComplianceApproved").toString()))
+					&& (activity.get("reOpen")==null || "0".equals(activity.get("reOpen").toString()))
+					&&  (activity.get("isProofRequired")==null || "0".equals(activity.get("isProofRequired").toString()))
 					&& (activity.get("isComplianceRejected")!=null && "0".equals(activity.get("isComplianceRejected").toString()))){
 				complainceOverview.put(COMPLAINCE_REVEIW, complainceOverview.get(COMPLAINCE_REVEIW)+1);
+			}else if(activity.get("isComplied")!=null &&  activity.get("isProofRequired")!=null && "1".equals(activity.get("isProofRequired").toString())){
+				complainceOverview.put(PENDING_DESCREPANCY, complainceOverview.get(PENDING_DESCREPANCY)+1);
 			}else if(activity.get("isComplied")!=null && activity.get("isComplainceDelayed")!=null && activity.get("isComplianceApproved")!=null && activity.get("isComplianceRejected")!=null ){
 				complainceOverview.put(COMPLAINCE_INTIME, complainceOverview.get(COMPLAINCE_INTIME)+1);
 			}
-		}
+		} 
 		
 		return complianceDetailByLaw;
 	}

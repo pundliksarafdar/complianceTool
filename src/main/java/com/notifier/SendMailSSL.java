@@ -11,9 +11,11 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
+import com.compli.managers.SettingsManager;
+
 public class SendMailSSL {
-	final static String username = "pundlikproject@gmail.com";
-	final static String password = "Gaurav#26993";
+	final static String username = SettingsManager.getStaticSettings().getMailId();
+	final static String password = SettingsManager.getStaticSettings().getMailPass();
 
 	static Properties props = new Properties();
 	Session session;
@@ -22,8 +24,8 @@ public class SendMailSSL {
 	static{
 		props.put("mail.smtp.auth", "true");
 		props.put("mail.smtp.starttls.enable", "true");
-		props.put("mail.smtp.host", "smtp.gmail.com");
-		props.put("mail.smtp.port", "587");
+		props.put("mail.smtp.host", SettingsManager.getStaticSettings().getSmtpHost());
+		props.put("mail.smtp.port", SettingsManager.getStaticSettings().getSmtpPort());
 		props.put("mail.smtp.ssl.trust", "smtp.gmail.com");
 		
 		Session session = Session.getInstance(props,
@@ -44,7 +46,17 @@ public class SendMailSSL {
 			message.setSubject(subject);
 			
 			message.setContent(content, "text/html; charset=utf-8");
-			Transport.send(message);
+			new Thread(new Runnable() {
+				@Override
+				public void run() {
+					try {
+						Transport.send(message);
+					} catch (MessagingException e) {
+						e.printStackTrace();
+					}					
+				}
+			}).start();
+
 		} catch (MessagingException e) {
 			e.printStackTrace();
 		}
@@ -61,7 +73,7 @@ public class SendMailSSL {
 		try {
 
 			Message message = new MimeMessage(session);
-			message.setFrom(new InternetAddress("sarafdarpundlik@gmail.com"));
+			//message.setFrom(new InternetAddress("sarafdarpundlik@gmail.com"));
 			message.setRecipients(Message.RecipientType.TO,
 				InternetAddress.parse(email));
 			message.setSubject("Complete registration");

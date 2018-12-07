@@ -1,22 +1,28 @@
 package com.compli.managers;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import com.compli.db.bean.migration.v2.ActivityBean;
+import com.compli.db.dao.ActivityDao;
 import com.compli.db.dao.DashBoardDao;
+import com.notifier.emailbean.PendingForDiscrepancy;
 
 public class ActivityManager {
 	DashBoardDao dashBoardDao;
+	ActivityDao activityDao;
 	boolean isFullUser;
 	String locationId;
 	public ActivityManager(String auth) {
 		String path = getClass().getResource("/applicationContext.xml").getPath();
 		ApplicationContext ctx=new ClassPathXmlApplicationContext("applicationContext.xml");
-		this.dashBoardDao = (DashBoardDao) ctx.getBean("dashBoardDao");		
+		this.dashBoardDao = (DashBoardDao) ctx.getBean("dashBoardDao");
+		this.activityDao = (ActivityDao) ctx.getBean("activityDao");		
 		this.isFullUser = AuthorisationManager.cache.getIfPresent(auth).isFullUser();
 	}
 	
@@ -64,20 +70,18 @@ public class ActivityManager {
 			if((activity.get("isComplied")!=null && "0".equals(activity.get("isComplied").toString())) &&
 					(activity.get("isComplianceApproved")!=null && "0".equals(activity.get("isComplianceApproved").toString())) 
 					&& (activity.get("isComplianceRejected")!=null && "0".equals(activity.get("isComplianceRejected").toString())) && "Pending compliance".equalsIgnoreCase(severity)){
-				//complainceOverview.put(PENDING_COMPLIANCE, complainceOverview.get(PENDING_COMPLIANCE)+1);
 				filteredActivity.add(activity);
 			}else if((activity.get("isComplainceDelayed")!=null && "1".equals(activity.get("isComplainceDelayed").toString())) && "Complied-Delayed".equalsIgnoreCase(severity)){
-				//complainceOverview.put(COMPLIANCE_DELAYED, complainceOverview.get(COMPLIANCE_DELAYED)+1);
 				filteredActivity.add(activity);
 			}else if((activity.get("isComplied")!=null && "1".equals(activity.get("isComplied").toString())) &&
 					(activity.get("isComplianceApproved")!=null && "0".equals(activity.get("isComplianceApproved").toString())) 
 					&& (activity.get("isComplianceRejected")!=null && "0".equals(activity.get("isComplianceRejected").toString())) && "Pending for review".equalsIgnoreCase(severity)){
-				//complainceOverview.put(COMPLAINCE_REVEIW, complainceOverview.get(COMPLAINCE_REVEIW)+1);
 				filteredActivity.add(activity);
 			}else if((activity.get("isComplied")!=null && "1".equals(activity.get("isComplied").toString()) && activity.get("isComplainceDelayed")!=null && "0".equals(activity.get("isComplainceDelayed").toString())  
 					&& activity.get("isComplianceApproved")!=null && "1".equals(activity.get("isComplianceApproved").toString()) && activity.get("isComplianceRejected")!=null)
 					&& "Complied- In time".equalsIgnoreCase(severity) ){
-				//complainceOverview.put(COMPLAINCE_INTIME, complainceOverview.get(COMPLAINCE_INTIME)+1);
+				filteredActivity.add(activity);
+			}else if(activity.get("isComplied")!=null && "1".equals(activity.get("isComplied").toString()) && activity.get("isProofRequired")!=null && "1".equals(activity.get("isProofRequired").toString())	&& "Pending for Discrepancy".equalsIgnoreCase(severity)){
 				filteredActivity.add(activity);
 			}
 		}
@@ -194,16 +198,17 @@ public class ActivityManager {
 	}
 	
 public boolean changeActivityStatus(String companyId,String activityId,boolean isComplied,boolean pendingComplied,boolean compliedInTime,boolean compliedDelayed,
-		boolean pendingDescrepancy,String remark){
+		boolean pendingDescrepancy,String remark,Date completionDate){
 		if(isComplied){
 			return this.dashBoardDao.changeActivityStatus(companyId,activityId, isComplied,remark);
 		}else if(compliedInTime){
-			return this.dashBoardDao.changeActivityStatusApproved(companyId, activityId);
+			return this.dashBoardDao.changeActivityStatusApproved(companyId, activityId,completionDate);
 		}else if(compliedDelayed){
-			return this.dashBoardDao.changeActivityStatusComplainceDelayed(companyId, activityId);
+			return this.dashBoardDao.changeActivityStatusComplainceDelayed(companyId, activityId,completionDate);
 		}else if(pendingDescrepancy){
-			EmailManager.sendActivityPendingForDescripancy(activityId);
-			return this.dashBoardDao.changeActivityStatusPendingDecrepancy(companyId, activityId);
+			PendingForDiscrepancy activity = activityDao.getActivityDataForMail(activityId);
+			EmailManager.sendActivityPendingForDescripancy(activity);
+			return this.dashBoardDao.changeActivityStatusPendingDecrepancy(companyId, activityId,remark);
 		}else {
 			return this.dashBoardDao.changeActivityStatusPendingComplied(companyId, activityId);
 		}
@@ -216,5 +221,17 @@ public boolean changeActivityStatus(String companyId,String activityId,boolean i
 	
 	public List<Map<String, Object>> getAllActivitiesWithDescriptionForCompanyLast3Months(String companyId,int monthCount,boolean isFullUser,String locationId){
 		return this.dashBoardDao.getAllActivitiesWithDescriptionForCompanyLast3Months(companyId,monthCount,isFullUser,locationId);
+	}
+	
+	public boolean requestToReopen(String activityId,String companyId){
+		PendingForDiscrepancy activity = activityDao.getActivityDataForArTechMail(activityId);
+		EmailManager.sendActivityRequestForReopen(activity);
+		this.activityDao.reopenActivity(activityId,companyId);
+		return true;
+	}
+
+	public boolean changeToOpen(String activityId, String companyId) {
+		this.activityDao.changeToOpen(activityId,companyId);
+		return true;
 	}
 }

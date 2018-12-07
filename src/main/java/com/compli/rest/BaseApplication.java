@@ -7,6 +7,7 @@ import javax.ws.rs.core.Application;
 
 import com.compli.exceptions.ApplicationExceptionMapper;
 import com.compli.filter.AuthFIlter;
+import com.notifier.timmer.RunSchedular;
 
 public class BaseApplication extends Application{
 	private Set<Object> singletons = new HashSet<Object>();
@@ -18,8 +19,11 @@ public class BaseApplication extends Application{
         singletons.add(new ActivityRestApi());
         singletons.add(new ReportRestApi());
         singletons.add(new FilesRestApi());
-        
+        singletons.add(new SettingsRestApi());
+        singletons.add(new AlertsRestApi());
         singletons.add(new ApplicationExceptionMapper());
+        
+        RunSchedular.startSchedular();
     }
     @Override
     public Set<Object> getSingletons() {

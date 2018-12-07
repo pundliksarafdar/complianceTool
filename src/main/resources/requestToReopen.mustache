@@ -8,9 +8,8 @@
 		</head>
 		<body>
 			<b>Dear {{user}},</b>
-			<h3>Activity </h3>
-			<p>Following activity has been marked as Pending for Discrepancy. You are requested to click on the following link and login to the tool using your credentials. 
-			Kindly follow steps as per instructions</p>
+			<h3>Request to reopen activity </h3>
+			<p>Following activity has been requested to reopen. You are requested to click on the following link and login to the tool using your credentials. Kindly follow steps as per instructions</p>
 			<table id="pendingActivities" border="1" style="border-collapse: collapse;text-align: center;width:100%;">
 				<thead>
 					<tr>
@@ -23,6 +22,6 @@
 					</tr>
 				</tbody>
 			</table>
-			<a href='http://localhost:4200/#/activities?activitySeverity=Pending%20for%20Discrepancy'>click here</a> to see pending for desrcepancy activities
+			<a href='http://{{serverUrl}}/#/activities?activitySeverity=Pending%20for%20Discrepancy'>click here</a> to see pending for desrcepancy activities
 		</body>
 	</html>

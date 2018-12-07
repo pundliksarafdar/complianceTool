@@ -453,13 +453,15 @@ var AppComponent = /** @class */ (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_25__customComponents_error_show_errors_component__ = __webpack_require__("./src/app/customComponents/error/show-errors.component.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_26_angular_datatables__ = __webpack_require__("./node_modules/angular-datatables/index.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_27__compliance_repository_compliance_repository_component__ = __webpack_require__("./src/app/compliance-repository/compliance-repository.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_28__blank_component_blank_component_component__ = __webpack_require__("./src/app/blank-component/blank-component.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_28__settings_settings_component__ = __webpack_require__("./src/app/settings/settings.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_29__blank_component_blank_component_component__ = __webpack_require__("./src/app/blank-component/blank-component.component.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+
 
 
 
@@ -498,7 +500,7 @@ var AppModule = /** @class */ (function () {
             declarations: [
                 __WEBPACK_IMPORTED_MODULE_3__app_component__["a" /* AppComponent */], __WEBPACK_IMPORTED_MODULE_25__customComponents_error_show_errors_component__["a" /* ShowErrorsComponent */], __WEBPACK_IMPORTED_MODULE_4__login_app_login_login_component__["a" /* LoginLoginComponent */], __WEBPACK_IMPORTED_MODULE_6__register_app_register_component__["a" /* RegisterComponent */], __WEBPACK_IMPORTED_MODULE_8__login_app_login_forget_component__["a" /* LoginForgetComponent */], __WEBPACK_IMPORTED_MODULE_5__loggedin_app_logedin_component__["a" /* LogedInComponent */],
                 __WEBPACK_IMPORTED_MODULE_14__sidebar_sidebar_component__["a" /* SidebarComponent */], __WEBPACK_IMPORTED_MODULE_19__complience_calendar_complience_calendar_component__["a" /* ComplienceCalendarComponent */], __WEBPACK_IMPORTED_MODULE_20__compliance_dashboard_compliance_dashboard_component__["a" /* ComplianceDashboardComponent */], __WEBPACK_IMPORTED_MODULE_22__compliance_report_compliance_report_component__["a" /* ComplianceReportComponent */],
-                __WEBPACK_IMPORTED_MODULE_23__compliance_activities_compliance_activities_component__["a" /* ComplianceActivitiesComponent */], __WEBPACK_IMPORTED_MODULE_24__filters_filter_pipe__["a" /* FilterPipe */], __WEBPACK_IMPORTED_MODULE_7__customComponents_combobox_app_combobox_component__["a" /* ComboboxComponent */], __WEBPACK_IMPORTED_MODULE_9__notactive_notactive_component__["a" /* NotActiveComponent */], __WEBPACK_IMPORTED_MODULE_10__accountActive_accountactive_component__["a" /* AccountActiveComponent */], __WEBPACK_IMPORTED_MODULE_27__compliance_repository_compliance_repository_component__["a" /* ComplianceRepositoryComponent */], __WEBPACK_IMPORTED_MODULE_28__blank_component_blank_component_component__["a" /* BlankComponentComponent */]
+                __WEBPACK_IMPORTED_MODULE_23__compliance_activities_compliance_activities_component__["a" /* ComplianceActivitiesComponent */], __WEBPACK_IMPORTED_MODULE_24__filters_filter_pipe__["a" /* FilterPipe */], __WEBPACK_IMPORTED_MODULE_7__customComponents_combobox_app_combobox_component__["a" /* ComboboxComponent */], __WEBPACK_IMPORTED_MODULE_9__notactive_notactive_component__["a" /* NotActiveComponent */], __WEBPACK_IMPORTED_MODULE_10__accountActive_accountactive_component__["a" /* AccountActiveComponent */], __WEBPACK_IMPORTED_MODULE_27__compliance_repository_compliance_repository_component__["a" /* ComplianceRepositoryComponent */], __WEBPACK_IMPORTED_MODULE_29__blank_component_blank_component_component__["a" /* BlankComponentComponent */], __WEBPACK_IMPORTED_MODULE_28__settings_settings_component__["a" /* SettingsComponent */]
             ],
             imports: [
                 __WEBPACK_IMPORTED_MODULE_12__angular_forms__["c" /* FormsModule */],
@@ -561,7 +563,10 @@ var AppModule = /** @class */ (function () {
                         data: { repository_type: 'Complied-Delayed' }
                     }, {
                         path: 'blank',
-                        component: __WEBPACK_IMPORTED_MODULE_28__blank_component_blank_component_component__["a" /* BlankComponentComponent */]
+                        component: __WEBPACK_IMPORTED_MODULE_29__blank_component_blank_component_component__["a" /* BlankComponentComponent */]
+                    }, {
+                        path: 'settings',
+                        component: __WEBPACK_IMPORTED_MODULE_28__settings_settings_component__["a" /* SettingsComponent */]
                     }
                 ], { useHash: true })
             ],
@@ -637,7 +642,7 @@ module.exports = ".table-curved td, .table-curved th {\r\n    border-left: 1px s
 /***/ "./src/app/compliance-activities/compliance-activities.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "\r\n\r\n\r\n<section class=\"content\" *ngIf=\"!loaded\">\r\n      <div class=\"row top-buffer\">\r\n        <div class=\"col-md-12 text-center\">\r\n         <i class=\"fa fa-spinner fa-spin\" style=\"font-size:40px\"></i><br/>\r\n         <span>Loading...</span>\r\n        </div>\r\n      </div>\r\n</section>\r\n\r\n\r\n<section class=\"content report\" *ngIf=\"loaded\">\r\n      <!-- Info boxes -->\r\n      <ng-template #popupcontent let-c=\"close\" let-d=\"dismiss\">\r\n          <div class=\"modal-header\">\r\n            <h4 class=\"modal-title\">Activity</h4>\r\n            <button type=\"button\" class=\"close\" aria-label=\"Close\" (click)=\"d('Cross click')\">\r\n              <span aria-hidden=\"true\">&times;</span>\r\n            </button>\r\n          </div>\r\n          <div class=\"modal-body\">\r\n            <table class=\"popuptable\">\r\n              <tbody>\r\n                <tr>\r\n                  <td>Activity Name: </td>\r\n                  <td>{{popupDetails.activityName}}</td>\r\n                </tr>\r\n                <tr>\r\n                  <td>Location: </td>\r\n                  <td>{{popupDetails.locationName}}</td>\r\n                </tr>\r\n                <tr>\r\n                  <td>Compliance Area: </td>\r\n                  <td>{{popupDetails.lawName}}</td>\r\n                </tr>\r\n                <tr>\r\n                  <td>Law Description: </td>\r\n                  <td>{{popupDetails.lawDesc}}</td>\r\n                </tr>\r\n                <tr>\r\n                  <td>Risk: </td>\r\n                  <td>{{popupDetails.riskDes}}</td>\r\n                </tr>\r\n                <tr>\r\n                  <td>Periodicity Due Date: </td>\r\n                  <td>{{popupDetails.duedate}}</td>\r\n                </tr>\r\n                <tr>\r\n                  <td>Period Description: </td>\r\n                  <td>{{popupDetails.periodicityDesc}}</td>\r\n                </tr>\r\n                <tr>\r\n                  <td>Actvity Assign User: </td>\r\n                  <td>{{popupDetails.assignedUser}}</td>\r\n                </tr>\r\n                <tr *ngIf=\"popupDetails.remark != ''\">\r\n                  <td>Remarks: </td>\r\n                  <td>{{popupDetails.remark}}</td>\r\n                </tr>\r\n                <tr>\r\n                  <td>Documents: </td>\r\n                  <td>\r\n                    <div *ngIf=\"!filesDetails\">\r\n                      Loading...\r\n                    </div>\r\n                    <div *ngIf=\"filesDetails && filesDetails.length==0\">\r\n                      No documents\r\n                    </div>\r\n                    <table class=\"doctable\" *ngIf=\"filesDetails && filesDetails.length!=0\">\r\n                      <thead>\r\n                        <tr>\r\n                        <th>Document </th>\r\n                        <th>Date of Submit</th>\r\n                        <th>Modified On</th>\r\n                        </tr>\r\n                      </thead>\r\n                      <tbody>\r\n                        <tr *ngFor=\"let filesDetail of filesDetails\">\r\n                          <td>{{filesDetail.filename}} <i (click)='downloadFile(filesDetail.fileId)' class='fa fa-download fa-lg downloadFile'></i></td>\r\n                          <td>{{filesDetail.uploaddate}}</td>\r\n                          <td>2015-10-19 10:15:19\t</td>\r\n                        </tr>\t\t\t\t\t\t\t\t\r\n                      </tbody>\r\n                    </table>\r\n                  </td>\r\n                </tr>\r\n        \r\n              </tbody>\r\n            </table>\r\n            <label class=\"btn btn-primary\" for=\"my-file-selector\" *ngIf=\"userType != 'ArTechUser'\">\r\n              <input type=\"file\" id=\"my-file-selector\" name=\"uploadfile\" multiple (change)=\"setFiles($event)\" [(ngModel)]=\"addedFiles\"  *ngIf=\"userType!='ArTechUser'\" style=\"display:none;\"/>\r\n              Choose document(s)\r\n            </label>  <br/> <span *ngIf=\"userType != 'ArTechUser'\"> (Multiple documenets can be uploaded at once.)</span>\r\n              <div *ngIf=\"filesUploading\">\r\n                      Uploading...\r\n              </div>\r\n            <div *ngIf=\"!filesUploading && filesToUpload.length!==0\">\r\n              <table calss=\"filesUpload\">\r\n                 <tr *ngFor=\"let fileToUpload of filesToUpload;let i = index\" >\r\n                    <td>{{fileToUpload.name}}</td>\r\n                    <td>{{(fileToUpload.size/1024).toFixed(2)}}Kb</td>\r\n                    <td><i class=\"fa fa-trash fa-lg\"(click)=\"removeFileFromList(i)\"></i></td>\r\n                </tr> \r\n              </table>\r\n              <input type=\"button\" class=\"btn btn-primary\" value=\"Upload\" (click)=\"uploadSelectedFiles(popupDetails.activityId,popupDetails.companyId)\"/>\r\n            </div>  \r\n          </div>\r\n          <div class=\"modal-footer\">\r\n            <button type=\"button\" class=\"btn btn-secondary\" (click)=\"c('Close click')\">Close</button>\r\n          </div>\r\n        </ng-template>\r\n        \r\n\r\n\r\n        <ng-template #confirmNotApplicable let-c=\"close\" let-d=\"dismiss\">\r\n          <div class=\"modal-header\">\r\n            <h4 class=\"modal-title\">Not Applicable</h4>\r\n            <button type=\"button\" class=\"close\" aria-label=\"Close\" (click)=\"remarks= undefined;d('Cross click')\">\r\n              <span aria-hidden=\"true\">&times;</span>\r\n            </button>\r\n          </div>\r\n          <div class=\"modal-body\">\r\n            <label for=\"remarks\">\r\n              Remarks\r\n            </label>  \r\n            <textarea rows=\"10\" cols=\"100\" id=\"remarks\" [(ngModel)]=\"remarks\" required placeholder=\"Please specify your comment if the activity is not applicable\"></textarea>\r\n            <span *ngIf=\"showerror\" style=\"color:red\">Remark mandatory for not applicable activities.</span>\r\n          </div>\r\n          <div class=\"modal-footer\">\r\n            <button type=\"button\" class=\"btn btn-primary\" (click)=\"NotApplicaleRemark()\">Submit</button>\r\n            <button type=\"button\" class=\"btn btn-secondary\" (click)=\"remarks= undefined;c('Close click')\">Close</button>\r\n          </div>\r\n        </ng-template>\r\n\r\n\r\n\r\n  <div class=\"col-md-12 text-center\" *ngIf=\"userType=='ArTechUser'\">\r\n    <div class=\"btn-group compliance-font\">\r\n            <label class=\"repocontainer\">Pending Compliance\r\n              <input type=\"checkbox\"  (change)=\"onFilterChange()\" [(ngModel)]=\"pendingCompliance\">\r\n              <span class=\"checkmark\"></span>\r\n            </label>\r\n            <label class=\"repocontainer\">Pending for review\r\n              <input type=\"checkbox\" (change)=\"onFilterChange()\" [(ngModel)]=\"pendingForReview\">\r\n              <span class=\"checkmark\"></span>\r\n            </label>\r\n            <button type=\"button\" style=\"margin-left: 10px\" class=\"btn btn-primary btn-small compliance-font\" (click)=\"rerender()\">\r\n                Fetch\r\n              </button>\r\n\r\n    </div>\r\n<!--     <div class=\"col-md-2 col-sm-6 col-xs-12\">\r\n            <label class=\"repocontainer\">Complied In time\r\n              <input type=\"checkbox\"  (change)=\"onFilterChange()\" [(ngModel)]=\"compliedInTime\">\r\n              <span class=\"checkmark\"></span>\r\n            </label>\r\n        </div>\r\n\r\n         <div class=\"col-md-2 col-sm-6 col-xs-12\">\r\n            <label class=\"repocontainer\">Complied Delayed\r\n              <input type=\"checkbox\" (change)=\"onFilterChange()\" [(ngModel)]=\"compliedDelayed\">\r\n              <span class=\"checkmark\"></span>\r\n            </label>\r\n        </div>\r\n -->  </div>\r\n      <div class=\"row top-buffer\" style=\"margin-left: -4%\">\r\n          \r\n\t<table datatable [dtOptions]=\"dtOptions\" [dtTrigger]=\"dtTrigger\" class=\"row-border hover\" style=\"width:100%;\">\r\n     <tfoot>\r\n    <tr>\r\n        <th><input type=\"text\" style=\"width:100px\" placeholder=\"Abbriviation\" name=\"Abbriviation\" columnLocation=\"0\"/></th>\r\n      <th><input type=\"text\" style=\"width:100px\" placeholder=\"Location\" name=\"location\" columnLocation=\"1\"/></th>\r\n      <th><input type=\"text\" style=\"width:100px\" placeholder=\"Law Description\" name=\"search-lawDesc\" columnLocation=\"2\"/></th>\r\n      <th><input type=\"text\" style=\"width:200px\" placeholder=\"Activity Name\" name=\"search-activityname\" columnLocation=\"3\"/></th>\r\n      <th><input type=\"text\" style=\"width:100px\" placeholder=\"Periodicity Date\" name=\"search-periodicitydate\" columnLocation=\"4\"/></th>\r\n      <th><input type=\"text\" style=\"width:120px\" placeholder=\"Period Description\" name=\"search-periodDescription\" columnLocation=\"5\"/></th> \r\n      <th><input type=\"text\" style=\"width:100px\" placeholder=\"Actvity User\" name=\"actvityUser\" columnLocation=\"6\"/></th>\r\n      <th></th>\r\n    </tr>\r\n  </tfoot>\r\n </table>\r\n\t</div>\r\n </section>"
+module.exports = "\r\n\r\n\r\n<section class=\"content report\">\r\n      <!-- Info boxes -->\r\n      <ng-template #popupcontent let-c=\"close\" let-d=\"dismiss\">\r\n          <div class=\"modal-header\">\r\n            <h4 class=\"modal-title\">Activity</h4>\r\n            <button type=\"button\" class=\"close\" aria-label=\"Close\" (click)=\"d('Cross click')\">\r\n              <span aria-hidden=\"true\">&times;</span>\r\n            </button>\r\n          </div>\r\n          <div class=\"modal-body\">\r\n            <table class=\"popuptable\">\r\n              <tbody>\r\n                <tr>\r\n                  <td>Activity Name: </td>\r\n                  <td>{{popupDetails.activityName}}</td>\r\n                </tr>\r\n                <tr>\r\n                  <td>Location: </td>\r\n                  <td>{{popupDetails.locationName}}</td>\r\n                </tr>\r\n                <tr>\r\n                  <td>Compliance Area: </td>\r\n                  <td>{{popupDetails.lawName}}</td>\r\n                </tr>\r\n                <tr>\r\n                  <td>Law Description: </td>\r\n                  <td>{{popupDetails.lawDesc}}</td>\r\n                </tr>\r\n                <tr>\r\n                  <td>Risk: </td>\r\n                  <td>{{popupDetails.riskDes}}</td>\r\n                </tr>\r\n                <tr>\r\n                  <td>Periodicity Due Date: </td>\r\n                  <td>{{popupDetails.duedate}}</td>\r\n                </tr>\r\n                <tr>\r\n                  <td>Period Description: </td>\r\n                  <td>{{popupDetails.periodicityDesc}}</td>\r\n                </tr>\r\n                <tr>\r\n                  <td>Actvity Assign User: </td>\r\n                  <td>{{popupDetails.assignedUser}}</td>\r\n                </tr>\r\n                <tr *ngIf=\"popupDetails.remark != ''\">\r\n                  <td>Remarks: </td>\r\n                  <td>{{popupDetails.remark}}</td>\r\n                </tr>\r\n                <tr>\r\n                  <td>Documents: </td>\r\n                  <td>\r\n                    <div *ngIf=\"!filesDetails\">\r\n                      Loading...\r\n                    </div>\r\n                    <div *ngIf=\"filesDetails && filesDetails.length==0\">\r\n                      No documents\r\n                    </div>\r\n                    <table class=\"doctable\" *ngIf=\"filesDetails && filesDetails.length!=0\">\r\n                      <thead>\r\n                        <tr>\r\n                        <th>Document </th>\r\n                        <th>Date of Submit</th>\r\n                        <th>Modified On</th>\r\n                        </tr>\r\n                      </thead>\r\n                      <tbody>\r\n                        <tr *ngFor=\"let filesDetail of filesDetails\">\r\n                          <td>{{filesDetail.filename}} <i (click)='downloadFile(filesDetail.fileId)' class='fa fa-download fa-lg downloadFile'></i></td>\r\n                          <td>{{filesDetail.uploaddate}}</td>\r\n                          <td>2015-10-19 10:15:19\t</td>\r\n                        </tr>\t\t\t\t\t\t\t\t\r\n                      </tbody>\r\n                    </table>\r\n                  </td>\r\n                </tr>\r\n        \r\n              </tbody>\r\n            </table>\r\n            <label class=\"btn btn-primary\" for=\"my-file-selector\" *ngIf=\"userType != 'ArTechUser'\">\r\n              <input type=\"file\" id=\"my-file-selector\" name=\"uploadfile\" multiple (change)=\"setFiles($event)\" [(ngModel)]=\"addedFiles\"  *ngIf=\"userType!='ArTechUser'\" style=\"display:none;\"/>\r\n              Choose document(s)\r\n            </label>  <br/> <span *ngIf=\"userType != 'ArTechUser'\"> (Multiple documenets can be uploaded at once.)</span>\r\n              <div *ngIf=\"filesUploading\">\r\n                      Uploading...\r\n              </div>\r\n            <div *ngIf=\"!filesUploading && filesToUpload.length!==0\">\r\n              <table calss=\"filesUpload\">\r\n                 <tr *ngFor=\"let fileToUpload of filesToUpload;let i = index\" >\r\n                    <td>{{fileToUpload.name}}</td>\r\n                    <td>{{(fileToUpload.size/1024).toFixed(2)}}Kb</td>\r\n                    <td><i class=\"fa fa-trash fa-lg\"(click)=\"removeFileFromList(i)\"></i></td>\r\n                </tr> \r\n              </table>\r\n              <input type=\"button\" class=\"btn btn-primary\" value=\"Upload\" (click)=\"uploadSelectedFiles(popupDetails.activityId,popupDetails.companyId)\"/>\r\n            </div>  \r\n          </div>\r\n          <div class=\"modal-footer\">\r\n            <button type=\"button\" class=\"btn btn-secondary\" (click)=\"c('Close click')\">Close</button>\r\n          </div>\r\n        </ng-template>\r\n        \r\n\r\n\r\n        <ng-template #confirmNotApplicable let-c=\"close\" let-d=\"dismiss\">\r\n          <div class=\"modal-header\">\r\n            <h4 class=\"modal-title\">{{statusCHangeModalTitle}}</h4>\r\n            <button type=\"button\" class=\"close\" aria-label=\"Close\" (click)=\"remarks= undefined;d('Cross click')\">\r\n              <span aria-hidden=\"true\">&times;</span>\r\n            </button>\r\n          </div>\r\n          <div class=\"modal-body\">\r\n            <label for=\"remarks\">\r\n              Remarks\r\n            </label>  \r\n            <textarea rows=\"10\" cols=\"100\" id=\"remarks\" [(ngModel)]=\"remarks\" required placeholder=\"Please specify your comment\"></textarea>\r\n            <span *ngIf=\"showerror\" style=\"color:red\">{{statusCHangeModalHelp}}</span>\r\n          </div>\r\n          <div class=\"modal-footer\">\r\n            <button type=\"button\" class=\"btn btn-primary\" (click)=\"NotApplicaleRemark()\">Submit</button>\r\n            <button type=\"button\" class=\"btn btn-secondary\" (click)=\"remarks= undefined;c('Close click')\">Close</button>\r\n          </div>\r\n        </ng-template>\r\n\r\n        <ng-template #confirmBox let-c=\"close\" let-d=\"dismiss\">\r\n            <div class=\"modal-header\">\r\n              <h4 class=\"modal-title\">{{confirmModelTitle}}</h4>\r\n              <button type=\"button\" class=\"close\" aria-label=\"Close\" (click)=\"remarks= undefined;d('Cross click')\">\r\n                <span aria-hidden=\"true\">&times;</span>\r\n              </button>\r\n            </div>\r\n            <div class=\"modal-body\">\r\n              Do you want to continue?\r\n            </div>\r\n            <div class=\"modal-footer\">\r\n              <button type=\"button\" class=\"btn btn-primary\" (click)=\"c('Ok')\">Ok</button>\r\n              <button type=\"button\" class=\"btn btn-secondary\" (click)=\"c('Close click')\">Cancel</button>\r\n            </div>\r\n          </ng-template>\r\n\r\n        <ng-template #confirmComplianceDate let-c=\"close\" let-d=\"dismiss\">\r\n          <div class=\"modal-header\">\r\n            <h4 class=\"modal-title\">{{complianceDateTitie}}</h4>\r\n            <button type=\"button\" class=\"close\" aria-label=\"Close\" (click)=\"complianceDate= undefined;d('Cross click')\">\r\n              <span aria-hidden=\"true\">&times;</span>\r\n            </button>\r\n          </div>\r\n          <div class=\"modal-body\">\r\n            <div class=\"row\">\r\n              <div class='col-sm-12'>\r\n                <div class=\"form-group\">\r\n                  <label>Complied Date</label>\r\n                  <input type=\"date\" name=\"markcomplieddate\" id=\"markcomplieddate\" [(ngModel)]=\"complianceDate\">\r\n                  <span *ngIf=\"showerrordate\" style=\"color:red\">{{statusCHangeModalDateHelp}}</span>\r\n                </div>\r\n              </div>\r\n            </div>\r\n          </div>\r\n          <div class=\"modal-footer\">\r\n            <button type=\"button\" class=\"btn btn-primary\" (click)=\"markCompliedDate()\">Submit</button>\r\n            <button type=\"button\" class=\"btn btn-secondary\" (click)=\"complianceDate= undefined;c('Close click')\">Close</button>\r\n          </div>\r\n        </ng-template>\r\n\r\n\r\n  <div class=\"col-md-12 text-center\" *ngIf=\"userType=='ArTechUser'\">\r\n    <div class=\"btn-group compliance-font\" *ngIf=\"showFilter\">\r\n            <label class=\"repocontainer\">Pending Compliance\r\n              <input type=\"checkbox\"  (change)=\"onFilterChange()\" [(ngModel)]=\"pendingCompliance\">\r\n              <span class=\"checkmark\"></span>\r\n            </label>\r\n            <label class=\"repocontainer\">Pending for review\r\n              <input type=\"checkbox\" (change)=\"onFilterChange()\" [(ngModel)]=\"pendingForReview\">\r\n              <span class=\"checkmark\"></span>\r\n            </label>\r\n            <label class=\"repocontainer\">Pending for descrepancy\r\n                <input type=\"checkbox\" (change)=\"onFilterChange()\" [(ngModel)]=\"requestToReopenCheck\">\r\n                <span class=\"checkmark\"></span>\r\n              </label>\r\n            <!-- <button type=\"button\" style=\"margin-left: 10px\" class=\"btn btn-primary btn-small compliance-font\" (click)=\"rerender()\">\r\n                Fetch\r\n              </button> -->\r\n\r\n    </div>    \r\n  </div>\r\n  <div class=\"col-md-12 text-center\" *ngIf=\"userType!='ArTechUser'\">\r\n      <div class=\"btn-group compliance-font\" *ngIf=\"showFilter\">\r\n              <label class=\"repocontainer\">Pending Compliance\r\n                  <input type=\"radio\" name=\"activity\" value=\"pending\" [(ngModel)]=\"activityType\" (change)=\"onTableViewChange();\"/>\r\n                  <span class=\"checkmark\"></span>\r\n                \r\n              </label>\r\n              <label class=\"repocontainer\">Pending Decrepancy\r\n                  <input type=\"radio\" name=\"activity\" value=\"descrepancy\" [(ngModel)]=\"activityType\" (change)=\"onTableViewChange();\"/>          \r\n                  <span class=\"checkmark\"></span>\r\n              </label>                    \r\n      </div>\r\n</div>\r\n      <div class=\"row top-buffer\" style=\"margin-left: -4%\">\r\n  <table id=\"activityTable\" #dtTableElement datatable [dtOptions]=\"dtOptions\" [dtTrigger]=\"dtTrigger\" class=\"row-border hover\" style=\"width:100%;table-layout: fixed;\">    \r\n  </table>\r\n \r\n  </div>\r\n  \r\n  <table style=\"width:100%;margin-left: -4%;table-layout: fixed;display: none;\" id=\"searchTable7Col\" >    \r\n      <tfoot>\r\n          <tr>\r\n            <th ><input type=\"text\" style=\"width:100%;\" placeholder=\"Abbriviation\" name=\"Abbriviation\" columnLocation=\"0\"/></th>\r\n            <th ><input type=\"text\" style=\"width:100%;\" placeholder=\"Location\" name=\"location\" columnLocation=\"1\"/></th>\r\n            <th ><input type=\"text\" style=\"width:100%;\" placeholder=\"Law Description\" name=\"search-lawDesc\" columnLocation=\"2\"/></th>\r\n            <th ><input type=\"text\" style=\"width:100%;\" placeholder=\"Activity Name\" name=\"search-activityname\" columnLocation=\"3\"/></th>\r\n            <th ><input type=\"text\" style=\"width:100%;\" placeholder=\"Periodicity Date\" name=\"search-periodicitydate\" columnLocation=\"4\"/></th>\r\n            <th ><input type=\"text\" style=\"width:100%;\"placeholder=\"Period Description\" name=\"search-periodDescription\" columnLocation=\"5\"/></th> \r\n            <th ><input type=\"text\" style=\"width:100%;\" placeholder=\"Actvity User\" name=\"actvityUser\" columnLocation=\"6\"/></th>\r\n            <th></th>\r\n            <th></th>\r\n          </tr>\r\n        </tfoot>\r\n  </table>\r\n\r\n  <table style=\"width:100%;margin-left: -4%;table-layout: fixed;display: none;\" id=\"searchTable5Col\" >    \r\n      <tfoot>\r\n          <tr>\r\n              <th ><input type=\"text\" style=\"width:100%;\" placeholder=\"Activity Name\" name=\"search-activityname\" columnLocation=\"0\"/></th>\r\n            <th ><input type=\"text\" style=\"width:100%;\" placeholder=\"Law Description\" name=\"search-lawDesc\" columnLocation=\"1\"/></th>\r\n            <th ><input type=\"text\" style=\"width:100%;\" placeholder=\"Periodicity Date\" name=\"search-periodicitydate\" columnLocation=\"2\"/></th>\r\n            <th ><input type=\"text\" style=\"width:100%;\"placeholder=\"Period Description\" name=\"search-periodDescription\" columnLocation=\"3\"/></th> \r\n            <th ><input type=\"text\" style=\"width:100%;\" placeholder=\"Actvity User\" name=\"actvityUser\" columnLocation=\"4\"/></th>\r\n            <th></th>            \r\n          </tr>\r\n        </tfoot>\r\n  </table>\r\n </section>"
 
 /***/ }),
 
@@ -656,6 +661,7 @@ module.exports = "\r\n\r\n\r\n<section class=\"content\" *ngIf=\"!loaded\">\r\n 
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_jquery___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6_jquery__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_rxjs__ = __webpack_require__("./node_modules/rxjs/Rx.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_rxjs___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_7_rxjs__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__angular_router__ = __webpack_require__("./node_modules/@angular/router/esm5/router.js");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -665,6 +671,42 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __generator = (this && this.__generator) || function (thisArg, body) {
+    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+    function verb(n) { return function (v) { return step([n, v]); }; }
+    function step(op) {
+        if (f) throw new TypeError("Generator is already executing.");
+        while (_) try {
+            if (f = 1, y && (t = y[op[0] & 2 ? "return" : op[0] ? "throw" : "next"]) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [0, t.value];
+            switch (op[0]) {
+                case 0: case 1: t = op; break;
+                case 4: _.label++; return { value: op[1], done: false };
+                case 5: _.label++; y = op[1]; op = [0]; continue;
+                case 7: op = _.ops.pop(); _.trys.pop(); continue;
+                default:
+                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
+                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
+                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
+                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
+                    if (t[2]) _.ops.pop();
+                    _.trys.pop(); continue;
+            }
+            op = body.call(thisArg, _);
+        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
+        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+    }
+};
+
 
 
 
@@ -674,26 +716,127 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 var ComplianceActivitiesComponent = /** @class */ (function () {
-    function ComplianceActivitiesComponent(activityService, repositoryService, modalService, loginService) {
+    function ComplianceActivitiesComponent(activityService, repositoryService, modalService, loginService, route) {
+        var _this = this;
         this.activityService = activityService;
         this.repositoryService = repositoryService;
         this.modalService = modalService;
         this.loginService = loginService;
+        this.route = route;
         // public activityData:Array<Object> = [];
         this.loaded = false;
+        this.redirection = "";
         this.dtOptions = {};
+        this.dtOptionsPendingDescipancy = {};
         this.dtTrigger = new __WEBPACK_IMPORTED_MODULE_7_rxjs__["Subject"]();
+        this.dtTriggerDesc = new __WEBPACK_IMPORTED_MODULE_7_rxjs__["Subject"]();
         this.popupDetails = {};
         this.filesDetails = undefined;
         this.filesToUpload = [];
         this.filesUploading = false;
         this.pendingCompliance = true;
         this.pendingForReview = true;
+        this.requestToReopenCheck = true;
         this.showerror = false;
+        this.showerrordate = false;
+        this.activityType = this.redirection.indexOf("Discrepancy") > -1 ? "descrepancy" : "pending";
+        this.showFilter = true;
+        this.isDescrepancyActivities = false;
+        this.SELECT_BOX = { notDue: "not due", compliedInTime: "complied in time", pendingCompliance: "pending compliance" };
+        this.DESCREPANCY = 'descrepancy';
+        this.rowCallBack = function (row, data, index) {
+            var self = _this;
+            __WEBPACK_IMPORTED_MODULE_6_jquery__('.requestToOpen', row).off("click").on("click", function (evt) {
+                var _this = this;
+                evt.preventDefault();
+                self.getConfirmation("Request to reopen").then(function (result) {
+                    if (result == "Ok") {
+                        self.requestToReopen(data.companyId, data.activityId, _this);
+                    }
+                });
+            });
+            if (self.userType != 'ArTechUser' && self.userType != 'sManager') {
+                __WEBPACK_IMPORTED_MODULE_6_jquery__('#statusChangeBtn', row).off('click').on('click', function ($event) {
+                    if (data.fileId) {
+                        //self.downloadFile(data.activityId,data.companyId,data.fileId);
+                    }
+                    else {
+                        self.changeStatus(data, data.activityId, data.companyId, $event);
+                    }
+                });
+            }
+            if (self.userType == 'ArTechUser') {
+                __WEBPACK_IMPORTED_MODULE_6_jquery__('#arStatusChange', row).off('change').on('change', function ($event) {
+                    var dropValue = $event.target['value'];
+                    if (dropValue == "select") {
+                        return false;
+                    }
+                    var changeValue = dropValue;
+                    _this.latestCompanyId = data.companyId;
+                    _this.latestActivityId = data.activityId;
+                    _this.captureEvent = $event;
+                    _this.captureChange = dropValue;
+                    // self.changeStatus(data,data.activityId,data.companyId,$event)
+                    if (changeValue == 'compliedInTime' || changeValue == 'compliedDelayed') {
+                        self.complianceDateTitie = changeValue == 'compliedInTime' ? "Complied" : "Compliance Delayed";
+                        _this.modalReference = _this.modalService.open(_this.confirmComplianceDate, { size: 'lg', backdrop: 'static' });
+                        _this.modalReference.result.then(function (result) {
+                            _this.closeResult = "Closed with: " + result;
+                        }, function (reason) {
+                            _this.closeResult = "Dismissed " + _this.getDismissReason(reason);
+                        });
+                    }
+                    else if (changeValue == 'pendingDescrepancy') {
+                        self.statusCHangeModalTitle = "Pending for descripency";
+                        self.statusCHangeModalHelp = "Remark mandatory for Pending for descripency activities.";
+                        __WEBPACK_IMPORTED_MODULE_6_jquery__("#markcomplieddate").focus();
+                        _this.modalReference = _this.modalService.open(_this.confirmNotApplicable, { size: 'lg', backdrop: 'static' });
+                        _this.modalReference.result.then(function (result) {
+                            _this.closeResult = "Closed with: " + result;
+                        }, function (reason) {
+                            _this.closeResult = "Dismissed " + _this.getDismissReason(reason);
+                        });
+                    }
+                    else {
+                        self.getConfirmation("Change to " + _this.SELECT_BOX[changeValue]).then(function (result) {
+                            if (result == "Ok") {
+                                self.submitStatusChange(data.companyId, data.activityId, null, $event, $event.target['value'], undefined);
+                            }
+                            else {
+                                $event.target['value'] = "select";
+                            }
+                        });
+                    }
+                });
+            }
+            __WEBPACK_IMPORTED_MODULE_6_jquery__('.downloadFile', row).off('click');
+            __WEBPACK_IMPORTED_MODULE_6_jquery__('.downloadFile', row).on('click', function () {
+                self.openModal(data);
+            });
+            __WEBPACK_IMPORTED_MODULE_6_jquery__(".changeToPendingComplaince", row).off("click").on("click", function (evt) {
+                evt.preventDefault();
+                var that = this;
+                self.getConfirmation("Change to pending").then(function (result) {
+                    if (result == "Ok") {
+                        self.changeStatusToOpen(data.companyId, data.activityId, that);
+                    }
+                });
+            });
+            return row;
+        };
     }
+    ComplianceActivitiesComponent.prototype.onTableViewChange = function () {
+        /* if(this.activityType == 'pending'){
+          this.buildActivities(this.activityData);
+        }else{
+          this.buildDescActivities(this.activityData);
+        } */
+        this.buildActivities(this.activityData);
+    };
     ComplianceActivitiesComponent.prototype.changeStatus = function (activity, activityId, companyId, event) {
         var _this = this;
         console.log(activity);
+        var self = this;
         this.latestActivityId = activityId;
         this.remarks = undefined;
         this.latestCompanyId = companyId;
@@ -702,6 +845,9 @@ var ComplianceActivitiesComponent = /** @class */ (function () {
             _this.loadFileDetails(response);
             console.log(_this.filesDetails);
             if (_this.filesDetails && _this.filesDetails.length == 0) {
+                self.statusCHangeModalTitle = "Not Applicable";
+                self.statusCHangeModalHelp = "Remark mandatory for not applicable activities.";
+                _this.captureChange = "Complied";
                 _this.modalReference = _this.modalService.open(_this.confirmNotApplicable, { size: 'lg', backdrop: 'static' });
                 _this.modalReference.result.then(function (result) {
                     _this.closeResult = "Closed with: " + result;
@@ -711,7 +857,7 @@ var ComplianceActivitiesComponent = /** @class */ (function () {
             }
             else {
                 console.log(activityId, companyId, event);
-                _this.submitStatusChange(companyId, activityId, _this.remarks, event, 'complied');
+                _this.submitStatusChange(companyId, activityId, _this.remarks, event, 'complied', undefined);
                 // this.activityService.setActivityStatus(activityId).then(resp=>{
                 //   event.target.disabled = true;
                 //   event.target.value = 'Complied';
@@ -719,21 +865,31 @@ var ComplianceActivitiesComponent = /** @class */ (function () {
             }
         }).catch(function (err) { _this.handleError(err); });
     };
-    ComplianceActivitiesComponent.prototype.submitStatusChange = function (companyId, activityId, remarks, event, compliedType) {
-        this.activityService.setActivityStatus(companyId, activityId, remarks, compliedType).then(function (resp) {
-            console.log(event);
+    ComplianceActivitiesComponent.prototype.submitStatusChange = function (companyId, activityId, remarks, event, compliedType, isCompliedDate) {
+        this.activityService.setActivityStatus(companyId, activityId, remarks, compliedType, isCompliedDate).then(function (resp) {
             event.target.disabled = true;
             __WEBPACK_IMPORTED_MODULE_6_jquery__(event.target).parent().html(compliedType);
-            //event.target.value = compliedType;
         });
     };
     ComplianceActivitiesComponent.prototype.NotApplicaleRemark = function () {
         if (this.remarks && this.remarks != "") {
-            this.submitStatusChange(this.latestCompanyId, this.latestActivityId, this.remarks, this.captureEvent, "complied");
+            this.submitStatusChange(this.latestCompanyId, this.latestActivityId, this.remarks, this.captureEvent, this.captureChange, undefined);
             this.modalReference.close();
         }
         else {
             this.showerror = true;
+        }
+    };
+    ComplianceActivitiesComponent.prototype.markCompliedDate = function () {
+        console.log(this.complianceDate);
+        console.log(this.latestCompanyId);
+        if (this.complianceDate && this.complianceDate != "") {
+            this.submitStatusChange(this.latestCompanyId, this.latestActivityId, this.complianceDate, this.captureEvent, this.captureChange, true);
+            this.modalReference.close();
+        }
+        else {
+            this.statusCHangeModalDateHelp = "Date mandatory for changing the status of the activity.";
+            this.showerrordate = true;
         }
     };
     ComplianceActivitiesComponent.prototype.handleError = function (error) {
@@ -822,18 +978,15 @@ var ComplianceActivitiesComponent = /** @class */ (function () {
             }
         }
     };
-    ComplianceActivitiesComponent.prototype.buildActivities = function (response) {
-        var _this = this;
-        //  this.loaded = true;
+    ComplianceActivitiesComponent.prototype.getOptionForActivityTable = function (activityType, response) {
         var self = this;
-        var issManagerDirectClick = false;
-        this.dtOptions = {
+        var dtOptions = {
             data: response,
             autoWidth: false,
             columns: [{
                     title: 'Abbr',
                     data: 'abbriviation',
-                    width: '2%'
+                    width: '5%'
                 }, {
                     title: 'Location',
                     data: 'locationName',
@@ -849,23 +1002,24 @@ var ComplianceActivitiesComponent = /** @class */ (function () {
                 }, {
                     title: 'Periodicity Due Date',
                     data: 'duedate',
-                    width: '10%'
+                    width: '8%'
                 }, {
                     title: 'Period Description',
                     data: 'periodicityDesc',
-                    width: '10%'
+                    width: '8%'
                 }, {
                     title: 'Actvity Assign User',
                     data: 'assignedUser',
-                    width: '10%'
+                    width: '8%'
                 }, {
+                    width: '3%',
                     title: '',
                     bSortable: false,
                     render: function (data, type, full) {
                         if (full.isComplied && !(full.isComplianceApproved || full.isComplianceRejected)) {
                             if (self.userType == 'ArTechUser') {
-                                return "<select  class='btn btn-outline-primary' style='width: 100%;' (change)='onCompanyChange($event.target.value)'>" +
-                                    "<option>Select</option>" +
+                                return "<select  id='arStatusChange' class='btn btn-outline-primary' style='width: 100%;'>" +
+                                    "<option value='select'>Select</option>" +
                                     "<option value='notDue'>Not Due</option>" +
                                     "<option value='compliedInTime'>Complied-in-time</option>" +
                                     "<option value='compliedDelayed'>Complied-Delayed</option>" +
@@ -873,7 +1027,15 @@ var ComplianceActivitiesComponent = /** @class */ (function () {
                                     "<option value='pendingDescrepancy'>Pending for Discrepancy</option>" +
                                     "</select>";
                             }
-                            return "Pending for review";
+                            else {
+                                if (full.isProofRequired && !full.reOpen) {
+                                    return '<a href="#" class="requestToOpen">Request to Open</a>';
+                                }
+                                else if (full.reOpen) {
+                                    return 'Requested to Open';
+                                }
+                                return "Pending for review";
+                            }
                         }
                         else if (full.isComplied && full.isComplianceApproved && full.isComplainceDelayed) {
                             return "Complaince delayed";
@@ -888,20 +1050,11 @@ var ComplianceActivitiesComponent = /** @class */ (function () {
                             if (self.userType == 'sManager' || self.userType == 'ArTechUser') {
                                 return "To be complied";
                             }
-                            // else if (self.userType == 'ArTechUser'){
-                            //   return "<select  class='btn btn-outline-primary' style='width: 100%;' (change)='onCompanyChange($event.target.value)'>"+
-                            //            "<option>Select</option>" +
-                            //            "<option value='Not Due'>Not Due</option>" +
-                            //            "<option value='Complied-in-time'>Complied-in-time</option>" +
-                            //            "<option value='Complied-Delayed'>Complied-Delayed</option>" +
-                            //            "<option value='Pending Compliance'>Pending Compliance</option>" +
-                            //            "<option value='Pending for Discrepancy'>Pending for Discrepancy</option>" +
-                            //            "</select>";    
-                            // }
                             return "<i id='statusChangeBtn' style='cursor:pointer' data-elemnt-obj=full class='fa fa-check fa-lg' value='Comply' title='Change status to complied'></i>";
                         }
                     }
                 }, {
+                    width: '3%',
                     title: '',
                     bSortable: false,
                     render: function (data, type, full) {
@@ -911,36 +1064,7 @@ var ComplianceActivitiesComponent = /** @class */ (function () {
                         return "";
                     }
                 }],
-            rowCallback: function (row, data, index) {
-                var self = _this;
-                // Unbind first in order to avoid any duplicate handler
-                // (see https://github.com/l-lin/angular-datatables/issues/87)
-                __WEBPACK_IMPORTED_MODULE_6_jquery__('td:eq(7)', row).unbind('click');
-                __WEBPACK_IMPORTED_MODULE_6_jquery__('td:eq(7)', row).unbind('change');
-                if (self.userType != 'ArTechUser' && self.userType != 'sManager') {
-                    __WEBPACK_IMPORTED_MODULE_6_jquery__('td:eq(7)', row).bind('click', '#statusChangeBtn', function ($event) {
-                        if (data.fileId) {
-                            //self.downloadFile(data.activityId,data.companyId,data.fileId);
-                        }
-                        else {
-                            self.changeStatus(data, data.activityId, data.companyId, $event);
-                        }
-                    });
-                }
-                if (self.userType == 'ArTechUser') {
-                    __WEBPACK_IMPORTED_MODULE_6_jquery__('td:eq(7)', row).bind('change', '#arStatusChange', function ($event) {
-                        console.log(data);
-                        console.log($event.target['value']);
-                        // self.changeStatus(data,data.activityId,data.companyId,$event)
-                        self.submitStatusChange(data.companyId, data.activityId, null, $event, $event.target['value']);
-                    });
-                }
-                __WEBPACK_IMPORTED_MODULE_6_jquery__('td:eq(8)', row).unbind('click');
-                __WEBPACK_IMPORTED_MODULE_6_jquery__('td:eq(8)', row).bind('click', function () {
-                    self.openModal(data);
-                });
-                return row;
-            },
+            rowCallback: self.rowCallBack,
             columnDefs: [
                 { "visible": self.userType != 'sManager' ? true : false, "targets": [8] }
             ],
@@ -953,53 +1077,249 @@ var ComplianceActivitiesComponent = /** @class */ (function () {
                 'excel'
             ]
         };
+        var dtOptionForPendingDescrepancy = {
+            data: response,
+            autoWidth: false,
+            columns: [{
+                    title: 'Activity Name',
+                    data: 'activityName',
+                    width: '20%'
+                }, {
+                    title: 'Law Description',
+                    data: 'lawDesc',
+                    width: '20%'
+                }, {
+                    title: 'Periodicity Due Date',
+                    data: 'duedate',
+                    width: '10%'
+                }, {
+                    title: 'Period Description',
+                    data: 'periodicityDesc',
+                    width: '10%'
+                }, {
+                    title: 'Discrepancy comment',
+                    data: 'arTechRemark',
+                    width: '30%',
+                    defamult: "&mdash;"
+                }, {
+                    title: '',
+                    width: '7%',
+                    bSortable: false,
+                    render: function (data, type, full) {
+                        if (full.isProofRequired && !full.reOpen) {
+                            return '<a href="#" class="requestToOpen">Request to Open</a>';
+                        }
+                        else if (full.reOpen) {
+                            return 'Requested to Open';
+                        }
+                    }
+                }, {
+                    width: '3%',
+                    title: '',
+                    bSortable: false,
+                    render: function (data, type, full) {
+                        if (self.userType != 'sManager') {
+                            return "<i *ngIf='full.fileId' style='cursor:pointer' class='fa fa-file-archive-o fa-lg downloadFile'></i>";
+                        }
+                        return "";
+                    }
+                }],
+            rowCallback: self.rowCallBack,
+            dom: 'Bfrtip',
+            buttons: [
+                'copy',
+                'print',
+                'excel'
+            ]
+        };
+        if (activityType == this.DESCREPANCY) {
+            return dtOptionForPendingDescrepancy;
+        }
+        else {
+            return dtOptions;
+        }
+    };
+    ComplianceActivitiesComponent.prototype.buildActivities = function (response) {
         this.loaded = true;
+        var that = this;
+        if (this.userType != 'ArTechUser') {
+            if (this.activityType == this.DESCREPANCY) {
+                response = __WEBPACK_IMPORTED_MODULE_6_jquery__["grep"](response, function (item) {
+                    return item["isProofRequired"];
+                });
+            }
+            else {
+                response = __WEBPACK_IMPORTED_MODULE_6_jquery__["grep"](response, function (item) {
+                    return !item["isProofRequired"];
+                });
+            }
+        }
+        else {
+            response = __WEBPACK_IMPORTED_MODULE_6_jquery__["grep"](response, function (item) {
+                return (!item["isProofRequired"] || item["reOpen"]) && ((that.complied_type == undefined) ||
+                    (that.complied_type.indexOf('Pending compliance') != -1 && item['isComplied'] == 0) ||
+                    (that.complied_type.indexOf('Pending for review') != -1 && item['isComplied'] == 1 && item['reOpen'] == 0) ||
+                    (that.complied_type.indexOf('Request to reopen') != -1 && item['reOpen'] == 1));
+            });
+        }
+        var self = this;
+        var issManagerDirectClick = false;
+        this.dtOptions = this.getOptionForActivityTable(this.activityType, response);
+        this.rerenderAsync(this.dtOptions);
+    };
+    ComplianceActivitiesComponent.prototype.getConfirmation = function (title) {
+        this.confirmModelTitle = title;
+        this.modalReference = this.modalService.open(this.confirmBox);
+        return this.modalReference.result;
+    };
+    ComplianceActivitiesComponent.prototype.changeStatusToOpen = function (companyId, activityId, that) {
+        this.activityService.changeStatusToOpen(companyId, activityId).then(function () {
+            __WEBPACK_IMPORTED_MODULE_6_jquery__(that).closest("td").text('To be complied');
+        });
+    };
+    ComplianceActivitiesComponent.prototype.buildDescActivities = function (response) {
+        response = __WEBPACK_IMPORTED_MODULE_6_jquery__["grep"](response, function (item) {
+            return item['isProofRequired'];
+        });
+        var self = this;
+        var issManagerDirectClick = false;
+        this.loaded = true;
+        this.rerenderAsync(this.dtOptions);
+    };
+    ComplianceActivitiesComponent.prototype.requestToReopen = function (companyId, activityId, that) {
+        this.activityService.requestToReopen(companyId, activityId).then(function () {
+            __WEBPACK_IMPORTED_MODULE_6_jquery__(that).parent().text("Requested to reopen");
+        });
+    };
+    ComplianceActivitiesComponent.prototype.rerenderAsync = function (newSettings) {
+        return __awaiter(this, void 0, void 0, function () {
+            var _this = this;
+            return __generator(this, function (_a) {
+                this.loaded = true;
+                try {
+                    if (this.datatableElement && this.datatableElement.dtInstance) {
+                        this.datatableElement.dtInstance.then(function (dtInstance) {
+                            if (newSettings) {
+                                // FIX To ensure that the DT doesn't break when we don't get columns
+                                if (newSettings.columns && newSettings.columns.length > 1) {
+                                    dtInstance.destroy();
+                                    _this.dtOptions = Promise.resolve(newSettings);
+                                    _this.displayTable(_this.dtTableElement);
+                                }
+                            }
+                        });
+                    }
+                    else {
+                        if (this.datatableElement.dtTrigger) {
+                            this.datatableElement.dtTrigger.next();
+                        }
+                    }
+                }
+                catch (error) {
+                    console.log("DT Rerender Exception: " + error);
+                }
+                return [2 /*return*/, Promise.resolve(newSettings)];
+            });
+        });
+    };
+    ComplianceActivitiesComponent.prototype.displayTable = function (renderIn) {
+        var _this = this;
+        if (this.datatableElement) {
+            this.datatableElement.dtInstance = new Promise(function (resolve, reject) {
+                Promise.resolve(_this.dtOptions).then(function (dtOptions) {
+                    // Using setTimeout as a "hack" to be "part" of NgZone
+                    setTimeout(function () {
+                        __WEBPACK_IMPORTED_MODULE_6_jquery__(renderIn.nativeElement).empty();
+                        _this.dtTrigger.next();
+                        setTimeout(function () {
+                            if (dtOptions.columns.length == 9) {
+                                __WEBPACK_IMPORTED_MODULE_6_jquery__("#activityTable").append(__WEBPACK_IMPORTED_MODULE_6_jquery__("#searchTable7Col tfoot").clone());
+                            }
+                            else {
+                                __WEBPACK_IMPORTED_MODULE_6_jquery__("#activityTable").append(__WEBPACK_IMPORTED_MODULE_6_jquery__("#searchTable5Col tfoot").clone());
+                            }
+                        }, 1000);
+                    });
+                }).catch(function (error) { return reject(error); });
+            });
+        }
     };
     ComplianceActivitiesComponent.prototype.onArStatusChange = function (event) {
         console.log(event);
     };
     ComplianceActivitiesComponent.prototype.onFilterChange = function () {
-        if (this.pendingCompliance && this.pendingForReview || !this.pendingCompliance && !this.pendingForReview) {
+        this.complied_type = [];
+        if ((this.pendingCompliance && this.pendingForReview && this.requestToReopenCheck) ||
+            (!this.pendingCompliance && !this.pendingForReview && !this.requestToReopenCheck)) {
             this.complied_type = undefined;
         }
-        else if (this.pendingCompliance) {
-            this.complied_type = "Pending compliance";
-        }
-        else if (this.pendingForReview) {
-            this.complied_type = "Pending for review";
+        else {
+            if (this.pendingCompliance) {
+                this.complied_type.push("Pending compliance");
+            }
+            if (this.pendingForReview) {
+                this.complied_type.push("Pending for review");
+            }
+            if (this.requestToReopenCheck) {
+                this.complied_type.push("Request to reopen");
+            }
         }
         this.getArTechActivities();
     };
     ComplianceActivitiesComponent.prototype.getArTechActivities = function () {
-        var _this = this;
-        //this.loaded = false;
         var self = this;
-        //self.loaded = false;
-        this.activityService.getActivityData(this.complied_type, null).then(function (response) {
-            self.loaded = false;
-            _this.buildActivities(response);
-            // self.rerender();      
-        }).catch(function (err) { _this.handleError(err); });
+        this.loaded = false;
+        /* this.activityService.getActivityData(this.complied_type,null).then(response => {
+          self.loaded = true;
+          this.buildActivities(response);
+         // self.rerender();
+        }).catch(err=>{this.handleError(err);}); */
+        this.buildActivities(this.activityData);
+    };
+    //This filter we need to set based on the query parameter if user clicked on links from dashboard
+    ComplianceActivitiesComponent.prototype.setFilter = function () {
+        //This ture means user came from links on dashboard or he clicked on email link.
+        if (!this.showFilter) {
+            switch (this.activitySeverity) {
+                case 'Pending for Discrepancy':
+                    this.activityType = this.DESCREPANCY;
+                    break;
+            }
+        }
     };
     ComplianceActivitiesComponent.prototype.ngOnInit = function () {
         this.setLoadUserTypeProfile();
+        this.activitySeverity = this.route.snapshot.queryParamMap.get('activitySeverity');
+        var lawArea = this.route.snapshot.queryParamMap.get('lawArea');
+        this.showFilter = !(!!this.activitySeverity || !!lawArea);
+        this.setFilter();
         this.buildActivities(this.activityData);
     };
     ComplianceActivitiesComponent.prototype.ngAfterViewInit = function () {
         this.dtTrigger.next();
         var that = this;
-        __WEBPACK_IMPORTED_MODULE_6_jquery__('input[columnLocation]').on('input', function () {
+        __WEBPACK_IMPORTED_MODULE_6_jquery__('body').on('input', 'input[columnLocation]', function () {
             var input = this;
             var index = parseInt(__WEBPACK_IMPORTED_MODULE_6_jquery__(input).attr("columnLocation"));
             that.datatableElement.dtInstance.then(function (dtInstance) {
                 dtInstance.columns(index).search(input['value']).draw();
             });
         });
+        if (this.dtOptions.columns.length == 9) {
+            __WEBPACK_IMPORTED_MODULE_6_jquery__("#activityTable").append(__WEBPACK_IMPORTED_MODULE_6_jquery__("#searchTable7Col tfoot").clone());
+        }
+        else {
+            __WEBPACK_IMPORTED_MODULE_6_jquery__("#activityTable").append(__WEBPACK_IMPORTED_MODULE_6_jquery__("#searchTable5Col tfoot").clone());
+        }
     };
     __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["ViewChild"])(__WEBPACK_IMPORTED_MODULE_3_angular_datatables__["a" /* DataTableDirective */]),
         __metadata("design:type", __WEBPACK_IMPORTED_MODULE_3_angular_datatables__["a" /* DataTableDirective */])
     ], ComplianceActivitiesComponent.prototype, "datatableElement", void 0);
+    __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["ViewChild"])('dtTableElement'),
+        __metadata("design:type", __WEBPACK_IMPORTED_MODULE_0__angular_core__["ElementRef"])
+    ], ComplianceActivitiesComponent.prototype, "dtTableElement", void 0);
     __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(),
         __metadata("design:type", Object)
@@ -1012,6 +1332,14 @@ var ComplianceActivitiesComponent = /** @class */ (function () {
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["ViewChild"])('confirmNotApplicable'),
         __metadata("design:type", __WEBPACK_IMPORTED_MODULE_0__angular_core__["ElementRef"])
     ], ComplianceActivitiesComponent.prototype, "confirmNotApplicable", void 0);
+    __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["ViewChild"])('confirmComplianceDate'),
+        __metadata("design:type", __WEBPACK_IMPORTED_MODULE_0__angular_core__["ElementRef"])
+    ], ComplianceActivitiesComponent.prototype, "confirmComplianceDate", void 0);
+    __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["ViewChild"])('confirmBox'),
+        __metadata("design:type", __WEBPACK_IMPORTED_MODULE_0__angular_core__["ElementRef"])
+    ], ComplianceActivitiesComponent.prototype, "confirmBox", void 0);
     ComplianceActivitiesComponent = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
             selector: 'app-compliance-activities',
@@ -1019,7 +1347,8 @@ var ComplianceActivitiesComponent = /** @class */ (function () {
             styles: [__webpack_require__("./src/app/compliance-activities/compliance-activities.component.css")],
             providers: [__WEBPACK_IMPORTED_MODULE_1__service_activityService__["a" /* ActivityService */], __WEBPACK_IMPORTED_MODULE_2__service_repositoryService__["a" /* RepositoryService */]]
         }),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__service_activityService__["a" /* ActivityService */], __WEBPACK_IMPORTED_MODULE_2__service_repositoryService__["a" /* RepositoryService */], __WEBPACK_IMPORTED_MODULE_5__ng_bootstrap_ng_bootstrap__["c" /* NgbModal */], __WEBPACK_IMPORTED_MODULE_4__service_loginService__["a" /* LoginService */]])
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__service_activityService__["a" /* ActivityService */], __WEBPACK_IMPORTED_MODULE_2__service_repositoryService__["a" /* RepositoryService */],
+            __WEBPACK_IMPORTED_MODULE_5__ng_bootstrap_ng_bootstrap__["c" /* NgbModal */], __WEBPACK_IMPORTED_MODULE_4__service_loginService__["a" /* LoginService */], __WEBPACK_IMPORTED_MODULE_8__angular_router__["a" /* ActivatedRoute */]])
     ], ComplianceActivitiesComponent);
     return ComplianceActivitiesComponent;
 }());
@@ -1038,7 +1367,7 @@ module.exports = "/*\r\n * Component: Info Box\r\n * -------------------\r\n */\
 /***/ "./src/app/compliance-dashboard/compliance-dashboard.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "\r\n\r\n<section class=\"content\" *ngIf=\"!loaded\">\r\n      <div class=\"row top-buffer\">\r\n        <div class=\"col-md-12 text-center\">\r\n         <i class=\"fa fa-spinner fa-spin\" style=\"font-size:40px\"></i><br/>\r\n         <span>Loading...</span>\r\n        </div>\r\n      </div>\r\n</section>\r\n\r\n<section class=\"content\" *ngIf=\"loaded\">\r\n      <!-- Info boxes -->\r\n      <div class=\"row top-buffer\" *ngIf=\"userType !='cOwner'\">\r\n        <div class=\"col-md-3 col-sm-6 col-xs-12 dasboardtiles\" (click)=\"getActivities('medium', undefined, null )\">\r\n          <div class=\"info-box\">\r\n            <span class=\"info-box-icon bg-aqua\"><i class=\"fa fa-ellipsis-h\" style=\"color: #fff\"></i></span>\r\n\r\n            <div class=\"info-box-content\">\r\n              <span class=\"info-box-text\">MEDIUM</span>\r\n              <span class=\"info-box-number\">{{riskCount.medium}}</span>\r\n            </div>\r\n            <!-- /.info-box-content -->\r\n          </div>\r\n          <!-- /.info-box -->\r\n        </div>\r\n        <!-- /.col -->\r\n        <div class=\"col-md-3 col-sm-6 col-xs-12 dasboardtiles\" (click)=\"getActivities('high', undefined, null)\">\r\n          <div class=\"info-box\">\r\n            <span class=\"info-box-icon bg-red\"><i class=\"fa fa-exclamation-triangle\" style=\"color: #fff\"></i></span>\r\n\r\n            <div class=\"info-box-content\">\r\n              <span class=\"info-box-text\">HIGH</span>\r\n              <span class=\"info-box-number\">{{riskCount.high}}</span>\r\n            </div>\r\n            <!-- /.info-box-content -->\r\n          </div>\r\n          <!-- /.info-box -->\r\n        </div>\r\n        <!-- /.col -->\r\n\r\n        <!-- fix for small devices only -->\r\n        <div class=\"clearfix visible-sm-block\"></div>\r\n\r\n        <div class=\"col-md-3 col-sm-6 col-xs-12 dasboardtiles\" (click)=\"getActivities('low' , undefined, null )\">\r\n          <div class=\"info-box\">\r\n            <span class=\"info-box-icon bg-green\"><i class=\"fa fa-arrow-down\" style=\"color: #fff\"></i></span>\r\n\r\n            <div class=\"info-box-content\">\r\n              <span class=\"info-box-text\">LOW</span>\r\n              <span class=\"info-box-number\">{{riskCount.low}}</span>\r\n            </div>\r\n            <!-- /.info-box-content -->\r\n          </div>\r\n          <!-- /.info-box -->\r\n        </div>\r\n        <!-- /.col -->\r\n        <div class=\"col-md-3 col-sm-6 col-xs-12 dasboardtiles\" (click)=\"getActivities('total', undefined, null)\">\r\n          <div class=\"info-box\">\r\n            <span class=\"info-box-icon bg-yellow\"><i class=\"fa fa-shield\"></i></span>\r\n\r\n            <div class=\"info-box-content\">\r\n              <span class=\"info-box-text\">TOTAL</span>\r\n              <span class=\"info-box-number\">{{riskCount.high + riskCount.medium + riskCount.low || 0}}</span>\r\n            </div>\r\n            <!-- /.info-box-content -->\r\n          </div>\r\n          <!-- /.info-box -->\r\n        </div>\r\n        <!-- /.col -->\r\n      </div>\r\n      <!-- /.row -->\r\n<div class=\"row top-buffer\" *ngIf=\"userType !='cOwner'\">\r\n  <div class=\"col-sm-6\">\r\n    <div *ngIf=\"loaded\">\r\n\t<canvas baseChart\r\n                [datasets]=\"lineChartData\"\r\n                [labels]=\"lineChartLabels\"\r\n                [options]=\"lineChartOptions\"\r\n                [chartType]=\"lineChartType\"\r\n                (chartHover)=\"chartHovered($event, pieChartType)\"\r\n                (chartClick)=\"chartClicked($event, lineChartType)\"></canvas>\r\n\t</div>\t\t\t\r\n  </div>\r\n      <!-- Indicators -->\r\n      \r\n  <div class=\"col-sm-6\" *ngIf=\"userType !='cOwner'\">\r\n    <canvas baseChart\r\n                [data]=\"pieChartData\"\r\n                [labels]=\"pieChartLabels\"\r\n                [options]=\"pieChartOptions\"\r\n                [chartType]=\"pieChartType\"\r\n                (chartHover)=\"chartHovered($event, pieChartType)\"\r\n                (chartClick)=\"chartClicked($event, pieChartType)\"></canvas>\r\n  </div>\r\n</div>\r\n<div class=\"row top-buffer\">\r\n<table class=\"table table-striped table-sm table-curved dashboard-table\">\r\n  <thead class=\"thead-dark\">\r\n  <tr>\r\n  <th class=\"tableheading\">Law Area</th>\r\n  <th class=\"tableheading\">Complied – In time</th>\r\n  <th class=\"tableheading\">Complied – Delayed</th>\r\n  <th class=\"tableheading\">Pending for Review</th>\r\n  <th class=\"tableheading\">Pending Compliance</th>\r\n  </tr>\r\n  </thead>\r\n  <tbody>\r\n<tr *ngFor=\"let law of objectKeys(complainceOverviewByLaw)\">\r\n      <td>{{law}}</td>\r\n      <td><a href=\"\" (click)=\"getActivities('Complied- In time', law, $event)\">{{complainceOverviewByLaw[law].intimeCompliance}}</a></td>\r\n      <td><a href=\"\" (click)=\"getActivities('Complied-Delayed', law, $event)\">{{complainceOverviewByLaw[law].delayedCompliance}}</a></td>\r\n      <td><a href=\"\" (click)=\"getActivities('Pending for review', law, $event)\">{{complainceOverviewByLaw[law].pendingReview}}</a></td>\r\n      <td><a href=\"\" (click)=\"getActivities('Pending compliance', law, $event)\">{{complainceOverviewByLaw[law].pendingCompliance}}</a></td>\r\n</tr>\r\n       \r\n</tbody>\r\n  </table>\r\n\r\n\t</div>\r\n\r\n\r\n\r\n    </section>"
+module.exports = "\r\n\r\n<section class=\"content\" *ngIf=\"!loaded\">\r\n      <div class=\"row top-buffer\">\r\n        <div class=\"col-md-12 text-center\">\r\n         <i class=\"fa fa-spinner fa-spin\" style=\"font-size:40px\"></i><br/>\r\n         <span>Loading...</span>\r\n        </div>\r\n      </div>\r\n</section>\r\n\r\n<section class=\"content\" *ngIf=\"loaded\">\r\n      <!-- Info boxes -->\r\n      <div class=\"row top-buffer\" *ngIf=\"userType !='cOwner'\">\r\n        <div class=\"col-md-3 col-sm-6 col-xs-12 dasboardtiles\" (click)=\"getActivities('medium', undefined, null )\">\r\n          <div class=\"info-box\">\r\n            <span class=\"info-box-icon bg-aqua\"><i class=\"fa fa-ellipsis-h\" style=\"color: #fff\"></i></span>\r\n\r\n            <div class=\"info-box-content\">\r\n              <span class=\"info-box-text\">MEDIUM</span>\r\n              <span class=\"info-box-number\">{{riskCount.medium}}</span>\r\n            </div>\r\n            <!-- /.info-box-content -->\r\n          </div>\r\n          <!-- /.info-box -->\r\n        </div>\r\n        <!-- /.col -->\r\n        <div class=\"col-md-3 col-sm-6 col-xs-12 dasboardtiles\" (click)=\"getActivities('high', undefined, null)\">\r\n          <div class=\"info-box\">\r\n            <span class=\"info-box-icon bg-red\"><i class=\"fa fa-exclamation-triangle\" style=\"color: #fff\"></i></span>\r\n\r\n            <div class=\"info-box-content\">\r\n              <span class=\"info-box-text\">HIGH</span>\r\n              <span class=\"info-box-number\">{{riskCount.high}}</span>\r\n            </div>\r\n            <!-- /.info-box-content -->\r\n          </div>\r\n          <!-- /.info-box -->\r\n        </div>\r\n        <!-- /.col -->\r\n\r\n        <!-- fix for small devices only -->\r\n        <div class=\"clearfix visible-sm-block\"></div>\r\n\r\n        <div class=\"col-md-3 col-sm-6 col-xs-12 dasboardtiles\" (click)=\"getActivities('low' , undefined, null )\">\r\n          <div class=\"info-box\">\r\n            <span class=\"info-box-icon bg-green\"><i class=\"fa fa-arrow-down\" style=\"color: #fff\"></i></span>\r\n\r\n            <div class=\"info-box-content\">\r\n              <span class=\"info-box-text\">LOW</span>\r\n              <span class=\"info-box-number\">{{riskCount.low}}</span>\r\n            </div>\r\n            <!-- /.info-box-content -->\r\n          </div>\r\n          <!-- /.info-box -->\r\n        </div>\r\n        <!-- /.col -->\r\n        <div class=\"col-md-3 col-sm-6 col-xs-12 dasboardtiles\" (click)=\"getActivities('total', undefined, null)\">\r\n          <div class=\"info-box\">\r\n            <span class=\"info-box-icon bg-yellow\"><i class=\"fa fa-shield\"></i></span>\r\n\r\n            <div class=\"info-box-content\">\r\n              <span class=\"info-box-text\">TOTAL</span>\r\n              <span class=\"info-box-number\">{{riskCount.high + riskCount.medium + riskCount.low || 0}}</span>\r\n            </div>\r\n            <!-- /.info-box-content -->\r\n          </div>\r\n          <!-- /.info-box -->\r\n        </div>\r\n        <!-- /.col -->\r\n      </div>\r\n      <!-- /.row -->\r\n<div class=\"row top-buffer\" *ngIf=\"userType !='cOwner'\">\r\n  <div class=\"col-sm-6\">\r\n    <div *ngIf=\"loaded\">\r\n\t<canvas baseChart\r\n                [datasets]=\"lineChartData\"\r\n                [labels]=\"lineChartLabels\"\r\n                [options]=\"lineChartOptions\"\r\n                [chartType]=\"lineChartType\"\r\n                (chartHover)=\"chartHovered($event, pieChartType)\"\r\n                (chartClick)=\"chartClicked($event, lineChartType)\"></canvas>\r\n\t</div>\t\t\t\r\n  </div>\r\n      <!-- Indicators -->\r\n      \r\n  <div class=\"col-sm-6\" *ngIf=\"userType !='cOwner'\">\r\n    <canvas baseChart\r\n                [data]=\"pieChartData\"\r\n                [labels]=\"pieChartLabels\"\r\n                [options]=\"pieChartOptions\"\r\n                [chartType]=\"pieChartType\"\r\n                (chartHover)=\"chartHovered($event, pieChartType)\"\r\n                (chartClick)=\"chartClicked($event, pieChartType)\"></canvas>\r\n  </div>\r\n</div>\r\n<div class=\"row top-buffer\">\r\n<table class=\"table table-striped table-sm table-curved dashboard-table\">\r\n  <thead class=\"thead-dark\">\r\n  <tr>\r\n  <th class=\"tableheading\">Law Area</th>\r\n  <th class=\"tableheading\">Complied – In time</th>\r\n  <th class=\"tableheading\">Complied – Delayed</th>\r\n  <th class=\"tableheading\">Pending for Review</th>\r\n  <th class=\"tableheading\">Pending Compliance</th>\r\n  <th class=\"tableheading\">Pending Descrepancy</th>\r\n  </tr>\r\n  </thead>\r\n  <tbody>\r\n<tr *ngFor=\"let law of objectKeys(complainceOverviewByLaw)\">\r\n      <td>{{law}}</td>\r\n      <td><a href=\"\" (click)=\"getActivities('Complied- In time', law, $event)\">{{complainceOverviewByLaw[law].intimeCompliance}}</a></td>\r\n      <td><a href=\"\" (click)=\"getActivities('Complied-Delayed', law, $event)\">{{complainceOverviewByLaw[law].delayedCompliance}}</a></td>\r\n      <td><a href=\"\" (click)=\"getActivities('Pending for review', law, $event)\">{{complainceOverviewByLaw[law].pendingReview}}</a></td>\r\n      <td><a href=\"\" (click)=\"getActivities('Pending compliance', law, $event)\">{{complainceOverviewByLaw[law].pendingCompliance}}</a></td>\r\n      <td><a href=\"\" (click)=\"getActivities('Pending for Discrepancy', law, $event)\">{{complainceOverviewByLaw[law].pendingDescrepancy}}</a></td>\r\n</tr>\r\n       \r\n</tbody>\r\n  </table>\r\n\r\n\t</div>\r\n\r\n\r\n\r\n    </section>"
 
 /***/ }),
 
@@ -1803,7 +2132,7 @@ var ComplienceCalendarComponent = /** @class */ (function () {
             activityCalanderObj['start'] = Object(__WEBPACK_IMPORTED_MODULE_1_date_fns__["addHours"])(Object(__WEBPACK_IMPORTED_MODULE_1_date_fns__["startOfDay"])(new Date(response[i]['duedate'])), 0);
             activityCalanderObj['end'] = new Date(response[i]['duedate']);
             activityCalanderObj['title'] = response[i]['activityName'];
-            activityCalanderObj['color'] = colors.blue;
+            activityCalanderObj['color'] = response[i]['isProofRequired'] ? colors.yellow : colors.blue;
             activityCalanderObj['activity'] = response[i];
             this.activityDataOnlyCalander.push(activityCalanderObj);
         }
@@ -2411,8 +2740,9 @@ var LoginLoginComponent = /** @class */ (function () {
             _this.loginInProgress = "enabled";
             _this.responseStr = responseStr;
             if (_this.responseStr.isUserActive) {
-                var redirectionUrl = _this.route.snapshot.queryParamMap.get('redirectionUrl');
+                var redirectionUrl = localStorage.getItem("redirectionUrl"); //this.route.snapshot.queryParamMap.get('redirectionUrl');
                 if (redirectionUrl) {
+                    localStorage.removeItem("redirectionUrl");
                     window.location.hash = redirectionUrl;
                 }
                 else {
@@ -2420,8 +2750,6 @@ var LoginLoginComponent = /** @class */ (function () {
                 }
             }
             else {
-                //window.location.href="#/notactive"
-                //User is not active show sendActivation email
                 _this.userNotActive = true;
             }
         })
@@ -2684,7 +3012,8 @@ var BaseService = /** @class */ (function () {
         console.error('An error occurred', error, error.status);
         if ("401" == error.status) {
             var redirectionUrl = encodeURI(window.location.hash.substr(1));
-            window.location.href = "#?redirectionUrl=" + redirectionUrl;
+            localStorage.setItem("redirectionUrl", redirectionUrl);
+            window.location.href = '#'; //"#?redirectionUrl="+redirectionUrl;
         }
         return Promise.reject(error.message || error);
     };
@@ -2693,6 +3022,70 @@ var BaseService = /** @class */ (function () {
         __metadata("design:paramtypes", [])
     ], BaseService);
     return BaseService;
+}());
+
+
+
+/***/ }),
+
+/***/ "./src/app/service/SettingsService.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return SettingsService; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("./node_modules/@angular/core/esm5/core.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_common_http__ = __webpack_require__("./node_modules/@angular/common/esm5/http.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__typeBean_loginBean__ = __webpack_require__("./src/app/typeBean/loginBean.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__loginService__ = __webpack_require__("./src/app/service/loginService.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__environments_environment__ = __webpack_require__("./src/environments/environment.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_rxjs_add_operator_toPromise__ = __webpack_require__("./node_modules/rxjs/_esm5/add/operator/toPromise.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_rxjs_add_operator_toPromise___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5_rxjs_add_operator_toPromise__);
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+
+
+
+var SettingsService = /** @class */ (function () {
+    function SettingsService(http, loginService) {
+        this.http = http;
+        this.loginService = loginService;
+        this.appUrl = "";
+        this.loginBean = new __WEBPACK_IMPORTED_MODULE_2__typeBean_loginBean__["a" /* LoginBean */]();
+        this.appUrl = __WEBPACK_IMPORTED_MODULE_4__environments_environment__["a" /* environment */].appUrl ? __WEBPACK_IMPORTED_MODULE_4__environments_environment__["a" /* environment */].appUrl : "";
+    }
+    SettingsService.prototype.handleError = function (error) {
+        console.error('An error occurred', error); // for demo purposes only
+        return Promise.reject(error.message || error);
+    };
+    SettingsService.prototype.getSettings = function () {
+        var headers = this.loginService.getHeaders();
+        var companyId = this.loginService.getCompany();
+        var url = this.appUrl + "/rest/settings";
+        return this.http.get(url, headers).toPromise().then(function (response) { return response; }).catch(this.handleError);
+    };
+    SettingsService.prototype.setSetting = function (settings) {
+        var url = this.appUrl + "/rest/settings";
+        return this.http.post(url, settings).toPromise().then(function (response) { return response; }).catch(this.handleError);
+    };
+    SettingsService.prototype.sendAlertsNow = function () {
+        var url = this.appUrl + "/rest/alerts/sendNow";
+        return this.http.post(url, {}).toPromise().then(function (response) { return response; }).catch(this.handleError);
+    };
+    SettingsService = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])(),
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__angular_common_http__["a" /* HttpClient */], __WEBPACK_IMPORTED_MODULE_3__loginService__["a" /* LoginService */]])
+    ], SettingsService);
+    return SettingsService;
 }());
 
 
@@ -2749,10 +3142,16 @@ var ActivityService = /** @class */ (function (_super) {
         _this.appUrl = __WEBPACK_IMPORTED_MODULE_4__environments_environment__["a" /* environment */].appUrl ? __WEBPACK_IMPORTED_MODULE_4__environments_environment__["a" /* environment */].appUrl : "";
         return _this;
     }
-    /* private handleError(error: any): Promise<any> {
-      console.error('An error occurred', error); // for demo purposes only
-      return Promise.reject(error.message || error);
-    } */
+    ActivityService.prototype.requestToReopen = function (companyId, activityId) {
+        var headers = this.loginService.getHeaders();
+        var url = this.appUrl + "/rest/activity/requestToReopen/" + companyId + "/" + activityId;
+        return this.http.post(url, {}, headers).toPromise().then(function (response) { return response; }).catch(this.handleError);
+    };
+    ActivityService.prototype.changeStatusToOpen = function (companyId, activityId) {
+        var headers = this.loginService.getHeaders();
+        var url = this.appUrl + "/rest/activity/changeToReopen/" + companyId + "/" + activityId;
+        return this.http.post(url, {}, headers).toPromise().then(function (response) { return response; }).catch(this.handleError);
+    };
     ActivityService.prototype.getActivityData = function (activitySeverity, lawArea) {
         var headers = this.loginService.getHeaders();
         var companyId = this.loginService.getCompany();
@@ -2762,12 +3161,15 @@ var ActivityService = /** @class */ (function (_super) {
         }
         return this.http.get(url, headers).toPromise().then(function (response) { return response; }).catch(this.handleError);
     };
-    ActivityService.prototype.setActivityStatus = function (companyId, activityId, remarks, compliedType) {
+    ActivityService.prototype.setActivityStatus = function (companyId, activityId, remarks, compliedType, isCompliedDate) {
         var headers = this.loginService.getHeaders();
         //let companyId = this.loginService.getCompany();
         var url = this.appUrl + "/rest/activity/changeStatus/" + companyId + "/" + activityId + "?" + compliedType + "=true";
         var statusRemarks = {};
-        if (remarks) {
+        if (remarks && isCompliedDate) {
+            statusRemarks['compliedDate'] = remarks;
+        }
+        else if (remarks) {
             statusRemarks['remarks'] = remarks;
         }
         return this.http.post(url, statusRemarks, headers).toPromise().then(function (response) { return response; }).catch(this.handleError);
@@ -3210,6 +3612,90 @@ var RepositoryService = /** @class */ (function () {
 
 /***/ }),
 
+/***/ "./src/app/settings/settings.component.css":
+/***/ (function(module, exports) {
+
+module.exports = ".switch6 {  max-width: 17em;  margin: 0 auto; }\r\n.switch6-light > span, .switch-toggle > span {  color: #000000; }\r\n.switch6-light span span, .switch6-light label, .switch-toggle span span, .switch-toggle label {  color: #2b2b2b; }\r\n.switch-toggle a, \r\n.switch6-light span span { display: none; }\r\n.switch6-light { display: block; height: 30px; position: relative; overflow: visible; padding: 0px; margin-left:0px; }\r\n.switch6-light * { -webkit-box-sizing: border-box; box-sizing: border-box; }\r\n.switch6-light a { display: block; -webkit-transition: all 0.3s ease-out 0s; transition: all 0.3s ease-out 0s; }\r\n.switch6-light label, \r\n.switch6-light > span { line-height: 30px; vertical-align: middle;}\r\n.switch6-light label {font-weight: 700; margin-bottom: px; max-width: 100%;}\r\n.switch6-light input:focus ~ a, .switch6-light input:focus + label { outline: 1px dotted rgb(136, 136, 136); }\r\n.switch6-light input { position: absolute; opacity: 0; z-index: 5; }\r\n.switch6-light input:checked ~ a { right: 0%; }\r\n.switch6-light > span { position: absolute; left: -100px; width: 100%; margin: 0px; padding-right: 100px; text-align: left; }\r\n.switch6-light > span span { position: absolute; top: 0px; left: 0px; z-index: 5; display: block; width: 50%; margin-left: 100px; text-align: center; }\r\n.switch6-light > span span:last-child { left: 50%; }\r\n.switch6-light a { position: absolute; right: 50%; top: 0px; z-index: 4; display: block; width: 50%; height: 123%; padding: 0px; }\r\n.top-buffer { margin-top:20px; }\r\n.left-buffer {margin-left: 10%}\r\n.selectpicker {\r\n\theight:90% !important;\r\n}\r\n.risk-table { \r\n\tmargin:15% 0 0  20%;\r\n \twidth: 70%;\r\n  }\r\n.table-curved {\r\n    border-collapse: separate;\r\n}\r\n.table-curved {\r\n    border: solid #ccc 1px;\r\n    border-radius: 10px;\r\n    border-left:0px;\r\n}\r\n.table-curved td, .table-curved th {\r\n    border-left: 1px solid #ccc;\r\n    border-top: 1px solid #ccc;\r\n}\r\n.table-curved th {\r\n    border-top: none;\r\n}\r\n.table-curved th:first-child {\r\n    border-radius: 10px 0 0 0;\r\n}\r\n.table-curved th:last-child {\r\n    border-radius: 0 10px 0 0;\r\n}\r\n.table-curved th:only-child{\r\n    border-radius: 10px 10px 0 0;\r\n}\r\n.table-curved tr:last-child td:first-child {\r\n    border-radius: 0 0 0 10px;\r\n}\r\n.table-curved tr:last-child td:last-child {\r\n    border-radius: 0 0 10px 0;\r\n}\r\n.risk-table td {\r\n \tcolor: #08c;\r\n }\r\n.tableheading {\r\n  color: #e1ffff;\r\n  background-color: #0275d8!important;\r\n}\r\n.margin-adjust-2 {\r\n    margin-left: -2%;\r\n}\r\n/*\t--------------------------------------------------\r\n\t:: Table Filter\r\n\t-------------------------------------------------- */\r\n.panel .btn-group {\r\n\tmargin: 15px 0 30px;\r\n}\r\n.panel .btn-group .btn {\r\n\t-webkit-transition: background-color .3s ease;\r\n\ttransition: background-color .3s ease;\r\n}\r\n.col-width-15{ width: 15% !important;}\r\n.col-width-25{ width: 25% !important;}\r\n.col-width-10{ width: 10% !important;}\r\n.col-width-20{ width: 20% !important;}\r\n.col-width-30{ width: 30% !important;}\r\n.btn:not(:disabled):not(.disabled) {\r\n    cursor: pointer;\r\n}\r\n.tableLabel{\r\n    padding-top: 30px;\r\n    font-size: 15px;\r\n    font-weight: bold;\r\n}"
+
+/***/ }),
+
+/***/ "./src/app/settings/settings.component.html":
+/***/ (function(module, exports) {
+
+module.exports = "\r\n<section class=\"content\" *ngIf=\"!loaded\">\r\n      <div class=\"row top-buffer\">\r\n        <div class=\"col-md-12 text-center\">\r\n         <i class=\"fa fa-spinner fa-spin\" style=\"font-size:40px\"></i><br/>\r\n         <span>Loading...</span>\r\n        </div>\r\n      </div>\r\n</section>\r\n\r\n\r\n\r\n<section class=\"content report\" *ngIf=\"loaded\">\r\n\t\t<form>\r\n\t\t\t<div class=\"form-group\">\r\n\t\t\t\t\t<input type=\"button\" (click)=\"saveSettings();\" value=\"Save Settings\" class=\"btn btn-primary\"/>\r\n\t\t\t\t\t<div class=\"alert alert-primary\" *ngIf=\"settingsSaveSuccess\">Saved</div>\r\n\t\t\t</div> \r\n\t\t\t<!--\r\n\t\t\t<div class=\"form-group\">\r\n\t\t\t\t\t<h3>Schedule settings</h3>\r\n\t\t\t\t\t<label>Send notification to users before due date</label>\r\n\t\t\t\t\t<div class=\"form-row\">\r\n\t\t\t\t\t\t\t<div class=\"col-3\">\r\n\t\t\t\t\t<input type=\"number\" name=\"cManager\" class=\"form-control\" [(ngModel)]=\"settings.cManagerDueDate\"></div><div class=\"col\"> Days before to Complaince manager</div>\r\n\t\t\t\t\t</div><br/>\r\n\t\t\t\t\t<div class=\"form-row\">\r\n\t\t\t\t\t\t\t<div class=\"col-3\">\r\n\t\t\t\t\t<input type=\"number\" name=\"arTech\" class=\"form-control\" [(ngModel)]=\"settings.arTechUserDueDate\"></div><div class=\"col\"> Days before to ArTech User</div>\r\n\t\t\t\t\t</div><br/>\r\n\t\t\t\t\t<div class=\"form-row\">\r\n\t\t\t\t\t\t\t<div class=\"col-3\">\r\n\t\t\t\t\t<input type=\"number\" name=\"cOwner\" class=\"form-control\" [(ngModel)]=\"settings.cOwnerDueDate\"></div><div class=\"col\"> Days before to Complaince Owner</div>\r\n\t\t\t\t\t</div><br/>\r\n\t\t\t\t\t<div class=\"form-row\">\r\n\t\t\t\t\t\t\t<div class=\"col-3\">\r\n\t\t\t\t\t<input type=\"number\" name=\"sManager\" class=\"form-control\" [(ngModel)]=\"settings.sManagerDueDate\"></div><div class=\"col\"> Days before to Super manager</div>\r\n\t\t\t\t\t</div>\r\n\t\t\t\t\t<input type=\"button\" (click)=\"sendAlertsNow();\" value=\"Send now\" class=\"btn btn-primary\"/>\r\n\t\t\t</div>\r\n\t\t\t-->\r\n\t\t\t<div class=\"form-group\">\r\n\t\t\t\t\t<h3>Server settings</h3>\r\n\t\t\t\t\t<label for=\"serverName\"> Server full url</label>\r\n\t\t\t\t\t<input type=\"text\" [(ngModel)]=\"settings.serverName\" name=\"serverName\" id=\"serverName\"/>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"form-group\">\r\n\t\t\t\t<h3>Schedule settings</h3>\r\n\t\t\t\t<table class=\"table table-striped\">\r\n\t\t\t\t\t<thead>\r\n\t\t\t\t\t\t<tr><th>Company name</th><th>First reminder</th><th>Second reminder</th><th>Followup</th></tr>\r\n\t\t\t\t\t</thead>\r\n\t\t\t\t\t<tr *ngFor=\"let schedules of settings.settingsScheduleBean;index as i\">\t\r\n\t\t\t\t\t\t<td>{{schedules.companyName}}</td>\r\n\t\t\t\t\t\t<td>\r\n\t\t\t\t\t\t\t<!-- <input type=\"number\" [(ngModel)]=\"schedules.sOwnerFirstReminderBean.cmDelay\" name=\"sOwnerFirstReminderBeanCmDelay{{i}}\"/>\r\n\t\t\t\t\t\t\t<input type=\"checkbox\" [(ngModel)]=\"schedules.sOwnerFirstReminderBean.sendToCm\" name=\"sOwnerFirstReminderBeanSendToCm{{i}}\"/> Manager\r\n\t\t\t\t\t\t\t<br/>\r\n\t\t\t\t\t\t\t<input type=\"number\" [(ngModel)]=\"schedules.sOwnerFirstReminderBean.coDelay\" name=\"sOwnerFirstReminderBeanCoDelay{{i}}\"/>\r\n\t\t\t\t\t\t\t --><input type=\"checkbox\" [(ngModel)]=\"schedules.sOwnerFirstReminderBean.sendToCo\" name=\"sOwnerFirstReminderBeanSendToCo{{i}}\"/> Owner\r\n\t\t\t\t\t\t</td>\r\n\t\t\t\t\t\t<td>\r\n\t\t\t\t\t\t\t<!-- <input type=\"number\" [(ngModel)]=\"schedules.sOwnerSecondReminderBean.cmDelay\" name=\"sOwnerSecondReminderBeanCmDelay{{i}}\"/>\r\n\t\t\t\t\t\t\t<input type=\"checkbox\" [(ngModel)]=\"schedules.sOwnerSecondReminderBean.sendToCm\" name=\"sOwnerSecondReminderBeanSendToCm{{i}}\"/> Manager\r\n\t\t\t\t\t\t\t<br/>\r\n\t\t\t\t\t\t\t<input type=\"number\" [(ngModel)]=\"schedules.sOwnerSecondReminderBean.coDelay\"  name=\"sOwnerSecondReminderBeanCoDelay{{i}}\"/>\r\n\t\t\t\t\t\t\t --><input type=\"checkbox\" [(ngModel)]=\"schedules.sOwnerSecondReminderBean.sendToCo\" name=\"sOwnerSecondReminderBeanSendToCo{{i}}\"/> Owner\r\n\t\t\t\t\t\t</td>\r\n\t\t\t\t\t\t<td>\r\n\t\t\t\t\t\t\t<!-- <input type=\"number\" [(ngModel)]=\"schedules.sOwnerFollowUpReminderBean.cmDelay\" name=\"sOwnerFollowUpReminderBeanCmDelay{{i}}\"/> -->\r\n\t\t\t\t\t\t\t<input type=\"checkbox\" [(ngModel)]=\"schedules.sOwnerFollowUpReminderBean.sendToCm\" name=\"sOwnerFollowUpReminderBeanSendToCm{{i}}\"/> Manager\r\n\t\t\t\t\t\t\t<br/>\r\n\t\t\t\t\t\t\t<!-- <input type=\"number\" [(ngModel)]=\"schedules.sOwnerFollowUpReminderBean.coDelay\"  name=\"sOwnerFollowUpReminderBeanCoDelay{{i}}\"/> -->\r\n\t\t\t\t\t\t\t<input type=\"checkbox\" [(ngModel)]=\"schedules.sOwnerFollowUpReminderBean.sendToCo\" name=\"sOwnerFollowUpReminderBeanSendToCo{{i}}\"/> Owner\r\n\t\t\t\t\t\t</td>\r\n\t\t\t\t\t</tr>\t\r\n\t\t\t\t</table>\t\r\n\t\t\t</div>\t\r\n\t\t\t<hr/>\r\n\t\t\t<div class=\"form-group\">\r\n\t\t\t\t<h3>SMTP settings</h3>\r\n\t\t\t\t<label for=\"mailId\">Email Id</label>\r\n\t\t\t\t<input type=\"text\" name=\"mailIdN\" id=\"mailId\" class=\"form-control\" [(ngModel)]=\"settings.mailId\">\r\n\t\t\t\t<label for=\"mailPass\">Email password</label>\r\n\t\t\t\t<input type=\"password\" name=\"mailPassN\" id=\"mailPass\" class=\"form-control\"  [(ngModel)]=\"settings.mailPass\">\r\n\t\t\t\t<label for=\"smtpHost\">SMTP host</label>\r\n\t\t\t\t<input type=\"text\" name=\"smtpHostN\" id=\"smtpHost\" class=\"form-control\"  [(ngModel)]=\"settings.smtpHost\">\r\n\t\t\t\t<label for=\"smtpPort\">SMTP port</label>\r\n\t\t\t\t<input type=\"text\" name=\"smtpPortN\" id=\"smtpPort\" class=\"form-control\"  [(ngModel)]=\"settings.smtpPort\">\r\n\t\t\t\t<br>\r\n\t\t\t\t<label for=\"testMail\">Test mail</label>\r\n\t\t\t\t<input type=\"text\" name=\"testMailN\" id=\"testMail\" class=\"form-control\">\r\n\t\t\t\t<input type=\"button\" name=\"testMailBtnN\" id=\"testMailBtn\" class=\"btn btn-primary\" value=\"Send\"/>\r\n\t\t\t</div>\r\n\t\t\t<hr/>\r\n\t\t\t<div class=\"form-group\">\r\n\t\t\t\t\t<h3>Testing settings</h3>\r\n\t\t\t\t\t<input type=\"checkbox\" class=\"form-check-input\" name=\"testingmodeN\"  [(ngModel)]=\"isTestingModeOn\"> \t\t\t\t\r\n\t\t\t\t\t<label for=\"testingmode\" class=\"form-check-label\" >Testing mode</label>\r\n\t\t\t\t\t<br/>\r\n\t\t\t\t\t<label for=\"mailId\">Complaince manager email</label>\r\n\t\t\t\t\t<input type=\"email\" name=\"complainceManagerEmailN\" id=\"complainceManagerEmail\" class=\"form-control\"  [(ngModel)]=\"settings.complainceManagerEmail\">\r\n\t\t\t\t\t\r\n\t\t\t\t\t<label for=\"mailId\">Complaince owner email</label>\r\n\t\t\t\t\t<input type=\"text\" name=\"complainceOwnerEmailN\" id=\"complainceOwnerEmail\" class=\"form-control\"  [(ngModel)]=\"settings.complainceOwnerEmail\">\r\n\t\t\t\t\t\r\n\t\t\t\t\t<label for=\"mailId\">Super manager email</label>\r\n\t\t\t\t\t<input type=\"text\" name=\"superManagerEmailN\" id=\"superManagerEmail\" class=\"form-control\"  [(ngModel)]=\"settings.superManagerEmail\">\r\n\t\t\t\t\t\r\n\t\t\t\t\t<label for=\"mailId\">Ar Tech email</label>\r\n\t\t\t\t\t<input type=\"text\" name=\"arTechEmailN\" id=\"arTechEmail\" class=\"form-control\"  [(ngModel)]=\"settings.arTechEmail\">\r\n\t\t\t\t</div>\r\n\t\t</form>\r\n</section>"
+
+/***/ }),
+
+/***/ "./src/app/settings/settings.component.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return SettingsComponent; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("./node_modules/@angular/core/esm5/core.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__service_SettingsService__ = __webpack_require__("./src/app/service/SettingsService.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__typeBean_SettingsBean__ = __webpack_require__("./src/app/typeBean/SettingsBean.ts");
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+var SettingsComponent = /** @class */ (function () {
+    function SettingsComponent(settingsService) {
+        this.settingsService = settingsService;
+        this.loaded = false;
+        this.settings = new __WEBPACK_IMPORTED_MODULE_2__typeBean_SettingsBean__["a" /* SettingsBean */]();
+        this.settingsSaveSuccess = false;
+        this.isTestingModeOn = false;
+    }
+    SettingsComponent.prototype.getSettings = function () {
+        var _this = this;
+        this.loaded = false;
+        this.settingsService.getSettings().then(function (response) {
+            _this.settings = response;
+            _this.loaded = true;
+            _this.isTestingModeOn = response.testingmode == 'true';
+        })
+            .catch(function (err) {
+            _this.loaded = true;
+        });
+    };
+    SettingsComponent.prototype.sendAlertsNow = function () {
+        this.settingsService.sendAlertsNow().then(function () { });
+    };
+    SettingsComponent.prototype.saveSettings = function () {
+        var _this = this;
+        this.settings.testingmode = this.isTestingModeOn;
+        this.settingsService.setSetting(this.settings).then(function () {
+            _this.settingsSaveSuccess = true;
+            setTimeout(function () { _this.settingsSaveSuccess = false; }, 2000);
+        });
+    };
+    SettingsComponent.prototype.ngOnInit = function () {
+        this.getSettings();
+    };
+    SettingsComponent = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
+            selector: 'app-settings',
+            template: __webpack_require__("./src/app/settings/settings.component.html"),
+            styles: [__webpack_require__("./src/app/settings/settings.component.css")],
+            providers: [__WEBPACK_IMPORTED_MODULE_1__service_SettingsService__["a" /* SettingsService */]]
+        }),
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__service_SettingsService__["a" /* SettingsService */]])
+    ], SettingsComponent);
+    return SettingsComponent;
+}());
+
+
+
+/***/ }),
+
 /***/ "./src/app/sidebar/sidebar.component.css":
 /***/ (function(module, exports) {
 
@@ -3220,7 +3706,7 @@ module.exports = "  \r\n  /*---- FIM SLIDE MENU*/\r\n  \r\n/* Shrinking the side
 /***/ "./src/app/sidebar/sidebar.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<aside>\r\n  <nav class=\"navbar navbar-inverse sidebar navbar-fixed-top\" role=\"navigation\">\r\n      <link href=\"//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css\" rel=\"stylesheet\">\r\n\r\n\r\n<div class=\"nav-side-menu\">\r\n    <i class=\"fa fa-bars fa-2x toggle-btn\" data-toggle=\"collapse\" data-target=\"#menu-content\"></i>\r\n  \r\n        <div class=\"menu-list\">\r\n  \r\n            <ul id=\"menu-content\" class=\"menu-content collapse out\">\r\n\r\n               <li [routerLinkActive]=\"['active']\" [routerLink]=\"['dashboard']\">\r\n                  <a >\r\n                  <i class=\"fa fa-dashboard fa-lg\"></i> Dashboard\r\n                  </a>\r\n                </li>\r\n                <li [routerLinkActive]=\"['active']\" [routerLink]=\"['activities']\">\r\n                  <a >\r\n                  <i class=\"fa fa-calendar fa-lg\"></i> Activities\r\n                  </a>\r\n                </li>\r\n                <li [routerLinkActive]=\"['active']\" [routerLink]=\"['report']\" *ngIf=\"userType=='cManager'||userType=='sManager'||userType=='ArTechUser'\">\r\n                  <a >\r\n                  <i class=\"fa fa-file-text fa-lg\"></i> Report\r\n                  </a>\r\n                </li>\r\n                <li [routerLink]=\"['repository']\" [routerLinkActive]=\"['active']\" *ngIf=\"userType=='cManager'||userType=='sManager'||userType=='ArTechUser'\">\r\n                  <a >\r\n                  <i class=\"fa fa-database fa-lg\"></i> Repository\r\n                  </a>\r\n                </li>\r\n                <!-- <li [routerLinkActive]=\"['active']\" *ngIf=\"userType=='cManager'||userType=='sManager'||userType=='ArTechUser'\">\r\n                  <a [routerLink]=\"['repositorydelayed']\">\r\n                  <i class=\"fa fa-database fa-lg\"></i> Repository(Delayed)\r\n                  </a>\r\n                </li> -->\r\n\r\n<!--                 <li  data-toggle=\"collapse\" data-target=\"#products\">\r\n                  <a href=\"#products\"><i class=\"fa fa-gift fa-lg\"></i> My Activity <span class=\"arrow\"></span></a>\r\n                </li>\r\n                <ul class=\"sub-menu collapse\" id=\"products\">\r\n                    <li><a href=\"#\">Pending</a></li>\r\n                    <li><a href=\"#\">Complied</a></li>\r\n                    <li><a href=\"#\">Review</a></li>\r\n                    <li><a href=\"#\">Descripency</a></li>\r\n                </ul>\r\n\r\n\r\n                <li data-toggle=\"collapse\" data-target=\"#service\" >\r\n                  <a href=\"#\"><i class=\"fa fa-globe fa-lg\"></i> Risk <span class=\"arrow\"></span></a>\r\n                </li>  \r\n                <ul class=\"sub-menu collapse\" id=\"service\">\r\n                    <li class=\"active\"><a href=\"#\">High</a></li>\r\n                    <li><a href=\"#\">Medium</a></li>\r\n                    <li><a href=\"#\">Low</a></li>\r\n                </ul>\r\n\r\n\r\n                <li data-toggle=\"collapse\" data-target=\"#new\" >\r\n                  <a href=\"#new\"><i class=\"fa fa-car fa-lg\"></i> Compliance Area <span class=\"arrow\"></span></a>\r\n                </li>\r\n                <ul class=\"sub-menu collapse\" id=\"new\">\r\n                    <li><a href=\"#\">TBD</a></li>\r\n                    <li><a href=\"#\">TBD</a></li>\r\n                    <li><a href=\"#\">TBD</a></li>\r\n                </ul>\r\n\r\n                <li data-toggle=\"collapse\" data-target=\"#new1\" >\r\n                  <a href=\"#\"><i class=\"fa fa-car fa-lg\"></i> Report <span class=\"arrow\"></span></a>\r\n                </li>\r\n                <ul class=\"sub-menu collapse\" id=\"new1\">\r\n                    <li><a href=\"#\">Monthly</a></li>\r\n                    <li><a href=\"#\">Yearly</a></li>\r\n                </ul>\r\n                <li data-toggle=\"collapse\" data-target=\"#new2\" >\r\n                  <a href=\"#\"><i class=\"fa fa-car fa-lg\"></i> Others <span class=\"arrow\"></span></a>\r\n                </li>\r\n                <ul class=\"sub-menu collapse\" id=\"new2\">\r\n                    <li><a href=\"#\">Aggrement</a></li>\r\n                    <li><a href=\"#\">License</a></li>\r\n                </ul>\r\n                <li data-toggle=\"collapse\" data-target=\"#new3\" >\r\n                  <a href=\"#\"><i class=\"fa fa-car fa-lg\"></i> Admin <span class=\"arrow\"></span></a>\r\n                </li>\r\n                <ul class=\"sub-menu collapse\" id=\"new3\">\r\n                    <li><a href=\"#\">Contact us</a></li>\r\n                    <li><a href=\"#\">Reminder setting</a></li>\r\n                    <li><a href=\"#\">Master data mapped</a></li>\r\n                </ul>\r\n -->            </ul>\r\n     \r\n        \r\n  </div>\r\n  <div class=\"menuBottom\" *ngIf=\"userType=='cManager'||userType=='sManager'||userType=='ArTechUser'\">\r\n      <label *ngIf=\"userType=='sManager' ||userType=='ArTechUser'\">Company</label>\r\n      <select *ngIf=\"userType=='sManager' ||userType=='ArTechUser'\" class=\"btn btn-outline-primary\" style=\"width: 100%;\" (change)=\"onCompanyChange($event.target.value)\">\r\n        <!-- <option value=\"all\">All</option> -->\r\n        <option value={{allCompanyIds}}>All</option>\r\n        <option *ngFor=\"let company of company_json\" value={{company.companyId}}>{{company.name}}</option>\r\n      </select>\r\n    <label>Location</label>\r\n    <select class=\"btn btn-outline-primary\" style=\"width: 100%;\" (change)=\"onLocationChange($event.target.value)\">\r\n      <option value=\"all\">All</option>\r\n      <option *ngFor=\"let companyLocation of companyLocations\" value={{companyLocation.locationId}}>{{companyLocation.locationName}}</option>\r\n    </select>\r\n    \r\n  </div>\r\n</div>\r\n  </nav>\r\n  \r\n</aside>\r\n\r\n<!-- <div class=\"main mainclass\"> -->\r\n  <!-- <app-compliance-dashboard></app-compliance-dashboard> -->\r\n\t<!--<app-complience-calendar></app-complience-calendar-->\r\n  <!-- <app-compliance-report></app-compliance-report> -->\r\n<!-- </div> -->"
+module.exports = "<aside>\r\n  <nav class=\"navbar navbar-inverse sidebar navbar-fixed-top\" role=\"navigation\">\r\n      <link href=\"//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css\" rel=\"stylesheet\">\r\n\r\n\r\n<div class=\"nav-side-menu\">\r\n    <i class=\"fa fa-bars fa-2x toggle-btn\" data-toggle=\"collapse\" data-target=\"#menu-content\"></i>\r\n  \r\n        <div class=\"menu-list\">\r\n  \r\n            <ul id=\"menu-content\" class=\"menu-content collapse out\" *ngIf=\"userType!='master'\">\r\n\r\n               <li [routerLinkActive]=\"['active']\" [routerLink]=\"['dashboard']\">\r\n                  <a >\r\n                  <i class=\"fa fa-dashboard fa-lg\"></i> Dashboard\r\n                  </a>\r\n                </li>\r\n                <li [routerLinkActive]=\"['active']\" [routerLink]=\"['activities']\">\r\n                  <a >\r\n                  <i class=\"fa fa-calendar fa-lg\"></i> Activities\r\n                  </a>\r\n                </li>\r\n                <li [routerLinkActive]=\"['active']\" [routerLink]=\"['report']\" *ngIf=\"userType=='cManager'||userType=='sManager'||userType=='ArTechUser'\">\r\n                  <a >\r\n                  <i class=\"fa fa-file-text fa-lg\"></i> Report\r\n                  </a>\r\n                </li>\r\n                <li [routerLink]=\"['repository']\" [routerLinkActive]=\"['active']\" *ngIf=\"userType=='cManager'||userType=='sManager'||userType=='ArTechUser'\">\r\n                  <a >\r\n                  <i class=\"fa fa-database fa-lg\"></i> Repository\r\n                  </a>\r\n                </li>\r\n                <!-- <li [routerLinkActive]=\"['active']\" *ngIf=\"userType=='cManager'||userType=='sManager'||userType=='ArTechUser'\">\r\n                  <a [routerLink]=\"['repositorydelayed']\">\r\n                  <i class=\"fa fa-database fa-lg\"></i> Repository(Delayed)\r\n                  </a>\r\n                </li> -->\r\n\r\n<!--                 <li  data-toggle=\"collapse\" data-target=\"#products\">\r\n                  <a href=\"#products\"><i class=\"fa fa-gift fa-lg\"></i> My Activity <span class=\"arrow\"></span></a>\r\n                </li>\r\n                <ul class=\"sub-menu collapse\" id=\"products\">\r\n                    <li><a href=\"#\">Pending</a></li>\r\n                    <li><a href=\"#\">Complied</a></li>\r\n                    <li><a href=\"#\">Review</a></li>\r\n                    <li><a href=\"#\">Descripency</a></li>\r\n                </ul>\r\n\r\n\r\n                <li data-toggle=\"collapse\" data-target=\"#service\" >\r\n                  <a href=\"#\"><i class=\"fa fa-globe fa-lg\"></i> Risk <span class=\"arrow\"></span></a>\r\n                </li>  \r\n                <ul class=\"sub-menu collapse\" id=\"service\">\r\n                    <li class=\"active\"><a href=\"#\">High</a></li>\r\n                    <li><a href=\"#\">Medium</a></li>\r\n                    <li><a href=\"#\">Low</a></li>\r\n                </ul>\r\n\r\n\r\n                <li data-toggle=\"collapse\" data-target=\"#new\" >\r\n                  <a href=\"#new\"><i class=\"fa fa-car fa-lg\"></i> Compliance Area <span class=\"arrow\"></span></a>\r\n                </li>\r\n                <ul class=\"sub-menu collapse\" id=\"new\">\r\n                    <li><a href=\"#\">TBD</a></li>\r\n                    <li><a href=\"#\">TBD</a></li>\r\n                    <li><a href=\"#\">TBD</a></li>\r\n                </ul>\r\n\r\n                <li data-toggle=\"collapse\" data-target=\"#new1\" >\r\n                  <a href=\"#\"><i class=\"fa fa-car fa-lg\"></i> Report <span class=\"arrow\"></span></a>\r\n                </li>\r\n                <ul class=\"sub-menu collapse\" id=\"new1\">\r\n                    <li><a href=\"#\">Monthly</a></li>\r\n                    <li><a href=\"#\">Yearly</a></li>\r\n                </ul>\r\n                <li data-toggle=\"collapse\" data-target=\"#new2\" >\r\n                  <a href=\"#\"><i class=\"fa fa-car fa-lg\"></i> Others <span class=\"arrow\"></span></a>\r\n                </li>\r\n                <ul class=\"sub-menu collapse\" id=\"new2\">\r\n                    <li><a href=\"#\">Aggrement</a></li>\r\n                    <li><a href=\"#\">License</a></li>\r\n                </ul>\r\n                <li data-toggle=\"collapse\" data-target=\"#new3\" >\r\n                  <a href=\"#\"><i class=\"fa fa-car fa-lg\"></i> Admin <span class=\"arrow\"></span></a>\r\n                </li>\r\n                <ul class=\"sub-menu collapse\" id=\"new3\">\r\n                    <li><a href=\"#\">Contact us</a></li>\r\n                    <li><a href=\"#\">Reminder setting</a></li>\r\n                    <li><a href=\"#\">Master data mapped</a></li>\r\n                </ul>\r\n -->            </ul>\r\n\r\n  <ul id=\"menu-content\" class=\"menu-content collapse out\" *ngIf=\"userType=='master'\">\r\n\r\n    <li [routerLinkActive]=\"['active']\" [routerLink]=\"['settings']\">\r\n       <a>\r\n       <i class=\"fa fa-dashboard fa-lg\"></i> Settings\r\n       </a>\r\n     </li>\r\n     <li [routerLinkActive]=\"['active']\" [routerLink]=\"['stats']\">\r\n        <a>\r\n        <i class=\"fa fa-dashboard fa-lg\"></i> Statistics\r\n        </a>\r\n      </li>\r\n     </ul>\r\n     \r\n        \r\n  </div>\r\n  <div class=\"menuBottom\" *ngIf=\"userType=='cManager'||userType=='sManager'||userType=='ArTechUser'\">\r\n      <label *ngIf=\"userType=='sManager' ||userType=='ArTechUser'\">Company</label>\r\n      <select *ngIf=\"userType=='sManager' ||userType=='ArTechUser'\" class=\"btn btn-outline-primary\" style=\"width: 100%;\" (change)=\"onCompanyChange($event.target.value)\">\r\n        <!-- <option value=\"all\">All</option> -->\r\n        <option value={{allCompanyIds}}>All</option>\r\n        <option *ngFor=\"let company of company_json\" value={{company.companyId}}>{{company.name}}</option>\r\n      </select>\r\n    <label>Location</label>\r\n    <select class=\"btn btn-outline-primary\" style=\"width: 100%;\" (change)=\"onLocationChange($event.target.value)\">\r\n      <option value=\"all\">All</option>\r\n      <option *ngFor=\"let companyLocation of companyLocations\" value={{companyLocation.locationId}}>{{companyLocation.locationName}}</option>\r\n    </select>\r\n    \r\n  </div>\r\n</div>\r\n  </nav>\r\n  \r\n</aside>\r\n\r\n<!-- <div class=\"main mainclass\"> -->\r\n  <!-- <app-compliance-dashboard></app-compliance-dashboard> -->\r\n\t<!--<app-complience-calendar></app-complience-calendar-->\r\n  <!-- <app-compliance-report></app-compliance-report> -->\r\n<!-- </div> -->"
 
 /***/ }),
 
@@ -3330,6 +3816,21 @@ var SidebarComponent = /** @class */ (function () {
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__service_locationService__["a" /* LocationService */], __WEBPACK_IMPORTED_MODULE_2__service_loginService__["a" /* LoginService */], __WEBPACK_IMPORTED_MODULE_3__angular_router__["b" /* Router */], __WEBPACK_IMPORTED_MODULE_3__angular_router__["a" /* ActivatedRoute */]])
     ], SidebarComponent);
     return SidebarComponent;
+}());
+
+
+
+/***/ }),
+
+/***/ "./src/app/typeBean/SettingsBean.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return SettingsBean; });
+var SettingsBean = /** @class */ (function () {
+    function SettingsBean() {
+    }
+    return SettingsBean;
 }());
 
 

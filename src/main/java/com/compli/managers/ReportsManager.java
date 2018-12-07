@@ -271,9 +271,6 @@ public class ReportsManager {
 	        params.put("TIME_PERIOD",month+" ("+finnancialYear+")");
 	        params.put("TIME_PERIOD_TYPE",monthNum!=null?"month":quarter!=null?"quarter":"year");
 	        
-	        String path2 = "C:\\DDrive\\Source\\Compliance\\compliance-tool\\ComplianceToolServer\\ComplianceTool\\src\\main\\resources\\reports\\";
-	        String path1 = "C:/report/reports/";
-	        String path = path2;
 	        JasperReport jasperCompliReport = JasperCompileManager.compileReport(this.getClass().getResourceAsStream("/reports/ComplianceReport.jrxml"));
 	        JasperPrint jasperPrint = JasperFillManager.fillReport(jasperCompliReport, params,beanCollectionDataAll);
 

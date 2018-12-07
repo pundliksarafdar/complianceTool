@@ -1,10 +1,24 @@
 package com.notifier.emailbean;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import com.compli.managers.SettingsManager;
+
 public class PendingForDiscrepancy {
 	String user;
+	String email;
 	String activityName;
 	String month;
+	Date periodictyDate;
+	String serverUrl = SettingsManager.getStaticSettings().getServerName();
 	
+	public String getServerUrl() {
+		return serverUrl;
+	}
+	public void setServerUrl(String serverUrl) {
+		this.serverUrl = serverUrl;
+	}
 	public String getUser() {
 		return user;
 	}
@@ -12,7 +26,8 @@ public class PendingForDiscrepancy {
 		return activityName;
 	}
 	public String getMonth() {
-		return month;
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MMMM");
+		return simpleDateFormat.format(periodictyDate);
 	}
 	public void setUser(String user) {
 		this.user = user;
@@ -23,6 +38,19 @@ public class PendingForDiscrepancy {
 	public void setMonth(String month) {
 		this.month = month;
 	}
+	public Date getPeriodictyDate() {
+		return periodictyDate;
+	}
+	public void setPeriodictyDate(Date periodictyDate) {
+		this.periodictyDate = periodictyDate;
+	}
+	public String getEmail() {
+		return email;
+	}
+	public void setEmail(String email) {
+		this.email = email;
+	}
+	
 	
 	
 }

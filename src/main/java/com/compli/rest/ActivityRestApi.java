@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
 
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
@@ -21,6 +22,7 @@ import com.compli.annotation.Authorised;
 import com.compli.annotation.Authorised.ROLE;
 import com.compli.bean.ComplyStatusBean;
 import com.compli.managers.ActivityManager;
+import com.compli.managers.AuthorisationManager;
 
 @Path("activity")
 @Produces(MediaType.APPLICATION_JSON)
@@ -32,7 +34,7 @@ public class ActivityRestApi {
 	public Response getAllActivityWithDescription(@PathParam("companyId")String companyId,
 			@QueryParam("activitySeverity")String activitySeverity,@QueryParam("month")String month,@QueryParam("year")String year,
 			@QueryParam("quarter")String quarter, 
-			@HeaderParam("auth")String auth,@HeaderParam("location")String location){
+			@HeaderParam("auth")String auth,@HeaderParam("location")String location) throws ExecutionException{
 		ActivityManager activityManager;
 		if(location==null || "all".equals(location)){
 			activityManager = new ActivityManager(auth);
@@ -40,7 +42,18 @@ public class ActivityRestApi {
 			activityManager = new ActivityManager(auth,location);
 		}
 		if(null==activitySeverity || activitySeverity.isEmpty() || "undefined".equals(activitySeverity) || "total".equals(activitySeverity))  {
-			return Response.ok(activityManager.getAllActivitiesWithDescriptionForCompanyWithSeverity(companyId,"Pending compliance")).build();
+			String userType = AuthorisationManager.getUserCatche(auth).getUserTypeId();
+			List<Map<String, Object>> activities = new ArrayList<Map<String,Object>>();
+			//if user is ARTerch or sManager add Pending for review as it will contain Peding for descrepancy activities
+			if(userType.equals("sManager") || userType.equals("ArTechUser")){
+				activities = activityManager.getAllActivitiesWithDescriptionForCompanyWithSeverity(companyId,"Pending for review");
+			}else{
+				activities = activityManager.getAllActivitiesWithDescriptionForCompanyWithSeverity(companyId,"Pending for Discrepancy");
+			}
+			activities.addAll(activityManager.getAllActivitiesWithDescriptionForCompanyWithSeverity(companyId,"Pending compliance"));
+			//activities.addAll(activityManager.getAllActivitiesWithDescriptionForCompanyWithSeverity(companyId,"Pending for review"));
+			return Response.ok(activities).build();
+				
 		}else if("both".equalsIgnoreCase(activitySeverity)){//Both comes from repositories if both are not checked
 			List<Map<String, Object>> activityList1 = new ArrayList<Map<String,Object>>();
 			List<Map<String, Object>> activityList2 = new ArrayList<Map<String,Object>>();
@@ -99,7 +112,8 @@ public class ActivityRestApi {
 			@QueryParam("compliedDelayed")boolean compliedDelayed,@QueryParam("pendingDescrepancy")boolean pendingDescrepancy,
 			@HeaderParam("auth")String auth,ComplyStatusBean complyStatusBean){
 		ActivityManager activityManager = new ActivityManager(auth);
-		return Response.ok(activityManager.changeActivityStatus(companyId, activityId, isComplied,pendingComplied,compliedInTime,compliedDelayed,pendingDescrepancy,complyStatusBean.getRemarks())).build();
+		return Response.ok(activityManager.changeActivityStatus(companyId, activityId, isComplied,pendingComplied,compliedInTime,compliedDelayed,pendingDescrepancy,
+				complyStatusBean.getRemarks(),complyStatusBean.getCompliedDate())).build();
 	}
 	
 	@GET
@@ -125,5 +139,21 @@ public class ActivityRestApi {
 			@HeaderParam("auth")String auth){
 		ActivityManager activityManager = new ActivityManager(auth);
 		return Response.ok(activityManager.getAllActivitiesWithDescriptionForCompanyWithSeverityAndLaw(companyId, status, activityLaw)).build();
+	}
+	
+	@POST
+	@Path("/requestToReopen/{companyId}/{activityId}")
+	public Response requestToReopen(@PathParam("companyId")String companyId,@PathParam("activityId")String activityId,@HeaderParam("auth")String auth){
+		ActivityManager activityManager = new ActivityManager(auth);
+		boolean reOpened = activityManager.requestToReopen(activityId, companyId);
+		return Response.ok(reOpened).build();
+	}
+	
+	@POST
+	@Path("/changeToReopen/{companyId}/{activityId}")
+	public Response changeToOpen(@PathParam("companyId")String companyId,@PathParam("activityId")String activityId,@HeaderParam("auth")String auth){
+		ActivityManager activityManager = new ActivityManager(auth);
+		boolean reOpened = activityManager.changeToOpen(activityId, companyId);
+		return Response.ok(reOpened).build();
 	}
 }

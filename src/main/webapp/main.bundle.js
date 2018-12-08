@@ -835,7 +835,6 @@ var ComplianceActivitiesComponent = /** @class */ (function () {
     };
     ComplianceActivitiesComponent.prototype.changeStatus = function (activity, activityId, companyId, event) {
         var _this = this;
-        console.log(activity);
         var self = this;
         this.latestActivityId = activityId;
         this.remarks = undefined;
@@ -843,7 +842,6 @@ var ComplianceActivitiesComponent = /** @class */ (function () {
         this.captureEvent = event;
         this.repositoryService.getRepositoryFilesData(companyId, activityId).then(function (response) {
             _this.loadFileDetails(response);
-            console.log(_this.filesDetails);
             if (_this.filesDetails && _this.filesDetails.length == 0) {
                 self.statusCHangeModalTitle = "Not Applicable";
                 self.statusCHangeModalHelp = "Remark mandatory for not applicable activities.";
@@ -856,7 +854,6 @@ var ComplianceActivitiesComponent = /** @class */ (function () {
                 });
             }
             else {
-                console.log(activityId, companyId, event);
                 _this.submitStatusChange(companyId, activityId, _this.remarks, event, 'complied', undefined);
                 // this.activityService.setActivityStatus(activityId).then(resp=>{
                 //   event.target.disabled = true;
@@ -881,8 +878,6 @@ var ComplianceActivitiesComponent = /** @class */ (function () {
         }
     };
     ComplianceActivitiesComponent.prototype.markCompliedDate = function () {
-        console.log(this.complianceDate);
-        console.log(this.latestCompanyId);
         if (this.complianceDate && this.complianceDate != "") {
             this.submitStatusChange(this.latestCompanyId, this.latestActivityId, this.complianceDate, this.captureEvent, this.captureChange, true);
             this.modalReference.close();
@@ -901,7 +896,6 @@ var ComplianceActivitiesComponent = /** @class */ (function () {
     };
     /*
       downloadFile(activityId:string,companyId:string,fileId:string){
-        console.log(activityId,companyId,fileId);
         this.activityService.downloadFile(fileId);
       }
     */
@@ -931,14 +925,12 @@ var ComplianceActivitiesComponent = /** @class */ (function () {
         });
     };
     ComplianceActivitiesComponent.prototype.loadFileDetails = function (response) {
-        console.log("Files response", response);
         this.filesDetails = response;
     };
     ComplianceActivitiesComponent.prototype.downloadFile = function (fileId) {
         this.repositoryService.downloadFile(fileId);
     };
     ComplianceActivitiesComponent.prototype.setFiles = function (event) {
-        //console.log("Hoiiiiioioio...",event.target.files);
         for (var _i = 0, _a = event.target.files; _i < _a.length; _i++) {
             var files = _a[_i];
             this.filesToUpload.push(files);
@@ -946,7 +938,6 @@ var ComplianceActivitiesComponent = /** @class */ (function () {
     };
     ComplianceActivitiesComponent.prototype.uploadComplete = function (companyId, activityId, resp) {
         var _this = this;
-        console.log("Upload complete", resp);
         this.filesToUpload = [];
         this.filesUploading = false;
         this.repositoryService.getRepositoryFilesData(companyId, activityId).then(function (response) { _this.loadFileDetails(response); })
@@ -954,7 +945,6 @@ var ComplianceActivitiesComponent = /** @class */ (function () {
     };
     ComplianceActivitiesComponent.prototype.uploadSelectedFiles = function (activityId, companyId) {
         var _this = this;
-        console.log(companyId, activityId);
         var self = this;
         this.filesUploading = true;
         this.activityService.uploadFile(this.filesToUpload, companyId, activityId, function (resp) { self.uploadComplete(companyId, activityId, resp); }).catch(function (err) { _this.filesUploading = false; _this.handleError(err); });
@@ -1110,7 +1100,19 @@ var ComplianceActivitiesComponent = /** @class */ (function () {
                             return '<a href="#" class="requestToOpen">Request to Open</a>';
                         }
                         else if (full.reOpen) {
-                            return 'Requested to Open';
+                            if (self.userType == 'ArTechUser') {
+                                return "<select  id='arStatusChange' class='btn btn-outline-primary' style='width: 100%;'>" +
+                                    "<option value='select'>Select</option>" +
+                                    "<option value='notDue'>Not Due</option>" +
+                                    "<option value='compliedInTime'>Complied-in-time</option>" +
+                                    "<option value='compliedDelayed'>Complied-Delayed</option>" +
+                                    "<option value='pendingCompliance'>Pending Compliance</option>" +
+                                    "<option value='pendingDescrepancy'>Pending for Discrepancy</option>" +
+                                    "</select>";
+                            }
+                            else {
+                                return 'Requested to Open';
+                            }
                         }
                     }
                 }, {
@@ -1216,7 +1218,6 @@ var ComplianceActivitiesComponent = /** @class */ (function () {
                     }
                 }
                 catch (error) {
-                    console.log("DT Rerender Exception: " + error);
                 }
                 return [2 /*return*/, Promise.resolve(newSettings)];
             });
@@ -1245,7 +1246,6 @@ var ComplianceActivitiesComponent = /** @class */ (function () {
         }
     };
     ComplianceActivitiesComponent.prototype.onArStatusChange = function (event) {
-        console.log(event);
     };
     ComplianceActivitiesComponent.prototype.onFilterChange = function () {
         this.complied_type = [];

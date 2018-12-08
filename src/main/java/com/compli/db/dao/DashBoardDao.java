@@ -50,7 +50,7 @@ public class DashBoardDao {
 				"on companyWithActivity.lawId = lawmaster.lawId) companyWithLaw	"+	
 			"on riskmaster.riskId = companyWithLaw.riskId) companyWithRisk "+
 		"on periodicitymaster.periodicityId = companyWithRisk.periodicityId) companyWithPeriodicity "+ 
-	"on periodicitydatemaster.periodicityDateId = companyWithPeriodicity.periodicityDateId and periodicitydatemaster.duedate<NOW()) companyWithPerDate  "+
+	"on periodicitydatemaster.periodicityDateId = companyWithPeriodicity.periodicityDateId and ((periodicitydatemaster.duedate<NOW() and true=?) or ((periodicitydatemaster.duedate<=LAST_DAY(NOW()) and true=?)))) companyWithPerDate  "+
 		"on companyWithPerDate.companyId = activity.companyId and companyWithPerDate.activityId = activity.activityId and activity.isComplianceRejected=false order by periodicityDateId desc;";
 	
 	private String activityQueryWithLocation = 
@@ -70,7 +70,7 @@ public class DashBoardDao {
 				"on companyWithActivity.lawId = lawmaster.lawId) companyWithLaw	"+	
 			"on riskmaster.riskId = companyWithLaw.riskId) companyWithRisk "+
 		"on periodicitymaster.periodicityId = companyWithRisk.periodicityId) companyWithPeriodicity "+ 
-	"on periodicitydatemaster.periodicityDateId = companyWithPeriodicity.periodicityDateId and periodicitydatemaster.duedate<NOW()) companyWithPerDate  "+
+	"on periodicitydatemaster.periodicityDateId = companyWithPeriodicity.periodicityDateId and ((periodicitydatemaster.duedate<NOW() and true=?) or ((periodicitydatemaster.duedate<NOW() and true=?)))) companyWithPerDate  "+
 		"on companyWithPerDate.companyId = activity.companyId and companyWithPerDate.activityId = activity.activityId and activity.isComplianceRejected=false order by periodicityDateId desc; ";
 	
 	private String activityQueryFullUserWithLocation = 
@@ -90,7 +90,7 @@ public class DashBoardDao {
 				"on companyWithActivity.lawId = lawmaster.lawId) companyWithLaw	"+	
 			"on riskmaster.riskId = companyWithLaw.riskId) companyWithRisk "+
 		"on periodicitymaster.periodicityId = companyWithRisk.periodicityId) companyWithPeriodicity "+ 
-	"on periodicitydatemaster.periodicityDateId = companyWithPeriodicity.periodicityDateId and periodicitydatemaster.duedate<NOW()) companyWithPerDate  "+
+	"on periodicitydatemaster.periodicityDateId = companyWithPeriodicity.periodicityDateId and ((periodicitydatemaster.duedate<NOW() and true=?) or ((periodicitydatemaster.duedate<NOW() and true=?)))) companyWithPerDate  "+
 		"on companyWithPerDate.companyId = activity.companyId and companyWithPerDate.activityId = activity.activityId and activity.isComplianceRejected=false order by periodicityDateId desc;";
 	
 	///////////////////////////////////////////////// Thiese are only open activities //////////////////////////////////////////////////////////////////////////////
@@ -647,11 +647,11 @@ private String activityQueryByLawAndStatusFullUser =
 		return activities;
 	}
 	
-	public List<Map<String, Object>> getAllOpenActivitiesWithDescriptionForCompany(String companyId,boolean isFullUser){
+	public List<Map<String, Object>> getAllActivitiesWithDescriptionForCompany(String companyId,boolean isFullUser,boolean tillDate,boolean tillMonthEnd){
 		companyId = "('"+companyId.replace(",", "','")+"')";
 		if(isFullUser){
 			activityQueryFullUser = activityQueryFullUser.replace("(?)", companyId);
-			List<Map<String, Object>> activities = this.jdbcTemplate.queryForList(activityQueryFullUser);
+			List<Map<String, Object>> activities = this.jdbcTemplate.queryForList(activityQueryFullUser,tillDate,tillMonthEnd);
 			return activities;
 		}else{
 			activityQuery = activityQuery.replace("(?)", companyId);
@@ -660,24 +660,11 @@ private String activityQueryByLawAndStatusFullUser =
 		}
 	}
 	
-	public List<Map<String, Object>> getAllActivitiesWithDescriptionForCompany(String companyId,boolean isFullUser){
-		companyId = "('"+companyId.replace(",", "','")+"')";
-		if(isFullUser){
-			activityQueryFullUser = activityQueryFullUser.replace("(?)", companyId);
-			List<Map<String, Object>> activities = this.jdbcTemplate.queryForList(activityQueryFullUser);
-			return activities;
-		}else{
-			activityQuery = activityQuery.replace("(?)", companyId);
-			List<Map<String, Object>> activities = this.jdbcTemplate.queryForList(activityQuery);
-			return activities;
-		}
-	}
-	
-	public List<Map<String, Object>> getAllActivitiesWithDescriptionForCompany(String companyId,boolean isFullUser,String locationId){
+	public List<Map<String, Object>> getAllActivitiesWithDescriptionForCompany(String companyId,boolean isFullUser,String locationId,boolean tillDate,boolean tillMonthEnd){
 		companyId = "('"+companyId.replace(",", "','")+"')";
 		if(isFullUser){
 			activityQueryFullUserWithLocation = activityQueryFullUserWithLocation.replace("(?)", companyId);
-			List<Map<String, Object>> activities = this.jdbcTemplate.queryForList(activityQueryFullUserWithLocation,locationId);
+			List<Map<String, Object>> activities = this.jdbcTemplate.queryForList(activityQueryFullUserWithLocation,locationId,tillDate,tillMonthEnd);
 			return activities;
 		}else{
 			activityQueryWithLocation = activityQueryWithLocation.replace("(?)", companyId);

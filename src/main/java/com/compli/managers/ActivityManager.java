@@ -35,11 +35,11 @@ public class ActivityManager {
 	}
 	
 	public List<Map<String, Object>> getAllActivitiesWithDescriptionForCompany(String companyId){
-		return this.dashBoardDao.getAllActivitiesWithDescriptionForCompany(companyId,this.isFullUser);
+		return this.dashBoardDao.getAllActivitiesWithDescriptionForCompany(companyId,this.isFullUser,true,false);
 	}
 	
 	public List<Map<String, Object>> getAllActivitiesWithDescriptionForCompany(String companyId,String locationId){
-		return this.dashBoardDao.getAllActivitiesWithDescriptionForCompany(companyId,this.isFullUser,locationId);
+		return this.dashBoardDao.getAllActivitiesWithDescriptionForCompany(companyId,this.isFullUser,locationId,false,true);
 	}
 	
 	public List<Map<String, Object>> getAllActivitiesWithDescriptionForCompanyWithRisk(String companyId,String riskId){
@@ -60,9 +60,9 @@ public class ActivityManager {
 	public List<Map<String, Object>> getAllActivitiesWithDescriptionForCompanyWithSeverity(String companyId,String severity){
 		List<Map<String, Object>> allActivity = null;
 		if(this.locationId==null){	
-			allActivity = this.dashBoardDao.getAllActivitiesWithDescriptionForCompany(companyId,true);
+			allActivity = this.dashBoardDao.getAllActivitiesWithDescriptionForCompany(companyId,true,false,true);
 		}else{
-			allActivity = this.dashBoardDao.getAllActivitiesWithDescriptionForCompany(companyId,true,this.locationId);
+			allActivity = this.dashBoardDao.getAllActivitiesWithDescriptionForCompany(companyId,true,this.locationId,true,false);
 		}
 		List<Map<String, Object>> filteredActivity = new ArrayList<Map<String,Object>>();
 		for(int i=0;i<allActivity.size();i++){

@@ -47,7 +47,7 @@ public class AlertsManager {
 			boolean isEnabled = isSendEnabled(pendingComplainceBean.getCompanyId(), rType, USER_TYPE.CM);
 			if(isEnabled){
 				String emailToSend = SettingsManager.getCManagerEmail(pendingComplainceBean.getEmail());
-				EmailManager.sendMailForReminder(pendingComplainceBean, emailToSend);
+				EmailManager.sendMailForReminder("Reminder 1 : Pending for complaince ",pendingComplainceBean, emailToSend);
 			}
 		}
 		
@@ -57,7 +57,7 @@ public class AlertsManager {
 			boolean isEnabled = isSendEnabled(pendingComplainceBean.getCompanyId(), rType, USER_TYPE.CO);
 			if(isEnabled){
 				String emailToSend = SettingsManager.getCManagerEmail(pendingComplainceBean.getEmail());
-				EmailManager.sendMailForReminder(pendingComplainceBean, emailToSend);
+				EmailManager.sendMailForReminder("Reminder 2 : Pending for complaince ",pendingComplainceBean, emailToSend);
 			}
 		}
 		
@@ -69,13 +69,13 @@ public class AlertsManager {
 			boolean isEnabledCO = isSendEnabled(pendingComplainceBean.getCompanyId(), rType, USER_TYPE.CO);
 			if(isEnabledCO){
 				String emailToSend = SettingsManager.getCOwnerEmail(pendingComplainceBean.getEmail());
-				EmailManager.sendMailForReminder(pendingComplainceBean, emailToSend);
+				EmailManager.sendMailForReminder("Followup : Pending for complaince",pendingComplainceBean, emailToSend);
 			}
 			
 			boolean isEnabledCM = isSendEnabled(pendingComplainceBean.getCompanyId(), rType, USER_TYPE.CM);
 			if(isEnabledCM){
 				String emailToSend = SettingsManager.getCManagerEmail(pendingComplainceBean.getEmail());
-				EmailManager.sendMailForReminder(pendingComplainceBean, emailToSend);
+				EmailManager.sendMailForReminder("Followup : Pending for complaince",pendingComplainceBean, emailToSend);
 			}
 		}
 	}

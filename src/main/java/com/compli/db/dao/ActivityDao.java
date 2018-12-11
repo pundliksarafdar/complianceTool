@@ -82,7 +82,7 @@ public class ActivityDao {
 						"(select lawId,periodicityId,companyId,isComplied,activityId,activityName,dueDate from periodicitydatemaster join  "+
 							"(SELECT activity.companyId,activitymaster.lawId,activitymaster.periodicityId,activitymaster.periodicityDateId,activity.isComplied,activity.activityId,activitymaster.activityName FROM activity join "+ 
 								"activitymaster on activity.activityId = activitymaster.activityId) activityDueDate  "+
-							"on periodicitydatemaster.periodicityDateId=activityDueDate.periodicityDateId where dueDate = adddate(DATE(now()),-?)  and isComplied=false) activityWithCompany "+ 
+							"on periodicitydatemaster.periodicityDateId=activityDueDate.periodicityDateId where dueDate = adddate(DATE(now()),?)  and isComplied=false) activityWithCompany "+ 
 						"on activityWithCompany.companyId = usercompany.companyId)userCOmpanyMergedTable "+ 
 				"on userCOmpanyMergedTable.userId = user.userId where userTypeId=?) activityUser "+
 			"on activityUser.activityId=activityassociation.activityId)activityWithAssociation "+

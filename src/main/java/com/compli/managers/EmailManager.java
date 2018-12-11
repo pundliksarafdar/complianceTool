@@ -30,8 +30,8 @@ public class EmailManager {
 		}
 		
 		//Send reminder email
-		public static void sendMailForReminder(PendingComplainceBean pendingComplainceBean,String email){
+		public static void sendMailForReminder(String subject,PendingComplainceBean pendingComplainceBean,String email){
 			System.out.println("Sending mail to email "+email);
-			sendEmail("sarafdarpundlik@gmail.com", "Pending for complaince ", "remindersEmail.mustache", pendingComplainceBean);
+			sendEmail("sarafdarpundlik@gmail.com", subject, "remindersEmail.mustache", pendingComplainceBean);
 		}
 }

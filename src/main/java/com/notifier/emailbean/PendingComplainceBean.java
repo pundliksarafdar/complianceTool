@@ -8,7 +8,14 @@ public class PendingComplainceBean {
 	String companyId;
 	List<PendingActivitiesForMail> pendingEmail;
 	String serverUrl;
+	String googleId;
 	
+	public String getGoogleId() {
+		return googleId;
+	}
+	public void setGoogleId(String googleId) {
+		this.googleId = googleId;
+	}
 	public String getServerUrl() {
 		return serverUrl;
 	}

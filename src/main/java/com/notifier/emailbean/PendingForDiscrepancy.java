@@ -11,10 +11,11 @@ public class PendingForDiscrepancy {
 	String activityName;
 	String month;
 	Date periodictyDate;
-	String serverUrl = SettingsManager.getStaticSettings().getServerName();
+	String serverUrl;
 	
 	public String getServerUrl() {
-		return serverUrl;
+		this.serverUrl = SettingsManager.getStaticSettings().getServerName();
+		return this.serverUrl;
 	}
 	public void setServerUrl(String serverUrl) {
 		this.serverUrl = serverUrl;

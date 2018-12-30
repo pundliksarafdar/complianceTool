@@ -113,16 +113,18 @@ public class AlertsManager {
 		List<String>attendees = new ArrayList<String>();
 		for(PendingComplainceBean pendingComplainceBean:complainceBeanscOwnerFollowup){
 			boolean isEnabledCO = isSendEnabled(pendingComplainceBean.getCompanyId(), rType, USER_TYPE.CO);
-			
-			if(isEnabledCO){
-				String emailToSend = SettingsManager.getCOwnerEmail(pendingComplainceBean.getEmail());
-				attendees.add(emailToSend);
+			if(pendingComplainceBean.getGoogleId()!=null){
+				if(isEnabledCO){
+					String emailToSend = SettingsManager.getCOwnerEmail(pendingComplainceBean.getGoogleId());
+					attendees.add(emailToSend);
+				}
 			}
-			
 			boolean isEnabledCM = isSendEnabled(pendingComplainceBean.getCompanyId(), rType, USER_TYPE.CM);
-			if(isEnabledCM){
-				String emailToSend = SettingsManager.getCManagerEmail(pendingComplainceBean.getEmail());
-				attendees.add(emailToSend);
+			if(pendingComplainceBean.getGoogleId()!=null){
+				if(isEnabledCM){
+					String emailToSend = SettingsManager.getCManagerEmail(pendingComplainceBean.getGoogleId());
+					attendees.add(emailToSend);
+				}
 			}
 			List<PendingActivitiesForMail> activitiesPending = pendingComplainceBean.getPendingEmail();
 			for(PendingActivitiesForMail activitiesForEvt:activitiesPending){
@@ -140,6 +142,7 @@ public class AlertsManager {
 		for(PendingActivitiesForMail activity:activities){
 			PendingComplainceBean pendingComplainceBean = new PendingComplainceBean();
 			pendingComplainceBean.setEmail(activity.getEmail());
+			pendingComplainceBean.setGoogleId(activity.getGoogleId());
 			pendingComplainceBean.setCompanyId(activity.getCompanyId());
 			int index = complainceBeans.indexOf(pendingComplainceBean);
 			if(index==-1){
@@ -192,7 +195,7 @@ public class AlertsManager {
 		/*AlertsManager alertsManager = new AlertsManager();
 		alertsManager.sendCalendarEvents();*/
 		
-		deleteAllEvents();
+		//deleteAllEvents();
 	}
 	
 	public boolean isSendEnabled(String companyId,REMINDER_TYPE rType,USER_TYPE uType){

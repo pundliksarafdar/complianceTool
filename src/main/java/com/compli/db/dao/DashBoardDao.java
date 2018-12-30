@@ -560,9 +560,9 @@ public class DashBoardDao {
 			"on companyWithPerDate.companyId = activity.companyId and companyWithPerDate.activityId = activity.activityId and activity.isComplianceRejected=false  order by periodicityDateId desc) newtable  WHERE (quarter(duedate)=? and YEAR(duedate)=? and isComplied=true) or (quarter(duedate)<=? and YEAR(duedate)=? and isComplied=false)";
 
 	
-	String changeActivityStatusQuery = "INSERT INTO activity (companyId,activityId, isComplied,isComplianceApproved,remark) VALUES(?, ?, ?, ?,?) ON DUPLICATE KEY UPDATE companyId =?,activityId=?, isComplied=?,isComplianceApproved=?,remark=?";
-	String changeActivityStatusQueryArtec = "INSERT INTO activity (companyId,activityId, isComplied,isComplianceApproved,isProofRequired,isComplainceDelayed,completionDate) VALUES(?, ?, ?, ?,?,?,?) ON DUPLICATE KEY UPDATE companyId =?,activityId=?, isComplied=?,isComplianceApproved=?,isProofRequired=?,isComplainceDelayed=?,completionDate=?";
-	String changeActivityPendingForDescripancyStatusQueryArtec = "INSERT INTO activity (companyId,activityId, isComplied,isComplianceApproved,isProofRequired,isComplainceDelayed,arTechRemark) VALUES(?, ?, ?, ?,?,?,?) ON DUPLICATE KEY UPDATE companyId =?,activityId=?, isComplied=?,isComplianceApproved=?,isProofRequired=?,isComplainceDelayed=?,arTechRemark=?";
+	String changeActivityStatusQuery = "INSERT INTO activity (companyId,activityId, isComplied,isComplianceApproved,remark,isProofRequired,reOpen) VALUES(?, ?, ?, ?,?,false,false) ON DUPLICATE KEY UPDATE companyId =?,activityId=?, isComplied=?,isComplianceApproved=?,remark=?,isProofRequired=false,reOpen=false";
+	String changeActivityStatusQueryArtec = "INSERT INTO activity (companyId,activityId, isComplied,isComplianceApproved,isProofRequired,isComplainceDelayed,completionDate,reOpen) VALUES(?, ?, ?, ?,?,?,?,false) ON DUPLICATE KEY UPDATE companyId =?,activityId=?, isComplied=?,isComplianceApproved=?,isProofRequired=?,isComplainceDelayed=?,completionDate=?,reOpen=false";
+	String changeActivityPendingForDescripancyStatusQueryArtec = "INSERT INTO activity (companyId,activityId, isComplied,isComplianceApproved,isProofRequired,isComplainceDelayed,arTechRemark,reOpen) VALUES(?, ?, ?, ?,?,?,?,false) ON DUPLICATE KEY UPDATE companyId =?,activityId=?, isComplied=?,isComplianceApproved=?,isProofRequired=?,isComplainceDelayed=?,arTechRemark=?,reOpen=false";
 	
 	/********************************* Dashboard pending activity Count for next10days. *****************************************************/
 

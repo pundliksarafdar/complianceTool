@@ -19,19 +19,19 @@ public class EmailManager {
 	public static void sendActivityPendingForDescripancy(PendingForDiscrepancy activityBean){
 		String email = SettingsManager.getCManagerEmail(activityBean.getEmail());
 		System.out.println("Sending mail to email "+email);
-		sendEmail("sarafdarpundlik@gmail.com", "Activity pending for discrepancy", "pendingForDiscrepancy.mustache", activityBean);
+		sendEmail(email, "Activity pending for discrepancy", "pendingForDiscrepancy.mustache", activityBean);
 	}
 	
 	//Send main to user and manager
 		public static void sendActivityRequestForReopen(PendingForDiscrepancy activityBean){
 			String email = SettingsManager.getArtecEmail(activityBean.getEmail());
 			System.out.println("Sending mail to email "+email);
-			sendEmail("sarafdarpundlik@gmail.com", "Request to reopen activity ", "requestToReopen.mustache", activityBean);
+			sendEmail(email, "Request to reopen activity ", "requestToReopen.mustache", activityBean);
 		}
 		
 		//Send reminder email
 		public static void sendMailForReminder(String subject,PendingComplainceBean pendingComplainceBean,String email){
 			System.out.println("Sending mail to email "+email);
-			sendEmail("sarafdarpundlik@gmail.com", subject, "remindersEmail.mustache", pendingComplainceBean);
+			sendEmail(email, subject, "remindersEmail.mustache", pendingComplainceBean);
 		}
 }

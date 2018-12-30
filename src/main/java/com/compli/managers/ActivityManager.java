@@ -65,23 +65,29 @@ public class ActivityManager {
 			allActivity = this.dashBoardDao.getAllActivitiesWithDescriptionForCompany(companyId,true,this.locationId,true,false);
 		}
 		List<Map<String, Object>> filteredActivity = new ArrayList<Map<String,Object>>();
-		for(int i=0;i<allActivity.size();i++){
+		int listSize = allActivity.size();
+		for(int i=0;i<listSize;i++){
 			Map<String,Object> activity = allActivity.get(i);
-			if((activity.get("isComplied")!=null && "0".equals(activity.get("isComplied").toString())) &&
-					(activity.get("isComplianceApproved")!=null && "0".equals(activity.get("isComplianceApproved").toString())) 
-					&& (activity.get("isComplianceRejected")!=null && "0".equals(activity.get("isComplianceRejected").toString())) && "Pending compliance".equalsIgnoreCase(severity)){
+			Object isComplied = activity.get("isComplied");
+			Object  isComplianceApproved = activity.get("isComplianceApproved");
+			Object isComplianceRejected = activity.get("isComplianceRejected");
+			Object  isComplainceDelayed = activity.get("isComplainceDelayed");
+			
+			if((isComplied!=null && "0".equals(isComplied.toString())) &&
+					(isComplianceApproved!=null && "0".equals(isComplianceApproved.toString())) 
+					&& (isComplianceRejected!=null && "0".equals(isComplianceRejected.toString())) && "Pending compliance".equalsIgnoreCase(severity)){
 				filteredActivity.add(activity);
-			}else if((activity.get("isComplainceDelayed")!=null && "1".equals(activity.get("isComplainceDelayed").toString())) && "Complied-Delayed".equalsIgnoreCase(severity)){
+			}else if((isComplainceDelayed!=null && "1".equals(isComplainceDelayed.toString())) && "Complied-Delayed".equalsIgnoreCase(severity)){
 				filteredActivity.add(activity);
-			}else if((activity.get("isComplied")!=null && "1".equals(activity.get("isComplied").toString())) &&
-					(activity.get("isComplianceApproved")!=null && "0".equals(activity.get("isComplianceApproved").toString())) 
-					&& (activity.get("isComplianceRejected")!=null && "0".equals(activity.get("isComplianceRejected").toString())) && "Pending for review".equalsIgnoreCase(severity)){
+			}else if((isComplied!=null && "1".equals(isComplied.toString())) &&
+					(isComplianceApproved!=null && "0".equals(isComplianceApproved.toString())) 
+					&& (isComplianceRejected!=null && "0".equals(isComplianceRejected.toString())) && "Pending for review".equalsIgnoreCase(severity)){
 				filteredActivity.add(activity);
-			}else if((activity.get("isComplied")!=null && "1".equals(activity.get("isComplied").toString()) && activity.get("isComplainceDelayed")!=null && "0".equals(activity.get("isComplainceDelayed").toString())  
-					&& activity.get("isComplianceApproved")!=null && "1".equals(activity.get("isComplianceApproved").toString()) && activity.get("isComplianceRejected")!=null)
+			}else if((isComplied!=null && "1".equals(isComplied.toString()) && isComplainceDelayed!=null && "0".equals(isComplainceDelayed.toString())  
+					&& isComplianceApproved!=null && "1".equals(isComplianceApproved.toString()) && isComplianceRejected!=null)
 					&& "Complied- In time".equalsIgnoreCase(severity) ){
 				filteredActivity.add(activity);
-			}else if(activity.get("isComplied")!=null && "1".equals(activity.get("isComplied").toString()) && activity.get("isProofRequired")!=null && "1".equals(activity.get("isProofRequired").toString())	&& "Pending for Discrepancy".equalsIgnoreCase(severity)){
+			}else if(isComplied!=null && "1".equals(isComplied.toString()) && activity.get("isProofRequired")!=null && "1".equals(activity.get("isProofRequired").toString())	&& "Pending for Discrepancy".equalsIgnoreCase(severity)){
 				filteredActivity.add(activity);
 			}
 		}
@@ -202,9 +208,13 @@ public boolean changeActivityStatus(String companyId,String activityId,boolean i
 		if(isComplied){
 			return this.dashBoardDao.changeActivityStatus(companyId,activityId, isComplied,remark);
 		}else if(compliedInTime){
-			return this.dashBoardDao.changeActivityStatusApproved(companyId, activityId,completionDate);
+			boolean isSuccess = this.dashBoardDao.changeActivityStatusApproved(companyId, activityId,completionDate);
+			AlertsManager.deleteEventForActivity(activityId);
+			return isSuccess;
 		}else if(compliedDelayed){
-			return this.dashBoardDao.changeActivityStatusComplainceDelayed(companyId, activityId,completionDate);
+			 boolean isSuccess = this.dashBoardDao.changeActivityStatusComplainceDelayed(companyId, activityId,completionDate);
+			 AlertsManager.deleteEventForActivity(activityId);
+			 return isSuccess;
 		}else if(pendingDescrepancy){
 			PendingForDiscrepancy activity = activityDao.getActivityDataForMail(activityId);
 			EmailManager.sendActivityPendingForDescripancy(activity);

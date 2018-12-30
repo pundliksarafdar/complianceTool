@@ -1,19 +1,30 @@
 package com.compli.managers;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import com.compli.bean.SettingsBean;
 import com.compli.bean.SettingsScheduleBean;
 import com.compli.db.dao.ActivityDao;
+import com.compli.services.GoogleServices;
+import com.google.api.services.calendar.Calendar;
+import com.google.api.services.calendar.model.Event;
+import com.google.api.services.calendar.model.Events;
+import com.google.api.services.drive.Drive;
+import com.notifier.builder.EventBuilder;
 import com.notifier.emailbean.PendingActivitiesForMail;
 import com.notifier.emailbean.PendingComplainceBean;
 
@@ -23,10 +34,16 @@ public class AlertsManager {
 	SettingsBean settingsBean;
 	enum USER_TYPE{CM,CO};
 	enum REMINDER_TYPE{FIRTS_REMINDER,SECOND_REMINDER,FOLLOWUP};
+	public static String CALENDAR_ID = "primary";
 	public AlertsManager() {
 		ApplicationContext ctx=new ClassPathXmlApplicationContext("applicationContext.xml");
 		this.activityDao = (ActivityDao) ctx.getBean("activityDao");
 		this.settingsBean = SettingsManager.getStaticSettings();
+	}
+	
+	public void sendCalendarEvents(){
+		Map<String,List<PendingActivitiesForMail>> activitiesForEvent10 = getActivitiesFor10();
+		sendEvents(activitiesForEvent10);
 	}
 	
 	public void SendAlerts(){
@@ -41,41 +58,79 @@ public class AlertsManager {
 	}
 	
 	public void SendMailForPending(Map<String,List<PendingActivitiesForMail>> activitiesForMails,REMINDER_TYPE rType){
-		List<PendingActivitiesForMail> activities = activitiesForMails.get("cManager");
-		List<PendingComplainceBean> complainceBeans = formatObject(activities);
-		for(PendingComplainceBean pendingComplainceBean:complainceBeans){
-			boolean isEnabled = isSendEnabled(pendingComplainceBean.getCompanyId(), rType, USER_TYPE.CM);
-			if(isEnabled){
-				String emailToSend = SettingsManager.getCManagerEmail(pendingComplainceBean.getEmail());
-				EmailManager.sendMailForReminder("Reminder 1 : Pending for complaince ",pendingComplainceBean, emailToSend);
+		if(rType.equals(REMINDER_TYPE.FIRTS_REMINDER)){
+			List<PendingActivitiesForMail> activities = activitiesForMails.get("cManager");
+			List<PendingComplainceBean> complainceBeans = formatObject(activities);
+			for(PendingComplainceBean pendingComplainceBean:complainceBeans){
+				boolean isEnabled = isSendEnabled(pendingComplainceBean.getCompanyId(), rType, USER_TYPE.CM);
+				if(isEnabled){
+					String emailToSend = SettingsManager.getCManagerEmail(pendingComplainceBean.getEmail());
+					EmailManager.sendMailForReminder("Reminder 1 : Pending for complaince ",pendingComplainceBean, emailToSend);
+				}
 			}
 		}
 		
-		List<PendingActivitiesForMail> activitiescOwner = activitiesForMails.get("cOwner");
-		List<PendingComplainceBean> complainceBeanscOwner = formatObject(activitiescOwner);
-		for(PendingComplainceBean pendingComplainceBean:complainceBeanscOwner){
-			boolean isEnabled = isSendEnabled(pendingComplainceBean.getCompanyId(), rType, USER_TYPE.CO);
-			if(isEnabled){
-				String emailToSend = SettingsManager.getCManagerEmail(pendingComplainceBean.getEmail());
-				EmailManager.sendMailForReminder("Reminder 2 : Pending for complaince ",pendingComplainceBean, emailToSend);
+		if(rType.equals(REMINDER_TYPE.SECOND_REMINDER)){
+			List<PendingActivitiesForMail> activitiescOwner = activitiesForMails.get("cOwner");
+			List<PendingComplainceBean> complainceBeanscOwner = formatObject(activitiescOwner);
+			for(PendingComplainceBean pendingComplainceBean:complainceBeanscOwner){
+				boolean isEnabled = isSendEnabled(pendingComplainceBean.getCompanyId(), rType, USER_TYPE.CO);
+				if(isEnabled){
+					String emailToSend = SettingsManager.getCManagerEmail(pendingComplainceBean.getEmail());
+					EmailManager.sendMailForReminder("Reminder 2 : Pending for complaince ",pendingComplainceBean, emailToSend);
+				}
 			}
 		}
 		
+		if(rType.equals(REMINDER_TYPE.FOLLOWUP)){
+			List<PendingActivitiesForMail> activitiescOwnerFollowUp = activitiesForMails.get("cOwner");
+			List<PendingActivitiesForMail> activitiescManagerFollowup = activitiesForMails.get("cManager");
+			List<PendingComplainceBean> complainceBeanscOwnerFollowup = formatObject(activitiescOwnerFollowUp);
+			//Combind cOwner and cManager emails
+			complainceBeanscOwnerFollowup.addAll(formatObject(activitiescManagerFollowup));
+			for(PendingComplainceBean pendingComplainceBean:complainceBeanscOwnerFollowup){
+				boolean isEnabledCO = isSendEnabled(pendingComplainceBean.getCompanyId(), rType, USER_TYPE.CO);
+				if(isEnabledCO){
+					String emailToSend = SettingsManager.getCOwnerEmail(pendingComplainceBean.getEmail());
+					EmailManager.sendMailForReminder("Followup : Pending for complaince",pendingComplainceBean, emailToSend);
+				}
+				
+				boolean isEnabledCM = isSendEnabled(pendingComplainceBean.getCompanyId(), rType, USER_TYPE.CM);
+				if(isEnabledCM){
+					String emailToSend = SettingsManager.getCManagerEmail(pendingComplainceBean.getEmail());
+					EmailManager.sendMailForReminder("Followup : Pending for complaince",pendingComplainceBean, emailToSend);
+				}
+			}
+		}
+	}
+	
+	public void sendEvents(Map<String,List<PendingActivitiesForMail>> activitiesForMails){
+		REMINDER_TYPE rType = REMINDER_TYPE.FOLLOWUP;
 		List<PendingActivitiesForMail> activitiescOwnerFollowUp = activitiesForMails.get("cOwner");
 		List<PendingActivitiesForMail> activitiescManagerFollowup = activitiesForMails.get("cManager");
 		List<PendingComplainceBean> complainceBeanscOwnerFollowup = formatObject(activitiescOwnerFollowUp);
 		complainceBeanscOwnerFollowup.addAll(formatObject(activitiescManagerFollowup));
+		List<String>attendees = new ArrayList<String>();
 		for(PendingComplainceBean pendingComplainceBean:complainceBeanscOwnerFollowup){
 			boolean isEnabledCO = isSendEnabled(pendingComplainceBean.getCompanyId(), rType, USER_TYPE.CO);
+			
 			if(isEnabledCO){
 				String emailToSend = SettingsManager.getCOwnerEmail(pendingComplainceBean.getEmail());
-				EmailManager.sendMailForReminder("Followup : Pending for complaince",pendingComplainceBean, emailToSend);
+				attendees.add(emailToSend);
 			}
 			
 			boolean isEnabledCM = isSendEnabled(pendingComplainceBean.getCompanyId(), rType, USER_TYPE.CM);
 			if(isEnabledCM){
 				String emailToSend = SettingsManager.getCManagerEmail(pendingComplainceBean.getEmail());
-				EmailManager.sendMailForReminder("Followup : Pending for complaince",pendingComplainceBean, emailToSend);
+				attendees.add(emailToSend);
+			}
+			List<PendingActivitiesForMail> activitiesPending = pendingComplainceBean.getPendingEmail();
+			for(PendingActivitiesForMail activitiesForEvt:activitiesPending){
+				try {
+					sendGoogleEvent(activitiesForEvt.getDesc1(), "Pending activity : "+activitiesForEvt.getActivityName(), activitiesForEvt.getDueDate(), activitiesForEvt.getActivityId(), attendees);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 			}
 		}
 	}
@@ -99,54 +154,12 @@ public class AlertsManager {
 		return complainceBeans;
 	}
 	
-	/*public Map<String,List<PendingActivitiesForMail>> setDelaysAndGetActivities(){
-		Map<String,List<PendingActivitiesForMail>> activities = new HashMap<String, List<PendingActivitiesForMail>>();
-		SettingsManager settingsManager = new SettingsManager();
-		SettingsBean settingsBean = settingsManager.getStaticSettings();
-		String cManagerDueDate = settingsBean.getcManagerDueDate();
-		String arTechDueDate = settingsBean.getArTechUserDueDate();
-		String cOwnerDueDate = settingsBean.getcOwnerDueDate();
-		String sManagerDueDate = settingsBean.getsManagerDueDate();
-		
-		cMDue = cManagerDueDate!=null?Integer.parseInt(cManagerDueDate):-1;
-		arTechDue = arTechDueDate!=null?Integer.parseInt(arTechDueDate):-1;
-		cODue = cOwnerDueDate!=null?Integer.parseInt(cOwnerDueDate):-1;
-		sMDue = sManagerDueDate!=null?Integer.parseInt(sManagerDueDate):-1;
-		
-		if(cMDue>0){
-			List<PendingActivitiesForMail> cManagerActivities = this.activityDao.getOlderActivitiesForMail(cMDue,"cManager");
-			activities.put("cManager", cManagerActivities);
-		}
-		if(cODue>0){
-			List<PendingActivitiesForMail> cOwnerActivities = this.activityDao.getOlderActivitiesForMail(cMDue,"cOwner");
-			activities.put("cOwner", cOwnerActivities);
-		}
-		if(arTechDue>0){
-			List<PendingActivitiesForMail> arTechUserActivities = this.activityDao.getOlderActivitiesForMail(cMDue,"ArTechUser");
-			activities.put("ArTechUser", arTechUserActivities);
-		}
-		if(sMDue>0){
-			List<PendingActivitiesForMail> sManagerActivities = this.activityDao.getOlderActivitiesForMail(cMDue,"sManager");
-			activities.put("sManager", sManagerActivities);
-		}
-		return activities;
-	}
-	*/
-	
 	public Map<String,List<PendingActivitiesForMail>> getActivitiesFor10(){
 		Map<String,List<PendingActivitiesForMail>> activities = new HashMap<String, List<PendingActivitiesForMail>>();
-		List<PendingActivitiesForMail> cManagerActivities = this.activityDao.getOlderActivitiesForMail(10,"cManager");
+		List<PendingActivitiesForMail> cManagerActivities = this.activityDao.getOlderActivitiesForMail(1,"cManager");
 		activities.put("cManager", cManagerActivities);
-		List<PendingActivitiesForMail> cOwnerActivities = this.activityDao.getOlderActivitiesForMail(10,"cOwner");
+		List<PendingActivitiesForMail> cOwnerActivities = this.activityDao.getOlderActivitiesForMail(1,"cOwner");
 		activities.put("cOwner", cOwnerActivities);
-		/*if(cMDue>0){
-			List<PendingActivitiesForMail> cManagerActivities = this.activityDao.getOlderActivitiesForMail(10,"cManager");
-			activities.put("cManager", cManagerActivities);
-		}
-		if(cODue>0){
-			List<PendingActivitiesForMail> cOwnerActivities = this.activityDao.getOlderActivitiesForMail(10,"cOwner");
-			activities.put("cOwner", cOwnerActivities);
-		}*/
 		return activities;
 	}
 	
@@ -168,9 +181,18 @@ public class AlertsManager {
 		return activities;
 	}
 	
-	public static void main(String[] args) {
-		AlertsManager alertsManager = new AlertsManager();
-		alertsManager.SendAlerts();
+	public static void main(String[] args) throws IOException {
+		/*AlertsManager alertsManager = new AlertsManager();
+		alertsManager.SendAlerts();*/
+		//sendGoogleEvent();
+		/*deleteEvent("1234");
+		Event evt = getEvent("1234");
+		System.out.println(evt);*/
+		
+		/*AlertsManager alertsManager = new AlertsManager();
+		alertsManager.sendCalendarEvents();*/
+		
+		deleteAllEvents();
 	}
 	
 	public boolean isSendEnabled(String companyId,REMINDER_TYPE rType,USER_TYPE uType){
@@ -202,5 +224,44 @@ public class AlertsManager {
 		}
 	}
 	
+	public static void sendGoogleEvent(String activity,String summary,Date date,String activityId,List<String>attendees) throws IOException{
+		Calendar calendarService = GoogleServices.getCalendarService();
+		EventBuilder eventBuilder = new EventBuilder();
+		date.setHours(9);
+		date.setMinutes(30);
+		Event event = eventBuilder.buildEvent(summary, activity, date, attendees, activityId);
+		try{
+		event = calendarService.events().insert(CALENDAR_ID, event).execute();
+		}catch(Exception e){
+			event = calendarService.events().update(CALENDAR_ID, event.getId(),event).execute();
+		}
+	}
+	
+	public static void deleteEvent(String eventId) throws IOException{
+		Calendar calendarService = GoogleServices.getCalendarService();
+		calendarService.events().delete(CALENDAR_ID, eventId).execute();
+	}
+	
+	public static void deleteEventForActivity(String activityId) {
+		try {
+			deleteEvent(EventBuilder.getGoogleCalendarId(activityId));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}		
+	}
+	
+	public static void deleteAllEvents() throws IOException{
+		Calendar calendarService = GoogleServices.getCalendarService();
+		 Events evts = calendarService.events().list(CALENDAR_ID).setMaxResults(1000).execute();
+		List<Event> evs = evts.getItems();
+		for(Event evt:evs){
+			deleteEvent(evt.getId());
+		}
+	}
+	
+	public static Event getEvent(String eventId) throws IOException{
+		Calendar calendarService = GoogleServices.getCalendarService();
+		return calendarService.events().get(CALENDAR_ID, EventBuilder.getGoogleCalendarId(eventId)).execute();
+	}
 
 }

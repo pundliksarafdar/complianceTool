@@ -10,6 +10,7 @@ public class Executer extends TimerTask{
 	public void run() {
 		AlertsManager manager = new AlertsManager();
 		manager.SendAlerts();
+		manager.sendCalendarEvents();
 	}
 	
 }

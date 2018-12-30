@@ -27,6 +27,7 @@ import com.compli.db.dao.PeriodicityDateMasterDao;
 import com.compli.db.dao.PeriodicityMasterDao;
 import com.compli.db.dao.UserCompanyDao;
 import com.compli.db.dao.UserDao;
+import com.google.api.services.drive.model.File;
 
 public class DataBaseMigrationUtilV2UpdateDB {
 	UserDao userDao;
@@ -185,6 +186,7 @@ public class DataBaseMigrationUtilV2UpdateDB {
 				errorRow++;
 			}	
 			}catch(Exception e){
+				e.printStackTrace();
 				System.out.println(activityAssociationBeans.get(i));
 			}
 		}
@@ -220,6 +222,28 @@ public class DataBaseMigrationUtilV2UpdateDB {
 		int errorRow = 0;
 		for(int i=0;i<len;i++){
 			boolean isSucess = this.filesDao.saveFile(filesBean.get(i).getActivityId(), filesBean.get(i).getCompanyId(), filesBean.get(i).getDocumentName(), filesBean.get(i).getDocumentFile());
+			if(len%500==0){
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+			if(isSucess){
+				errorRow++;
+			}	
+		}
+		return errorRow;
+	}
+	
+	public int updateFilesId(List<File> filesBean){
+		int len = filesBean.size();
+		int errorRow = 0;
+		for(int i=0;i<len;i++){
+			boolean isSucess = this.filesDao.updateFileId(filesBean.get(i).getId(), filesBean.get(i).getName());
+			if(!isSucess){
+				System.out.println(filesBean.get(i).getName());
+			}
 			if(len%500==0){
 				try {
 					Thread.sleep(1000);

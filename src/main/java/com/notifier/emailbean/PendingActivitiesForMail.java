@@ -4,8 +4,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class PendingActivitiesForMail {
-	 String activityId,activityName,userId,firstname,userTypeId,email,dueDateParsed,companyId;
-	 String locationName,complianceArea,description;
+	 String activityId,activityName,userId,firstname,userTypeId,email,dueDateParsed,companyId,googleId;
+	 String locationName,complianceArea,description,desc1;
 	 Date dueDate;
 	 
 	 public String getDueDateParsed() {
@@ -17,6 +17,18 @@ public class PendingActivitiesForMail {
 	}
 	
 	 
+	public String getGoogleId() {
+		return googleId;
+	}
+	public String getDesc1() {
+		return desc1;
+	}
+	public void setGoogleId(String googleId) {
+		this.googleId = googleId;
+	}
+	public void setDesc1(String desc) {
+		this.desc1 = desc;
+	}
 	public String getCompanyId() {
 		return companyId;
 	}

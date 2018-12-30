@@ -23,7 +23,21 @@ public class UserBean {
 	boolean isPrimaryUser;
 	String userTypeId;
 	boolean isFullUser;
+	String image;
+	String googleId;
 	
+	public String getImage() {
+		return image;
+	}
+	public String getGoogleId() {
+		return googleId;
+	}
+	public void setImage(String image) {
+		this.image = image;
+	}
+	public void setGoogleId(String googleId) {
+		this.googleId = googleId;
+	}
 	public String getUserId() {
 		return userId;
 	}

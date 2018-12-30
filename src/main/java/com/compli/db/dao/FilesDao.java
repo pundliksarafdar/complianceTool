@@ -12,7 +12,8 @@ import com.compli.db.bean.UserBean;
 public class FilesDao {
 	private JdbcTemplate jdbcTemplate;
 	private String filesForUser = "select * from files where activityId=? and companyId=?"; 
-	private String savefilesForUser = "INSERT INTO files(activityId,companyId,fileId,filename)VALUES(?,?,?,?);"; 
+	private String savefilesForUser = "INSERT INTO files(activityId,companyId,fileId,filename)VALUES(?,?,?,?);";
+	private String updateFileIdForUser = "UPDATE files SET fileId=? WHERE filename=?;";
 	private String fileById = "select * from files where  fileId=?"; 
 	
 	public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
@@ -31,6 +32,10 @@ public class FilesDao {
 
 	public boolean saveFile(String activityId,String companyId,String fileId,String filename) {
 		return this.jdbcTemplate.update(savefilesForUser,new Object[]{activityId,companyId,fileId,filename})>0;		
+	}
+	
+	public boolean updateFileId(String fileId,String filename) {
+		return this.jdbcTemplate.update(updateFileIdForUser,new Object[]{fileId,filename})>0;		
 	}
 	
 	public List<Files> getAlFiles() {

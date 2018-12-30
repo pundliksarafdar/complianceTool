@@ -60,4 +60,16 @@ public class RegistrationManager {
 		SendMailSSL mailSSL = new SendMailSSL();
 		mailSSL.reSendRegistrationMail(userBean.getRegId(), userBean.getUserId(), userBean.getEmail());
 	}
+	
+	public boolean updateUser(String auth,com.compli.db.bean.UserBean userBeanToUpdate) throws ExecutionException{
+		com.compli.db.bean.UserBean userBean = AuthorisationManager.getUserCatche(auth);
+		userBean.setFirstName(userBeanToUpdate.getFirstName());
+		userBean.setLastName(userBeanToUpdate.getLastName());
+		userBean.setImage(userBeanToUpdate.getImage());
+		userBean.setGoogleId(userBeanToUpdate.getGoogleId());
+		if(userBeanToUpdate.getPass()!=null && userBeanToUpdate.getPass().trim().isEmpty()){
+			userBean.setPass(userBeanToUpdate.getPass());
+		}
+		return this.userDao.updateUserData(userBean);
+	}
 }

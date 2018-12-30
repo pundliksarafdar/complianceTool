@@ -73,14 +73,14 @@ public class ActivityDao {
 	}
 	
 	public List<PendingActivitiesForMail> getOlderActivitiesForMail(int maxDateInterval,String userType){
-		String sql = "select description,lawname as complianceArea,locationName,companyId,activityId,activityName,userId,firstname,userTypeId,email,dueDate from periodicitymaster inner join "+
-	"(select lawname,locationName,periodicityId,companyId,activityId,activityName,userId,firstname,userTypeId,email,dueDate from lawmaster inner join "+
-		"(select locationName,lawId,periodicityId,companyId,activityId,activityName,userId,firstname,userTypeId,email,dueDate from location inner join "+
-			"(select locationId,lawId,periodicityId,companyId,activityUser.activityId,activityName,userId,firstname,userTypeId,email,dueDate from activityassociation inner join "+ 
-				"(select lawId,periodicityId,companyId,activityId,activityName,user.userId,firstname,userTypeId,email,dueDate from user inner join  "+
-					"(select lawId,periodicityId,usercompany.companyId,isComplied,activityId,activityName,userId,dueDate from usercompany join "+ 
-						"(select lawId,periodicityId,companyId,isComplied,activityId,activityName,dueDate from periodicitydatemaster join  "+
-							"(SELECT activity.companyId,activitymaster.lawId,activitymaster.periodicityId,activitymaster.periodicityDateId,activity.isComplied,activity.activityId,activitymaster.activityName FROM activity join "+ 
+		String sql = "select description,lawname as complianceArea,locationName,companyId,activityId,activityName,desc1,userId,firstname,userTypeId,email,dueDate,googleId from periodicitymaster inner join "+
+	"(select lawname,locationName,periodicityId,companyId,activityId,activityName,desc1,userId,firstname,userTypeId,email,dueDate,googleId from lawmaster inner join "+
+		"(select locationName,lawId,periodicityId,companyId,activityId,activityName,desc1,userId,firstname,userTypeId,email,dueDate,googleId from location inner join "+
+			"(select locationId,lawId,periodicityId,companyId,activityUser.activityId,activityName,desc1,userId,firstname,userTypeId,email,dueDate,googleId from activityassociation inner join "+ 
+				"(select lawId,periodicityId,companyId,activityId,activityName,desc1,user.userId,firstname,userTypeId,email,dueDate,googleId from user inner join  "+
+					"(select lawId,periodicityId,usercompany.companyId,isComplied,activityId,activityName,desc1,userId,dueDate from usercompany join "+ 
+						"(select lawId,periodicityId,companyId,isComplied,activityId,activityName,desc1,dueDate from periodicitydatemaster join  "+
+							"(SELECT activity.companyId,activitymaster.lawId,activitymaster.periodicityId,activitymaster.periodicityDateId,activity.isComplied,activity.activityId,activitymaster.activityName,description as desc1 FROM activity join "+ 
 								"activitymaster on activity.activityId = activitymaster.activityId) activityDueDate  "+
 							"on periodicitydatemaster.periodicityDateId=activityDueDate.periodicityDateId where dueDate = adddate(DATE(now()),?)  and isComplied=false) activityWithCompany "+ 
 						"on activityWithCompany.companyId = usercompany.companyId)userCOmpanyMergedTable "+ 

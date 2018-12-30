@@ -9,7 +9,29 @@ public class SettingsBean {
 	public String cManagerDueDate,arTechUserDueDate,cOwnerDueDate,sManagerDueDate;
 	public List<SettingsScheduleBean> settingsScheduleBean;
 	public String serverName;
+	public String accessToken;
+	public String refreshToken;
+	public String expirationTime;
 	
+	
+	public String getAccessToken() {
+		return accessToken;
+	}
+	public String getRefreshToken() {
+		return refreshToken;
+	}
+	public String getExpirationTime() {
+		return expirationTime;
+	}
+	public void setAccessToken(String accessToken) {
+		this.accessToken = accessToken;
+	}
+	public void setRefreshToken(String refreshToken) {
+		this.refreshToken = refreshToken;
+	}
+	public void setExpirationTime(String expirationTime) {
+		this.expirationTime = expirationTime;
+	}
 	public String getServerName() {
 		return serverName;
 	}

@@ -3,22 +3,15 @@ package com.compli.managers;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
-
-
-
-
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
-
-
-
-
 import com.compli.bean.SettingsBean;
 import com.compli.bean.SettingsScheduleBean;
 import com.compli.db.bean.CompanyBean;
 import com.compli.db.bean.Pair;
 import com.compli.db.dao.CompanyDao;
-import com.compli.db.dao.SettingsDao;import com.google.common.reflect.TypeToken;
+import com.compli.db.dao.SettingsDao;
+import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 
 
@@ -26,6 +19,7 @@ public class SettingsManager {
 	SettingsDao settingsDao;
 	CompanyDao companyDao;
 	public static SettingsBean settingsBean;
+	
 	static{
 		SettingsManager settingsManager = new SettingsManager();
 		refreshSettings();

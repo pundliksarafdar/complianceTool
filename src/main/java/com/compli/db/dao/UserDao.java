@@ -20,6 +20,9 @@ import com.mysql.cj.api.jdbc.Statement;
 
 public class UserDao {
 	private JdbcTemplate jdbcTemplate;
+	
+	private String UPDATE_USER_DATA = "update user set firstname=? , lastname=? , image=? , googleId = ? where userId=?";
+	private String UPDATE_USER_PASS = "update user set pass=? where userId=?";
 
 	public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
 		this.jdbcTemplate = jdbcTemplate;
@@ -103,5 +106,13 @@ public class UserDao {
 	
 	public boolean validateEmail(String registrationId) {
 		return this.jdbcTemplate.update("update user set isactive=true where regId=?;",registrationId)>-1;		
+	}
+	
+	public boolean updateUserData(UserBean userBean){
+		this.jdbcTemplate.update(UPDATE_USER_DATA,userBean.getFirstName(),userBean.getLastName(),userBean.getImage(),userBean.getGoogleId(),userBean.getUserId());
+		if(userBean.getPass()!=null && !userBean.getPass().trim().isEmpty()){
+			this.jdbcTemplate.update(UPDATE_USER_PASS,userBean.getPass(),userBean.getUserId());
+		}
+		return true;
 	}
 }

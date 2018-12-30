@@ -116,5 +116,14 @@ public class UsersRestApi extends Application{
 		registrationManager.sendActivationLinkFor(auth);
 		return Response.accepted().build();
 	}
+	
+	@POST
+	@Path("/updateUser")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response updateUser(@HeaderParam("auth")String auth,com.compli.db.bean.UserBean userBean) throws ExecutionException{ 
+		RegistrationManager registrationManager = new RegistrationManager();
+		boolean success = registrationManager.updateUser(auth, userBean);
+		return Response.ok().build();		
+	}
 }
 

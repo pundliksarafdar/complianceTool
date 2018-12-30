@@ -207,6 +207,7 @@ public class DashBoardManager {
 			}
 			
 			Map<String,Integer>  complainceOverview = complianceDetailByLaw.get(lawId);
+			System.out.println(activity.get("activityId")+"::"+i);
 			if((activity.get("isComplied")!=null && "0".equals(activity.get("isComplied").toString())) &&
 					(activity.get("isComplianceApproved")!=null && "0".equals(activity.get("isComplianceApproved").toString())) 
 					&& (activity.get("isComplianceRejected")!=null && "0".equals(activity.get("isComplianceRejected").toString()))){

@@ -1,8 +1,10 @@
 package com.compli.rest;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -14,9 +16,11 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.StreamingOutput;
 
 import org.apache.commons.io.IOUtils;
 import org.jboss.resteasy.plugins.providers.RegisterBuiltin;
@@ -57,13 +61,25 @@ public class FilesRestApi {
 	
 	@GET
 	@Path("/download/{fileId}")
-	public Response downloadFile(@PathParam("fileId")String fileId){
+	//@Produces(MediaType.APPLICATION_OCTET_STREAM)
+	public Response downloadFile(@PathParam("fileId")String fileId) throws IOException{
 		StorageManager storageManager = new StorageManager();
 		List<Files> files = storageManager.getFileById(fileId);
-		File file = new File(UPLOADED_FILE_PATH+File.separator+files.get(0).getFilename());
-		System.out.println(file.getAbsolutePath());
+		ByteArrayOutputStream oStream = StorageManager.downloadFile(fileId);
+		//File file = new File(UPLOADED_FILE_PATH+File.separator+files.get(0).getFilename());
+		//System.out.println(file.getAbsolutePath());
 		
-		return Response.ok(file).header("Content-Disposition","attachment; filename="+files.get(0).getFilename()).build();
+		StreamingOutput stream = new StreamingOutput() {
+	        public void write(OutputStream output) throws IOException, WebApplicationException {
+	            try {
+	                output.write(oStream.toByteArray());
+	            }
+	            catch (Exception e) {
+	                throw new WebApplicationException(e);
+	            }
+	        }
+	 };
+		return Response.ok(stream,MediaType.APPLICATION_OCTET_STREAM).header("Content-Disposition","attachment; filename="+files.get(0).getFilename()).build();
 	}
 	
 	@POST
@@ -72,6 +88,7 @@ public class FilesRestApi {
 	public Response uploadFile(@PathParam("companyId")String companyId,@PathParam("activityId")String activityId,MultipartFormDataInput  input){
 		Map<String, List<InputPart>> uploadForm = input.getFormDataMap();
 		List<InputPart> inputParts = uploadForm.get("uploadedFile");
+		HashMap<String, String>statusMap = new HashMap<>();
 		for (InputPart inputPart : inputParts) {
 			 try {
 				MultivaluedMap<String, String> header = inputPart.getHeaders();
@@ -82,20 +99,31 @@ public class FilesRestApi {
 				java.io.InputStream inputStream = inputPart.getBody(java.io.InputStream.class,null);
 
 				byte [] bytes = IOUtils.toByteArray(inputStream);
-					
+				String mimeType = inputPart.getMediaType().toString();
 				//constructs upload file path
 				String filePath = UPLOADED_FILE_PATH+File.separator + fileName;
 					
 				writeFile(bytes,filePath);
-				StorageManager storageManager = new StorageManager();
-				String fileId = UUID.getUID();
-				storageManager.saveFile(activityId, companyId, fileId, fileName);
+				
+				//upload to google drive
+				File file = new File(filePath);
+				String fileId = StorageManager.saveFileOnDrive(mimeType, fileName, file);
+				if(fileId != null){
+					StorageManager storageManager = new StorageManager();
+					storageManager.saveFile(activityId, companyId, fileId, fileName);
+					statusMap.put("uploaded", "yes");
+				}else{
+					statusMap.put("uploaded", "no");
+				}
+				
+				if(file.exists()){
+					file.delete();
+				}
 			 }catch(Exception e){
 				 e.printStackTrace();
 			 }
 		} 
-		HashMap<String, String>statusMap = new HashMap<>();
-		statusMap.put("uploaded", "yes");
+		
 		return Response.ok(statusMap).build();
 	}
 	
@@ -117,6 +145,14 @@ public class FilesRestApi {
 			}
 		return Response.ok(fileData).build();
 	}
+	
+	@GET
+	@Path("/listAllFilesDrive")
+	public Response getAllUploadedFilesOnDrive() throws IOException{
+		StorageManager manager = new StorageManager();
+		List files = manager.getAllFilesOnGoogleDrive();
+		return Response.ok(files).build();
+	}
 
 	@POST
 	@Path("/uploadSimply")
@@ -127,6 +163,7 @@ public class FilesRestApi {
 		for (InputPart inputPart : inputParts) {
 			 try {
 				MultivaluedMap<String, String> header = inputPart.getHeaders();
+				String mimeType = inputPart.getMediaType().toString();
 				String fileName = getFileName(header);
 				System.out.println(fileName);
 				
@@ -137,8 +174,12 @@ public class FilesRestApi {
 					
 				//constructs upload file path
 				String filePath = UPLOADED_FILE_PATH+File.separator + fileName;
-					
-				writeFile(bytes,filePath);				
+				//save file temperorily	
+				writeFile(bytes,filePath);
+				//upload to google drive
+				File file = new File(filePath);
+				String fileId = StorageManager.saveFileOnDrive(mimeType, fileName, file);
+				System.out.println(fileId);
 			 }catch(Exception e){
 				 e.printStackTrace();
 			 }

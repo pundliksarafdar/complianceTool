@@ -63,6 +63,7 @@ public class RegistrationManager {
 	
 	public boolean updateUser(String auth,com.compli.db.bean.UserBean userBeanToUpdate) throws ExecutionException{
 		com.compli.db.bean.UserBean userBean = AuthorisationManager.getUserCatche(auth);
+		String googleIdOld = userBean.getGoogleId();
 		userBean.setFirstName(userBeanToUpdate.getFirstName());
 		userBean.setLastName(userBeanToUpdate.getLastName());
 		userBean.setImage(userBeanToUpdate.getImage());
@@ -70,6 +71,15 @@ public class RegistrationManager {
 		if(userBeanToUpdate.getPass()!=null && userBeanToUpdate.getPass().trim().isEmpty()){
 			userBean.setPass(userBeanToUpdate.getPass());
 		}
-		return this.userDao.updateUserData(userBean);
+		
+		boolean isSuccess = this.userDao.updateUserData(userBean);
+		if(isSuccess){
+			//Update event only if goole email is changed
+			if(null==googleIdOld || !googleIdOld.equals(userBeanToUpdate.getGoogleId())){
+				AlertsManager alertsManager = new AlertsManager();
+				alertsManager.sendInitialCalendarEvents(userBeanToUpdate.getGoogleId());
+			}
+		}
+		return isSuccess;
 	}
 }

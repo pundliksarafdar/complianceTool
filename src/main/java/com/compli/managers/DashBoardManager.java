@@ -147,7 +147,12 @@ public class DashBoardManager {
 			complainceOverview.put(COMPLAINCE_INTIME, 0);
 			complainceOverview.put(COMPLAINCE_REVEIW, 0);
 			complainceOverview.put(COMPLIED, 0);
-			complianceOverviewForLast3Month.put(month-index, complainceOverview);
+			int monthCal = month-index;
+			//if monthCal is 0 then its dec or if its -1 then its nov
+			if(monthCal<=0){
+				monthCal = monthCal == 0?12:11;
+			}
+			complianceOverviewForLast3Month.put(monthCal, complainceOverview);
 		}
 		
 		ActivityManager activityManager = new ActivityManager(this.auth);
@@ -207,7 +212,7 @@ public class DashBoardManager {
 			}
 			
 			Map<String,Integer>  complainceOverview = complianceDetailByLaw.get(lawId);
-			System.out.println(activity.get("activityId")+"::"+i);
+			//System.out.println(activity.get("activityId")+"::"+i);
 			if((activity.get("isComplied")!=null && "0".equals(activity.get("isComplied").toString())) &&
 					(activity.get("isComplianceApproved")!=null && "0".equals(activity.get("isComplianceApproved").toString())) 
 					&& (activity.get("isComplianceRejected")!=null && "0".equals(activity.get("isComplianceRejected").toString()))){

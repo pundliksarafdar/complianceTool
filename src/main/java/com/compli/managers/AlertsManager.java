@@ -20,6 +20,7 @@ import com.compli.bean.SettingsBean;
 import com.compli.bean.SettingsScheduleBean;
 import com.compli.db.dao.ActivityDao;
 import com.compli.services.GoogleServices;
+import com.google.api.client.util.DateTime;
 import com.google.api.services.calendar.Calendar;
 import com.google.api.services.calendar.model.Event;
 import com.google.api.services.calendar.model.Events;
@@ -44,6 +45,17 @@ public class AlertsManager {
 	public void sendCalendarEvents(){
 		Map<String,List<PendingActivitiesForMail>> activitiesForEvent10 = getActivitiesFor10();
 		sendEvents(activitiesForEvent10);
+	}
+	
+	public void sendInitialCalendarEvents(String googleId){
+		Map<String,List<PendingActivitiesForMail>> activitiesForEvent10 = getActivitiesTill10(googleId);
+		Thread thread = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				sendEvents(activitiesForEvent10);		
+			}
+		});
+		thread.start();
 	}
 	
 	public void SendAlerts(){
@@ -159,9 +171,18 @@ public class AlertsManager {
 	
 	public Map<String,List<PendingActivitiesForMail>> getActivitiesFor10(){
 		Map<String,List<PendingActivitiesForMail>> activities = new HashMap<String, List<PendingActivitiesForMail>>();
-		List<PendingActivitiesForMail> cManagerActivities = this.activityDao.getOlderActivitiesForMail(1,"cManager");
+		List<PendingActivitiesForMail> cManagerActivities = this.activityDao.getOlderActivitiesForMail(10,"cManager");
 		activities.put("cManager", cManagerActivities);
-		List<PendingActivitiesForMail> cOwnerActivities = this.activityDao.getOlderActivitiesForMail(1,"cOwner");
+		List<PendingActivitiesForMail> cOwnerActivities = this.activityDao.getOlderActivitiesForMail(10,"cOwner");
+		activities.put("cOwner", cOwnerActivities);
+		return activities;
+	}
+	
+	public Map<String,List<PendingActivitiesForMail>> getActivitiesTill10(String googleId){
+		Map<String,List<PendingActivitiesForMail>> activities = new HashMap<String, List<PendingActivitiesForMail>>();
+		List<PendingActivitiesForMail> cManagerActivities = this.activityDao.getOlderActivitiesForMailTillDays(10,"cManager",googleId);
+		activities.put("cManager", cManagerActivities);
+		List<PendingActivitiesForMail> cOwnerActivities = this.activityDao.getOlderActivitiesForMailTillDays(10,"cOwner",googleId);
 		activities.put("cOwner", cOwnerActivities);
 		return activities;
 	}
@@ -192,10 +213,11 @@ public class AlertsManager {
 		Event evt = getEvent("1234");
 		System.out.println(evt);*/
 		
-		/*AlertsManager alertsManager = new AlertsManager();
-		alertsManager.sendCalendarEvents();*/
+		AlertsManager alertsManager = new AlertsManager();
+		/*alertsManager.sendCalendarEvents();*/
 		
-		//deleteAllEvents();
+		deleteAllEvents();
+		//alertsManager.sendInitialCalendarEvents("pundlikproject@gmail.com");
 	}
 	
 	public boolean isSendEnabled(String companyId,REMINDER_TYPE rType,USER_TYPE uType){
@@ -234,7 +256,7 @@ public class AlertsManager {
 		date.setMinutes(30);
 		Event event = eventBuilder.buildEvent(summary, activity, date, attendees, activityId);
 		try{
-		event = calendarService.events().insert(CALENDAR_ID, event).execute();
+			event = calendarService.events().insert(CALENDAR_ID, event).execute();
 		}catch(Exception e){
 			event = calendarService.events().update(CALENDAR_ID, event.getId(),event).execute();
 		}
@@ -255,9 +277,14 @@ public class AlertsManager {
 	
 	public static void deleteAllEvents() throws IOException{
 		Calendar calendarService = GoogleServices.getCalendarService();
+		DateTime dateTime0 = new DateTime(1000000);
 		 Events evts = calendarService.events().list(CALENDAR_ID).setMaxResults(1000).execute();
 		List<Event> evs = evts.getItems();
+		int idx = 0;
+		int length = evs.size();
+		System.out.println("Events length :"+length);
 		for(Event evt:evs){
+			System.out.println("Index : "+idx++);
 			deleteEvent(evt.getId());
 		}
 	}

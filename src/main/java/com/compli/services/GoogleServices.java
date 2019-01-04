@@ -39,8 +39,8 @@ public class GoogleServices {
 	static GoogleClientSecrets clientSecrets;
 	static GoogleAuthorizationCodeFlow flow;
 	static Credential credential;
-	static String clientId = "485938436404-e2l60rp8b6hrpkjcqt4qvniti0h9imic.apps.googleusercontent.com";
-	static String clientSecret = "aS4L1ZoVam820K7bF_sHoQPm";
+	static String clientId = "268978747144-h5u6uplbojevsappcklaq67l4fdfjt0a.apps.googleusercontent.com";
+	static String clientSecret = "9_Y_mv5lrrvVZI99cnEdtkdX";
 	static String redirectURI = "/rest/settings/google";
 	static Details web;
 	

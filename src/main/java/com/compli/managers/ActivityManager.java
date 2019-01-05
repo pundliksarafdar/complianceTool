@@ -206,14 +206,19 @@ public class ActivityManager {
 public boolean changeActivityStatus(String companyId,String activityId,boolean isComplied,boolean pendingComplied,boolean compliedInTime,boolean compliedDelayed,
 		boolean pendingDescrepancy,String remark,Date completionDate){
 		if(isComplied){
-			return this.dashBoardDao.changeActivityStatus(companyId,activityId, isComplied,remark);
+			boolean isSuccess = this.dashBoardDao.changeActivityStatus(companyId,activityId, isComplied,remark);
+			try{
+				if(isSuccess){
+					AlertsManager.deleteEventForActivity(activityId);
+				}
+			}catch(Exception e){e.printStackTrace();}
+			return isSuccess;
 		}else if(compliedInTime){
 			boolean isSuccess = this.dashBoardDao.changeActivityStatusApproved(companyId, activityId,completionDate);
 			AlertsManager.deleteEventForActivity(activityId);
 			return isSuccess;
 		}else if(compliedDelayed){
 			 boolean isSuccess = this.dashBoardDao.changeActivityStatusComplainceDelayed(companyId, activityId,completionDate);
-			 AlertsManager.deleteEventForActivity(activityId);
 			 return isSuccess;
 		}else if(pendingDescrepancy){
 			PendingForDiscrepancy activity = activityDao.getActivityDataForMail(activityId);

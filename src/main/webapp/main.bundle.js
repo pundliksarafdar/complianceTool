@@ -1308,7 +1308,7 @@ var ComplianceActivitiesComponent = /** @class */ (function () {
         this.setLoadUserTypeProfile();
         this.activityType = this.redirection.indexOf("Discrepancy") > -1 ? "descrepancy" : "pending";
         this.activitySeverity = this.route.snapshot.queryParamMap.get('activitySeverity');
-        this.activityType = this.activitySeverity.indexOf("Discrepancy") > -1 ? "descrepancy" : "pending";
+        this.activityType = this.activitySeverity != undefined && this.activitySeverity.indexOf("Discrepancy") > -1 ? "descrepancy" : "pending";
         var lawArea = this.route.snapshot.queryParamMap.get('lawArea');
         this.showFilter = !(!!this.activitySeverity || !!lawArea);
         this.setFilter();

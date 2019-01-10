@@ -20,9 +20,9 @@ public class Util {
 		//Added + 1 because MONTH start from 0
 		int currentMonth =  Calendar.getInstance().get(Calendar.MONTH)+1; 
 		if(currentMonth<4){
-			fyYear = month>4?fyYear-1:fyYear;
+			fyYear = month>3?fyYear-1:fyYear;
 		}else{
-			fyYear = month>4?fyYear:fyYear+1;
+			fyYear = month>3?fyYear:fyYear+1;
 		}		
 		return fyYear;
 	}
@@ -33,7 +33,7 @@ public class Util {
 		if(quarterInt == 3){
 			year = Util.getFinnancialYearForMonth(1);
 		}else{
-			year = Util.getFinnancialYearForMonth(5);
+			year = Util.getFinnancialYearForMonth(4);
 		}
 		return year;
 	}
@@ -42,13 +42,13 @@ public class Util {
 		int year = getFYForQuarter(quarterNo);
 		String date = null;
 		if(quarterNo==0){
-			date = year+"-06-31";
+			date = year+"-6-30";
 		}else if(quarterNo==1){
-			date = year+"-09-30";
+			date = year+"-9-30";
 		}else if(quarterNo==2){
 			date = year+"-12-31";
 		}else {
-			date = year+"-03-31";
+			date = year+"-3-31";
 		}
 		return date;
 	}

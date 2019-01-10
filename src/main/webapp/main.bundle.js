@@ -882,7 +882,13 @@ var ComplianceActivitiesComponent = /** @class */ (function () {
     ComplianceActivitiesComponent.prototype.submitStatusChange = function (companyId, activityId, remarks, event, compliedType, isCompliedDate) {
         this.activityService.setActivityStatus(companyId, activityId, remarks, compliedType, isCompliedDate).then(function (resp) {
             event.target.disabled = true;
-            __WEBPACK_IMPORTED_MODULE_6_jquery__(event.target).parent().html(compliedType);
+            if (compliedType == "Complied") {
+                __WEBPACK_IMPORTED_MODULE_6_jquery__(event.target).parent().html("Submitted");
+                __WEBPACK_IMPORTED_MODULE_6_jquery__(event.target).closest("tr").find(".downloadFile").remove();
+            }
+            else {
+                __WEBPACK_IMPORTED_MODULE_6_jquery__(event.target).parent().html(compliedType);
+            }
         });
     };
     ComplianceActivitiesComponent.prototype.NotApplicaleRemark = function () {

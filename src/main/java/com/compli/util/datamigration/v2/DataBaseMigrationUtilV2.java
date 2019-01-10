@@ -87,11 +87,11 @@ public class DataBaseMigrationUtilV2 {
 	}
 	
 	public static void startUploadingFiles() throws IOException{
-		FILE_NAME = "C:\\report\\db_submit_detail.xlsx";
+		FILE_NAME = "C:\\report\\newDocumentsSubmit.xlsx";
 		Sheet sheet = readSheetFile();
-		/*DBMigrationUtilV2FIles.init();
+		DBMigrationUtilV2FIles.init();
 		DBMigrationUtilV2FIles.createFIles(sheet);
-		*/
+		
 		DBMigrationUtilV2FIlesDriveRefresh.init();
 		DBMigrationUtilV2FIlesDriveRefresh.refreshFilesId();
 	}

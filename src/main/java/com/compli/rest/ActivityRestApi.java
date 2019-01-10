@@ -85,7 +85,7 @@ public class ActivityRestApi {
 				year = year.split("-")[0];
 				activityList1 = activityManager.getAllActivitiesWithDescriptionForCompanyWithSeverityForYear(companyId,"Complied- In time",year);			
 			}else if(quarter!=null){
-				activityList1 = activityManager.getAllActivitiesWithDescriptionForCompanyWithSeverityForQuarter(companyId,"Complied- In time",quarter);
+				activityList1 = activityManager.getAllActivitiesWithDescriptionForCompanyForQuarter(companyId,quarter);
 			}
 			return Response.ok(activityList1).build();
 		}else if("low".equalsIgnoreCase(activitySeverity) || "medium".equalsIgnoreCase(activitySeverity) || "high".equalsIgnoreCase(activitySeverity) || "all".equalsIgnoreCase(activitySeverity)){

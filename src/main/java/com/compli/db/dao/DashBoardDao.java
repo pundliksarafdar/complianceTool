@@ -9,6 +9,8 @@ import java.util.Map;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 
+import com.compli.util.Util;
+
 public class DashBoardDao {
 	private JdbcTemplate jdbcTemplate;
 	
@@ -252,7 +254,7 @@ public class DashBoardDao {
 			"on riskmaster.riskId = companyWithLaw.riskId) companyWithRisk "+
 		"on periodicitymaster.periodicityId = companyWithRisk.periodicityId) companyWithPeriodicity "+ 
 	"on periodicitydatemaster.periodicityDateId = companyWithPeriodicity.periodicityDateId) companyWithPerDate  "+
- "on companyWithPerDate.companyId = activity.companyId and companyWithPerDate.activityId = activity.activityId and activity.isComplianceRejected=false  order by periodicityDateId desc) newtable where ((month(duedate)=? and year(duedate)=?) and isComplied=true and(isComplianceApproved=true || isComplainceDelayed=true)) or (month(duedate)<=? and year(duedate)<=? and isComplied=false);";
+ "on companyWithPerDate.companyId = activity.companyId and companyWithPerDate.activityId = activity.activityId and activity.isComplianceRejected=false  order by periodicityDateId desc) newtable where ((month(duedate)=? and year(duedate)=?) and isComplied=true and(isComplianceApproved=true || isComplainceDelayed=true)) or (DATE_FORMAT(duedate,'%Y%m')<=DATE_FORMAT(?,'%Y%m') and isComplied=false);";
 	
 	/************************************************************************/
 	private String activityForMonthIncludingRejectedQuery = 
@@ -339,7 +341,7 @@ public class DashBoardDao {
 			"on riskmaster.riskId = companyWithLaw.riskId) companyWithRisk "+
 		"on periodicitymaster.periodicityId = companyWithRisk.periodicityId) companyWithPeriodicity "+ 
 	"on periodicitydatemaster.periodicityDateId = companyWithPeriodicity.periodicityDateId) companyWithPerDate  "+
- "on companyWithPerDate.companyId = activity.companyId and companyWithPerDate.activityId = activity.activityId and activity.isComplianceRejected=false  order by periodicityDateId desc) newtable where ((month(duedate)=? and year(duedate)=?) and isComplied=true) or (DATE_FORMAT(duedate,'%Y%m') <= DATE_FORMAT(now(),'%Y%m') and isComplied=false);";
+ "on companyWithPerDate.companyId = activity.companyId and companyWithPerDate.activityId = activity.activityId and activity.isComplianceRejected=false  order by periodicityDateId desc) newtable where ((month(duedate)=? and year(duedate)=?) and isComplied=true) or (DATE_FORMAT(duedate,'%Y%m') <=DATE_FORMAT(?,'%Y%m') and isComplied=false);";
 
 	/************************************************************************/
 	private String activityForMonthQueryIncludingRejectedWithLocation = 
@@ -514,7 +516,7 @@ public class DashBoardDao {
 			"on riskmaster.riskId = companyWithLaw.riskId) companyWithRisk "+
 		"on periodicitymaster.periodicityId = companyWithRisk.periodicityId) companyWithPeriodicity "+ 
 	"on periodicitydatemaster.periodicityDateId = companyWithPeriodicity.periodicityDateId) companyWithPerDate  "+
-		"on companyWithPerDate.companyId = activity.companyId and companyWithPerDate.activityId = activity.activityId and activity.isComplianceRejected=false  order by periodicityDateId desc) newtable  WHERE (quarter(duedate)=? and YEAR(duedate)=? and isComplied=true) or (quarter(duedate)<=? and YEAR(duedate)=? and isComplied=false)";
+		"on companyWithPerDate.companyId = activity.companyId and companyWithPerDate.activityId = activity.activityId and activity.isComplianceRejected=false  order by periodicityDateId desc) newtable  WHERE (quarter(duedate)=? and YEAR(duedate)=? and isComplied=true) or (DATE_FORMAT(duedate,'%Y%m')<=DATE_FORMAT(?,'%Y%m') and isComplied=false)";
 
 	//Need to modify 
 		private String activityForQuarterQueryWithLocation = 
@@ -557,7 +559,7 @@ public class DashBoardDao {
 				"on riskmaster.riskId = companyWithLaw.riskId) companyWithRisk "+
 			"on periodicitymaster.periodicityId = companyWithRisk.periodicityId) companyWithPeriodicity "+ 
 		"on periodicitydatemaster.periodicityDateId = companyWithPeriodicity.periodicityDateId) companyWithPerDate  "+
-			"on companyWithPerDate.companyId = activity.companyId and companyWithPerDate.activityId = activity.activityId and activity.isComplianceRejected=false  order by periodicityDateId desc) newtable  WHERE (quarter(duedate)=? and YEAR(duedate)=? and isComplied=true) or (quarter(duedate)<=? and YEAR(duedate)=? and isComplied=false)";
+			"on companyWithPerDate.companyId = activity.companyId and companyWithPerDate.activityId = activity.activityId and activity.isComplianceRejected=false  order by periodicityDateId desc) newtable  WHERE (quarter(duedate)=? and YEAR(duedate)=? and isComplied=true) or (DATE_FORMAT(duedate,'%Y%m')<=DATE_FORMAT(?,'%Y%m') and isComplied=false)";
 
 	
 	String changeActivityStatusQuery = "INSERT INTO activity (companyId,activityId, isComplied,isComplianceApproved,remark,isProofRequired,reOpen) VALUES(?, ?, ?, ?,?,false,false) ON DUPLICATE KEY UPDATE companyId =?,activityId=?, isComplied=?,isComplianceApproved=?,remark=?,isProofRequired=false,reOpen=false";
@@ -688,13 +690,16 @@ private String activityQueryByLawAndStatusFullUser =
 	
 	public List<Map<String, Object>> getAllActivitiesWithDescriptionForCompanyByMonth(String companyId, String month,boolean isFullUser) {
 		companyId = "('"+companyId.replace(",", "','")+"')";
+		int mon = Integer.parseInt(month);
 		if(isFullUser){
+			//Sql date formater need date i nYYYY-mm-dd hence forming date
+			String dateFormatted = Util.getFinnancialYearForMonth(mon)+"-"+month+"-01";
 			activityForMonthQueryFullUser = activityForMonthQueryFullUser.replace("(?)", companyId);
-			List<Map<String, Object>> activities = this.jdbcTemplate.queryForList(activityForMonthQueryFullUser,month,Calendar.getInstance().get(Calendar.YEAR),month,Calendar.getInstance().get(Calendar.YEAR));
+			List<Map<String, Object>> activities = this.jdbcTemplate.queryForList(activityForMonthQueryFullUser,month,Util.getFinnancialYearForMonth(mon),dateFormatted);
 			return activities;
 		}else{
 			activityForMonthQuery = activityForMonthQuery.replace("(?)", companyId);
-			List<Map<String, Object>> activities = this.jdbcTemplate.queryForList(activityForMonthQuery,month,Calendar.getInstance().get(Calendar.YEAR));
+			List<Map<String, Object>> activities = this.jdbcTemplate.queryForList(activityForMonthQuery,month,Util.getFinnancialYearForMonth(mon));
 			return activities;
 		}
 	}
@@ -702,8 +707,10 @@ private String activityQueryByLawAndStatusFullUser =
 	public List<Map<String, Object>> getAllActivitiesWithDescriptionForCompanyByMonthWithRejected(String companyId, String month,boolean isFullUser) {
 		companyId = "('"+companyId.replace(",", "','")+"')";
 		if(isFullUser){
+			int mon = Integer.parseInt(month);
+			int fyYear = Util.getFinnancialYearForMonth(mon);
 			activityForMonthIncludingRejectedQueryFullUser = activityForMonthIncludingRejectedQueryFullUser.replace("(?)", companyId);
-			List<Map<String, Object>> activities = this.jdbcTemplate.queryForList(activityForMonthIncludingRejectedQueryFullUser,month,Calendar.getInstance().get(Calendar.YEAR));
+			List<Map<String, Object>> activities = this.jdbcTemplate.queryForList(activityForMonthIncludingRejectedQueryFullUser,month,fyYear);
 			return activities;
 		}else{
 			activityForMonthQuery = activityForMonthQuery.replace("(?)", companyId);
@@ -711,12 +718,29 @@ private String activityQueryByLawAndStatusFullUser =
 			return activities;
 		}
 	}
+	//This function is only for repository
+	public List<Map<String, Object>> getAllActivitiesWithDescriptionForCompanyByQuarterWithRejected(String companyId, String quarter,boolean isFullUser) {
+		//removing is rejected from query
+		this.activityForQuarterQueryFullUser = this.activityForQuarterQueryFullUser.replace("and activity.isComplianceRejected=false", "");
+		List<Map<String, Object>> activities = getAllActivitiesWithDescriptionForCompanyByQuarter(companyId, isFullUser, quarter);
+		return activities;
+	}
+	
+	//This function is only for repository
+		public List<Map<String, Object>> getAllActivitiesWithDescriptionForCompanyByQuarterWithRejected(String companyId, String quarter,boolean isFullUser,String location) {
+			//removing is rejected from query
+			this.activityForQuarterQueryFullUser = this.activityForQuarterQueryFullUser.replace("and activity.isComplianceRejected=false", "");
+			List<Map<String, Object>> activities = getAllActivitiesWithDescriptionForCompanyByQuarter(companyId, isFullUser, quarter,location);
+			return activities;
+		}
 	
 	public List<Map<String, Object>> getAllActivitiesWithDescriptionForCompanyByMonth(String companyId, String month,boolean isFullUser,String location) {
 		companyId = "('"+companyId.replace(",", "','")+"')";
+		int mon = Integer.parseInt(month);
 		if(isFullUser){
+			String dateFormatted = Util.getFinnancialYearForMonth(mon)+"-"+month+"-01";
 			activityForMonthQueryFullUserWithLocation = activityForMonthQueryFullUserWithLocation.replace("(?)", companyId);
-			List<Map<String, Object>> activities = this.jdbcTemplate.queryForList(activityForMonthQueryFullUserWithLocation,location,month,Calendar.getInstance().get(Calendar.YEAR));
+			List<Map<String, Object>> activities = this.jdbcTemplate.queryForList(activityForMonthQueryFullUserWithLocation,location,month,Util.getFinnancialYearForMonth(mon),dateFormatted);
 			return activities;
 		}else{
 			activityForMonthQueryWithLocation = activityForMonthQueryWithLocation.replace("(?)", companyId);
@@ -898,9 +922,10 @@ private String activityQueryByLawAndStatusFullUser =
 			String companyId, boolean isFullUser,String quarter) {
 		companyId = "('"+companyId.replace(",", "','")+"')";
 		int year = Calendar.getInstance().get(Calendar.YEAR);
-
 		//Indian quarter start at April so adding 1 
 		int quarterInt = Integer.parseInt(quarter);
+		year = Util.getFYForQuarter(quarterInt);
+		String lastdayOfQuarter = Util.getLastDateOfQuarter(quarterInt);
 		//UI quarter starts with 0 so adding 1 in quarter
 		quarterInt++;
 		if(quarterInt == 4){
@@ -911,7 +936,7 @@ private String activityQueryByLawAndStatusFullUser =
 		quarter = quarterInt+"";
 		if(isFullUser){
 			activityForQuarterQueryFullUser = activityForQuarterQueryFullUser.replace("(?)", companyId);
-			List<Map<String, Object>> activities = this.jdbcTemplate.queryForList(activityForQuarterQueryFullUser,quarter,year,quarter,year);
+			List<Map<String, Object>> activities = this.jdbcTemplate.queryForList(activityForQuarterQueryFullUser,quarter,year,lastdayOfQuarter);
 			return activities;
 		}else{
 			activityForQuarterQuery = activityForQuarterQuery.replace("(?)", companyId);
@@ -927,6 +952,9 @@ private String activityQueryByLawAndStatusFullUser =
 
 		//Indian quarter start at April so adding 1 
 		int quarterInt = Integer.parseInt(quarter);
+		year = Util.getFYForQuarter(quarterInt);
+		String lastdayOfQuarter = Util.getLastDateOfQuarter(quarterInt);
+		
 		//UI quarter starts with 0 so adding 1 in quarter
 		quarterInt++;
 		if(quarterInt == 4){
@@ -937,7 +965,7 @@ private String activityQueryByLawAndStatusFullUser =
 		quarter = quarterInt+"";
 		if(isFullUser){
 			activityForQuarterQueryFullUserWithLocation = activityForQuarterQueryFullUserWithLocation.replace("(?)", companyId);
-			List<Map<String, Object>> activities = this.jdbcTemplate.queryForList(activityForQuarterQueryFullUserWithLocation,location,quarter,year,quarter,year);
+			List<Map<String, Object>> activities = this.jdbcTemplate.queryForList(activityForQuarterQueryFullUserWithLocation,location,quarter,year,lastdayOfQuarter);
 			return activities;
 		}else{
 			activityForQuarterQueryWithLocation = activityForQuarterQueryWithLocation.replace("(?)", companyId);

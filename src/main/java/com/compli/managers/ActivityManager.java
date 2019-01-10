@@ -136,6 +136,16 @@ public class ActivityManager {
 		}
 		return allActivity;
 	}
+	//This function is for repository with tracker
+	public List<Map<String, Object>> getAllActivitiesWithDescriptionForCompanyForQuarter(String companyId,String month){
+		List<Map<String, Object>> allActivity = null;
+		if(this.locationId==null){
+			allActivity = this.dashBoardDao.getAllActivitiesWithDescriptionForCompanyByQuarterWithRejected(companyId,month,true);
+		}else{
+			allActivity = this.dashBoardDao.getAllActivitiesWithDescriptionForCompanyByQuarterWithRejected(companyId,month,true,this.locationId);
+		}
+		return allActivity;
+	}
 	
 	public List<Map<String, Object>> getAllActivitiesWithDescriptionForCompanyWithSeverityForYear(String companyId,String severity,String year){
 		List<Map<String, Object>> allActivity = null;

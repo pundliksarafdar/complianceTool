@@ -1,5 +1,6 @@
 package com.compli.managers;
 
+import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.text.DateFormatSymbols;
 import java.time.LocalDate;
@@ -256,6 +257,7 @@ public class ReportsManager {
 			JRBeanCollectionDataSource beanCollectionDataAll = new JRBeanCollectionDataSource(new ArrayList(){{add(0);}});
 			JRBeanCollectionDataSource beanCollectionDataSourceInTime = new JRBeanCollectionDataSource(compliedInTime);
 	        JRBeanCollectionDataSource beanCollectionDataSourceInDelayed = new JRBeanCollectionDataSource(compliedDelayed);
+	        //compliedOpen = compliedOpen.subList(5, 6);
 	        JRBeanCollectionDataSource beanCollectionDataSourceInOpen = new JRBeanCollectionDataSource(compliedOpen);
 	        JRBeanCollectionDataSource graphBeanDataSource = new JRBeanCollectionDataSource(graphBeans);
 	        JRBeanCollectionDataSource chartBeanDataSource = new JRBeanCollectionDataSource(chartBean);
@@ -274,6 +276,7 @@ public class ReportsManager {
 	        JasperReport jasperCompliReport = JasperCompileManager.compileReport(this.getClass().getResourceAsStream("/reports/ComplianceReport.jrxml"));
 	        JasperPrint jasperPrint = JasperFillManager.fillReport(jasperCompliReport, params,beanCollectionDataAll);
 
+	        ByteArrayOutputStream bos = new ByteArrayOutputStream();
 //	        JasperExportManager.exportReportToPdfFile(jasperPrint, "c:/report/report.pdf");
 	        pdfFile = JasperExportManager.exportReportToPdf(jasperPrint);
 	    } catch (Exception e) {

@@ -639,6 +639,47 @@ private String activityQueryByLawAndStatusFullUser =
 	"on periodicitydatemaster.periodicityDateId = companyWithPeriodicity.periodicityDateId and periodicitydatemaster.duedate<NOW()) companyWithPerDate  "+
 "on companyWithPerDate.companyId = activity.companyId and companyWithPerDate.activityId = activity.activityId and activity.isComplianceRejected=false and isComplied=? and isComplianceApproved=? and isComplainceDelayed=? and isComplianceRejected=? and isProofRequired=? order by periodicityDateId desc;";
 
+///////////////////////////////////////// Activity query by lawarea and status//////////////////////////////////////////////////////////////////////////////////////
+private String activityQueryByMonthAndStatus = 
+"select companyWithPerDate.companyId,abbriviation,lawId,lawDesc,lawName,locationId,locationName,companyWithPerDate.activityId,activityName,riskId,riskDes,periodicityId,periodicityDesc,periodicityDateId,consequence,duedate,ifnull(isComplied,false)as isComplied ,ifnull(isComplianceApproved,false) as isComplianceApproved,ifnull(isComplianceRejected,false) as isComplianceRejected,ifnull(isComplainceDelayed,false) as isComplainceDelayed,ifnull(isProofRequired,false) as isProofRequired,ifnull(reOpen,false) as reOpen,arTechRemark,assignedUser,remark,completionDate from activity right join "+
+	"(select companyId,abbriviation,lawId,lawDesc,lawName,locationId,locationName,activityId,activityName,riskId,riskDes,periodicityId,periodicityDesc,periodicitydatemaster.periodicityDateId,consequence,periodicitydatemaster.duedate from periodicitydatemaster inner join "+
+		"(select companyId,abbriviation,lawId,lawDesc,lawName,locationId,locationName,activityId,activityName,riskId,riskDes,periodicitymaster.periodicityId,periodicitymaster.description as periodicityDesc,periodicityDateId,consequence from periodicitymaster inner join "+
+			"(select companyId,abbriviation,lawId,lawDesc,lawName,locationId,locationName,activityId,activityName,riskmaster.riskId,riskmaster.description riskDes,periodicityId,periodicityDateId,consequence from riskmaster inner join "+
+				"(select companyId,abbriviation,locationId,locationName,activityId,activityName,riskId,lawmaster.lawName,lawmaster.lawId,lawmaster.lawDesc,periodicityId,periodicityDateId,consequence from lawmaster inner join "+
+					"(select companyId,abbriviation,lawId,locationId,locationName,activitymaster.activityId,activitymaster.activityName,riskId,periodicityId,periodicityDateId,consequence from activitymaster inner join "+
+						"(select companyId,abbriviation,activityassociation.locationId,locationName,activityId from activityassociation inner join "+ 
+							"(select companyId,abbriviation,location.locationId,locationName from location inner join	"+
+								"(select cc.companyId,abbriviation,locationId from company cc inner join companylocation "+
+								"on cc.companyId = companylocation.companyId where cc.companyId in (?)) companyWithLocation "+
+							"on location.locationId = companyWithLocation.locationId) companyWithLocationName "+
+						"on companyWithLocationName.locationId = activityassociation.locationId) companyWithActivityId "+
+					"on companyWithActivityId.activityId = activitymaster.activityId) companyWithActivity "+
+				"on companyWithActivity.lawId = lawmaster.lawId  and companyWithActivity.lawId like ?) companyWithLaw	"+	
+			"on riskmaster.riskId = companyWithLaw.riskId) companyWithRisk "+
+		"on periodicitymaster.periodicityId = companyWithRisk.periodicityId) companyWithPeriodicity "+ 
+	"on periodicitydatemaster.periodicityDateId = companyWithPeriodicity.periodicityDateId and month(periodicitydatemaster.duedate)=? and year(periodicitydatemaster.duedate)=?)) companyWithPerDate  "+
+"on companyWithPerDate.companyId = activity.companyId and companyWithPerDate.activityId = activity.activityId and activity.isComplianceRejected=false order by periodicityDateId desc;";
+
+private String activityQueryByMonthAndStatusFullUser = 
+"select companyWithPerDate.companyId,abbriviation,lawId,lawDesc,lawName,locationId,locationName,companyWithPerDate.activityId,activityName,riskId,riskDes,periodicityId,periodicityDesc,periodicityDateId,consequence,duedate,ifnull(isComplied,false)as isComplied ,ifnull(isComplianceApproved,false) as isComplianceApproved,ifnull(isComplianceRejected,false) as isComplianceRejected,ifnull(isComplainceDelayed,false) as isComplainceDelayed,ifnull(isProofRequired,false) as isProofRequired,ifnull(reOpen,false) as reOpen,arTechRemark,assignedUser,remark,completionDate from activity inner join "+
+	"(select companyId,abbriviation,lawId,lawDesc,lawName,locationId,locationName,activityId,activityName,riskId,riskDes,periodicityId,periodicityDesc,periodicitydatemaster.periodicityDateId,consequence,periodicitydatemaster.duedate from periodicitydatemaster inner join "+
+		"(select companyId,abbriviation,lawId,lawDesc,lawName,locationId,locationName,activityId,activityName,riskId,riskDes,periodicitymaster.periodicityId,periodicitymaster.description as periodicityDesc,periodicityDateId,consequence from periodicitymaster inner join "+
+			"(select companyId,abbriviation,lawId,lawDesc,lawName,locationId,locationName,activityId,activityName,riskmaster.riskId,riskmaster.description riskDes,periodicityId,periodicityDateId,consequence from riskmaster inner join "+
+				"(select companyId,abbriviation,locationId,locationName,activityId,activityName,riskId,lawmaster.lawName,lawmaster.lawId,lawmaster.lawDesc,periodicityId,periodicityDateId,consequence from lawmaster inner join "+
+					"(select companyId,abbriviation,lawId,locationId,locationName,activitymaster.activityId,activitymaster.activityName,riskId,periodicityId,periodicityDateId,consequence from activitymaster inner join "+
+						"(select companyId,abbriviation,activityassociation.locationId,locationName,activityId from activityassociation inner join "+ 
+							"(select companyId,abbriviation,location.locationId,locationName from location inner join	"+
+								"(select cc.companyId,abbriviation,locationId from company cc inner join companylocation "+
+								"on cc.companyId = companylocation.companyId where cc.companyId in (?)) companyWithLocation "+
+							"on location.locationId = companyWithLocation.locationId) companyWithLocationName "+
+						"on companyWithLocationName.locationId = activityassociation.locationId) companyWithActivityId "+
+					"on companyWithActivityId.activityId = activitymaster.activityId) companyWithActivity "+
+				"on companyWithActivity.lawId = lawmaster.lawId) companyWithLaw	"+	
+			"on riskmaster.riskId = companyWithLaw.riskId) companyWithRisk "+
+		"on periodicitymaster.periodicityId = companyWithRisk.periodicityId) companyWithPeriodicity "+ 
+	"on periodicitydatemaster.periodicityDateId = companyWithPeriodicity.periodicityDateId and month(periodicitydatemaster.duedate)=? and year(periodicitydatemaster.duedate)=?) companyWithPerDate  "+
+"on companyWithPerDate.companyId = activity.companyId and companyWithPerDate.activityId = activity.activityId and activity.isComplianceRejected=false and isComplied=? and isComplianceApproved=? and isComplainceDelayed=? and isComplianceRejected=? and isProofRequired=? order by periodicityDateId desc;";
+
 	public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
 		this.jdbcTemplate = jdbcTemplate;
 	}
@@ -885,6 +926,38 @@ private String activityQueryByLawAndStatusFullUser =
 			return activitiesCount;
 		}
 	}
+	
+	public List<Map<String, Object>> getAllActivitiesWithDescriptionForCompanyByMonthAndStatus(
+			String companyId,String month,String status, boolean isFullUser) {
+		String months[] = {"Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"};
+		List<String> monthsList = Arrays.asList(months);
+		companyId = "('"+companyId.replace(",", "','")+"')";
+		Boolean isComplied = false,isComplianceApproved = false,isComplainceDelayed = false,isComplianceRejected = false,isProofRequired=false,isReOpenRequested=false;
+		if("Pending compliance".equalsIgnoreCase(status)){
+			isComplied = false;isComplianceApproved = false;isComplainceDelayed = false;isComplianceRejected = false;isProofRequired=false;isReOpenRequested=false;
+		}else if("Complied-Delayed".equalsIgnoreCase(status)){
+			isComplied = true;isComplianceApproved = true;isComplainceDelayed = true;isComplianceRejected = false;isProofRequired=false;isReOpenRequested=false;
+		}else if("Pending for review".equalsIgnoreCase(status)){
+			isComplied = true;isComplianceApproved = false;isComplainceDelayed = false;isComplianceRejected = false;isProofRequired=false;isReOpenRequested=false;
+		}else if("Complied- In time".equalsIgnoreCase(status)){
+			isComplied = true;isComplianceApproved = true;isComplainceDelayed = false;isComplianceRejected = false;isProofRequired=false;isReOpenRequested=false;
+		}else if("Pending for Discrepancy".equalsIgnoreCase(status)){
+			isComplied = true;isComplianceApproved = false;isComplainceDelayed = false;isComplianceRejected = false;isProofRequired=true;isReOpenRequested=false;
+		}
+		
+		int year = Util.getFinnancialYearForMonth(Integer.parseInt(month));
+		if(isFullUser){
+			activityQueryByMonthAndStatusFullUser = activityQueryByMonthAndStatusFullUser.replace("(?)", companyId);
+			List<Map<String, Object>> activitiesCount = this.jdbcTemplate.queryForList(activityQueryByMonthAndStatusFullUser,month,year,isComplied,isComplianceApproved,isComplainceDelayed,isComplianceRejected,isProofRequired);
+			return activitiesCount;
+		}else{
+			//This is having a problem
+			activityQueryByMonthAndStatus = activityQueryByMonthAndStatus.replace("(?)", companyId);
+			List<Map<String, Object>> activitiesCount = this.jdbcTemplate.queryForList(activityQueryByMonthAndStatus,month,year,isComplied,isComplianceApproved,isComplainceDelayed,isComplianceRejected);
+			return activitiesCount;
+		}
+	}
+
 
 	public List<Map<String, Object>> getAllActivitiesWithDescriptionForCompanyByYear(
 			String companyId, String year, boolean isFullUser) {

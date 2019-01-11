@@ -1,6 +1,7 @@
 package com.compli.managers;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -53,8 +54,16 @@ public class ActivityManager {
 	}
 	
 	public List<Map<String, Object>> getAllActivitiesWithDescriptionForCompanyWithSeverityAndLaw(String companyId,String status,String law){
-		List<Map<String, Object>> allActivity = this.dashBoardDao.getAllActivitiesWithDescriptionForCompanyByLawAndStatus(companyId,law,status,true);
-		return allActivity;
+		String months[] = {"Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"};
+		List<String> monthsList = Arrays.asList(months);
+		if(monthsList.contains(law)){
+			String monthStr = (monthsList.indexOf(law)+1)+"";
+			List<Map<String, Object>> allActivity = this.dashBoardDao.getAllActivitiesWithDescriptionForCompanyByMonthAndStatus(companyId,monthStr,status,true);
+			return allActivity;
+		}else{
+			List<Map<String, Object>> allActivity = this.dashBoardDao.getAllActivitiesWithDescriptionForCompanyByLawAndStatus(companyId,law,status,true);
+			return allActivity;
+		}
 	}
 	
 	public List<Map<String, Object>> getAllActivitiesWithDescriptionForCompanyWithSeverity(String companyId,String severity){

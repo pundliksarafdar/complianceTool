@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.text.DateFormatSymbols;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -189,9 +190,9 @@ public class ReportsManager {
 		return complianceDetailByLaw;
 	}
 	
-	public static String finnancialYear(String month){
+	public static String finnancialYear(){
 		String finnacialYear = "";
-		int monthInt = Integer.parseInt(month);
+		int monthInt = Calendar.getInstance().get(Calendar.MONTH);
 		int currentYear = LocalDate.now().getYear();
 		if(monthInt>3){
 			finnacialYear = currentYear + "-" + (currentYear+1);
@@ -227,12 +228,12 @@ public class ReportsManager {
 		String month = null,finnancialYear = null,monthEnd=null;
 			if(monthNum!=null){
 				monthEnd =month = new DateFormatSymbols().getMonths()[Integer.parseInt(monthNum)-1];
-				finnancialYear = finnancialYear(monthNum);
+				finnancialYear = finnancialYear();
 			}else if(quarter!=null){
 				//month = new DateFormatSymbols().getMonths()[Integer.parseInt(monthNum)-1];
 				monthEnd = month = quarter(quarter);
 				//Quarter finnacial year is always same so taking fy for may
-				finnancialYear = finnancialYear("5");
+				finnancialYear = finnancialYear();
 			}else if(year!=null){
 				month = "";
 				finnancialYear = Integer.parseInt(year)+"-"+(Integer.parseInt(year)+1)+"";

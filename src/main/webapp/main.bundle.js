@@ -1709,6 +1709,8 @@ var ComplianceReportComponent = /** @class */ (function () {
         this.barChartData[1].data = openData;
         if (this.view == 'month') {
             //this.barChartOptions.title.text = this.monthSet[this.reportMonth] + " (FY "+ this.getCurrentFiscalYear() + " )";
+            this.barChartOptions.title.text = this.monthSet[this.reportMonth] + " (FY " + this.getCurrentFiscalYear() + " )";
+            ;
             this.barChartOptions.scales.xAxes[0].scaleLabel.labelString = 'Month';
         }
         else if (this.view == 'quarter') {

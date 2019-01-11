@@ -862,7 +862,7 @@ var ComplianceActivitiesComponent = /** @class */ (function () {
             if (_this.filesDetails && _this.filesDetails.length == 0) {
                 self.statusCHangeModalTitle = "Not Applicable";
                 self.statusCHangeModalHelp = "Remark mandatory for not applicable activities.";
-                _this.captureChange = "Complied";
+                _this.captureChange = "complied";
                 _this.modalReference = _this.modalService.open(_this.confirmNotApplicable, { size: 'lg', backdrop: 'static' });
                 _this.modalReference.result.then(function (result) {
                     _this.closeResult = "Closed with: " + result;

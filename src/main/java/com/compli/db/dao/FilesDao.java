@@ -1,5 +1,6 @@
 package com.compli.db.dao;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -12,7 +13,7 @@ import com.compli.db.bean.UserBean;
 public class FilesDao {
 	private JdbcTemplate jdbcTemplate;
 	private String filesForUser = "select * from files where activityId=? and companyId=?"; 
-	private String savefilesForUser = "INSERT INTO files(activityId,companyId,fileId,filename)VALUES(?,?,?,?);";
+	private String savefilesForUser = "INSERT INTO files(activityId,companyId,fileId,filename,createdOn)VALUES(?,?,?,?,?);";
 	private String updateFileIdForUser = "UPDATE files SET fileId=? WHERE filename=?;";
 	private String fileById = "select * from files where  fileId=?"; 
 	
@@ -30,8 +31,8 @@ public class FilesDao {
 		return files;
 	}
 
-	public boolean saveFile(String activityId,String companyId,String fileId,String filename) {
-		return this.jdbcTemplate.update(savefilesForUser,new Object[]{activityId,companyId,fileId,filename})>0;		
+	public boolean saveFile(String activityId,String companyId,String fileId,String filename,Date createdOn) {
+		return this.jdbcTemplate.update(savefilesForUser,new Object[]{activityId,companyId,fileId,filename,createdOn})>0;		
 	}
 	
 	public boolean updateFileId(String fileId,String filename) {

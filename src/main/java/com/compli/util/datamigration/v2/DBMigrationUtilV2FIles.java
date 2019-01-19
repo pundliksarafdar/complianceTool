@@ -1,6 +1,7 @@
 package com.compli.util.datamigration.v2;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -72,6 +73,7 @@ public class DBMigrationUtilV2FIles {
 			String activityId = (int)currentRow.getCell(ACTIVITY_ID, Row.CREATE_NULL_AS_BLANK).getNumericCellValue()+"";
 			String docName = currentRow.getCell(DOCUMENT_NAME, Row.CREATE_NULL_AS_BLANK).toString().trim();
 			String submitDate = currentRow.getCell(SUBMIT_DATE, Row.CREATE_NULL_AS_BLANK).toString().trim();
+			Date createdOn = currentRow.getCell(SUBMIT_DATE, Row.CREATE_NULL_AS_BLANK).getDateCellValue();
 			 String fileName = currentRow.getCell(DOCUMENT_FILE, Row.CREATE_NULL_AS_BLANK).toString().trim();
 			if(docName.equals("")){
 				docName = fileName;
@@ -87,6 +89,7 @@ public class DBMigrationUtilV2FIles {
 				 continue;
 			 }
 			 FilesBean filesBean = new FilesBean(activityId, companyId, docName, submitDate, fileName);
+			 filesBean.setCreatedOn(createdOn);
 			 filesBeans.add(filesBean);
 		}
 		

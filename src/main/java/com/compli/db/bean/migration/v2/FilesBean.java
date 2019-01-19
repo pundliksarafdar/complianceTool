@@ -1,8 +1,10 @@
 package com.compli.db.bean.migration.v2;
 
+import java.util.Date;
+
 public class FilesBean {
 	String activityId,companyId,documentName,dateOfSubmition,documentFile;
-
+	Date createdOn;
 	
 	public FilesBean(String activityId, String companyId, String documentName,	String dateOfSubmition, String documentFile) {
 		this.activityId = activityId;
@@ -11,6 +13,15 @@ public class FilesBean {
 		this.dateOfSubmition = dateOfSubmition;
 		this.documentFile = documentFile;
 	}
+
+	public Date getCreatedOn() {
+		return createdOn;
+	}
+
+	public void setCreatedOn(Date createdOn) {
+		this.createdOn = createdOn;
+	}
+
 
 	public String getActivityId() {
 		return activityId;

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -37,7 +38,7 @@ public class StorageManager {
 	}
 	
 	public boolean saveFile(String activityId,String companyId,String fileId,String filename) {
-		return filesDao.saveFile(activityId, companyId, fileId, filename);		
+		return filesDao.saveFile(activityId, companyId, fileId, filename,new Date());		
 	}
 	
 	public static String saveFileOnDrive(String mimeType,String fileName,java.io.File fileToUpload) throws IOException{

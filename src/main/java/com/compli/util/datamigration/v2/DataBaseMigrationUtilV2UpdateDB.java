@@ -257,4 +257,26 @@ public class DataBaseMigrationUtilV2UpdateDB {
 		}
 		return errorRow;
 	}
+	
+	public int updateUserDetails(List<com.compli.db.bean.UserBean> beans){
+		int len = beans.size();
+		int errorRow = 0;
+		for(int i=0;i<len;i++){
+			boolean isSucess = this.userDao.updateUserDetails(beans.get(i).getFirstName(), beans.get(i).getLastName(),beans.get(i).getEmail());
+			if(!isSucess){
+				System.out.println(beans.get(i).getFirstName());
+			}
+			if(len%500==0){
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+			if(isSucess){
+				errorRow++;
+			}	
+		}
+		return errorRow;
+	}
 }

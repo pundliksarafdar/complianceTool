@@ -9,6 +9,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import com.compli.db.bean.migration.v2.ActivityAssociationBean;
 import com.compli.db.bean.migration.v2.ActivityBean;
 import com.compli.db.bean.migration.v2.ActivityMasterBean;
+import com.compli.util.Constants;
 import com.notifier.emailbean.PendingActivitiesForMail;
 import com.notifier.emailbean.PendingForDiscrepancy;
 
@@ -20,10 +21,10 @@ public class ActivityDao {
 	}
 	//Using migration beans only
 	public boolean addActivityForUpload(ActivityBean activityBean){
-		String sql = "insert into activity(activityId,companyId,isComplied,isComplianceApproved,isProofRequired,isComplianceRejected,isComplainceDelayed,remark,assignedUser,completionDate) values(?,?,?,?,?,?,?,?,?,?)";
+		String sql = "insert into activity(activityId,companyId,isComplied,isComplianceApproved,isProofRequired,isComplianceRejected,isComplainceDelayed,remark,assignedUser,completionDate,activityStatus) values(?,?,?,?,?,?,?,?,?,?,?)";
 		return this.jdbcTemplate.update(sql,activityBean.getActivityId(),activityBean.getCompanyId(),activityBean.isComplied(),
 				activityBean.isComplianceApproved(),activityBean.isProofRequired(),activityBean.isComplianceRejected(),activityBean.isComplainceDelayed(),
-				activityBean.getRemark(),activityBean.getAssignedUser(),activityBean.getCompletionDate())>0;
+				activityBean.getRemark(),activityBean.getAssignedUser(),activityBean.getCompletionDate(),activityBean.getActivityStatus())>0;
 	}
 	
 	public List<ActivityBean> getAllActivityData(){
@@ -63,8 +64,8 @@ public class ActivityDao {
 	
 	//This is request to reopen
 	public void reopenActivity(String activityId, String companyId) {
-		String sql = "UPDATE activity set reOpen=true where activityId=? and companyId=?";
-		this.jdbcTemplate.update(sql, activityId,companyId);
+		String sql = "UPDATE activity set reOpen=true,activityStatus=? where activityId=? and companyId=?";
+		this.jdbcTemplate.update(sql,Constants.REQUESTED_REOPEN, activityId,companyId);
 	}
 	
 	public void changeToOpen(String activityId, String companyId) {

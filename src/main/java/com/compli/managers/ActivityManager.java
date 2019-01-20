@@ -12,6 +12,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import com.compli.db.bean.migration.v2.ActivityBean;
 import com.compli.db.dao.ActivityDao;
 import com.compli.db.dao.DashBoardDao;
+import com.compli.util.Constants;
 import com.notifier.emailbean.PendingForDiscrepancy;
 
 public class ActivityManager {
@@ -66,7 +67,7 @@ public class ActivityManager {
 		}
 	}
 	
-	public List<Map<String, Object>> getAllActivitiesWithDescriptionForCompanyWithSeverity(String companyId,String severity){
+	public List<Map<String, Object>> getAllActivitiesWithDescriptionForCompanyWithSeverity(String companyId,List<String> severity){
 		List<Map<String, Object>> allActivity = null;
 		if(this.locationId==null){	
 			allActivity = this.dashBoardDao.getAllActivitiesWithDescriptionForCompany(companyId,true,false,true);
@@ -84,19 +85,19 @@ public class ActivityManager {
 			
 			if((isComplied!=null && "0".equals(isComplied.toString())) &&
 					(isComplianceApproved!=null && "0".equals(isComplianceApproved.toString())) 
-					&& (isComplianceRejected!=null && "0".equals(isComplianceRejected.toString())) && "Pending compliance".equalsIgnoreCase(severity)){
+					&& (isComplianceRejected!=null && "0".equals(isComplianceRejected.toString())) && severity.indexOf("Pending compliance")!=-1){
 				filteredActivity.add(activity);
-			}else if((isComplainceDelayed!=null && "1".equals(isComplainceDelayed.toString())) && "Complied-Delayed".equalsIgnoreCase(severity)){
+			}else if((isComplainceDelayed!=null && "1".equals(isComplainceDelayed.toString())) && severity.indexOf("Complied-Delayed")!=-1){
 				filteredActivity.add(activity);
 			}else if((isComplied!=null && "1".equals(isComplied.toString())) &&
 					(isComplianceApproved!=null && "0".equals(isComplianceApproved.toString())) 
-					&& (isComplianceRejected!=null && "0".equals(isComplianceRejected.toString())) && "Pending for review".equalsIgnoreCase(severity)){
+					&& (isComplianceRejected!=null && "0".equals(isComplianceRejected.toString())) && severity.indexOf("Pending for review")!=-1){
 				filteredActivity.add(activity);
 			}else if((isComplied!=null && "1".equals(isComplied.toString()) && isComplainceDelayed!=null && "0".equals(isComplainceDelayed.toString())  
 					&& isComplianceApproved!=null && "1".equals(isComplianceApproved.toString()) && isComplianceRejected!=null)
-					&& "Complied- In time".equalsIgnoreCase(severity) ){
+					&& severity.indexOf("Complied- In time")!=-1 ){
 				filteredActivity.add(activity);
-			}else if(isComplied!=null && "1".equals(isComplied.toString()) && activity.get("isProofRequired")!=null && "1".equals(activity.get("isProofRequired").toString())	&& "Pending for Discrepancy".equalsIgnoreCase(severity)){
+			}else if(isComplied!=null && "1".equals(isComplied.toString()) && activity.get("isProofRequired")!=null && "1".equals(activity.get("isProofRequired").toString())	&& severity.indexOf("Pending for Discrepancy")!=-1 ){
 				filteredActivity.add(activity);
 			}
 		}
@@ -223,9 +224,9 @@ public class ActivityManager {
 	}
 	
 public boolean changeActivityStatus(String companyId,String activityId,boolean isComplied,boolean pendingComplied,boolean compliedInTime,boolean compliedDelayed,
-		boolean pendingDescrepancy,String remark,Date completionDate){
+		boolean pendingDescrepancy,boolean isNotDue,String remark,Date completionDate){
 		if(isComplied){
-			boolean isSuccess = this.dashBoardDao.changeActivityStatus(companyId,activityId, isComplied,remark);
+			boolean isSuccess = this.dashBoardDao.changeActivityStatus(companyId,activityId, isComplied,remark,Constants.PENDING_REVIEW);
 			try{
 				if(isSuccess){
 					AlertsManager.deleteEventForActivity(activityId);
@@ -243,7 +244,9 @@ public boolean changeActivityStatus(String companyId,String activityId,boolean i
 			PendingForDiscrepancy activity = activityDao.getActivityDataForMail(activityId);
 			EmailManager.sendActivityPendingForDescripancy(activity);
 			return this.dashBoardDao.changeActivityStatusPendingDecrepancy(companyId, activityId,remark);
-		}else {
+		}else if(isNotDue){
+			return this.dashBoardDao.changeActivityStatusRejected(companyId, activityId);
+		}else{
 			return this.dashBoardDao.changeActivityStatusPendingComplied(companyId, activityId);
 		}
 	}

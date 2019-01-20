@@ -6,6 +6,7 @@ public class ActivityBean {
 	String activityId,companyId,remark,assignedUser;
 	boolean isComplied,isComplianceApproved,isProofRequired,isComplianceRejected,isComplainceDelayed;
 	Date completionDate;
+	String activityStatus;
 	public ActivityBean() {
 	
 	}
@@ -13,7 +14,7 @@ public class ActivityBean {
 	public ActivityBean(String activityId, String companyId, String remark,
 			String assignedUser,Date completionDate,boolean isComplied,
 			boolean isComplianceApproved, boolean isProofRequired,
-			boolean isComplianceRejected, boolean isComplainceDelayed) {
+			boolean isComplianceRejected, boolean isComplainceDelayed,String activityStatus) {
 		this.activityId = activityId;
 		this.companyId = companyId;
 		this.remark = remark;
@@ -24,7 +25,17 @@ public class ActivityBean {
 		this.isProofRequired = isProofRequired;
 		this.isComplianceRejected = isComplianceRejected;
 		this.isComplainceDelayed = isComplainceDelayed;
+		this.activityStatus = activityStatus;
 		
+	}
+
+	
+	public String getActivityStatus() {
+		return activityStatus;
+	}
+
+	public void setActivityStatus(String activityStatus) {
+		this.activityStatus = activityStatus;
 	}
 
 	public String getActivityId() {

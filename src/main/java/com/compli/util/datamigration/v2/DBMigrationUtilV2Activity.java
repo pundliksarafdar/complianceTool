@@ -35,6 +35,7 @@ import com.compli.db.dao.LawMasterDao;
 import com.compli.db.dao.LocationDao;
 import com.compli.db.dao.PeriodicityDateMasterDao;
 import com.compli.db.dao.PeriodicityMasterDao;
+import com.compli.util.Constants;
 import com.compli.util.Util;
 
 public class DBMigrationUtilV2Activity {
@@ -93,17 +94,17 @@ public class DBMigrationUtilV2Activity {
 			}
 			String companyId = getCompanyId(companyAbbr, companyName);
 			
-			ActivityBean activityBean = new ActivityBean(activityId, companyId, remark, assignedUser, completionDate,false, false, false, false, false);
+			ActivityBean activityBean = new ActivityBean(activityId, companyId, remark, assignedUser, completionDate,false, false, false, false, false,"");
 			if(statusNum==1){//In time
-				activityBean = new ActivityBean(activityId, companyId, remark, assignedUser, completionDate,true, true, false, false, false);
+				activityBean = new ActivityBean(activityId, companyId, remark, assignedUser, completionDate,true, true, false, false, false,Constants.COMP_INTIME);
 			}else if(statusNum==2){//Delayd
-				activityBean = new ActivityBean(activityId, companyId, remark, assignedUser, completionDate,true, true, false, false, true);
+				activityBean = new ActivityBean(activityId, companyId, remark, assignedUser, completionDate,true, true, false, false, true,Constants.COM_DELAYED);
 			}else if(statusNum==3){//Pending review
-				activityBean = new ActivityBean(activityId, companyId, remark, assignedUser, completionDate,true, false, false, false, false);
-			}else if(statusNum==4){//Pending
-				activityBean = new ActivityBean(activityId, companyId, remark, assignedUser, completionDate,false, false, false, false, false);
-			}else if(statusNum==5){//Pending
-				activityBean = new ActivityBean(activityId, companyId, remark, assignedUser, completionDate,false, false, false, true, false);
+				activityBean = new ActivityBean(activityId, companyId, remark, assignedUser, completionDate,true, false, false, false, false,Constants.PENDING_REVIEW);
+			}else if(statusNum==4){//Pending compliance
+				activityBean = new ActivityBean(activityId, companyId, remark, assignedUser, completionDate,false, false, false, false, false,Constants.PENDING_COMPLIE);
+			}else if(statusNum==5){//Not due
+				activityBean = new ActivityBean(activityId, companyId, remark, assignedUser, completionDate,false, false, false, true, false,Constants.COM_REJE);
 			}
 				
 			activityBeanSheet.add(activityBean);

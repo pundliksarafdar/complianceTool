@@ -36,6 +36,8 @@ public class DBMigrationUtilV2UserCompany {
 	
 	static List<Map<String,Object>> allLocations;
 	static List<CompanyBean> companies;
+	
+	//filterdUser are user whitch are not present in usercompany table
 	static List<UserBean> filteredUser;
 	public DBMigrationUtilV2UserCompany() {
 		String path = getClass().getResource("/applicationContext.xml").getPath();
@@ -96,6 +98,9 @@ public class DBMigrationUtilV2UserCompany {
 			if(cell.toString().trim().equals("")){
 				continue;
 			}else{
+				if(cell.toString().equals("PVS.Rao@BEUMERGROUP.com")){
+					System.out.println(cell.toString());
+				}
 				String userId = isUserContiainsFilteredUser(cell.toString());
 				if(null!=userId){
 					userCompanyBean = new UserCompanyBean(userId,companyId);
@@ -147,7 +152,7 @@ public class DBMigrationUtilV2UserCompany {
 	private static String isUserContiainsFilteredUser(String userEmail){
 		String userId = null;
 		for(UserBean user:filteredUser){
-			if(user.getEmail().trim().equals(userEmail)){
+			if(user.getEmail().trim().equalsIgnoreCase(userEmail)){
 				userId = user.getUserId();
 				break;
 			}

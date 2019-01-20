@@ -30,7 +30,17 @@ public class DataBaseMigrationUtilV2 {
 	private static int DELAY = 2*1000;
 	public static void main(String[] args) throws IOException {
 		//startUploading();
-		startUploadingFiles();
+		//startUploadingFiles();
+		updateUserDetails();
+	}
+	
+	public static void updateUserDetails() throws IOException{
+		FILE_NAME = "C:\\report\\db_auth_user.xlsx";
+		Sheet sheet = readSheetFile();
+		DBMigrationUtilV2UserDetails.init();
+		DBMigrationUtilV2UserDetails.updateUserDetails(sheet);
+		try {	Thread.sleep(DELAY);} catch (InterruptedException e) {e.printStackTrace();}
+
 	}
 	
 	public static void startUploading() throws IOException{
@@ -39,19 +49,20 @@ public class DataBaseMigrationUtilV2 {
 		boolean isValidSheet = validateSheet(sheet);
 		System.out.println("Is valid "+isValidSheet);
 		if(isValidSheet){
-			DBMigrationUtilV2User.init();
+			/*DBMigrationUtilV2User.init();
 			DBMigrationUtilV2User.createUsers(sheet);
 			try {	Thread.sleep(DELAY);} catch (InterruptedException e) {e.printStackTrace();}
 			
 			DBMigrationUtilV2Company.init();
 			DBMigrationUtilV2Company.createCompanies(sheet);
 			try {	Thread.sleep(DELAY);} catch (InterruptedException e) {e.printStackTrace();}
+			*/
 			
-			DBMigrationUtilV2UserCompany.init();
+			/*DBMigrationUtilV2UserCompany.init();
 			DBMigrationUtilV2UserCompany.createUserCompany(sheet);
-			try {	Thread.sleep(DELAY);} catch (InterruptedException e) {e.printStackTrace();}
+			try {	Thread.sleep(DELAY);} catch (InterruptedException e) {e.printStackTrace();}*/
 			
-			DBMigrationUtilV2Location.init();
+			/*DBMigrationUtilV2Location.init();
 			DBMigrationUtilV2Location.createLocations(sheet);
 			try {	Thread.sleep(DELAY);} catch (InterruptedException e) {e.printStackTrace();}
 			
@@ -82,7 +93,7 @@ public class DataBaseMigrationUtilV2 {
 		   DBMigrationUtilV2Activity.init();
 			DBMigrationUtilV2Activity.createActivity(sheet);
 			try {	Thread.sleep(DELAY);} catch (InterruptedException e) {e.printStackTrace();}
-		
+	*/	
 		}
 	}
 	

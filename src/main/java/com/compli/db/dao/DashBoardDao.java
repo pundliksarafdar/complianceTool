@@ -9,6 +9,7 @@ import java.util.Map;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 
+import com.compli.util.Constants;
 import com.compli.util.Util;
 
 public class DashBoardDao {
@@ -562,9 +563,10 @@ public class DashBoardDao {
 			"on companyWithPerDate.companyId = activity.companyId and companyWithPerDate.activityId = activity.activityId and activity.isComplianceRejected=false  order by periodicityDateId desc) newtable  WHERE (quarter(duedate)=? and YEAR(duedate)=? and isComplied=true) or (DATE_FORMAT(duedate,'%Y%m')<=DATE_FORMAT(?,'%Y%m') and isComplied=false)";
 
 	
-	String changeActivityStatusQuery = "INSERT INTO activity (companyId,activityId, isComplied,isComplianceApproved,remark,isProofRequired,reOpen) VALUES(?, ?, ?, ?,?,false,false) ON DUPLICATE KEY UPDATE companyId =?,activityId=?, isComplied=?,isComplianceApproved=?,remark=?,isProofRequired=false,reOpen=false";
-	String changeActivityStatusQueryArtec = "INSERT INTO activity (companyId,activityId, isComplied,isComplianceApproved,isProofRequired,isComplainceDelayed,completionDate,reOpen) VALUES(?, ?, ?, ?,?,?,?,false) ON DUPLICATE KEY UPDATE companyId =?,activityId=?, isComplied=?,isComplianceApproved=?,isProofRequired=?,isComplainceDelayed=?,completionDate=?,reOpen=false";
-	String changeActivityPendingForDescripancyStatusQueryArtec = "INSERT INTO activity (companyId,activityId, isComplied,isComplianceApproved,isProofRequired,isComplainceDelayed,arTechRemark,reOpen) VALUES(?, ?, ?, ?,?,?,?,false) ON DUPLICATE KEY UPDATE companyId =?,activityId=?, isComplied=?,isComplianceApproved=?,isProofRequired=?,isComplainceDelayed=?,arTechRemark=?,reOpen=false";
+	String changeActivityStatusQuery = "INSERT INTO activity (companyId,activityId, isComplied,isComplianceApproved,remark,isProofRequired,reOpen,activityStatus) VALUES(?, ?, ?, ?,?,false,false,?) ON DUPLICATE KEY UPDATE companyId =?,activityId=?, isComplied=?,isComplianceApproved=?,remark=?,isProofRequired=false,reOpen=false,activityStatus=?";
+	String changeActivityStatusQueryArtec = "INSERT INTO activity (companyId,activityId, isComplied,isComplianceApproved,isProofRequired,isComplainceDelayed,completionDate,reOpen,activityStatus) VALUES(?, ?, ?, ?,?,?,?,false,?) ON DUPLICATE KEY UPDATE companyId =?,activityId=?, isComplied=?,isComplianceApproved=?,isProofRequired=?,isComplainceDelayed=?,completionDate=?,reOpen=false,activityStatus=?";
+	String changeActivityPendingForDescripancyStatusQueryArtec = "INSERT INTO activity (companyId,activityId, isComplied,isComplianceApproved,isProofRequired,isComplainceDelayed,arTechRemark,reOpen,activityStatus) VALUES(?, ?, ?, ?,?,?,?,false,?) ON DUPLICATE KEY UPDATE companyId =?,activityId=?, isComplied=?,isComplianceApproved=?,isProofRequired=?,isComplainceDelayed=?,arTechRemark=?,reOpen=false,activityStatus=?";
+	String changeActivityRejectedForDescripancyStatusQueryArtec = "UPDATE activity set isComplied=true,isComplianceApproved=false,isProofRequired=false,isComplainceDelayed=false,reOpen=false,isComplianceRejected=true,activityStatus=? where companyId =? and activityId=?";
 	
 	/********************************* Dashboard pending activity Count for next10days. *****************************************************/
 
@@ -804,32 +806,37 @@ private String activityQueryByMonthAndStatusFullUser =
 	}
 
 
-	public boolean changeActivityStatus(String companyId, String activityId,boolean status,String remark) {
+	public boolean changeActivityStatus(String companyId, String activityId,boolean status,String remark,String activityStatus) {
 		boolean isDemoUser = false;
-		this.jdbcTemplate.update(changeActivityStatusQuery, companyId,activityId,status,isDemoUser, remark,companyId,activityId,status,isDemoUser,remark);
+		this.jdbcTemplate.update(changeActivityStatusQuery, companyId,activityId,status,isDemoUser, remark,activityStatus,companyId,activityId,status,isDemoUser,remark,activityStatus);
 		return true;
 	}
 	
 	public boolean changeActivityStatusApproved(String companyId, String activityId,Date complainceDate) {
-		this.jdbcTemplate.update(changeActivityStatusQueryArtec, companyId,activityId,true,true,false,false,complainceDate,companyId,activityId,true,true,false,false,complainceDate);
+		this.jdbcTemplate.update(changeActivityStatusQueryArtec, companyId,activityId,true,true,false,false,complainceDate,Constants.COMP_INTIME,companyId,activityId,true,true,false,false,complainceDate,Constants.COMP_INTIME);
 		return true; 
 	}
 	
 	public boolean changeActivityStatusPendingComplied(String companyId, String activityId) {
-		this.jdbcTemplate.update(changeActivityStatusQueryArtec, companyId,activityId,false,false,false,false,new Date(),companyId,activityId,false,false,false,false,new Date());
+		this.jdbcTemplate.update(changeActivityStatusQueryArtec, companyId,activityId,false,false,false,false,new Date(),Constants.PENDING_COMPLIE,companyId,activityId,false,false,false,false,new Date(),Constants.PENDING_COMPLIE);
 		return true;
 	}
 	
 	public boolean changeActivityStatusComplainceDelayed(String companyId, String activityId,Date complainceDate) {
-		this.jdbcTemplate.update(changeActivityStatusQueryArtec, companyId,activityId,true,false,false,true,complainceDate,companyId,activityId,true,false,false,true,complainceDate);
+		this.jdbcTemplate.update(changeActivityStatusQueryArtec, companyId,activityId,true,false,false,true,complainceDate,Constants.COM_DELAYED,companyId,activityId,true,false,false,true,complainceDate,Constants.COM_DELAYED);
 		return true;
 	}
 	
 	public boolean changeActivityStatusPendingDecrepancy(String companyId, String activityId,String arTechRemark) {
-		this.jdbcTemplate.update(changeActivityPendingForDescripancyStatusQueryArtec, companyId,activityId,true,false,true,false,arTechRemark,companyId,activityId,true,false,true,false,arTechRemark);
+		this.jdbcTemplate.update(changeActivityPendingForDescripancyStatusQueryArtec, companyId,activityId,true,false,true,false,arTechRemark,Constants.COM_DESC,companyId,activityId,true,false,true,false,arTechRemark,Constants.COM_DESC);
 		return true;
 	}
-
+	
+	public boolean changeActivityStatusRejected(String companyId, String activityId) {
+		this.jdbcTemplate.update(changeActivityRejectedForDescripancyStatusQueryArtec,Constants.COM_REJE,companyId,activityId);
+		return true;
+	}
+	
 	public List<Map<String, Object>> getAllActivitiesWithDescriptionForCompanyLast3Months(String companyId,
 			int month,boolean isFullUser) {
 		companyId = "('"+companyId.replace(",", "','")+"')";

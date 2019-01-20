@@ -115,4 +115,8 @@ public class UserDao {
 		}
 		return true;
 	}
+	
+	public boolean updateUserDetails(String firstName,String lastName,String email) {
+		return this.jdbcTemplate.update("update user set firstname=?,lastname=? where email=?;",firstName,lastName,email)>-1;		
+	}
 }

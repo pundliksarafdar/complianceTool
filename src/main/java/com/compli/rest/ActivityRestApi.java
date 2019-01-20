@@ -45,19 +45,25 @@ public class ActivityRestApi {
 			String userType = AuthorisationManager.getUserCatche(auth).getUserTypeId();
 			List<Map<String, Object>> activities = new ArrayList<Map<String,Object>>();
 			//if user is ARTerch or sManager add Pending for review as it will contain Peding for descrepancy activities
+			List<String>activityStatusLink = new ArrayList<String>();
+			activityStatusLink.add("Pending compliance");
 			if(userType.equals("sManager") || userType.equals("ArTechUser")){
-				activities = activityManager.getAllActivitiesWithDescriptionForCompanyWithSeverity(companyId,"Pending for review");
+				activityStatusLink.add("Pending for review");
+				activities = activityManager.getAllActivitiesWithDescriptionForCompanyWithSeverity(companyId,activityStatusLink);
 			}else{
-				activities = activityManager.getAllActivitiesWithDescriptionForCompanyWithSeverity(companyId,"Pending for Discrepancy");
+				activityStatusLink.add("Pending for Discrepancy");
+				activities = activityManager.getAllActivitiesWithDescriptionForCompanyWithSeverity(companyId,activityStatusLink);
 			}
-			activities.addAll(activityManager.getAllActivitiesWithDescriptionForCompanyWithSeverity(companyId,"Pending compliance"));
+			//activities.addAll(activityManager.getAllActivitiesWithDescriptionForCompanyWithSeverity(companyId,"Pending compliance"));
 			//activities.addAll(activityManager.getAllActivitiesWithDescriptionForCompanyWithSeverity(companyId,"Pending for review"));
 			return Response.ok(activities).build();
 				
 		}else if("both".equalsIgnoreCase(activitySeverity)){//Both comes from repositories if both are not checked
 			List<Map<String, Object>> activityList1 = new ArrayList<Map<String,Object>>();
 			List<Map<String, Object>> activityList2 = new ArrayList<Map<String,Object>>();
-			activityList1.addAll(activityManager.getAllActivitiesWithDescriptionForCompanyWithSeverity(companyId,"Complied- In time"));
+			List<String>activityStatusLink = new ArrayList<String>();
+			activityStatusLink.add("Complied- In time");
+			activityList1.addAll(activityManager.getAllActivitiesWithDescriptionForCompanyWithSeverity(companyId,activityStatusLink));
 			if(month!=null){
 				activityList1 = activityManager.getAllActivitiesWithDescriptionForCompanyWithSeverityForMonth(companyId,"Complied-Delayed",month);
 			}else if(year!=null){
@@ -99,7 +105,9 @@ public class ActivityRestApi {
 			}else if(quarter!=null){
 				return Response.ok(activityManager.getAllActivitiesWithDescriptionForCompanyWithSeverityForQuarter(companyId,activitySeverity,quarter)).build();
 			}{
-				return Response.ok(activityManager.getAllActivitiesWithDescriptionForCompanyWithSeverity(companyId,activitySeverity)).build();
+				List<String>activityType = new ArrayList<String>();
+				activityType.add(activitySeverity);
+				return Response.ok(activityManager.getAllActivitiesWithDescriptionForCompanyWithSeverity(companyId,activityType)).build();				
 			}
 		}
 	}
@@ -109,10 +117,10 @@ public class ActivityRestApi {
 	@Authorised(role=ROLE.ALL)
 	public Response changeActivityStatus(@PathParam("companyId")String companyId,@PathParam("activityId")String activityId,
 			@QueryParam("complied")boolean isComplied,@QueryParam("pendingComplied")boolean pendingComplied,@QueryParam("compliedInTime")boolean compliedInTime,
-			@QueryParam("compliedDelayed")boolean compliedDelayed,@QueryParam("pendingDescrepancy")boolean pendingDescrepancy,
+			@QueryParam("compliedDelayed")boolean compliedDelayed,@QueryParam("pendingDescrepancy")boolean pendingDescrepancy,@QueryParam("notDue")boolean notDue,
 			@HeaderParam("auth")String auth,ComplyStatusBean complyStatusBean){
 		ActivityManager activityManager = new ActivityManager(auth);
-		return Response.ok(activityManager.changeActivityStatus(companyId, activityId, isComplied,pendingComplied,compliedInTime,compliedDelayed,pendingDescrepancy,
+		return Response.ok(activityManager.changeActivityStatus(companyId, activityId, isComplied,pendingComplied,compliedInTime,compliedDelayed,pendingDescrepancy,notDue,
 				complyStatusBean.getRemarks(),complyStatusBean.getCompliedDate())).build();
 	}
 	

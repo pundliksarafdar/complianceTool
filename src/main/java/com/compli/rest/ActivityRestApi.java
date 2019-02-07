@@ -89,7 +89,7 @@ public class ActivityRestApi {
 				activityList1 = activityManager.getAllActivitiesWithDescriptionForCompanyForMonth(companyId,month);
 			}else if(year!=null){
 				year = year.split("-")[0];
-				activityList1 = activityManager.getAllActivitiesWithDescriptionForCompanyWithSeverityForYear(companyId,"Complied- In time",year);			
+				activityList1 = activityManager.getAllActivitiesWithDescriptionForCompanyForYear(companyId,year);			
 			}else if(quarter!=null){
 				activityList1 = activityManager.getAllActivitiesWithDescriptionForCompanyForQuarter(companyId,quarter);
 			}
@@ -144,8 +144,13 @@ public class ActivityRestApi {
 	@Authorised(role=ROLE.ALL)
 	public Response getAllActivityWithLawAndStatus(@PathParam("companyId")String companyId,
 			@QueryParam("lawArea")String activityLaw,@QueryParam("activitySeverity")String status,
-			@HeaderParam("auth")String auth){
-		ActivityManager activityManager = new ActivityManager(auth);
+			@HeaderParam("auth")String auth,@HeaderParam("location")String location){
+		ActivityManager activityManager;
+		if(location==null || "all".equals(location)){
+			activityManager = new ActivityManager(auth);
+		}else{
+			activityManager = new ActivityManager(auth,location);
+		}
 		return Response.ok(activityManager.getAllActivitiesWithDescriptionForCompanyWithSeverityAndLaw(companyId, status, activityLaw)).build();
 	}
 	

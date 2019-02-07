@@ -28,6 +28,7 @@ public class DashBoardManager {
 	 DashBoardDao dashBoardDao;
 	 List<Map<String, Object>> activities;
 	 String auth;
+	 String userId;
 	 private boolean isFullUser;
 	 private String locationId;
 	 
@@ -39,6 +40,7 @@ public class DashBoardManager {
 		this.companyId = companyId;
 		this.auth=auth;
 		this.isFullUser = AuthorisationManager.cache.getIfPresent(auth).isFullUser();
+		this.userId =  AuthorisationManager.cache.getIfPresent(auth).getUserId();
 	}
 	
 	public DashBoardManager(String companyId,String auth,String locationId) {
@@ -50,6 +52,7 @@ public class DashBoardManager {
 		this.auth=auth;
 		this.isFullUser = AuthorisationManager.cache.getIfPresent(auth).isFullUser();
 		this.locationId = locationId;
+		this.userId =  AuthorisationManager.cache.getIfPresent(auth).getUserId();
 	}
 	
 	public HashMap<String,Object> getDashBoardData(){
@@ -76,7 +79,7 @@ public class DashBoardManager {
 		riskCountMap.put(LOW, 0);
 		List<Map<String, Object>> counts;
 		if(null == this.locationId){
-			counts = this.dashBoardDao.getPendingActivityCoutForNext10Days(this.companyId,this.isFullUser);
+			counts = this.dashBoardDao.getPendingActivityCoutForNext10Days(this.companyId,this.userId,this.isFullUser);
 		}else{
 			counts = this.dashBoardDao.getPendingActivityCoutForNext10Days(this.companyId,this.isFullUser,this.locationId);
 		}
@@ -93,7 +96,7 @@ public class DashBoardManager {
 		Map<String,Integer> complainceOverview = new HashMap<>();
 		boolean isFullUser = true;
 		if(isFullUser){
-			Map<String, Object> counts = this.dashBoardDao.getComplianceOverview(this.companyId,this.locationId);
+			Map<String, Object> counts = this.dashBoardDao.getComplianceOverview(this.companyId,this.locationId,this.userId);
 			complainceOverview.put(PENDING_COMPLIANCE, Integer.parseInt((counts.get(PENDING_COMPLIANCE)!=null?counts.get(PENDING_COMPLIANCE):0)+""));
 			complainceOverview.put(COMPLIANCE_DELAYED, Integer.parseInt((counts.get(COMPLIANCE_DELAYED)!=null?counts.get(COMPLIANCE_DELAYED):0)+""));
 			complainceOverview.put(COMPLAINCE_INTIME, Integer.parseInt((counts.get(COMPLAINCE_INTIME)!=null?counts.get(COMPLAINCE_INTIME):0)+""));
@@ -157,11 +160,8 @@ public class DashBoardManager {
 		
 		ActivityManager activityManager = new ActivityManager(this.auth);
 		List<Map<String, Object>> allActivity;
-		if(null==this.locationId){
-			 allActivity = activityManager.getAllActivitiesWithDescriptionForCompanyLast3Months(this.companyId,month,this.isFullUser);
-		}else{
-			allActivity = activityManager.getAllActivitiesWithDescriptionForCompanyLast3Months(this.companyId,month,this.isFullUser,this.locationId);
-		}
+		String locationIdH = null==this.locationId?"all":this.locationId;
+		allActivity = activityManager.getAllActivitiesWithDescriptionForCompanyLast3Months(this.companyId,month,this.userId,this.isFullUser,locationIdH);
 		
 		for(int i=0;i<allActivity.size();i++){
 			Map<String,Integer> complainceOverview = complianceOverviewForLast3Month.get(Integer.parseInt(allActivity.get(i).get("dueMonth")+""));

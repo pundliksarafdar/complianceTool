@@ -3501,7 +3501,8 @@ var ReportService = /** @class */ (function () {
         console.log(frequency);
         var headers = this.loginService.getHeaders();
         var companyId = this.loginService.getCompany();
-        var url = this.appUrl + "/rest/report/generateReport?" + reportType + '=' + frequency + '&companyId=' + companyId;
+        var url = this.appUrl + "/rest/report/generateReport?" + reportType + '=' + frequency + '&companyId=' + companyId + '&auth=' + headers.headers.get("auth")
+            + '&location=' + headers.headers.get("location");
         return url;
     };
     ReportService = __decorate([

@@ -41,6 +41,7 @@ public class ReportsManager {
 	CompanyDao companyDao;
 	private boolean isFullUser = true;
 	private String location = null;
+	private String userId;
 	
 	public ReportsManager() {
 		String path = getClass().getResource("/applicationContext.xml").getPath();
@@ -49,21 +50,28 @@ public class ReportsManager {
 		this.companyDao = (CompanyDao)ctx.getBean("companyDao");
 	}
 	
-	public ReportsManager(String location) {
+	public ReportsManager(String auth) {
+		String path = getClass().getResource("/applicationContext.xml").getPath();
+		ApplicationContext ctx=new ClassPathXmlApplicationContext("applicationContext.xml");
+		this.dashBoardDao = (DashBoardDao) ctx.getBean("dashBoardDao");
+		this.companyDao = (CompanyDao)ctx.getBean("companyDao");
+		this.userId  = AuthorisationManager.cache.getIfPresent(auth).getUserId();
+	}
+	
+	public ReportsManager(String location,String auth) {
 		this.location = location;
 		String path = getClass().getResource("/applicationContext.xml").getPath();
 		ApplicationContext ctx=new ClassPathXmlApplicationContext("applicationContext.xml");
 		this.dashBoardDao = (DashBoardDao) ctx.getBean("dashBoardDao");		
+		this.userId  = AuthorisationManager.cache.getIfPresent(auth).getUserId();
+		this.companyDao = (CompanyDao)ctx.getBean("companyDao");
 	}
 	
 	public HashMap<String,Object> getReportsObject(String companyId,String month){
 		 HashMap<String,Object> reportsMap = new HashMap<>();
 		 List<Map<String, Object>> activities = null;
-		 if(this.location==null){		 
-		 	activities = getAllActivitiesWithDescriptionForCompanyByMonth(companyId, month);
-		 }else{
-			 activities = getAllActivitiesWithDescriptionForCompanyByMonth(companyId, month,this.location);
-		 }
+		 String locationH = (this.location==null)?"all":this.location;		 
+		 activities = getAllActivitiesWithDescriptionForCompanyByMonth(companyId, month,locationH,this.userId);
 		 Map<String, Map<String, Integer>> riskCount = getComplainceOverviewByRisk(activities);
 		 
 		 reportsMap.put("activities", activities);
@@ -75,9 +83,9 @@ public class ReportsManager {
 		 HashMap<String,Object> reportsMap = new HashMap<>();
 		 List<Map<String, Object>> activities = null;
 		 if(this.location==null){	
-		 	activities = getAllActivitiesWithDescriptionForCompanyByQuarter(companyId, quarter);
+		 	activities = getAllActivitiesWithDescriptionForCompanyByQuarter(companyId, quarter,"all",this.userId);
 		 }else{
-			 activities = getAllActivitiesWithDescriptionForCompanyByQuarter(companyId, quarter,this.location);
+			 activities = getAllActivitiesWithDescriptionForCompanyByQuarter(companyId, quarter,this.location,this.userId);
 		 }
 		 Map<String, Map<String, Integer>> riskCount = getComplainceOverviewByRisk(activities);
 		 
@@ -91,7 +99,7 @@ public class ReportsManager {
 		 HashMap<String,Object> reportsMap = new HashMap<>();
 		 List<Map<String, Object>> activities = null;
 		 if(this.location==null){
-			 activities = getAllActivitiesWithDescriptionForCompanyByYear(companyId, year);
+			 activities = getAllActivitiesWithDescriptionForCompanyByYear(companyId, year,"all");
 		 }else{
 			 activities = getAllActivitiesWithDescriptionForCompanyByYear(companyId, year,this.location);
 		 }
@@ -103,28 +111,28 @@ public class ReportsManager {
 	}
 	
 	
-	public List<Map<String, Object>> getAllActivitiesWithDescriptionForCompanyByMonth(String companyId,String month){
-		return this.dashBoardDao.getAllActivitiesWithDescriptionForCompanyByMonth(companyId,month,this.isFullUser);
+	public List<Map<String, Object>> getAllActivitiesWithDescriptionForCompanyByMonth(String companyId,String month,String userId){
+		return this.dashBoardDao.getAllActivitiesWithDescriptionForCompanyByMonth(companyId,month,userId,this.isFullUser,userId);
 	}
 	
-	public List<Map<String, Object>> getAllActivitiesWithDescriptionForCompanyByMonth(String companyId,String month,String location){
-		return this.dashBoardDao.getAllActivitiesWithDescriptionForCompanyByMonth(companyId,month,this.isFullUser,location);
+	public List<Map<String, Object>> getAllActivitiesWithDescriptionForCompanyByMonth(String companyId,String month,String location,String userId){
+		return this.dashBoardDao.getAllActivitiesWithDescriptionForCompanyByMonth(companyId,month,this.isFullUser,location,userId);
 	}
 	
-	public List<Map<String, Object>> getAllActivitiesWithDescriptionForCompanyByQuarter(String companyId,String quarter){
-		return this.dashBoardDao.getAllActivitiesWithDescriptionForCompanyByQuarter(companyId,this.isFullUser,quarter);
+	/*public List<Map<String, Object>> getAllActivitiesWithDescriptionForCompanyByQuarter(String companyId,String quarter,String userId){
+		return this.dashBoardDao.getAllActivitiesWithDescriptionForCompanyByQuarter(companyId,this.isFullUser,quarter,userId);
+	}
+	*/
+	public List<Map<String, Object>> getAllActivitiesWithDescriptionForCompanyByQuarter(String companyId,String quarter,String location,String userId){
+		return this.dashBoardDao.getAllActivitiesWithDescriptionForCompanyByQuarter(companyId,this.isFullUser,quarter,location,userId);
 	}
 	
-	public List<Map<String, Object>> getAllActivitiesWithDescriptionForCompanyByQuarter(String companyId,String quarter,String location){
-		return this.dashBoardDao.getAllActivitiesWithDescriptionForCompanyByQuarter(companyId,this.isFullUser,quarter,location);
-	}
-	
-	public List<Map<String, Object>> getAllActivitiesWithDescriptionForCompanyByYear(String companyId,String year){
+	/*public List<Map<String, Object>> getAllActivitiesWithDescriptionForCompanyByYear(String companyId,String year){
 		return this.dashBoardDao.getAllActivitiesWithDescriptionForCompanyByYear(companyId,year,this.isFullUser);
-	}
+	}*/
 	
 	public List<Map<String, Object>> getAllActivitiesWithDescriptionForCompanyByYear(String companyId,String year,String location){
-		return this.dashBoardDao.getAllActivitiesWithDescriptionForCompanyByYear(companyId,year,this.isFullUser,location);
+		return this.dashBoardDao.getAllActivitiesWithDescriptionForCompanyByYear(companyId,year,this.isFullUser,location,this.userId);
 	}
 	
 	public HashMap<String, Integer> getRiskCount(List<Map<String, Object>> activities){
@@ -362,50 +370,47 @@ public class ReportsManager {
 	}
 	
 	public Map<String, Object> generateReport(String companyId,String month) throws FileNotFoundException, DRException{
-		ReportsManager manager = new ReportsManager();
-		HashMap<String, Object> d = manager.getReportsObject(companyId, month);
+		HashMap<String, Object> d = this.getReportsObject(companyId, month);
 		
 		List<Map<String, Object>> data = (List<Map<String, Object>>) d.get("activities");
 		HashMap<String, List> formattedDataMap = format(data);
-		Map<String, Object> fileObject = manager.generateReportNew(formattedDataMap.get("compliedInTime"),formattedDataMap.get("compliedDelayed"),
+		Map<String, Object> fileObject = this.generateReportNew(formattedDataMap.get("compliedInTime"),formattedDataMap.get("compliedDelayed"),
 				formattedDataMap.get("compliedOpen"),formattedDataMap.get("graphBeans"),formattedDataMap.get("chartBeans"),companyId,month,null,null
 				);	
 		return fileObject;
 	}
 	
 	public Map<String, Object> generateReportForQuarter(String companyId,String quarter) throws FileNotFoundException, DRException{
-		ReportsManager manager = new ReportsManager();
-		HashMap<String, Object> d = manager.getReportsObjectByQuarter(companyId, quarter);
+		HashMap<String, Object> d = this.getReportsObjectByQuarter(companyId, quarter);
 		
 		List<Map<String, Object>> data = (List<Map<String, Object>>) d.get("activities");
 		HashMap<String, List> formattedDataMap = format(data);
-		Map<String, Object> fileObject = manager.generateReportNew(formattedDataMap.get("compliedInTime"),formattedDataMap.get("compliedDelayed"),
+		Map<String, Object> fileObject = this.generateReportNew(formattedDataMap.get("compliedInTime"),formattedDataMap.get("compliedDelayed"),
 				formattedDataMap.get("compliedOpen"),formattedDataMap.get("graphBeans"),formattedDataMap.get("chartBeans"),companyId,null,quarter,null
 				);	
 		return fileObject;
 	}
 	
 	public Map<String, Object> generateReportForYear(String companyId,String year) throws FileNotFoundException, DRException{
-		ReportsManager manager = new ReportsManager();
-		HashMap<String, Object> d = manager.getReportsObjectByYear(companyId, year);
+		HashMap<String, Object> d = this.getReportsObjectByYear(companyId, year);
 		
 		List<Map<String, Object>> data = (List<Map<String, Object>>) d.get("activities");
 		HashMap<String, List> formattedDataMap = format(data);
-		Map<String, Object> fileObject = manager.generateReportNew(formattedDataMap.get("compliedInTime"),formattedDataMap.get("compliedDelayed"),
+		Map<String, Object> fileObject = this.generateReportNew(formattedDataMap.get("compliedInTime"),formattedDataMap.get("compliedDelayed"),
 				formattedDataMap.get("compliedOpen"),formattedDataMap.get("graphBeans"),formattedDataMap.get("chartBeans"),companyId,null,null,year
 				);	
 		return fileObject;
 	}
 	
 	public static void main(String[] args) throws DRException, FileNotFoundException {
-		ReportsManager manager = new ReportsManager();
-		HashMap<String, Object> d = manager.getReportsObject("ff2dbbe29f7d4073", "4");
+		/*ReportsManager manager = new ReportsManager();
+		HashMap<String, Object> d = manager.getReportsObject("ff2dbbe29f7d4073", "4","pvs.rao");
 		
 		List<Map<String, Object>> data = (List<Map<String, Object>>) d.get("activities");
 		HashMap<String, List> formattedDataMap = format(data);
 		manager.generateReportNew(formattedDataMap.get("compliedInTime"),formattedDataMap.get("compliedDelayed"),
 				formattedDataMap.get("compliedOpen"),formattedDataMap.get("graphBeans"),formattedDataMap.get("chartBeans"),
-				"ff2dbbe29f7d4073","4",null,null);
+				"ff2dbbe29f7d4073","4",null,null);*/
 		
 	}
 }

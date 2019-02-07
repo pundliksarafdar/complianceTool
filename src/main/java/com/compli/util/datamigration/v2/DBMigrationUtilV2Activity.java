@@ -46,6 +46,7 @@ public class DBMigrationUtilV2Activity {
 	private static int COMPLAINCE_STATUS = 15;
 	private static int ASSIGNED_USER =16;
 	private static int REMARK = 17;
+	private static int IS_ACTIVE = 22;
 	
 	static ActivityDao activityDao;
 	static CompanyDao companyDao;
@@ -78,6 +79,7 @@ public class DBMigrationUtilV2Activity {
 			Row currentRow = iterator.next();
 			String activityId = (int)currentRow.getCell(ID, Row.CREATE_NULL_AS_BLANK).getNumericCellValue()+"";
 			String companyName = currentRow.getCell(COMPANY_NAME, Row.CREATE_NULL_AS_BLANK).toString().trim();
+			String isActive = currentRow.getCell(IS_ACTIVE, Row.CREATE_NULL_AS_BLANK).toString().trim();
 			
 			if(companyName.equals("")){
 				continue;

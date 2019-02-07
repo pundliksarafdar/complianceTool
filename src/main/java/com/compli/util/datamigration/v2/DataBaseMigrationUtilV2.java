@@ -29,9 +29,9 @@ public class DataBaseMigrationUtilV2 {
 	private static int ROW_COUNT = 27;
 	private static int DELAY = 2*1000;
 	public static void main(String[] args) throws IOException {
-		//startUploading();
+		startUploading();
 		//startUploadingFiles();
-		updateUserDetails();
+		//updateUserDetails();
 	}
 	
 	public static void updateUserDetails() throws IOException{
@@ -56,13 +56,13 @@ public class DataBaseMigrationUtilV2 {
 			DBMigrationUtilV2Company.init();
 			DBMigrationUtilV2Company.createCompanies(sheet);
 			try {	Thread.sleep(DELAY);} catch (InterruptedException e) {e.printStackTrace();}
-			*/
 			
-			/*DBMigrationUtilV2UserCompany.init();
+			
+			DBMigrationUtilV2UserCompany.init();
 			DBMigrationUtilV2UserCompany.createUserCompany(sheet);
-			try {	Thread.sleep(DELAY);} catch (InterruptedException e) {e.printStackTrace();}*/
+			try {	Thread.sleep(DELAY);} catch (InterruptedException e) {e.printStackTrace();}
 			
-			/*DBMigrationUtilV2Location.init();
+			DBMigrationUtilV2Location.init();
 			DBMigrationUtilV2Location.createLocations(sheet);
 			try {	Thread.sleep(DELAY);} catch (InterruptedException e) {e.printStackTrace();}
 			
@@ -89,11 +89,14 @@ public class DataBaseMigrationUtilV2 {
 			DBMigrationUtilV2ActivityAssociation.init();
 			DBMigrationUtilV2ActivityAssociation.createActivityAssociation(sheet);
 			try {	Thread.sleep(DELAY);} catch (InterruptedException e) {e.printStackTrace();}
+			*/
 			
-		   DBMigrationUtilV2Activity.init();
+		   /*DBMigrationUtilV2Activity.init();
 			DBMigrationUtilV2Activity.createActivity(sheet);
-			try {	Thread.sleep(DELAY);} catch (InterruptedException e) {e.printStackTrace();}
-	*/	
+			try {	Thread.sleep(DELAY);} catch (InterruptedException e) {e.printStackTrace();}*/
+			
+			DBMigrationUtilV2ActivityAssignment.init();
+			DBMigrationUtilV2ActivityAssignment.updateUserDetails(sheet);	
 		}
 	}
 	

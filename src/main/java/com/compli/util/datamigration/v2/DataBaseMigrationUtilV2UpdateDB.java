@@ -16,6 +16,7 @@ import com.compli.db.bean.migration.v2.PeriodicityDateMasterBean;
 import com.compli.db.bean.migration.v2.PeriodicityMasterBean;
 import com.compli.db.bean.migration.v2.UserBean;
 import com.compli.db.bean.migration.v2.UserCompanyBean;
+import com.compli.db.dao.AcivityAssignmentDao;
 import com.compli.db.dao.ActivityAssociationDao;
 import com.compli.db.dao.ActivityDao;
 import com.compli.db.dao.ActivityMasterDao;
@@ -27,6 +28,7 @@ import com.compli.db.dao.PeriodicityDateMasterDao;
 import com.compli.db.dao.PeriodicityMasterDao;
 import com.compli.db.dao.UserCompanyDao;
 import com.compli.db.dao.UserDao;
+import com.compli.util.bean.ActivityAssignnmentBean;
 import com.google.api.services.drive.model.File;
 
 public class DataBaseMigrationUtilV2UpdateDB {
@@ -41,6 +43,7 @@ public class DataBaseMigrationUtilV2UpdateDB {
 	ActivityDao activityDao;
 	UserCompanyDao userCompanyDao;
 	FilesDao filesDao;
+	AcivityAssignmentDao acivityAssignmentDao;
 	
 	public DataBaseMigrationUtilV2UpdateDB() {
 		String path = getClass().getResource("/applicationContext.xml").getPath();
@@ -56,6 +59,7 @@ public class DataBaseMigrationUtilV2UpdateDB {
 		activityDao = (ActivityDao) ctx.getBean("activityDao");
 		userCompanyDao = (UserCompanyDao)ctx.getBean("userCompanyDao");
 		filesDao = (FilesDao) ctx.getBean("filesDao");
+		this.acivityAssignmentDao = (AcivityAssignmentDao)ctx.getBean("activityAssignementDao");
 	}
 	
 	public int updateUserDB(List<UserBean> filteredUsers){
@@ -278,5 +282,9 @@ public class DataBaseMigrationUtilV2UpdateDB {
 			}	
 		}
 		return errorRow;
+	}
+	
+	public void saveActivityAssignment(List<ActivityAssignnmentBean> actAssociationBean){
+		this.acivityAssignmentDao.saveActivityAssignment(actAssociationBean);		
 	}
 }

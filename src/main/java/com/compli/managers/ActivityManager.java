@@ -20,12 +20,14 @@ public class ActivityManager {
 	ActivityDao activityDao;
 	boolean isFullUser;
 	String locationId;
+	private String userId;
 	public ActivityManager(String auth) {
 		String path = getClass().getResource("/applicationContext.xml").getPath();
 		ApplicationContext ctx=new ClassPathXmlApplicationContext("applicationContext.xml");
 		this.dashBoardDao = (DashBoardDao) ctx.getBean("dashBoardDao");
 		this.activityDao = (ActivityDao) ctx.getBean("activityDao");		
 		this.isFullUser = AuthorisationManager.cache.getIfPresent(auth).isFullUser();
+		this.userId  = AuthorisationManager.cache.getIfPresent(auth).getUserId();
 	}
 	
 	public ActivityManager(String auth,String locationId) {
@@ -34,22 +36,23 @@ public class ActivityManager {
 		ApplicationContext ctx=new ClassPathXmlApplicationContext("applicationContext.xml");
 		this.dashBoardDao = (DashBoardDao) ctx.getBean("dashBoardDao");		
 		this.isFullUser = AuthorisationManager.cache.getIfPresent(auth).isFullUser();
+		this.userId =  AuthorisationManager.cache.getIfPresent(auth).getUserId();
 	}
 	
 	public List<Map<String, Object>> getAllActivitiesWithDescriptionForCompany(String companyId){
-		return this.dashBoardDao.getAllActivitiesWithDescriptionForCompany(companyId,this.isFullUser,true,false);
+		return this.dashBoardDao.getAllActivitiesWithDescriptionForCompany(companyId,this.isFullUser,true,false,this.userId,"all");
 	}
 	
 	public List<Map<String, Object>> getAllActivitiesWithDescriptionForCompany(String companyId,String locationId){
-		return this.dashBoardDao.getAllActivitiesWithDescriptionForCompany(companyId,this.isFullUser,locationId,false,true);
+		return this.dashBoardDao.getAllActivitiesWithDescriptionForCompany(companyId,this.isFullUser,true,false,this.userId,locationId);
 	}
 	
 	public List<Map<String, Object>> getAllActivitiesWithDescriptionForCompanyWithRisk(String companyId,String riskId){
 		List<Map<String, Object>> activities ;
 		if(!"all".equals(riskId)){
-			activities = this.dashBoardDao.getAllActivitiesWithDescriptionForCompanyWithRisk(companyId,riskId,this.isFullUser);
+			activities = this.dashBoardDao.getAllActivitiesWithDescriptionForCompanyWithRisk(companyId,riskId,this.userId,this.isFullUser);
 		}else{
-			activities = this.dashBoardDao.getAllActivitiesWithDescriptionForCompanyWithRisk(companyId,"%",this.isFullUser);
+			activities = this.dashBoardDao.getAllActivitiesWithDescriptionForCompanyWithRisk(companyId,"%",this.userId,this.isFullUser);
 		}
 		return activities;
 	}
@@ -57,12 +60,13 @@ public class ActivityManager {
 	public List<Map<String, Object>> getAllActivitiesWithDescriptionForCompanyWithSeverityAndLaw(String companyId,String status,String law){
 		String months[] = {"Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"};
 		List<String> monthsList = Arrays.asList(months);
+		String location = this.locationId!=null?this.locationId:"all";
 		if(monthsList.contains(law)){
 			String monthStr = (monthsList.indexOf(law)+1)+"";
-			List<Map<String, Object>> allActivity = this.dashBoardDao.getAllActivitiesWithDescriptionForCompanyByMonthAndStatus(companyId,monthStr,status,true);
+			List<Map<String, Object>> allActivity = this.dashBoardDao.getAllActivitiesWithDescriptionForCompanyByMonthAndStatus(companyId,monthStr,status,this.userId,true,location);
 			return allActivity;
 		}else{
-			List<Map<String, Object>> allActivity = this.dashBoardDao.getAllActivitiesWithDescriptionForCompanyByLawAndStatus(companyId,law,status,true);
+			List<Map<String, Object>> allActivity = this.dashBoardDao.getAllActivitiesWithDescriptionForCompanyByLawAndStatus(companyId,law,status,this.userId,true,location);
 			return allActivity;
 		}
 	}
@@ -70,9 +74,9 @@ public class ActivityManager {
 	public List<Map<String, Object>> getAllActivitiesWithDescriptionForCompanyWithSeverity(String companyId,List<String> severity){
 		List<Map<String, Object>> allActivity = null;
 		if(this.locationId==null){	
-			allActivity = this.dashBoardDao.getAllActivitiesWithDescriptionForCompany(companyId,true,false,true);
+			allActivity = this.dashBoardDao.getAllActivitiesWithDescriptionForCompany(companyId,true,false,true,this.userId,"all" );
 		}else{
-			allActivity = this.dashBoardDao.getAllActivitiesWithDescriptionForCompany(companyId,true,this.locationId,true,false);
+			allActivity = this.dashBoardDao.getAllActivitiesWithDescriptionForCompany(companyId,true,false,true,this.userId,this.locationId );
 		}
 		List<Map<String, Object>> filteredActivity = new ArrayList<Map<String,Object>>();
 		int listSize = allActivity.size();
@@ -107,9 +111,9 @@ public class ActivityManager {
 	public List<Map<String, Object>> getAllActivitiesWithDescriptionForCompanyWithSeverityForMonth(String companyId,String severity,String month){
 		List<Map<String, Object>> allActivity = null;
 		if(this.locationId==null){
-			allActivity = this.dashBoardDao.getAllActivitiesWithDescriptionForCompanyByMonth(companyId,month,true);
+			allActivity = this.dashBoardDao.getAllActivitiesWithDescriptionForCompanyByMonth(companyId,month,this.userId,true,"all");
 		}else{
-			allActivity = this.dashBoardDao.getAllActivitiesWithDescriptionForCompanyByMonth(companyId,month,true,this.locationId);
+			allActivity = this.dashBoardDao.getAllActivitiesWithDescriptionForCompanyByMonth(companyId,month,this.userId,true,this.locationId);
 		}
 		List<Map<String, Object>> filteredActivity = new ArrayList<Map<String,Object>>();
 		for(int i=0;i<allActivity.size();i++){
@@ -137,12 +141,22 @@ public class ActivityManager {
 		return filteredActivity;
 	}
 	
+	public List<Map<String, Object>> getAllActivitiesWithDescriptionForCompanyForYear(String companyId,String year){
+		List<Map<String, Object>> allActivity = null;
+		if(this.locationId==null){
+			allActivity = this.dashBoardDao.getAllActivitiesWithDescriptionForCompanyByYearWithRejected(companyId,year,true,"all",this.userId);
+		}else{
+			allActivity = this.dashBoardDao.getAllActivitiesWithDescriptionForCompanyByYearWithRejected(companyId,year,true,this.locationId,this.userId);
+		}
+		return allActivity;
+	}
+	
 	public List<Map<String, Object>> getAllActivitiesWithDescriptionForCompanyForMonth(String companyId,String month){
 		List<Map<String, Object>> allActivity = null;
 		if(this.locationId==null){
-			allActivity = this.dashBoardDao.getAllActivitiesWithDescriptionForCompanyByMonthWithRejected(companyId,month,true);
+			allActivity = this.dashBoardDao.getAllActivitiesWithDescriptionForCompanyByMonthWithRejected(companyId,month,true,"all",this.userId);
 		}else{
-			allActivity = this.dashBoardDao.getAllActivitiesWithDescriptionForCompanyByMonthWithRejected(companyId,month,true,this.locationId);
+			allActivity = this.dashBoardDao.getAllActivitiesWithDescriptionForCompanyByMonthWithRejected(companyId,month,true,this.locationId,this.userId);
 		}
 		return allActivity;
 	}
@@ -150,9 +164,9 @@ public class ActivityManager {
 	public List<Map<String, Object>> getAllActivitiesWithDescriptionForCompanyForQuarter(String companyId,String month){
 		List<Map<String, Object>> allActivity = null;
 		if(this.locationId==null){
-			allActivity = this.dashBoardDao.getAllActivitiesWithDescriptionForCompanyByQuarterWithRejected(companyId,month,true);
+			allActivity = this.dashBoardDao.getAllActivitiesWithDescriptionForCompanyByQuarterWithRejected(companyId,month,true,"all",this.userId);
 		}else{
-			allActivity = this.dashBoardDao.getAllActivitiesWithDescriptionForCompanyByQuarterWithRejected(companyId,month,true,this.locationId);
+			allActivity = this.dashBoardDao.getAllActivitiesWithDescriptionForCompanyByQuarterWithRejected(companyId,month,true,this.locationId,this.userId);
 		}
 		return allActivity;
 	}
@@ -160,9 +174,9 @@ public class ActivityManager {
 	public List<Map<String, Object>> getAllActivitiesWithDescriptionForCompanyWithSeverityForYear(String companyId,String severity,String year){
 		List<Map<String, Object>> allActivity = null;
 		if(this.locationId==null){
-			allActivity = this.dashBoardDao.getAllActivitiesWithDescriptionForCompanyByYear(companyId,year,true);
+			allActivity = this.dashBoardDao.getAllActivitiesWithDescriptionForCompanyByYear(companyId,year,true,"all",this.userId);
 		}else{
-			allActivity = this.dashBoardDao.getAllActivitiesWithDescriptionForCompanyByYear(companyId,year,true,this.locationId);
+			allActivity = this.dashBoardDao.getAllActivitiesWithDescriptionForCompanyByYear(companyId,year,true,this.locationId,this.userId);
 		}
 		List<Map<String, Object>> filteredActivity = new ArrayList<Map<String,Object>>();
 		for(int i=0;i<allActivity.size();i++){
@@ -193,9 +207,9 @@ public class ActivityManager {
 	public List<Map<String, Object>> getAllActivitiesWithDescriptionForCompanyWithSeverityForQuarter(String companyId,String severity,String quarter){
 		List<Map<String, Object>> allActivity = null;
 		if(this.locationId==null){
-			allActivity = this.dashBoardDao.getAllActivitiesWithDescriptionForCompanyByQuarter(companyId,true,quarter);
+			allActivity = this.dashBoardDao.getAllActivitiesWithDescriptionForCompanyByQuarter(companyId,true,quarter,"all",this.userId);
 		}else{
-			allActivity = this.dashBoardDao.getAllActivitiesWithDescriptionForCompanyByQuarter(companyId,true,quarter,this.locationId);
+			allActivity = this.dashBoardDao.getAllActivitiesWithDescriptionForCompanyByQuarter(companyId,true,quarter,this.locationId,this.userId);
 		}
 		List<Map<String, Object>> filteredActivity = new ArrayList<Map<String,Object>>();
 		for(int i=0;i<allActivity.size();i++){
@@ -252,13 +266,13 @@ public boolean changeActivityStatus(String companyId,String activityId,boolean i
 	}
 	
 	
-	public List<Map<String, Object>> getAllActivitiesWithDescriptionForCompanyLast3Months(String companyId,int monthCount,boolean isFullUser){
-		return this.dashBoardDao.getAllActivitiesWithDescriptionForCompanyLast3Months(companyId,monthCount,isFullUser);
+	public List<Map<String, Object>> getAllActivitiesWithDescriptionForCompanyLast3Months(String companyId,int monthCount,String userId,boolean isFullUser,String locationId){
+		return this.dashBoardDao.getAllActivitiesWithDescriptionForCompanyLast3Months(companyId,monthCount,userId,isFullUser,locationId);
 	}
 	
-	public List<Map<String, Object>> getAllActivitiesWithDescriptionForCompanyLast3Months(String companyId,int monthCount,boolean isFullUser,String locationId){
+	/*public List<Map<String, Object>> getAllActivitiesWithDescriptionForCompanyLast3Months(String companyId,int monthCount,boolean isFullUser,String locationId){
 		return this.dashBoardDao.getAllActivitiesWithDescriptionForCompanyLast3Months(companyId,monthCount,isFullUser,locationId);
-	}
+	}*/
 	
 	public boolean requestToReopen(String activityId,String companyId){
 		PendingForDiscrepancy activity = activityDao.getActivityDataForArTechMail(activityId);

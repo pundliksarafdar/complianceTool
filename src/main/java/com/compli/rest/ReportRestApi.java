@@ -30,12 +30,13 @@ public class ReportRestApi {
 	@GET
 	@Authorised(role=ROLE.ALL)
 	public Response getAllActivityWithDescription(@QueryParam("month")String month,@QueryParam("companyId")String companyId,
-			@QueryParam("year")String year,@QueryParam("quarter")String quarter,@HeaderParam("location")String location){
+			@QueryParam("year")String year,@QueryParam("quarter")String quarter,@HeaderParam("location")String location,
+			@HeaderParam("auth")String auth){
 		ReportsManager reportsManager = null;
 		if(location==null || "all".equals(location)){
-			reportsManager = new ReportsManager();
+			reportsManager = new ReportsManager(auth);
 		}else{
-			reportsManager = new ReportsManager(location);
+			reportsManager = new ReportsManager(location,auth);
 		}
 		if(month!=null){
 			return Response.ok(reportsManager.getReportsObject(companyId, month)).build();
@@ -50,15 +51,15 @@ public class ReportRestApi {
 	@GET
 	@Path("generateReport")
 	//@Authorised(role=ROLE.ALL)
-	public Response generateReport(@QueryParam("month")String month,@QueryParam("companyId")String companyId,
-			@QueryParam("year")String year,@QueryParam("quarter")String quarter,@HeaderParam("location")String location) throws FileNotFoundException, DRException{
+	public Response generateReport(@QueryParam("month")String month,@QueryParam("companyId")String companyId,@QueryParam("auth")String auth,
+			@QueryParam("year")String year,@QueryParam("quarter")String quarter,@QueryParam("location")String location) throws FileNotFoundException, DRException{
 		final byte[] fileBytes;
 		String filename = null;
 		ReportsManager reportsManager = null;
 		if(location==null || "all".equals(location)){
-			reportsManager = new ReportsManager();
+			reportsManager = new ReportsManager(auth);
 		}else{
-			reportsManager = new ReportsManager(location);
+			reportsManager = new ReportsManager(location,auth);
 		}
 		
 		if(month!=null){

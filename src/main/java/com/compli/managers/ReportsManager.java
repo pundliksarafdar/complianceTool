@@ -311,7 +311,7 @@ public class ReportsManager {
 		int highOpen = 0;
 		
 		for(Map<String, Object> dt :data){
-			if((Integer)dt.get("isComplied")==1 && (Integer)dt.get("isComplianceApproved")==1 && (Integer)dt.get("isComplainceDelayed")==0){
+			if("1".equals(dt.get("isComplied").toString()) && "1".equals(dt.get("isComplianceApproved").toString()) && "0".equals(dt.get("isComplainceDelayed").toString())){
 					dt.put("complianceState", "Complied activities");
 					compliedInTime.add(dt);	
 					if(dt.get("riskDes").toString().toLowerCase().equals("low")){
@@ -321,7 +321,7 @@ public class ReportsManager {
 					}else if(dt.get("riskDes").toString().toLowerCase().equals("high")){
 						highComplied++;
 					}
-			}else if((Integer)dt.get("isComplainceDelayed")==1){
+			}else if("1".equals(dt.get("isComplainceDelayed").toString())){
 				dt.put("complianceState", "Compliance delayed");
 				compliedDelayed.add(dt);
 				if(dt.get("riskDes").toString().toLowerCase().equals("low")){
@@ -331,7 +331,7 @@ public class ReportsManager {
 				}else if(dt.get("riskDes").toString().toLowerCase().equals("high")){
 					highComplied++;
 				}
-			}else if((Integer)dt.get("isComplied")==0){
+			}else if("0".equals(dt.get("isComplied").toString())){
 				dt.put("complianceState", "Open activities");
 				compliedOpen.add(dt);
 				if(dt.get("riskDes").toString().toLowerCase().equals("low")){

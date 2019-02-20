@@ -783,6 +783,16 @@ var ComplianceActivitiesComponent = /** @class */ (function () {
                 });
             }
             if (self.userType == 'ArTechUser') {
+                __WEBPACK_IMPORTED_MODULE_6_jquery__(".markNotDue", row).off("click").on("click", function ($event) {
+                    self.getConfirmation("Change to " + _this.SELECT_BOX["notDue"]).then(function (result) {
+                        if (result == "Ok") {
+                            self.submitStatusChange(data.companyId, data.activityId, null, $event, "notDue", undefined);
+                        }
+                        else {
+                            $event.target['value'] = "select";
+                        }
+                    });
+                });
                 __WEBPACK_IMPORTED_MODULE_6_jquery__('#arStatusChange', row).off('change').on('change', function ($event) {
                     var dropValue = $event.target['value'];
                     if (dropValue == "select") {
@@ -1003,7 +1013,7 @@ var ComplianceActivitiesComponent = /** @class */ (function () {
                 }, {
                     title: 'Location',
                     data: 'locationName',
-                    width: '15%'
+                    width: '10%'
                 }, {
                     title: 'Law Description',
                     data: 'lawDesc',
@@ -1025,7 +1035,7 @@ var ComplianceActivitiesComponent = /** @class */ (function () {
                     data: 'assignedUser',
                     width: '8%'
                 }, {
-                    width: '3%',
+                    width: '7%',
                     title: '',
                     bSortable: false,
                     render: function (data, type, full) {
@@ -1061,6 +1071,9 @@ var ComplianceActivitiesComponent = /** @class */ (function () {
                         }
                         else if (!full.isComplied) {
                             if (self.userType == 'sManager' || self.userType == 'ArTechUser') {
+                                if (self.userType == 'ArTechUser') {
+                                    return "To be complied <i title='Change to not due' style='cursor:pointer;margin-left: 10px;' class='fa fa-ban fa-lg markNotDue'></i>";
+                                }
                                 return "To be complied";
                             }
                             return "<i id='statusChangeBtn' style='cursor:pointer' data-elemnt-obj=full class='fa fa-check fa-lg' value='Comply' title='Change status to complied'></i>";

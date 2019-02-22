@@ -47,7 +47,8 @@ public class ActivityRestApi {
 			//if user is ARTerch or sManager add Pending for review as it will contain Peding for descrepancy activities
 			List<String>activityStatusLink = new ArrayList<String>();
 			activityStatusLink.add("Pending compliance");
-			if(userType.equals("sManager") || userType.equals("ArTechUser")){
+			//Total will come from dashboard total pending activity click so do not add pending for review in this case 
+			if((userType.equals("sManager") || userType.equals("ArTechUser")) && !"total".equals(activitySeverity)){
 				activityStatusLink.add("Pending for review");
 				activities = activityManager.getAllActivitiesWithDescriptionForCompanyWithSeverity(companyId,activityStatusLink);
 			}else{

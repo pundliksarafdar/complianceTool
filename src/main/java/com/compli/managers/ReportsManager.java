@@ -190,7 +190,8 @@ public class ReportsManager {
 			Map<String,Integer>  complainceOverview = complianceDetailByLaw.get(riskDes);
 			if(null==activity.get("isComplied") || "0".equals(activity.get("isComplied").toString())){
 				complainceOverview.put(OPEN, complainceOverview.get(OPEN)+1);
-			}else if(null!=activity.get("isComplied") && "1".equals(activity.get("isComplied").toString())){
+			}else if(null!=activity.get("isComplied") && "1".equals(activity.get("isComplied").toString())
+					&& null!=activity.get("isComplianceApproved").toString() && "1".equals(activity.get("isComplianceApproved").toString())){
 				complainceOverview.put(COMPLIED, complainceOverview.get(COMPLIED)+1);
 			}
 		}

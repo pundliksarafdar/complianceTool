@@ -138,6 +138,7 @@
 		<field name="activityName" class="java.lang.String"/>
 		<field name="riskDes" class="java.lang.String"/>
 		<field name="duedate" class="java.sql.Date"/>
+		<field name="lawDesc" class="java.lang.String"/>
 		<field name="consequence" class="java.lang.String"/>
 	</subDataset>
 	<subDataset name="GraphData" uuid="35c9b2e5-b90e-4b5b-b8ff-322f15560474">
@@ -567,11 +568,11 @@
 								<text><![CDATA[Compliance open]]></text>
 							</staticText>
 						</jr:tableHeader>
-						<jr:column width="80" uuid="498ea153-5053-40ed-801d-c98d8f88c806">
+						<jr:column width="50" uuid="498ea153-5053-40ed-801d-c98d8f88c806">
 							<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column1"/>
 							<jr:columnHeader style="Table 2_CH" height="30" rowSpan="1">
 								<staticText>
-									<reportElement x="0" y="0" width="80" height="30" uuid="94a228a6-9a65-46d0-886c-4f4bf3215d84"/>
+									<reportElement x="0" y="0" width="50" height="30" uuid="94a228a6-9a65-46d0-886c-4f4bf3215d84"/>
 									<textElement textAlignment="Center" verticalAlignment="Middle">
 										<font isBold="true"/>
 									</textElement>
@@ -580,17 +581,17 @@
 							</jr:columnHeader>
 							<jr:detailCell style="Table 2_TD" height="30">
 								<textField>
-									<reportElement x="0" y="0" width="80" height="30" uuid="f506e615-3770-44ef-89ff-38ea6231c4a9"/>
+									<reportElement x="0" y="0" width="50" height="30" uuid="f506e615-3770-44ef-89ff-38ea6231c4a9"/>
 									<textElement textAlignment="Center" verticalAlignment="Middle"/>
 									<textFieldExpression><![CDATA[$F{locationName}]]></textFieldExpression>
 								</textField>
 							</jr:detailCell>
 						</jr:column>
-						<jr:column width="160" uuid="9d42d5f8-0cd2-4c37-800c-f2cb15fb99ca">
+						<jr:column width="140" uuid="9d42d5f8-0cd2-4c37-800c-f2cb15fb99ca">
 							<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column2"/>
 							<jr:columnHeader style="Table 2_CH" height="30" rowSpan="1">
 								<staticText>
-									<reportElement x="0" y="0" width="160" height="30" uuid="db22b9da-eb28-426f-bfc8-c4399af6a48b"/>
+									<reportElement x="0" y="0" width="140" height="30" uuid="db22b9da-eb28-426f-bfc8-c4399af6a48b"/>
 									<textElement textAlignment="Center" verticalAlignment="Middle">
 										<font isBold="true"/>
 									</textElement>
@@ -599,17 +600,36 @@
 							</jr:columnHeader>
 							<jr:detailCell style="Table 2_TD" height="30">
 								<textField isStretchWithOverflow="true">
-									<reportElement x="0" y="0" width="160" height="30" uuid="578d500e-1cab-438d-8724-3591e3a247a8"/>
+									<reportElement x="0" y="0" width="140" height="30" uuid="578d500e-1cab-438d-8724-3591e3a247a8"/>
 									<textElement textAlignment="Center" verticalAlignment="Middle"/>
 									<textFieldExpression><![CDATA[$F{activityName}]]></textFieldExpression>
 								</textField>
 							</jr:detailCell>
 						</jr:column>
-						<jr:column width="70" uuid="d1c10c5d-2817-485e-9331-9e66142f559d">
+						<jr:column width="100" uuid="28407a1b-9503-4b52-870f-e75049bbea33">
+							<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column5"/>
+							<jr:columnHeader style="Table 2_CH" height="30" rowSpan="1">
+								<staticText>
+									<reportElement x="0" y="0" width="100" height="30" uuid="86c8e374-408b-4c55-89ac-5ce2ee200d38"/>
+									<textElement textAlignment="Center" verticalAlignment="Middle">
+										<font isBold="true"/>
+									</textElement>
+									<text><![CDATA[Law Description]]></text>
+								</staticText>
+							</jr:columnHeader>
+							<jr:detailCell style="Table 2_TD" height="30">
+								<textField isStretchWithOverflow="true">
+									<reportElement x="0" y="0" width="100" height="30" uuid="acc1aa27-16f5-4117-a5dd-aaf3c0c13225"/>
+									<textElement textAlignment="Center" verticalAlignment="Middle"/>
+									<textFieldExpression><![CDATA[$F{lawDesc}]]></textFieldExpression>
+								</textField>
+							</jr:detailCell>
+						</jr:column>
+						<jr:column width="40" uuid="d1c10c5d-2817-485e-9331-9e66142f559d">
 							<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column3"/>
 							<jr:columnHeader style="Table 2_CH" height="30" rowSpan="1">
 								<staticText>
-									<reportElement x="0" y="0" width="70" height="30" uuid="8199e410-ee89-449a-b39e-efb7b5b51e13"/>
+									<reportElement x="0" y="0" width="40" height="30" uuid="8199e410-ee89-449a-b39e-efb7b5b51e13"/>
 									<textElement textAlignment="Center" verticalAlignment="Middle">
 										<font isBold="true"/>
 									</textElement>
@@ -618,7 +638,7 @@
 							</jr:columnHeader>
 							<jr:detailCell style="Table 2_TD" height="30">
 								<textField>
-									<reportElement x="0" y="0" width="70" height="30" uuid="2d934236-2825-48a7-a736-466053de00bb"/>
+									<reportElement x="0" y="0" width="40" height="30" uuid="2d934236-2825-48a7-a736-466053de00bb"/>
 									<textElement textAlignment="Center" verticalAlignment="Middle"/>
 									<textFieldExpression><![CDATA[$F{riskDes}]]></textFieldExpression>
 								</textField>
@@ -643,11 +663,11 @@
 								</textField>
 							</jr:detailCell>
 						</jr:column>
-						<jr:column width="185" uuid="28407a1b-9503-4b52-870f-e75049bbea33">
+						<jr:column width="165" uuid="28407a1b-9503-4b52-870f-e75049bbea33">
 							<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column5"/>
 							<jr:columnHeader style="Table 2_CH" height="30" rowSpan="1">
 								<staticText>
-									<reportElement x="0" y="0" width="185" height="30" uuid="86c8e374-408b-4c55-89ac-5ce2ee200d38"/>
+									<reportElement x="0" y="0" width="165" height="30" uuid="86c8e374-408b-4c55-89ac-5ce2ee200d38"/>
 									<textElement textAlignment="Center" verticalAlignment="Middle">
 										<font isBold="true"/>
 									</textElement>
@@ -656,7 +676,7 @@
 							</jr:columnHeader>
 							<jr:detailCell style="Table 2_TD" height="30">
 								<textField isStretchWithOverflow="true">
-									<reportElement x="0" y="0" width="185" height="30" uuid="acc1aa27-16f5-4117-a5dd-aaf3c0c13225"/>
+									<reportElement x="0" y="0" width="165" height="30" uuid="acc1aa27-16f5-4117-a5dd-aaf3c0c13225"/>
 									<textElement textAlignment="Center" verticalAlignment="Middle"/>
 									<textFieldExpression><![CDATA[$F{consequence}!=null?$F{consequence}:""]]></textFieldExpression>
 								</textField>

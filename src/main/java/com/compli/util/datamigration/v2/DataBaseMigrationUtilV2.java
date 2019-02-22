@@ -30,7 +30,7 @@ public class DataBaseMigrationUtilV2 {
 	private static int DELAY = 2*1000;
 	public static void main(String[] args) throws IOException {
 		startUploading();
-		//startUploadingFiles();
+		startUploadingFiles();
 		//updateUserDetails();
 	}
 	
@@ -44,12 +44,12 @@ public class DataBaseMigrationUtilV2 {
 	}
 	
 	public static void startUploading() throws IOException{
-		FILE_NAME = "C:\\report\\newTracker.xlsx";
+		FILE_NAME = "C:\\report\\db_tracker_1.xlsx";
 		Sheet sheet = readSheetFile();
 		boolean isValidSheet = validateSheet(sheet);
 		System.out.println("Is valid "+isValidSheet);
 		if(isValidSheet){
-			/*DBMigrationUtilV2User.init();
+			DBMigrationUtilV2User.init();
 			DBMigrationUtilV2User.createUsers(sheet);
 			try {	Thread.sleep(DELAY);} catch (InterruptedException e) {e.printStackTrace();}
 			
@@ -89,11 +89,11 @@ public class DataBaseMigrationUtilV2 {
 			DBMigrationUtilV2ActivityAssociation.init();
 			DBMigrationUtilV2ActivityAssociation.createActivityAssociation(sheet);
 			try {	Thread.sleep(DELAY);} catch (InterruptedException e) {e.printStackTrace();}
-			*/
 			
-		   /*DBMigrationUtilV2Activity.init();
+			
+		   DBMigrationUtilV2Activity.init();
 			DBMigrationUtilV2Activity.createActivity(sheet);
-			try {	Thread.sleep(DELAY);} catch (InterruptedException e) {e.printStackTrace();}*/
+			try {	Thread.sleep(DELAY);} catch (InterruptedException e) {e.printStackTrace();}
 			
 			DBMigrationUtilV2ActivityAssignment.init();
 			DBMigrationUtilV2ActivityAssignment.updateUserDetails(sheet);	
@@ -101,10 +101,10 @@ public class DataBaseMigrationUtilV2 {
 	}
 	
 	public static void startUploadingFiles() throws IOException{
-		FILE_NAME = "C:\\report\\newDocumentsSubmit.xlsx";
+		FILE_NAME = "C:\\report\\db_submit_detail.xlsx";
 		Sheet sheet = readSheetFile();
-		/*DBMigrationUtilV2FIles.init();
-		DBMigrationUtilV2FIles.createFIles(sheet);*/
+		DBMigrationUtilV2FIles.init();
+		DBMigrationUtilV2FIles.createFIles(sheet);
 		
 		DBMigrationUtilV2FIlesDriveRefresh.init();
 		DBMigrationUtilV2FIlesDriveRefresh.refreshFilesId();

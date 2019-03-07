@@ -123,6 +123,6 @@
       				    
   </dependencies>
   <build>
-    <finalName>ComplianceTool</finalName>
+    <finalName>ROOT</finalName>
   </build>
 </project>

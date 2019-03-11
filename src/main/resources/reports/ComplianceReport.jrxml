@@ -283,7 +283,7 @@
 									<text><![CDATA[Location]]></text>
 								</staticText>
 							</jr:columnHeader>
-							<jr:detailCell style="Table_TD" height="30">
+							<jr:detailCell height="30">
 								<textField isStretchWithOverflow="true">
 									<reportElement x="0" y="0" width="82" height="30" uuid="1e889123-0d14-42e8-8bab-a2f9c2b8b71f"/>
 									<textElement textAlignment="Center" verticalAlignment="Middle"/>
@@ -675,7 +675,7 @@
 									<text><![CDATA[Consequences]]></text>
 								</staticText>
 							</jr:columnHeader>
-							<jr:detailCell style="Table 2_TD" height="30">
+							<jr:detailCell height="30">
 								<textField isStretchWithOverflow="true">
 									<reportElement x="0" y="0" width="165" height="30" uuid="acc1aa27-16f5-4117-a5dd-aaf3c0c13225"/>
 									<textElement textAlignment="Center" verticalAlignment="Middle"/>

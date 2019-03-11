@@ -676,9 +676,9 @@
 							</jr:columnHeader>
 							<jr:detailCell style="Table 2_TD" height="30">
 								<textField isStretchWithOverflow="true">
-									<reportElement stretchType="ContainerHeight" x="0" y="0" width="165" height="30" uuid="acc1aa27-16f5-4117-a5dd-aaf3c0c13225"/>
+									<reportElement x="0" y="0" width="165" height="30" uuid="acc1aa27-16f5-4117-a5dd-aaf3c0c13225"/>
 									<textElement textAlignment="Center" verticalAlignment="Middle"/>
-									<textFieldExpression><![CDATA[$F{consequence}!=null?$F{consequence}:""]]></textFieldExpression>
+									<textFieldExpression><![CDATA[$F{consequence}+"...."]]></textFieldExpression>
 								</textField>
 							</jr:detailCell>
 						</jr:column>

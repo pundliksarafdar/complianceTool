@@ -284,7 +284,7 @@
 								</staticText>
 							</jr:columnHeader>
 							<jr:detailCell style="Table_TD" height="30">
-								<textField>
+								<textField isStretchWithOverflow="true">
 									<reportElement x="0" y="0" width="82" height="30" uuid="1e889123-0d14-42e8-8bab-a2f9c2b8b71f"/>
 									<textElement textAlignment="Center" verticalAlignment="Middle"/>
 									<textFieldExpression><![CDATA[$F{locationName}]]></textFieldExpression>
@@ -423,7 +423,7 @@
 								</staticText>
 							</jr:columnHeader>
 							<jr:detailCell style="Table 1_TD" height="30">
-								<textField>
+								<textField isStretchWithOverflow="true">
 									<reportElement x="0" y="0" width="60" height="30" uuid="3c739b43-b17f-4f74-8607-4d631c85439b"/>
 									<textElement textAlignment="Center" verticalAlignment="Middle"/>
 									<textFieldExpression><![CDATA[$F{locationName}]]></textFieldExpression>
@@ -581,7 +581,7 @@
 								</staticText>
 							</jr:columnHeader>
 							<jr:detailCell style="Table 2_TD" height="30">
-								<textField>
+								<textField isStretchWithOverflow="true">
 									<reportElement x="0" y="0" width="50" height="30" uuid="f506e615-3770-44ef-89ff-38ea6231c4a9"/>
 									<textElement textAlignment="Center" verticalAlignment="Middle"/>
 									<textFieldExpression><![CDATA[$F{locationName}]]></textFieldExpression>

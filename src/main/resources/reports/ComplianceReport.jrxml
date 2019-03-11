@@ -2,7 +2,6 @@
 <!-- Created with Jaspersoft Studio version 6.6.0.final using JasperReports Library version 6.6.0  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ComplianceReport" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="0ca4265c-0db5-4548-a06e-5be9ec69586e">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
-	<property name="net.sf.jasperreports.text.truncate.at.char" value="Boolean.TRUE"/>
 	<style name="Table_TH" mode="Opaque" backcolor="#F0F8FF">
 		<box>
 			<pen lineWidth="0.5" lineColor="#000000"/>
@@ -283,8 +282,8 @@
 									<text><![CDATA[Location]]></text>
 								</staticText>
 							</jr:columnHeader>
-							<jr:detailCell height="30">
-								<textField isStretchWithOverflow="true">
+							<jr:detailCell style="Table_TD" height="30">
+								<textField>
 									<reportElement x="0" y="0" width="82" height="30" uuid="1e889123-0d14-42e8-8bab-a2f9c2b8b71f"/>
 									<textElement textAlignment="Center" verticalAlignment="Middle"/>
 									<textFieldExpression><![CDATA[$F{locationName}]]></textFieldExpression>
@@ -423,7 +422,7 @@
 								</staticText>
 							</jr:columnHeader>
 							<jr:detailCell style="Table 1_TD" height="30">
-								<textField isStretchWithOverflow="true">
+								<textField>
 									<reportElement x="0" y="0" width="60" height="30" uuid="3c739b43-b17f-4f74-8607-4d631c85439b"/>
 									<textElement textAlignment="Center" verticalAlignment="Middle"/>
 									<textFieldExpression><![CDATA[$F{locationName}]]></textFieldExpression>
@@ -581,7 +580,7 @@
 								</staticText>
 							</jr:columnHeader>
 							<jr:detailCell style="Table 2_TD" height="30">
-								<textField isStretchWithOverflow="true">
+								<textField>
 									<reportElement x="0" y="0" width="50" height="30" uuid="f506e615-3770-44ef-89ff-38ea6231c4a9"/>
 									<textElement textAlignment="Center" verticalAlignment="Middle"/>
 									<textFieldExpression><![CDATA[$F{locationName}]]></textFieldExpression>
@@ -675,11 +674,11 @@
 									<text><![CDATA[Consequences]]></text>
 								</staticText>
 							</jr:columnHeader>
-							<jr:detailCell height="30">
+							<jr:detailCell style="Table 2_TD" height="30">
 								<textField isStretchWithOverflow="true">
 									<reportElement x="0" y="0" width="165" height="30" uuid="acc1aa27-16f5-4117-a5dd-aaf3c0c13225"/>
 									<textElement textAlignment="Center" verticalAlignment="Middle"/>
-									<textFieldExpression><![CDATA[$F{consequence}+".OOOO."]]></textFieldExpression>
+									<textFieldExpression><![CDATA[$F{consequence}!=null?$F{consequence}:""]]></textFieldExpression>
 								</textField>
 							</jr:detailCell>
 						</jr:column>

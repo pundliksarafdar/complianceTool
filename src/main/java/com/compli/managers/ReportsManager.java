@@ -11,7 +11,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import net.sf.dynamicreports.report.exception.DRException;
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
@@ -233,7 +232,7 @@ public class ReportsManager {
 	}
 	
 	public Map<String,Object> generateReportNew(List<Map<String, Object>> compliedInTime,List<Map<String, Object>> compliedDelayed,
-			List<Map<String, Object>> compliedOpen,List<GraphBean> graphBeans,List<ChartBean> chartBean,String companyId,String monthNum,String quarter,String year) throws DRException, FileNotFoundException{
+			List<Map<String, Object>> compliedOpen,List<GraphBean> graphBeans,List<ChartBean> chartBean,String companyId,String monthNum,String quarter,String year) throws  FileNotFoundException{
 		String month = null,finnancialYear = null,monthEnd=null;
 			if(monthNum!=null){
 				monthEnd =month = new DateFormatSymbols().getMonths()[Integer.parseInt(monthNum)-1];
@@ -287,7 +286,7 @@ public class ReportsManager {
 	        JasperPrint jasperPrint = JasperFillManager.fillReport(jasperCompliReport, params,beanCollectionDataAll);
 
 	        ByteArrayOutputStream bos = new ByteArrayOutputStream();
-//	        JasperExportManager.exportReportToPdfFile(jasperPrint, "c:/report/report.pdf");
+	        //JasperExportManager.exportReportToPdfFile(jasperPrint, "c:/report/report.pdf");
 	        pdfFile = JasperExportManager.exportReportToPdf(jasperPrint);
 	    } catch (Exception e) {
 	        e.printStackTrace();
@@ -370,7 +369,7 @@ public class ReportsManager {
 		return dataMap;
 	}
 	
-	public Map<String, Object> generateReport(String companyId,String month) throws FileNotFoundException, DRException{
+	public Map<String, Object> generateReport(String companyId,String month) throws FileNotFoundException{
 		HashMap<String, Object> d = this.getReportsObject(companyId, month);
 		
 		List<Map<String, Object>> data = (List<Map<String, Object>>) d.get("activities");
@@ -381,7 +380,7 @@ public class ReportsManager {
 		return fileObject;
 	}
 	
-	public Map<String, Object> generateReportForQuarter(String companyId,String quarter) throws FileNotFoundException, DRException{
+	public Map<String, Object> generateReportForQuarter(String companyId,String quarter) throws FileNotFoundException{
 		HashMap<String, Object> d = this.getReportsObjectByQuarter(companyId, quarter);
 		
 		List<Map<String, Object>> data = (List<Map<String, Object>>) d.get("activities");
@@ -392,7 +391,7 @@ public class ReportsManager {
 		return fileObject;
 	}
 	
-	public Map<String, Object> generateReportForYear(String companyId,String year) throws FileNotFoundException, DRException{
+	public Map<String, Object> generateReportForYear(String companyId,String year) throws FileNotFoundException{
 		HashMap<String, Object> d = this.getReportsObjectByYear(companyId, year);
 		
 		List<Map<String, Object>> data = (List<Map<String, Object>>) d.get("activities");
@@ -403,16 +402,15 @@ public class ReportsManager {
 		return fileObject;
 	}
 	
-	public static void main(String[] args) throws DRException, FileNotFoundException {
-		/*ReportsManager manager = new ReportsManager();
-		HashMap<String, Object> d = manager.getReportsObject("ff2dbbe29f7d4073", "4","pvs.rao");
+	public static void main(String[] args) throws FileNotFoundException {
+		ReportsManager manager = new ReportsManager();
+		HashMap<String, Object> d = manager.getReportsObject("ff2dbbe29f7d4073", "4");
 		
 		List<Map<String, Object>> data = (List<Map<String, Object>>) d.get("activities");
 		HashMap<String, List> formattedDataMap = format(data);
 		manager.generateReportNew(formattedDataMap.get("compliedInTime"),formattedDataMap.get("compliedDelayed"),
 				formattedDataMap.get("compliedOpen"),formattedDataMap.get("graphBeans"),formattedDataMap.get("chartBeans"),
-				"ff2dbbe29f7d4073","4",null,null);*/
-		
+				"ff2dbbe29f7d4073","4",null,null);		
 	}
 }
 

@@ -16,8 +16,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.StreamingOutput;
 
-import net.sf.dynamicreports.report.exception.DRException;
-
 import com.compli.annotation.Authorised;
 import com.compli.annotation.Authorised.ROLE;
 import com.compli.managers.ActivityManager;
@@ -52,7 +50,7 @@ public class ReportRestApi {
 	@Path("generateReport")
 	//@Authorised(role=ROLE.ALL)
 	public Response generateReport(@QueryParam("month")String month,@QueryParam("companyId")String companyId,@QueryParam("auth")String auth,
-			@QueryParam("year")String year,@QueryParam("quarter")String quarter,@QueryParam("location")String location) throws FileNotFoundException, DRException{
+			@QueryParam("year")String year,@QueryParam("quarter")String quarter,@QueryParam("location")String location) throws FileNotFoundException {
 		final byte[] fileBytes;
 		String filename = null;
 		ReportsManager reportsManager = null;

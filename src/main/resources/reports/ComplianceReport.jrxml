@@ -172,11 +172,8 @@
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
-	<background>
-		<band splitType="Stretch"/>
-	</background>
 	<detail>
-		<band height="652" splitType="Stretch">
+		<band height="641" splitType="Stretch">
 			<image>
 				<reportElement x="120" y="80" width="290" height="260" uuid="46cc6878-b41c-4fdb-8e98-c8ce30350de0"/>
 				<imageExpression><![CDATA["reports/logo.png"]]></imageExpression>
@@ -214,7 +211,7 @@
 				<textFieldExpression><![CDATA[$P{TIME_PERIOD}]]></textFieldExpression>
 			</textField>
 		</band>
-		<band height="628" splitType="Stretch">
+		<band height="620" splitType="Stretch">
 			<barChart>
 				<chart evaluationTime="Report">
 					<reportElement x="258" y="57" width="300" height="180" uuid="2ba7c21c-50d5-4021-b28c-cd082e8287ba"/>
@@ -261,10 +258,10 @@
 					<datasetRun subDataset="CompliedInTimeActivities" uuid="7c81b19f-f325-4efd-b12f-d0a30ef0354e">
 						<dataSourceExpression><![CDATA[$P{CompliedInTimeDataSource}]]></dataSourceExpression>
 					</datasetRun>
-					<jr:columnGroup width="556" uuid="415296b3-0a02-4c49-a189-1fb6bcbbcb0d">
+					<jr:columnGroup width="530" uuid="415296b3-0a02-4c49-a189-1fb6bcbbcb0d">
 						<jr:tableHeader style="Table 1_TH" height="30" rowSpan="1">
 							<staticText>
-								<reportElement x="0" y="0" width="556" height="30" uuid="7893f7d6-09b4-48b1-8625-885b9f2d786f"/>
+								<reportElement x="0" y="0" width="530" height="30" uuid="7893f7d6-09b4-48b1-8625-885b9f2d786f"/>
 								<textElement textAlignment="Center" verticalAlignment="Middle">
 									<font isBold="true"/>
 								</textElement>
@@ -290,11 +287,11 @@
 								</textField>
 							</jr:detailCell>
 						</jr:column>
-						<jr:column width="164" uuid="4407d185-00f4-4a81-ab56-a16e35045489">
+						<jr:column width="158" uuid="4407d185-00f4-4a81-ab56-a16e35045489">
 							<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column2"/>
 							<jr:columnHeader style="Table_CH" height="30" rowSpan="1">
 								<staticText>
-									<reportElement x="0" y="0" width="164" height="30" uuid="0978ce4b-d06b-4a9b-a21d-afed55218979"/>
+									<reportElement x="0" y="0" width="158" height="30" uuid="0978ce4b-d06b-4a9b-a21d-afed55218979"/>
 									<textElement textAlignment="Center" verticalAlignment="Middle">
 										<font isBold="true"/>
 									</textElement>
@@ -303,17 +300,17 @@
 							</jr:columnHeader>
 							<jr:detailCell style="Table_TD" height="30">
 								<textField isStretchWithOverflow="true">
-									<reportElement x="0" y="0" width="164" height="30" uuid="ffca8b99-9ec6-405d-a6fd-14b514b58a38"/>
+									<reportElement x="0" y="0" width="158" height="30" uuid="ffca8b99-9ec6-405d-a6fd-14b514b58a38"/>
 									<textElement textAlignment="Center" verticalAlignment="Middle"/>
 									<textFieldExpression><![CDATA[$F{activityName}]]></textFieldExpression>
 								</textField>
 							</jr:detailCell>
 						</jr:column>
-						<jr:column width="144" uuid="a34959e5-07be-4070-9dc4-719188bcfcff">
+						<jr:column width="124" uuid="a34959e5-07be-4070-9dc4-719188bcfcff">
 							<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column3"/>
 							<jr:columnHeader style="Table_CH" height="30" rowSpan="1">
 								<staticText>
-									<reportElement x="0" y="0" width="144" height="30" uuid="902fb221-fb1c-425f-90d4-9df169ad4844"/>
+									<reportElement x="0" y="0" width="124" height="30" uuid="902fb221-fb1c-425f-90d4-9df169ad4844"/>
 									<textElement textAlignment="Center" verticalAlignment="Middle">
 										<font isBold="true"/>
 									</textElement>
@@ -322,7 +319,7 @@
 							</jr:columnHeader>
 							<jr:detailCell style="Table_TD" height="30">
 								<textField>
-									<reportElement x="0" y="0" width="144" height="30" uuid="5a6faa1d-2eb7-4d16-be0b-733d288e02fb"/>
+									<reportElement x="0" y="0" width="124" height="30" uuid="5a6faa1d-2eb7-4d16-be0b-733d288e02fb"/>
 									<textElement textAlignment="Center" verticalAlignment="Middle"/>
 									<textFieldExpression><![CDATA[$F{lawDesc}]]></textFieldExpression>
 								</textField>
@@ -756,12 +753,6 @@
 				</textElement>
 				<text><![CDATA[Compliance Overview]]></text>
 			</staticText>
-			<break>
-				<reportElement x="0" y="402" width="100" height="1" uuid="e2ac9595-ce8c-4bd4-9c17-f57b9dd2bde4"/>
-			</break>
-			<break>
-				<reportElement x="0" y="520" width="98" height="1" uuid="564aad0c-9cd9-4bbe-a54f-5578f47df325"/>
-			</break>
 		</band>
 	</detail>
 	<pageFooter>

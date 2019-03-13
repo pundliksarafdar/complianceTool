@@ -173,7 +173,7 @@
 		<![CDATA[]]>
 	</queryString>
 	<detail>
-		<band height="641" splitType="Stretch">
+		<band height="640" splitType="Stretch">
 			<image>
 				<reportElement x="120" y="80" width="290" height="260" uuid="46cc6878-b41c-4fdb-8e98-c8ce30350de0"/>
 				<imageExpression><![CDATA["reports/logo.png"]]></imageExpression>
@@ -195,9 +195,6 @@
 				<textElement textAlignment="Right"/>
 				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
 			</textField>
-			<break>
-				<reportElement x="0" y="640" width="555" height="1" uuid="93dc704b-e82b-4334-911b-d78e586f9bed"/>
-			</break>
 			<textField>
 				<reportElement x="204" y="400" width="153" height="30" uuid="7f983cb9-2756-4d0c-a2df-b334b3b1e110"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
@@ -211,7 +208,7 @@
 				<textFieldExpression><![CDATA[$P{TIME_PERIOD}]]></textFieldExpression>
 			</textField>
 		</band>
-		<band height="620" splitType="Stretch">
+		<band height="640" splitType="Stretch">
 			<barChart>
 				<chart evaluationTime="Report">
 					<reportElement x="258" y="57" width="300" height="180" uuid="2ba7c21c-50d5-4021-b28c-cd082e8287ba"/>
@@ -544,7 +541,7 @@
 				</jr:table>
 			</componentElement>
 			<componentElement>
-				<reportElement positionType="Float" x="0" y="530" width="555" height="90" uuid="0d2f77d3-5eb3-470b-a499-29736ee7a22f">
+				<reportElement positionType="Float" x="3" y="540" width="560" height="100" uuid="0d2f77d3-5eb3-470b-a499-29736ee7a22f">
 					<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.VerticalRowLayout"/>
 					<property name="com.jaspersoft.studio.table.style.table_header" value="Table 2_TH"/>
 					<property name="com.jaspersoft.studio.table.style.column_header" value="Table 2_CH"/>
@@ -554,22 +551,22 @@
 					<datasetRun subDataset="CompliedOpenActivities" uuid="7ef64790-b46b-497d-9048-4230ffa354c8">
 						<dataSourceExpression><![CDATA[$P{CompliedOpenDataSource}]]></dataSourceExpression>
 					</datasetRun>
-					<jr:columnGroup width="555" uuid="bb6d721c-dd5c-4072-b331-f2c971fe9c09">
+					<jr:columnGroup width="545" uuid="bb6d721c-dd5c-4072-b331-f2c971fe9c09">
 						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Columns [5]"/>
 						<jr:tableHeader style="Table 2_TH" height="30" rowSpan="1">
 							<staticText>
-								<reportElement x="0" y="0" width="555" height="30" uuid="542968c9-19d5-4dcc-a352-82014ae3758b"/>
+								<reportElement x="0" y="0" width="545" height="30" uuid="542968c9-19d5-4dcc-a352-82014ae3758b"/>
 								<textElement textAlignment="Center" verticalAlignment="Middle">
 									<font isBold="true"/>
 								</textElement>
 								<text><![CDATA[Compliance open]]></text>
 							</staticText>
 						</jr:tableHeader>
-						<jr:column width="50" uuid="498ea153-5053-40ed-801d-c98d8f88c806">
+						<jr:column width="60" uuid="498ea153-5053-40ed-801d-c98d8f88c806">
 							<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column1"/>
 							<jr:columnHeader style="Table 2_CH" height="30" rowSpan="1">
 								<staticText>
-									<reportElement x="0" y="0" width="50" height="30" uuid="94a228a6-9a65-46d0-886c-4f4bf3215d84"/>
+									<reportElement x="0" y="0" width="60" height="30" uuid="94a228a6-9a65-46d0-886c-4f4bf3215d84"/>
 									<textElement textAlignment="Center" verticalAlignment="Middle">
 										<font isBold="true"/>
 									</textElement>
@@ -578,17 +575,17 @@
 							</jr:columnHeader>
 							<jr:detailCell style="Table 2_TD" height="30">
 								<textField isStretchWithOverflow="true">
-									<reportElement x="0" y="0" width="50" height="30" uuid="f506e615-3770-44ef-89ff-38ea6231c4a9"/>
+									<reportElement x="0" y="0" width="60" height="30" uuid="f506e615-3770-44ef-89ff-38ea6231c4a9"/>
 									<textElement textAlignment="Center" verticalAlignment="Middle"/>
 									<textFieldExpression><![CDATA[$F{locationName}]]></textFieldExpression>
 								</textField>
 							</jr:detailCell>
 						</jr:column>
-						<jr:column width="140" uuid="9d42d5f8-0cd2-4c37-800c-f2cb15fb99ca">
+						<jr:column width="120" uuid="9d42d5f8-0cd2-4c37-800c-f2cb15fb99ca">
 							<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column2"/>
 							<jr:columnHeader style="Table 2_CH" height="30" rowSpan="1">
 								<staticText>
-									<reportElement x="0" y="0" width="140" height="30" uuid="db22b9da-eb28-426f-bfc8-c4399af6a48b"/>
+									<reportElement x="0" y="0" width="120" height="30" uuid="db22b9da-eb28-426f-bfc8-c4399af6a48b"/>
 									<textElement textAlignment="Center" verticalAlignment="Middle">
 										<font isBold="true"/>
 									</textElement>
@@ -597,7 +594,7 @@
 							</jr:columnHeader>
 							<jr:detailCell style="Table 2_TD" height="30">
 								<textField isStretchWithOverflow="true">
-									<reportElement x="0" y="0" width="140" height="30" uuid="578d500e-1cab-438d-8724-3591e3a247a8"/>
+									<reportElement x="0" y="0" width="120" height="30" uuid="578d500e-1cab-438d-8724-3591e3a247a8"/>
 									<textElement textAlignment="Center" verticalAlignment="Middle"/>
 									<textFieldExpression><![CDATA[$F{activityName}]]></textFieldExpression>
 								</textField>
@@ -664,7 +661,7 @@
 							<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column5"/>
 							<jr:columnHeader style="Table 2_CH" height="30" rowSpan="1">
 								<staticText>
-									<reportElement x="0" y="0" width="165" height="30" uuid="86c8e374-408b-4c55-89ac-5ce2ee200d38"/>
+									<reportElement x="0" y="0" width="165" height="30" uuid="86c8e374-408b-4c55-89ac-5ce2ee200d39"/>
 									<textElement textAlignment="Center" verticalAlignment="Middle">
 										<font isBold="true"/>
 									</textElement>

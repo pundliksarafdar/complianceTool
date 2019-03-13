@@ -235,34 +235,34 @@
 				<text><![CDATA[Compliance Overview]]></text>
 			</staticText>
 			<componentElement>
-				<reportElement x="-2" y="360" width="558" height="62" uuid="b315b785-9933-4a29-9fdb-c09c4e090fb9"/>
+				<reportElement x="-2" y="360" width="558" height="90" uuid="b315b785-9933-4a29-9fdb-c09c4e090fb9"/>
 				<jr:list xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" printOrder="Vertical">
 					<datasetRun subDataset="CompliedOpenActivities" uuid="6aea825b-eb1f-470d-92e8-cd74d26be8a2">
 						<dataSourceExpression><![CDATA[$P{CompliedOpenDataSource}]]></dataSourceExpression>
 					</datasetRun>
-					<jr:listContents height="62" width="558">
+					<jr:listContents height="90" width="558">
 						<textField isStretchWithOverflow="true">
-							<reportElement x="4" y="10" width="46" height="30" uuid="aca12d60-bb61-4399-be0c-0a06a9bf2e64"/>
+							<reportElement x="4" y="10" width="66" height="30" uuid="aca12d60-bb61-4399-be0c-0a06a9bf2e64"/>
 							<textFieldExpression><![CDATA[$F{locationName}]]></textFieldExpression>
 						</textField>
 						<textField isStretchWithOverflow="true">
-							<reportElement x="50" y="10" width="90" height="30" uuid="44ffa539-df78-42b0-8cbd-c3d72ca19a85"/>
+							<reportElement x="80" y="10" width="90" height="30" uuid="44ffa539-df78-42b0-8cbd-c3d72ca19a85"/>
 							<textFieldExpression><![CDATA[$F{activityName}]]></textFieldExpression>
 						</textField>
 						<textField isStretchWithOverflow="true">
-							<reportElement x="140" y="10" width="100" height="30" uuid="8a35fd86-aa61-4916-92ae-2f1c46e79efa"/>
+							<reportElement x="190" y="10" width="100" height="30" uuid="8a35fd86-aa61-4916-92ae-2f1c46e79efa"/>
 							<textFieldExpression><![CDATA[$F{riskDes}]]></textFieldExpression>
 						</textField>
 						<textField isStretchWithOverflow="true">
-							<reportElement x="240" y="10" width="50" height="30" uuid="d11b863d-cdc8-44e4-98f9-0a1a34aebb81"/>
+							<reportElement x="310" y="10" width="50" height="30" uuid="d11b863d-cdc8-44e4-98f9-0a1a34aebb81"/>
 							<textFieldExpression><![CDATA[$F{duedate}]]></textFieldExpression>
 						</textField>
 						<textField isStretchWithOverflow="true">
-							<reportElement x="290" y="10" width="120" height="30" uuid="034050b7-6195-4a30-b8a6-f0d368072478"/>
+							<reportElement x="400" y="10" width="120" height="30" uuid="034050b7-6195-4a30-b8a6-f0d368072478"/>
 							<textFieldExpression><![CDATA[$F{lawDesc}]]></textFieldExpression>
 						</textField>
 						<textField isStretchWithOverflow="true">
-							<reportElement x="410" y="10" width="140" height="30" uuid="5ae18631-f1d4-4a99-820f-3a3c3de3ef2e"/>
+							<reportElement x="0" y="40" width="558" height="40" uuid="5ae18631-f1d4-4a99-820f-3a3c3de3ef2e"/>
 							<textFieldExpression><![CDATA[$F{consequence}]]></textFieldExpression>
 						</textField>
 					</jr:listContents>

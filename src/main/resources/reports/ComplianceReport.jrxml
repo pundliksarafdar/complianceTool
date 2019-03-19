@@ -673,7 +673,7 @@
 							</jr:columnHeader>
 							<jr:detailCell style="Table 2_TD" height="30">
 								<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
-									<reportElement stretchType="ElementGroupHeight" mode="Opaque" x="0" y="0" width="165" height="30" uuid="acc1aa27-16f5-4117-a5dd-aaf3c0c13225"/>
+									<reportElement positionType="Float" stretchType="RelativeToTallestObject" mode="Opaque" x="0" y="0" width="165" height="30" isPrintWhenDetailOverflows="true" uuid="acc1aa27-16f5-4117-a5dd-aaf3c0c13225"/>
 									<textElement textAlignment="Center" verticalAlignment="Middle">
 										<paragraph lineSpacing="Single"/>
 									</textElement>

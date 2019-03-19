@@ -41,7 +41,7 @@ public class ReportsManager {
 	private boolean isFullUser = true;
 	private String location = null;
 	private String userId;
-	
+	public static String newline = System.getProperty("line.separator");
 	public ReportsManager() {
 		String path = getClass().getResource("/applicationContext.xml").getPath();
 		ApplicationContext ctx=new ClassPathXmlApplicationContext("applicationContext.xml");
@@ -333,6 +333,11 @@ public class ReportsManager {
 				}
 			}else if("0".equals(dt.get("isComplied").toString())){
 				dt.put("complianceState", "Open activities");
+				try{
+					String consequence = dt.get("consequence").toString();
+					consequence = consequence.replaceAll(newline, "");
+					dt.put("consequence", consequence);
+				}catch(Exception e){e.printStackTrace();}
 				compliedOpen.add(dt);
 				if(dt.get("riskDes").toString().toLowerCase().equals("low")){
 					lowOpen++;
@@ -404,13 +409,14 @@ public class ReportsManager {
 	
 	public static void main(String[] args) throws FileNotFoundException {
 		ReportsManager manager = new ReportsManager();
-		HashMap<String, Object> d = manager.getReportsObject("ff2dbbe29f7d4073", "4");
+		manager.userId = "akshay";
+		HashMap<String, Object> d = manager.getReportsObject("c42e21c7c70e439e", "1");
 		
 		List<Map<String, Object>> data = (List<Map<String, Object>>) d.get("activities");
 		HashMap<String, List> formattedDataMap = format(data);
 		manager.generateReportNew(formattedDataMap.get("compliedInTime"),formattedDataMap.get("compliedDelayed"),
 				formattedDataMap.get("compliedOpen"),formattedDataMap.get("graphBeans"),formattedDataMap.get("chartBeans"),
-				"ff2dbbe29f7d4073","4",null,null);		
+				"c42e21c7c70e439e","1",null,null);		
 	}
 }
 

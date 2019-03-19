@@ -759,7 +759,7 @@
 	</detail>
 	<pageFooter>
 		<band height="50" splitType="Stretch">
-			<textField>
+			<textField> 
 				<reportElement x="370" y="10" width="100" height="30" uuid="d599246c-6e38-4a67-9bce-672676132300"/>
 				<textElement textAlignment="Right"/>
 				<textFieldExpression><![CDATA["Page " + $V{PAGE_NUMBER}]]></textFieldExpression>

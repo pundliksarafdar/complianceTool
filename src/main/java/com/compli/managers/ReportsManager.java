@@ -330,7 +330,7 @@ public class ReportsManager {
 					mediumComplied++;
 				}else if(dt.get("riskDes").toString().toLowerCase().equals("high")){
 					highComplied++;
-				}
+				} 
 			}else if("0".equals(dt.get("isComplied").toString())){
 				dt.put("complianceState", "Open activities");
 				try{

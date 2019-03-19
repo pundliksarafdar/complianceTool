@@ -300,7 +300,7 @@
 								</textElement>
 								<text><![CDATA[Law descreption]]></text>
 							</staticText>
-							<textField isStretchWithOverflow="true" evaluationTime="Report">
+							<textField isStretchWithOverflow="true">
 								<reportElement stretchType="RelativeToTallestObject" x="1" y="54" width="550" height="126" uuid="5ae18631-f1d4-4a99-820f-3a3c3de3ef2e"/>
 								<box>
 									<pen lineWidth="0.5"/>

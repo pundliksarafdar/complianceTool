@@ -237,14 +237,14 @@
 			<frame>
 				<reportElement x="-1" y="470" width="555" height="60" uuid="1124bd74-fc99-4e6c-ad96-c83419941991"/>
 				<componentElement>
-					<reportElement positionType="Float" stretchType="ElementGroupHeight" isPrintRepeatedValues="false" x="2" y="-130" width="551" height="120" uuid="b315b785-9933-4a29-9fdb-c09c4e090fb9">
+					<reportElement positionType="Float" stretchType="ElementGroupHeight" isPrintRepeatedValues="false" x="2" y="-130" width="551" height="190" uuid="b315b785-9933-4a29-9fdb-c09c4e090fb9">
 						<property name="net.sf.jasperreports.export.headertoolbar.table.name" value="Complie in time"/>
 					</reportElement>
 					<jr:list xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" printOrder="Vertical">
 						<datasetRun subDataset="CompliedOpenActivities" uuid="6aea825b-eb1f-470d-92e8-cd74d26be8a2">
 							<dataSourceExpression><![CDATA[$P{CompliedOpenDataSource}]]></dataSourceExpression>
 						</datasetRun>
-						<jr:listContents height="120" width="551">
+						<jr:listContents height="190" width="551">
 							<textField isStretchWithOverflow="true">
 								<reportElement style="Table 3_TD" x="1" y="23" width="80" height="30" uuid="aca12d60-bb61-4399-be0c-0a06a9bf2e64"/>
 								<textFieldExpression><![CDATA[$F{locationName}]]></textFieldExpression>
@@ -301,7 +301,7 @@
 								<text><![CDATA[Law descreption]]></text>
 							</staticText>
 							<textField isStretchWithOverflow="true">
-								<reportElement x="1" y="54" width="550" height="66" uuid="5ae18631-f1d4-4a99-820f-3a3c3de3ef2e"/>
+								<reportElement x="1" y="54" width="550" height="126" uuid="5ae18631-f1d4-4a99-820f-3a3c3de3ef2e"/>
 								<box>
 									<pen lineWidth="0.5"/>
 									<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>

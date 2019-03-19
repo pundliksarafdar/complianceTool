@@ -300,8 +300,8 @@
 								</textElement>
 								<text><![CDATA[Law descreption]]></text>
 							</staticText>
-							<textField isStretchWithOverflow="true">
-								<reportElement x="1" y="54" width="550" height="126" uuid="5ae18631-f1d4-4a99-820f-3a3c3de3ef2e"/>
+							<textField isStretchWithOverflow="true" evaluationTime="Report">
+								<reportElement stretchType="RelativeToTallestObject" x="1" y="54" width="550" height="126" uuid="5ae18631-f1d4-4a99-820f-3a3c3de3ef2e"/>
 								<box>
 									<pen lineWidth="0.5"/>
 									<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -309,7 +309,7 @@
 									<bottomPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
 									<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
 								</box>
-								<textFieldExpression><![CDATA["Consequence:- "+$F{consequence}]]></textFieldExpression>
+								<textFieldExpression class="java.lang.String"><![CDATA["Consequence:- "+$F{consequence}]]></textFieldExpression>
 							</textField>
 						</jr:listContents>
 					</jr:list>

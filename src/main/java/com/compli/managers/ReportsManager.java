@@ -335,7 +335,7 @@ public class ReportsManager {
 				dt.put("complianceState", "Open activities");
 				try{
 					String consequence = dt.get("consequence").toString();
-					consequence = consequence.replaceAll(newline, "");
+					consequence = consequence.replaceAll("\\r\\n|\\r|\\n", " ");;
 					dt.put("consequence", consequence);
 				}catch(Exception e){e.printStackTrace();}
 				compliedOpen.add(dt);

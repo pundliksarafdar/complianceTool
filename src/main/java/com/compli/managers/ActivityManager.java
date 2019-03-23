@@ -9,6 +9,7 @@ import java.util.Map;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import com.compli.db.bean.UserBean;
 import com.compli.db.bean.migration.v2.ActivityBean;
 import com.compli.db.dao.ActivityDao;
 import com.compli.db.dao.DashBoardDao;
@@ -35,8 +36,13 @@ public class ActivityManager {
 		String path = getClass().getResource("/applicationContext.xml").getPath();
 		ApplicationContext ctx=new ClassPathXmlApplicationContext("applicationContext.xml");
 		this.dashBoardDao = (DashBoardDao) ctx.getBean("dashBoardDao");		
+		this.activityDao = (ActivityDao) ctx.getBean("activityDao");
 		this.isFullUser = AuthorisationManager.cache.getIfPresent(auth).isFullUser();
 		this.userId =  AuthorisationManager.cache.getIfPresent(auth).getUserId();
+	}
+	
+	public List<UserBean> getUsersForActivity(String activityId){
+		return this.activityDao.getUsersForActivity(activityId);
 	}
 	
 	public List<Map<String, Object>> getAllActivitiesWithDescriptionForCompany(String companyId){
@@ -69,6 +75,11 @@ public class ActivityManager {
 			List<Map<String, Object>> allActivity = this.dashBoardDao.getAllActivitiesWithDescriptionForCompanyByLawAndStatus(companyId,law,status,this.userId,true,location);
 			return allActivity;
 		}
+	}
+	
+	//this function is only used by master user
+	public List<Map<String, Object>> getAllActivitiesWithDescriptionForCompanyByMonthWithRejected(String companyId,String month,String year){
+		return this.dashBoardDao.getAllActivitiesWithDescriptionForCompanyByMonthWithRejected(companyId, month, year);
 	}
 	
 	public List<Map<String, Object>> getAllActivitiesWithDescriptionForCompanyWithSeverity(String companyId,List<String> severity){

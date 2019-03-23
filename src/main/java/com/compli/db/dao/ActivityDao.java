@@ -6,6 +6,7 @@ import java.util.Map;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 
+import com.compli.db.bean.UserBean;
 import com.compli.db.bean.migration.v2.ActivityAssociationBean;
 import com.compli.db.bean.migration.v2.ActivityBean;
 import com.compli.db.bean.migration.v2.ActivityMasterBean;
@@ -20,6 +21,12 @@ public class ActivityDao {
 		this.jdbcTemplate = jdbcTemplate;
 	}
 	//Using migration beans only
+	String ACTIVITY_ID = "select user.userId,firstname,lastname,email,userTypeId from user join	(select userId from activity_assignment where activityId=?)userForActivity on user.userId=userForActivity.userId;";
+	
+	public List<UserBean> getUsersForActivity(String activityId){
+		return this.jdbcTemplate.query(ACTIVITY_ID,new Object[]{activityId},new BeanPropertyRowMapper(UserBean.class));
+	}
+	
 	public boolean addActivityForUpload(ActivityBean activityBean){
 		String sql = "insert into activity(activityId,companyId,isComplied,isComplianceApproved,isProofRequired,isComplianceRejected,isComplainceDelayed,remark,assignedUser,completionDate,activityStatus) values(?,?,?,?,?,?,?,?,?,?,?)";
 		return this.jdbcTemplate.update(sql,activityBean.getActivityId(),activityBean.getCompanyId(),activityBean.isComplied(),

@@ -334,7 +334,7 @@ public class ReportsManager {
 			}else if("0".equals(dt.get("isComplied").toString())){
 				dt.put("complianceState", "Open activities");
 				try{
-					String consequence = dt.get("consequence").toString();
+					String consequence = dt.get("consequence").toString().replaceAll("[^A-Za-z0-9]+", "");
 					System.out.println("Consequences:before:###################"+consequence);
 					consequence = consequence.replaceAll("\\r\\n|\\r|\\n", " ");
 					System.out.println("Consequences:after:*****************"+consequence);

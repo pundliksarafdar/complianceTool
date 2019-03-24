@@ -335,9 +335,9 @@ public class ReportsManager {
 				dt.put("complianceState", "Open activities");
 				try{
 					String consequence = dt.get("consequence").toString();
-					System.out.println("Consequences:before:###################",consequence);
+					System.out.println("Consequences:before:###################"+consequence);
 					consequence = consequence.replaceAll("\\r\\n|\\r|\\n", " ");
-					System.out.println("Consequences:after:###################",consequence);
+					System.out.println("Consequences:after:*****************"+consequence);
 					dt.put("consequence",consequence);
 					//dt.put("consequence", "Section 272A(2)(c) of Income TaxAct, 1961:Rs 100 per day from thedate of default or amount of taxdeductibleSection 271H of theIncome Tax Act,1961:In case offailure to furnish thestatement/furnishing the incorrectstatementChargeable with (a)Penalty between ten thousandrupees to one lakh rupeesSection234E of the Income Tax Act,1961:Incase of failure to furnish thestatementChargeable with(a) Penaltyof a sum of two hundred rupees forevery day subject to maximum of Section 272A(2)(c) of Income TaxAct, 1961:Rs 100 per day from thedate of default or amount of taxdeductibleSection 271H of theIncome Tax Act,1961:In case offailure to furnish thestatement/furnishing the incorrectstatementChargeable with (a)Penalty between ten thousandrupees to one lakh rupeesSection234E of the Income Tax Act,1961:Incase of failure to furnish thestatementChargeable with(a) Penaltyof a sum of two hundred rupees forevery day subject to maximum of");
 				}catch(Exception e){e.printStackTrace();}

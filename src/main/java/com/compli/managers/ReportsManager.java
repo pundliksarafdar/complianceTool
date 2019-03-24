@@ -335,11 +335,11 @@ public class ReportsManager {
 				dt.put("complianceState", "Open activities");
 				try{
 					String consequence = dt.get("consequence").toString();
-					String consequence = new String(consequence);
+					String consequence1 = new StringBuffer(consequence).toString();;
 					System.out.println("Consequences:before:###################"+consequence);
 					consequence = consequence.replaceAll("\\r\\n|\\r|\\n", " ");
 					System.out.println("Consequences:after:*****************"+consequence);
-					dt.put("consequence",consequence.trim());
+					dt.put("consequence",consequence1.trim());
 					//dt.put("consequence", "As per Section 6B If an employer does not pay to the Board and ammount of unpid accumulation, or fines realised from the employees within the time he is required by or under the provisions of this act to pay it, the welfare commsioner may cause to be served a notice on such employer to pay the amount within the period specified therein which shall not be less than thirty days from the date of service of such notice. If the employer fails, without sufficient cause to pay any such amount within the period specified in the notice, he shall, in addition to that amount, pay to the Board simple interest - In case of failure to pay any amount of unpaid accumulations or fines raised from the employees - i) for the first three months at 1.5% of the said amount for each completed months, after the last date by which he should have paid it according to the notice and ii) thereafter at 2% of that amount for each completed months, during the time he continued to make default in the payment of the amount.\n\r As per Section 6B If an employer does not pay to the Board and ammount of unpid accumulation, or fines realised from the employees within the time he is required by or under the provisions of this act to pay it, the welfare commsioner may cause to be served a notice on such employer to pay the amount within the period specified therein which shall not be less than thirty days from the date of service of such notice. If the employer fails, without sufficient cause to pay any such amount within the period specified in the notice, he shall, in addition to that amount, pay to the Board simple interest - In case of failure to pay any amount of unpaid accumulations or fines raised from the employees - i) for the first three months at 1.5% of the said amount for each completed months, after the last date by which he should have paid it according to the notice and ii) thereafter at 2% of that amount for each completed months, during the time he continued to make default in the payment of the amount.");
 				}catch(Exception e){e.printStackTrace();}
 				compliedOpen.add(dt);

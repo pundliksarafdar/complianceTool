@@ -147,4 +147,9 @@ public class SettingsManager {
 		}
 		return scheduleBeans;
 	}
+	
+	public List<CompanyBean> getAllCompanies(){
+		List<CompanyBean> allCompanies = this.companyDao.getAllCompany();
+		return allCompanies;
+	}
 }

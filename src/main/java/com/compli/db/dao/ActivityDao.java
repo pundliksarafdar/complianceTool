@@ -24,8 +24,8 @@ public class ActivityDao {
 	String ACTIVITY_ID = "select user.userId,firstname,lastname,email,userTypeId from user join	(select userId from activity_assignment where activityId=?)userforactivity on user.userId=userforactivity.userId;";
 	
 	public int getMaximumActivityId(){
-		Map<String, Object> maxActivity = this.jdbcTemplate.queryForMap("select max(activityId) as maxActivityCount from activity;");
-		return Integer.parseInt((String) maxActivity.get("maxactivitycount"));
+		List<Map<String, Object>> maxActivity = this.jdbcTemplate.queryForList("select CAST(activityId AS UNSIGNED)as maxactivitycount from activity order by maxactivitycount desc limit 1;");
+		return Integer.parseInt((String) maxActivity.get(0).get("maxactivitycount").toString());
 	}
 	
 	public List<UserBean> getUsersForActivity(String activityId){

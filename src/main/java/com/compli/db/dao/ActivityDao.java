@@ -21,7 +21,12 @@ public class ActivityDao {
 		this.jdbcTemplate = jdbcTemplate;
 	}
 	//Using migration beans only
-	String ACTIVITY_ID = "select user.userId,firstname,lastname,email,userTypeId from user join	(select userId from activity_assignment where activityId=?)userForActivity on user.userId=userForActivity.userId;";
+	String ACTIVITY_ID = "select user.userId,firstname,lastname,email,userTypeId from user join	(select userId from activity_assignment where activityId=?)userforactivity on user.userId=userforactivity.userId;";
+	
+	public int getMaximumActivityId(){
+		Map<String, Object> maxActivity = this.jdbcTemplate.queryForMap("select max(activityId) as maxActivityCount from activity;");
+		return Integer.parseInt((String) maxActivity.get("maxactivitycount"));
+	}
 	
 	public List<UserBean> getUsersForActivity(String activityId){
 		return this.jdbcTemplate.query(ACTIVITY_ID,new Object[]{activityId},new BeanPropertyRowMapper(UserBean.class));

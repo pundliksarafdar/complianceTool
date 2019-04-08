@@ -41,6 +41,10 @@ public class ActivityManager {
 		this.userId =  AuthorisationManager.cache.getIfPresent(auth).getUserId();
 	}
 	
+	public boolean uploadActivities(){
+		
+		return false;
+	}
 	public List<UserBean> getUsersForActivity(String activityId){
 		return this.activityDao.getUsersForActivity(activityId);
 	}

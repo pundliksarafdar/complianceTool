@@ -37,6 +37,12 @@ public class DBMigrationUtilV2LawMaster {
 		new DBMigrationUtilV2LawMaster();
 	}
 	
+	public static void init(int lawDesc,int complArea){
+		LAW_DESC = lawDesc;
+		COMPLAINCE_AREA = complArea;
+		new DBMigrationUtilV2LawMaster();
+	}
+	
 	public static void createLawMaster(Sheet datatypeSheet){
 		Iterator<Row> iterator = datatypeSheet.iterator();
 		List<com.compli.db.bean.migration.v2.LawMasterBean>lawMasterBeans = new ArrayList<com.compli.db.bean.migration.v2.LawMasterBean>(); 
@@ -57,7 +63,12 @@ public class DBMigrationUtilV2LawMaster {
 				continue;
 			}
 			
-			String lawName = LAW_NAME.get((int)complainceArea.getNumericCellValue());
+			String lawName = "";
+			if(complainceArea.getCellType()==Cell.CELL_TYPE_NUMERIC){
+				lawName = LAW_NAME.get((int)complainceArea.getNumericCellValue());
+			}else{
+				lawName = complainceArea.getStringCellValue();
+			}
 			LawMasterBean lawMasterBean = new LawMasterBean(lawName.trim(), lawDesc.toString().trim());
 			lawMasterBeans.add(lawMasterBean);
 		}

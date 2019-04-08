@@ -1,13 +1,17 @@
 package com.compli.rest;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.security.GeneralSecurityException;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
@@ -16,13 +20,22 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 
+import org.apache.commons.io.IOUtils;
+import org.jboss.resteasy.plugins.providers.multipart.InputPart;
+import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
+
+import com.compli.annotation.Authorised;
+import com.compli.annotation.Authorised.ROLE;
 import com.compli.bean.SettingsBean;
 import com.compli.db.bean.CompanyBean;
 import com.compli.db.bean.UserBean;
 import com.compli.managers.ActivityManager;
+import com.compli.managers.DataManager;
 import com.compli.managers.SettingsManager;
+import com.compli.managers.StorageManager;
 import com.compli.services.GoogleServices;
 import com.google.api.client.auth.oauth2.AuthorizationCodeRequestUrl;
 import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow;
@@ -87,4 +100,25 @@ public class SettingsRestApi {
 		List<UserBean> users = activityManager.getUsersForActivity(activityId);
 		return Response.ok(users).build();		
 	}
+	
+	@POST
+	@Path("/upload/{companyId}")
+	@Authorised(role=ROLE.ALL)
+	@Consumes(MediaType.MULTIPART_FORM_DATA)
+	public Response uploadFile(@PathParam("companyId")String companyId,MultipartFormDataInput  input){
+		Map<String, List<InputPart>> uploadForm = input.getFormDataMap();
+		List<InputPart> inputParts = uploadForm.get("uploadedFile");
+		List<String> rejectReasons = new ArrayList<String>();
+		for (InputPart inputPart : inputParts) {
+			 try {
+				java.io.InputStream inputStream = inputPart.getBody(java.io.InputStream.class,null);
+				DataManager dataManager = new DataManager();
+				rejectReasons = dataManager.uploadData(inputStream, companyId);
+			}catch(Exception e){
+				 e.printStackTrace();
+			 }
+		} 
+		return Response.ok(rejectReasons).build();
+	}
+
 }

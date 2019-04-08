@@ -32,6 +32,11 @@ public class DBMigrationUtilV2PeriodicityMaster {
 		new DBMigrationUtilV2PeriodicityMaster();
 	}
 	
+	public static void init(int rowNo){
+		new DBMigrationUtilV2PeriodicityMaster();
+		PERIODICITY_DESC = rowNo;
+	}
+	
 	public static void createPeriodicityMaster(Sheet datatypeSheet){
 		Iterator<Row> iterator = datatypeSheet.iterator();
 		List<com.compli.db.bean.migration.v2.PeriodicityMasterBean> periodicityMasterBeans = new ArrayList<com.compli.db.bean.migration.v2.PeriodicityMasterBean>(); 

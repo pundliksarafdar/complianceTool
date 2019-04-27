@@ -13,9 +13,9 @@ import com.compli.db.dao.UserDao;
 
 public class DashBoardManager {
 	
-	private String HIGH = "high";
-	private  String MEDIUM = "medium";
-	private String LOW = "low";
+	private String HIGH = "High";
+	private  String MEDIUM = "Medium";
+	private String LOW = "Low";
 	
 	private String PENDING_COMPLIANCE = "pendingCompliance";
 	private String COMPLAINCE_REVEIW = "pendingReview";

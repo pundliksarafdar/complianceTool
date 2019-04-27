@@ -41,7 +41,7 @@ public class ReportsManager {
 	private boolean isFullUser = true;
 	private String location = null;
 	private String userId;
-	
+	public static String newline = System.getProperty("line.separator");
 	public ReportsManager() {
 		String path = getClass().getResource("/applicationContext.xml").getPath();
 		ApplicationContext ctx=new ClassPathXmlApplicationContext("applicationContext.xml");
@@ -330,9 +330,22 @@ public class ReportsManager {
 					mediumComplied++;
 				}else if(dt.get("riskDes").toString().toLowerCase().equals("high")){
 					highComplied++;
-				}
+				} 
 			}else if("0".equals(dt.get("isComplied").toString())){
 				dt.put("complianceState", "Open activities");
+				try{
+					String consequence = dt.get("consequence").toString();
+					StringBuffer cons = new StringBuffer();
+					char[] con = consequence.toCharArray();
+					for(int i=0;i<consequence.length();i++){
+						if(i>890){
+							System.out.println(consequence.charAt(i)+"==="+((int)consequence.charAt(i)));
+						}
+						cons.append(consequence.charAt(i));						
+					}
+					dt.put("consequence",cons.toString());
+					//dt.put("consequence", "As per Section 6B If an employer does not pay to the Board and ammount of unpid accumulation, or fines realised from the employees within the time he is required by or under the provisions of this act to pay it, the welfare commsioner may cause to be served a notice on such employer to pay the amount within the period specified therein which shall not be less than thirty days from the date of service of such notice. If the employer fails, without sufficient cause to pay any such amount within the period specified in the notice, he shall, in addition to that amount, pay to the Board simple interest - In case of failure to pay any amount of unpaid accumulations or fines raised from the employees - i) for the first three months at 1.5% of the said amount for each completed months, after the last date by which he should have paid it according to the notice and ii) thereafter at 2% of that amount for each completed months, during the time he continued to make default in the payment of the amount.\n\r As per Section 6B If an employer does not pay to the Board and ammount of unpid accumulation, or fines realised from the employees within the time he is required by or under the provisions of this act to pay it, the welfare commsioner may cause to be served a notice on such employer to pay the amount within the period specified therein which shall not be less than thirty days from the date of service of such notice. If the employer fails, without sufficient cause to pay any such amount within the period specified in the notice, he shall, in addition to that amount, pay to the Board simple interest - In case of failure to pay any amount of unpaid accumulations or fines raised from the employees - i) for the first three months at 1.5% of the said amount for each completed months, after the last date by which he should have paid it according to the notice and ii) thereafter at 2% of that amount for each completed months, during the time he continued to make default in the payment of the amount.");
+				}catch(Exception e){e.printStackTrace();}
 				compliedOpen.add(dt);
 				if(dt.get("riskDes").toString().toLowerCase().equals("low")){
 					lowOpen++;
@@ -404,13 +417,14 @@ public class ReportsManager {
 	
 	public static void main(String[] args) throws FileNotFoundException {
 		ReportsManager manager = new ReportsManager();
-		HashMap<String, Object> d = manager.getReportsObject("ff2dbbe29f7d4073", "4");
+		manager.userId = "akshay";
+		HashMap<String, Object> d = manager.getReportsObject("c42e21c7c70e439e", "1");
 		
 		List<Map<String, Object>> data = (List<Map<String, Object>>) d.get("activities");
 		HashMap<String, List> formattedDataMap = format(data);
 		manager.generateReportNew(formattedDataMap.get("compliedInTime"),formattedDataMap.get("compliedDelayed"),
 				formattedDataMap.get("compliedOpen"),formattedDataMap.get("graphBeans"),formattedDataMap.get("chartBeans"),
-				"ff2dbbe29f7d4073","4",null,null);		
+				"c42e21c7c70e439e","1",null,null);		
 	}
 }
 

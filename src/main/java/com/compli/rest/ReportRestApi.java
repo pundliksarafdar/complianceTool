@@ -27,7 +27,8 @@ public class ReportRestApi {
 	
 	@GET
 	@Authorised(role=ROLE.ALL)
-	public Response getAllActivityWithDescription(@QueryParam("month")String month,@QueryParam("companyId")String companyId,
+	//mon is used to fetch report year and month
+	public Response getAllActivityWithDescription(@QueryParam("month")String month,@QueryParam("mon")String mon,@QueryParam("companyId")String companyId,
 			@QueryParam("year")String year,@QueryParam("quarter")String quarter,@HeaderParam("location")String location,
 			@HeaderParam("auth")String auth){
 		ReportsManager reportsManager = null;

@@ -25,7 +25,7 @@ import com.compli.db.bean.migration.v2.UserBean;
 import com.compli.db.dao.UserDao;
 
 public class DataBaseMigrationUtilV2 {
-	private static String FILE_NAME = "C:\\report\\db_tracker.xlsx";
+	private static String FILE_NAME = "C:\\report\\Table Tracker_Online Tyari_final_FY 2019-20.xlsx";
 	private static int ROW_COUNT = 27;
 	private static int DELAY = 2*1000;
 	public static void main(String[] args) throws IOException {
@@ -44,7 +44,7 @@ public class DataBaseMigrationUtilV2 {
 	}
 	
 	public static void startUploading() throws IOException{
-		FILE_NAME = "C:\\report\\Table Tracker_Additional GST_Fy18-19_11.xlsx";
+		FILE_NAME = "C:\\report\\Table Tracker_Online Tyari_final_FY 2019-20.xlsx";
 		Sheet sheet = readSheetFile();
 		boolean isValidSheet = validateSheet(sheet);
 		System.out.println("Is valid "+isValidSheet);

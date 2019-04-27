@@ -13,9 +13,9 @@ import com.compli.db.dao.UserDao;
 
 public class DashBoardManager {
 	
-	private String HIGH = "High";
-	private  String MEDIUM = "Medium";
-	private String LOW = "Low";
+	private String HIGH = "high";
+	private  String MEDIUM = "medium";
+	private String LOW = "low";
 	
 	private String PENDING_COMPLIANCE = "pendingCompliance";
 	private String COMPLAINCE_REVEIW = "pendingReview";
@@ -84,7 +84,7 @@ public class DashBoardManager {
 			counts = this.dashBoardDao.getPendingActivityCoutForNext10Days(this.companyId,this.isFullUser,this.locationId);
 		}
 		for(Map<String, Object> count : counts){
-			String riskId = (String)count.get("riskId");
+			String riskId = ((String)count.get("riskId")).toLowerCase();
 			int countN = Integer.parseInt((Long)count.get("count")+"");
 			riskCountMap.put(riskId, countN);
 		}

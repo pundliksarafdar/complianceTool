@@ -3,14 +3,19 @@ package com.compli.managers;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
+
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+
 import com.compli.bean.SettingsBean;
 import com.compli.bean.SettingsScheduleBean;
 import com.compli.db.bean.CompanyBean;
 import com.compli.db.bean.Pair;
+import com.compli.db.bean.UsersForCompany;
+import com.compli.db.bean.migration.v2.UserCompanyBean;
 import com.compli.db.dao.CompanyDao;
 import com.compli.db.dao.SettingsDao;
+import com.compli.db.dao.UserCompanyDao;
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 
@@ -18,6 +23,7 @@ import com.google.gson.Gson;
 public class SettingsManager {
 	SettingsDao settingsDao;
 	CompanyDao companyDao;
+	UserCompanyDao userCompanyDao;
 	public static SettingsBean settingsBean;
 	
 	static{
@@ -29,6 +35,7 @@ public class SettingsManager {
 		ApplicationContext ctx=new ClassPathXmlApplicationContext("applicationContext.xml");
 		this.settingsDao = (SettingsDao) ctx.getBean("settingsDao");
 		this.companyDao = (CompanyDao) ctx.getBean("companyDao");
+		this.userCompanyDao = (UserCompanyDao) ctx.getBean("userCompanyDao");
 	}
 	public boolean saveSettings(SettingsBean settingsBean){
 		List<Pair> pairs = new ArrayList<Pair>();
@@ -151,5 +158,9 @@ public class SettingsManager {
 	public List<CompanyBean> getAllCompanies(){
 		List<CompanyBean> allCompanies = this.companyDao.getAllCompany();
 		return allCompanies;
+	}
+	
+	public List<UsersForCompany> getUserForCompany(String companyId){
+		return this.userCompanyDao.getAllUsersForCompany(companyId);
 	}
 }

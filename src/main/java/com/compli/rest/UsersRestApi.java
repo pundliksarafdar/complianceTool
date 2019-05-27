@@ -21,9 +21,13 @@ import javax.ws.rs.core.Response.Status;
 import com.compli.annotation.Authorised;
 import com.compli.bean.RegisterBean;
 import com.compli.bean.UserBean;
+import com.compli.db.bean.UsersForCompany;
+import com.compli.db.bean.migration.v2.UserCompanyBean;
+import com.compli.db.dao.UserCompanyDao;
 import com.compli.managers.AuthorisationManager;
 import com.compli.managers.NotificationManager;
 import com.compli.managers.RegistrationManager;
+import com.compli.managers.SettingsManager;
 
 @Path("/user")
 @Produces(MediaType.APPLICATION_JSON)
@@ -124,6 +128,16 @@ public class UsersRestApi extends Application{
 		RegistrationManager registrationManager = new RegistrationManager();
 		boolean success = registrationManager.updateUser(auth, userBean);
 		return Response.ok().build();		
+	}
+	
+	@GET
+	@Path("/allUserForCompany/{companyId}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Authorised(role=Authorised.ROLE.ALL)
+	public Response getAllUserForCompany(@PathParam("companyId") String companyId){
+		SettingsManager settingsManager = new SettingsManager(); 
+		java.util.List<UsersForCompany> users = settingsManager.getUserForCompany(companyId);
+		return Response.ok(users).build();
 	}
 }
 

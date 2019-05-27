@@ -12,6 +12,7 @@ import java.util.Set;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -188,9 +189,9 @@ public class AlertsManager {
 	
 	public Map<String,List<PendingActivitiesForMail>> getActivitiesFor5(){
 		Map<String,List<PendingActivitiesForMail>> activities = new HashMap<String, List<PendingActivitiesForMail>>();
-		List<PendingActivitiesForMail> cManagerActivities = this.activityDao.getOlderActivitiesForMail(5,"cManager");
+		List<PendingActivitiesForMail> cManagerActivities = this.activityDao.getOlderActivitiesForMail(4,"cManager");
 		activities.put("cManager", cManagerActivities);
-		List<PendingActivitiesForMail> cOwnerActivities = this.activityDao.getOlderActivitiesForMail(5,"cOwner");
+		List<PendingActivitiesForMail> cOwnerActivities = this.activityDao.getOlderActivitiesForMail(4,"cOwner");
 		activities.put("cOwner", cOwnerActivities);
 		return activities;
 	}

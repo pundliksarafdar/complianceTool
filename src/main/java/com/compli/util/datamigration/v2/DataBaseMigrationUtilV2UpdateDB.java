@@ -287,4 +287,8 @@ public class DataBaseMigrationUtilV2UpdateDB {
 	public void saveActivityAssignment(List<ActivityAssignnmentBean> actAssociationBean){
 		this.acivityAssignmentDao.saveActivityAssignment(actAssociationBean);		
 	}
+	
+	public void removeActivityAssignment(List<ActivityAssignnmentBean> actAssociationBean){
+		this.acivityAssignmentDao.removeActivityAssignment(actAssociationBean);		
+	}
 }

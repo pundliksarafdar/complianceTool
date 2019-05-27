@@ -29,6 +29,7 @@ import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
 
 import com.compli.annotation.Authorised;
 import com.compli.annotation.Authorised.ROLE;
+import com.compli.bean.ChangeDateBean;
 import com.compli.bean.SettingsBean;
 import com.compli.db.bean.CompanyBean;
 import com.compli.db.bean.UserBean;
@@ -37,6 +38,7 @@ import com.compli.managers.DataManager;
 import com.compli.managers.SettingsManager;
 import com.compli.managers.StorageManager;
 import com.compli.services.GoogleServices;
+import com.compli.util.bean.ActivityAssignnmentBean;
 import com.google.api.client.auth.oauth2.AuthorizationCodeRequestUrl;
 import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow;
 import com.google.api.client.googleapis.auth.oauth2.GoogleClientSecrets;
@@ -120,5 +122,34 @@ public class SettingsRestApi {
 		} 
 		return Response.ok(rejectReasons).build();
 	}
-
+	
+	@POST
+	@Path("/changeDate")
+	@Authorised(role=ROLE.ALL)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public static Response changeDate(ChangeDateBean changeDateBean,@HeaderParam("auth")String auth){
+		ActivityManager activityManager = new ActivityManager(auth);
+		activityManager.changeDate(changeDateBean);
+		return Response.ok().build();
+	}
+	
+	@POST
+	@Path("/setUserForActivity")
+	@Authorised(role=ROLE.ALL)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public static Response setUserForActivity(List<ActivityAssignnmentBean> activityAssignnmentBeans,@HeaderParam("auth")String auth){
+		ActivityManager activityManager = new ActivityManager(auth);
+		activityManager.addUserForActivity(activityAssignnmentBeans);
+		return Response.ok().build();
+	}
+	
+	@POST
+	@Path("/removeUserForActivity")
+	@Authorised(role=ROLE.ALL)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public static Response removeUserForActivity(ActivityAssignnmentBean activityAssignnmentBean,@HeaderParam("auth")String auth){
+		ActivityManager activityManager = new ActivityManager(auth);
+		activityManager.removeUserForActivity(activityAssignnmentBean);
+		return Response.ok().build();
+	}
 }

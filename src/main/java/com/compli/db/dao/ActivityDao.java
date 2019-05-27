@@ -5,6 +5,8 @@ import java.util.Map;
 
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
 import com.compli.db.bean.UserBean;
 import com.compli.db.bean.migration.v2.ActivityAssociationBean;
@@ -16,9 +18,14 @@ import com.notifier.emailbean.PendingForDiscrepancy;
 
 public class ActivityDao {
 	private JdbcTemplate jdbcTemplate;
+	private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 	
 	public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
 		this.jdbcTemplate = jdbcTemplate;
+	}
+	
+	public void setNamedParameterJdbcTemplate(NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
+		this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
 	}
 	//Using migration beans only
 	String ACTIVITY_ID = "select user.userId,firstname,lastname,email,userTypeId from user join	(select userId from activity_assignment where activityId=?)userforactivity on user.userId=userforactivity.userId;";
@@ -124,5 +131,13 @@ public class ActivityDao {
 	"on activityWithLocation.lawId = lawmaster.lawId) activitywithLaw "+
 "on activitywithLaw.periodicityId = periodicitymaster.periodicityId  where googleId=?";
 		return this.jdbcTemplate.query(sql, new Object[]{maxDateInterval,userType,googleId},new BeanPropertyRowMapper(PendingActivitiesForMail.class));
+	}
+	
+	public void updatePeriodicityDateOfActivity(List<String>activityIds,String date){
+		String updateSql = "update activitymaster set periodicityDateId=:date where activityId in (:ids);";
+		MapSqlParameterSource param = new MapSqlParameterSource();
+		param.addValue("ids", activityIds);
+		param.addValue("date", date);
+		this.namedParameterJdbcTemplate.update(updateSql, param);
 	}
 }

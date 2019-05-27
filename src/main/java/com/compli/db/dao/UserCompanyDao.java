@@ -6,11 +6,12 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import com.compli.db.bean.CompanyBean;
+import com.compli.db.bean.UsersForCompany;
 import com.compli.db.bean.migration.v2.UserCompanyBean;
 
 public class UserCompanyDao {
 	private JdbcTemplate jdbcTemplate;
-	private static String USER_FOR_COMPANY = "select user.userId,firstname,lastname,email,userTypeId from user join	(select userId from userCompany where companyId=?)userForActivityon user.userId=userForActivity.userId;";
+	private static String USER_FOR_COMPANY = "select firstname,lastname,user.userId,email,userTypeId from user join usercompany on user.userId=usercompany.userId where usercompany.companyId=?;";
 	
 	public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
 		this.jdbcTemplate = jdbcTemplate;
@@ -21,8 +22,9 @@ public class UserCompanyDao {
 		return userCompanyBeans;
 	}
 	
-	public List<UserCompanyBean> getAllUsersForCompany(String companyId){
-		List<UserCompanyBean> userCompanyBeans = null;//(List<UserCompanyBean>) this.jdbcTemplate.query(USER_FOR_COMPANY,companyId, new BeanPropertyRowMapper(UserCompanyBean.class));
+	public List<UsersForCompany> getAllUsersForCompany(String companyId){
+		List<UsersForCompany> userCompanyBeans = (List<UsersForCompany>) this.jdbcTemplate.query(USER_FOR_COMPANY,new Object[]{companyId}, new BeanPropertyRowMapper(UsersForCompany.class));
+		
 		return userCompanyBeans;
 	}
 	

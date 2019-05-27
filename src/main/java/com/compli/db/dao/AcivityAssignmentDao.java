@@ -38,6 +38,23 @@ public class AcivityAssignmentDao {
 		});
 	}
 	
+	public  void removeActivityAssignment(List<ActivityAssignnmentBean>actAssociationBean){
+		String sql = "delete from activity_assignment where activityId=? and userId=?;";
+		this.jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {			
+			@Override
+			public void setValues(PreparedStatement ps, int i) throws SQLException {
+				ActivityAssignnmentBean pair = actAssociationBean.get(i);
+				ps.setString(1, pair.getActivityId());
+				ps.setString(2, pair.getUserId());				
+			}
+			 
+			@Override
+			public int getBatchSize() {
+				return actAssociationBean.size();
+			}
+		});
+	}
+	
 	public List<ActivityAssignnmentBean> getActivityAssignment(){
 		String sql = "select * from activity_assignment";
 		return this.jdbcTemplate.query(sql, new BeanPropertyRowMapper(ActivityAssignnmentBean.class));

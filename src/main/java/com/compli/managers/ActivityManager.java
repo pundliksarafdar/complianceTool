@@ -9,16 +9,22 @@ import java.util.Map;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import com.compli.bean.ChangeDateBean;
 import com.compli.db.bean.UserBean;
 import com.compli.db.bean.migration.v2.ActivityBean;
+import com.compli.db.bean.PeriodicityDateMasterBean;
 import com.compli.db.dao.ActivityDao;
 import com.compli.db.dao.DashBoardDao;
+import com.compli.db.dao.PeriodicityDateMasterDao;
 import com.compli.util.Constants;
+import com.compli.util.bean.ActivityAssignnmentBean;
+import com.compli.util.datamigration.v2.DataBaseMigrationUtilV2UpdateDB;
 import com.notifier.emailbean.PendingForDiscrepancy;
 
 public class ActivityManager {
 	DashBoardDao dashBoardDao;
 	ActivityDao activityDao;
+	PeriodicityDateMasterDao periodicityDateMasterDao;
 	boolean isFullUser;
 	String locationId;
 	private String userId;
@@ -27,8 +33,10 @@ public class ActivityManager {
 		ApplicationContext ctx=new ClassPathXmlApplicationContext("applicationContext.xml");
 		this.dashBoardDao = (DashBoardDao) ctx.getBean("dashBoardDao");
 		this.activityDao = (ActivityDao) ctx.getBean("activityDao");		
+		this.periodicityDateMasterDao = (PeriodicityDateMasterDao) ctx.getBean("periodicityDateDao");
 		this.isFullUser = AuthorisationManager.cache.getIfPresent(auth).isFullUser();
 		this.userId  = AuthorisationManager.cache.getIfPresent(auth).getUserId();
+		
 	}
 	
 	public ActivityManager(String auth,String locationId) {
@@ -300,5 +308,24 @@ public boolean changeActivityStatus(String companyId,String activityId,boolean i
 	public boolean changeToOpen(String activityId, String companyId) {
 		this.activityDao.changeToOpen(activityId,companyId);
 		return true;
+	}
+	
+	public void changeDate(ChangeDateBean changeDateBean){
+		PeriodicityDateMasterBean pDateBean = new PeriodicityDateMasterBean(changeDateBean.getDate(), changeDateBean.getDate()); 
+		//Insert periodicityDate before adding change date
+		try{this.periodicityDateMasterDao.addPeriodicityMasterForUpload(pDateBean);}catch(Exception e){System.out.println("Value is already present.");}
+		this.activityDao.updatePeriodicityDateOfActivity(changeDateBean.getActivityId(), changeDateBean.getDate());
+	}
+	
+	public void addUserForActivity(List<ActivityAssignnmentBean> activityAssignnmentBeans){
+		DataBaseMigrationUtilV2UpdateDB updateDB = new DataBaseMigrationUtilV2UpdateDB();
+		updateDB.saveActivityAssignment(activityAssignnmentBeans);	
+	}
+	
+	public void removeUserForActivity(ActivityAssignnmentBean activityAssignnmentBean){
+		List<ActivityAssignnmentBean> activityAssignnmentBeans = new ArrayList<ActivityAssignnmentBean>();
+		activityAssignnmentBeans.add(activityAssignnmentBean);
+		DataBaseMigrationUtilV2UpdateDB updateDB = new DataBaseMigrationUtilV2UpdateDB();
+		updateDB.removeActivityAssignment(activityAssignnmentBeans);	
 	}
 }

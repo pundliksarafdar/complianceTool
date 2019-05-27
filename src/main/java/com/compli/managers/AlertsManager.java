@@ -2,17 +2,10 @@ package com.compli.managers;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collector;
-import java.util.stream.Collectors;
-
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -24,7 +17,6 @@ import com.google.api.client.util.DateTime;
 import com.google.api.services.calendar.Calendar;
 import com.google.api.services.calendar.model.Event;
 import com.google.api.services.calendar.model.Events;
-import com.google.api.services.drive.Drive;
 import com.notifier.builder.EventBuilder;
 import com.notifier.emailbean.PendingActivitiesForMail;
 import com.notifier.emailbean.PendingComplainceBean;
@@ -206,17 +198,17 @@ public class AlertsManager {
 	}
 	
 	public static void main(String[] args) throws IOException {
-		/*AlertsManager alertsManager = new AlertsManager();
-		alertsManager.SendAlerts();*/
+		AlertsManager alertsManager = new AlertsManager();
+		alertsManager.SendAlerts();
 		//sendGoogleEvent();
 		/*deleteEvent("1234");
 		Event evt = getEvent("1234");
 		System.out.println(evt);*/
 		
-		AlertsManager alertsManager = new AlertsManager();
+		//AlertsManager alertsManager = new AlertsManager();
 		/*alertsManager.sendCalendarEvents();*/
 		
-		deleteAllEvents();
+		//deleteAllEvents();
 		//alertsManager.sendInitialCalendarEvents("pundlikproject@gmail.com");
 	}
 	

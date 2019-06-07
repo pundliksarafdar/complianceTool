@@ -13,7 +13,7 @@ import com.compli.db.bean.UserBean;
 public class FilesDao {
 	private JdbcTemplate jdbcTemplate;
 	private String filesForUser = "select * from files where activityId=? and companyId=? and isDeleted!=true"; 
-	private String savefilesForUser = "INSERT INTO files(activityId,companyId,fileId,filename,createdOn)VALUES(?,?,?,?,?);";
+	private String savefilesForUser = "INSERT INTO files(activityId,companyId,fileId,filename,createdOn,isDeleted)VALUES(?,?,?,?,?,false);";
 	private String updateFileIdForUser = "UPDATE files SET fileId=? WHERE filename=?;";
 	private String markFileAsDeleted = "UPDATE files SET isDeleted=true WHERE fileId=?;";
 	private String fileById = "select * from files where  fileId=? and isDeleted!=true"; 

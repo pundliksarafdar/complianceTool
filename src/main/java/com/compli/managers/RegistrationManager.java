@@ -27,6 +27,10 @@ public class RegistrationManager {
 		return this.userDao.insertUserValues(registerBean);
 	}
 	
+	public boolean insertUserValuesForMaster(com.compli.db.bean.UserBean userBean){
+		return this.userDao.insertUserValuesForMaster(userBean);
+	}
+	
 	public boolean isUserExists(String userid){
 		return this.userDao.isUserExist(userid);
 	}

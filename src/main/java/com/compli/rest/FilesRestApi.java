@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -31,6 +32,7 @@ import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
 import org.jboss.resteasy.spi.ResteasyProviderFactory;
 import org.jboss.resteasy.util.Base64.InputStream;
 
+import com.compli.annotation.Authorised;
 import com.compli.db.bean.Files;
 import com.compli.managers.StorageManager;
 import com.compli.util.UUID;
@@ -50,6 +52,7 @@ public class FilesRestApi {
 	    	file.mkdirs();
 	    }
 	}
+	
 	@GET
 	@Path("/{companyId}/{activityId}")
 	public Response getFilesForActivityForCompany(
@@ -57,6 +60,16 @@ public class FilesRestApi {
 			){
 		StorageManager storageManager = new StorageManager();
 		return Response.ok(storageManager.getFilesForActivity(activityId, companyId)).build();
+	}
+
+	@DELETE
+	@Path("/{companyId}/{activityId}/{fileId}")
+	@Authorised(role=Authorised.ROLE.ALL)
+	public Response removeFileForActivityForCompany(
+			@PathParam("companyId")String companyId,@PathParam("activityId")String activityId,@PathParam("fileId")String fileId
+			){
+		StorageManager storageManager = new StorageManager();
+		return Response.ok(storageManager.markFileAsDeleted(fileId)).build();
 	}
 	
 	@GET

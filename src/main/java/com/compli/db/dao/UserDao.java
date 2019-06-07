@@ -69,6 +69,17 @@ public class UserDao {
 				userBean.getPass(),userBean.getFirstName(),userBean.getLastName(),false)>0;
 	}
 	
+	
+	/** This method is used to insert user, User will be added directly without activation 
+	 * @param userBean
+	 * @return
+	 */
+	public boolean insertUserValuesForMaster(UserBean userBean){
+		String insertUserQuery = "INSERT INTO user(isPrimaryUser, phone, regId, userId, isDeleted, email, pass, firstName, lastName, isactive) VALUES(?,?,?,?,?,?,?,?,?,?)";
+		return this.jdbcTemplate.update(insertUserQuery,true,userBean.getPhone(),userBean.getRegId(),userBean.getUserId(),false,userBean.getEmail(),
+				userBean.getPass(),userBean.getFirstName(),userBean.getLastName(),true)>0;
+	}
+	
 	public boolean insertUserValuesForUpload(UserBean userBean){
 		String insertUserQuery = "INSERT INTO user(isPrimaryUser, phone, regId, userId, isDeleted, email, pass, firstName, lastName, isactive,userTypeId,isFullUser) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)";
 		return this.jdbcTemplate.update(insertUserQuery,true,"",userBean.getRegId(),userBean.getUserId(),false,userBean.getEmail(),

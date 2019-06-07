@@ -6,12 +6,15 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import com.compli.bean.SettingsBean;
 import com.compli.bean.SettingsScheduleBean;
+import com.compli.db.bean.CompanyBean;
 import com.compli.db.dao.ActivityDao;
+import com.compli.db.dao.CompanyDao;
 import com.compli.services.GoogleServices;
 import com.google.api.client.util.DateTime;
 import com.google.api.services.calendar.Calendar;
@@ -23,15 +26,20 @@ import com.notifier.emailbean.PendingComplainceBean;
 
 public class AlertsManager {
 	private ActivityDao activityDao;
+	private CompanyDao companyDao;
 	Integer cMDue,arTechDue,cODue,sMDue;
 	SettingsBean settingsBean;
-	enum USER_TYPE{CM,CO};
+	enum USER_TYPE{CM,CO,ARTEC};
 	enum REMINDER_TYPE{FIRTS_REMINDER,SECOND_REMINDER,FOLLOWUP};
 	public static String CALENDAR_ID = "primary";
+	Map<String, String> allCompanies;
 	public AlertsManager() {
 		ApplicationContext ctx=new ClassPathXmlApplicationContext("applicationContext.xml");
 		this.activityDao = (ActivityDao) ctx.getBean("activityDao");
+		this.companyDao = (CompanyDao) ctx.getBean("companyDao");
 		this.settingsBean = SettingsManager.getStaticSettings();
+		//Loading allCOmpany bean to get companyname agains companyId
+		this.allCompanies = formCompanyMap(this.companyDao.getAllCompany());
 	}
 	
 	public void sendCalendarEvents(){
@@ -51,6 +59,7 @@ public class AlertsManager {
 	}
 	
 	public void SendAlerts(){
+		
 		Map<String,List<PendingActivitiesForMail>> activitiesForMails10 = getActivitiesFor10();
 		SendMailForPending(activitiesForMails10,REMINDER_TYPE.FIRTS_REMINDER);
 		
@@ -83,6 +92,13 @@ public class AlertsManager {
 					String emailToSend = SettingsManager.getCManagerEmail(pendingComplainceBean.getEmail());
 					EmailManager.sendMailForReminder("Reminder 2 : Pending for complaince ",pendingComplainceBean, emailToSend);
 				}
+			}
+			//Send mail to ArTech user default no need of check
+			List<PendingActivitiesForMail> activitiesArTech = activitiesForMails.get("ArTechUser");
+			List<PendingComplainceBean> complainceBeansArTech = formatObject(activitiesArTech);
+			for(PendingComplainceBean pendingComplainceBean:complainceBeansArTech){
+					String emailToSend = SettingsManager.getArtecEmail(pendingComplainceBean.getEmail());
+					EmailManager.sendMailForReminder("Reminder 2 : Pending for complaince ",pendingComplainceBean, emailToSend);				
 			}
 		}
 		
@@ -147,7 +163,9 @@ public class AlertsManager {
 			PendingComplainceBean pendingComplainceBean = new PendingComplainceBean();
 			pendingComplainceBean.setEmail(activity.getEmail());
 			pendingComplainceBean.setGoogleId(activity.getGoogleId());
+			pendingComplainceBean.setCompanyName(this.allCompanies.get(activity.getCompanyId()));
 			pendingComplainceBean.setCompanyId(activity.getCompanyId());
+			
 			int index = complainceBeans.indexOf(pendingComplainceBean);
 			if(index==-1){
 				List<PendingActivitiesForMail> pendingEmail = new ArrayList<PendingActivitiesForMail>();
@@ -161,12 +179,22 @@ public class AlertsManager {
 		return complainceBeans;
 	}
 	
+	private Map<String,String>formCompanyMap(List<CompanyBean>allCompanies){
+		Map<String,String> map = new HashMap<String, String>();
+		allCompanies.forEach(company->{
+			map.put(company.getCompanyId(), company.getName());
+		});
+		return map;
+	}
+	
 	public Map<String,List<PendingActivitiesForMail>> getActivitiesFor10(){
 		Map<String,List<PendingActivitiesForMail>> activities = new HashMap<String, List<PendingActivitiesForMail>>();
 		List<PendingActivitiesForMail> cManagerActivities = this.activityDao.getOlderActivitiesForMail(10,"cManager");
 		activities.put("cManager", cManagerActivities);
 		List<PendingActivitiesForMail> cOwnerActivities = this.activityDao.getOlderActivitiesForMail(10,"cOwner");
 		activities.put("cOwner", cOwnerActivities);
+		List<PendingActivitiesForMail> arTechActivities = this.activityDao.getOlderActivitiesForMail(10,"ArTechUser");
+		activities.put("ArTechUser", arTechActivities);
 		return activities;
 	}
 	
@@ -185,6 +213,8 @@ public class AlertsManager {
 		activities.put("cManager", cManagerActivities);
 		List<PendingActivitiesForMail> cOwnerActivities = this.activityDao.getOlderActivitiesForMail(4,"cOwner");
 		activities.put("cOwner", cOwnerActivities);
+		List<PendingActivitiesForMail> arTechActivities = this.activityDao.getOlderActivitiesForMail(4,"ArTechUser");
+		activities.put("ArTechUser", arTechActivities);
 		return activities;
 	}
 	

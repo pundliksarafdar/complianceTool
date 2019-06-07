@@ -96,17 +96,17 @@ public class GoogleServices {
 	    return tokenMap;
 	}
 	
-	public static String getAccessToken() throws IOException{
+	public static String getAccessToken(boolean forceInvalid) throws IOException{
 		String accessToken = null;
 		SettingsBean settingsBeanNew = SettingsManager.getStaticSettings();
 		long expirationTime = settingsBeanNew.getExpirationTime()!=null?Long.parseLong(settingsBeanNew.getExpirationTime()):0;
-		if(expirationTime<new Date().getTime()){
+		if(expirationTime<new Date().getTime() || forceInvalid){
 			Map<String,String>tokens = getAccessToken(settingsBeanNew.getRefreshToken(), clientId, clientSecret);
 			accessToken = tokens.get("accessTokenNew");
 			settingsBeanNew.setAccessToken(accessToken);
 			settingsBeanNew.setRefreshToken(tokens.get("refreshTokenNew"));
 			//set new expiration time
-			long expirationTimeNew = (new Date().getTime())+(Long.parseLong(tokens.get("expiresInSec"))*1000)-(60000);
+			long expirationTimeNew = (new Date().getTime())+(Long.parseLong(tokens.get("expiresInSec"))*1000)-(5000);
 			settingsBeanNew.setExpirationTime(expirationTimeNew+"");
 			SettingsManager manager = new SettingsManager();
 			manager.saveSettings(settingsBeanNew);
@@ -134,7 +134,7 @@ public class GoogleServices {
 		final DateTime date1 = new DateTime("2017-05-05T16:30:00.000+05:30");
 		final DateTime date2 = new DateTime(new Date());
 		try{
-			String accessToken = getAccessToken();
+			String accessToken = getAccessToken(false);
 			GoogleCredential googleCredential = new GoogleCredential().setAccessToken(accessToken);
 				client = new com.google.api.services.calendar.Calendar.Builder(httpTransport, JSON_FACTORY, googleCredential)
 						.setApplicationName(APPLICATION_NAME).build();
@@ -144,27 +144,50 @@ public class GoogleServices {
 				System.out.println("My:" + eventList.getItems());		
 			} catch (Exception e) {
 				e.printStackTrace();
+				String accessToken;
+				try {
+					accessToken = getAccessToken(true);
+					GoogleCredential googleCredential = new GoogleCredential().setAccessToken(accessToken);
+					client = new com.google.api.services.calendar.Calendar.Builder(httpTransport, JSON_FACTORY, googleCredential)
+							.setApplicationName(APPLICATION_NAME).build();
+					Events events = client.events();
+					com.google.api.services.calendar.model.Events eventList = events.list("primary").setTimeMin(date1).setTimeMax(date2).execute();
+					message = eventList.getItems().toString();
+					System.out.println("My:" + eventList.getItems());
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}				
 			}
-
 			System.out.println("cal message:" + message);
 			return message;
 	}
 	
 	public static Calendar getCalendarService() throws IOException{
-		String accessToken = getAccessToken();
-		GoogleCredential googleCredential = new GoogleCredential().setAccessToken(accessToken);
+		try{
+			String accessToken = getAccessToken(false);
+			GoogleCredential googleCredential = new GoogleCredential().setAccessToken(accessToken);
 			client = new com.google.api.services.calendar.Calendar.Builder(httpTransport, JSON_FACTORY, googleCredential)
 					.setApplicationName(APPLICATION_NAME).build();
-		
-			return client;
+		}catch(Exception e){
+			String accessToken = getAccessToken(true);
+			GoogleCredential googleCredential = new GoogleCredential().setAccessToken(accessToken);
+			client = new com.google.api.services.calendar.Calendar.Builder(httpTransport, JSON_FACTORY, googleCredential)
+					.setApplicationName(APPLICATION_NAME).build();
+		}
+		return client;
 	}
 	
 	public static Drive getDriveService() throws IOException{
-		String accessToken = getAccessToken();
-		GoogleCredential googleCredential = new GoogleCredential().setAccessToken(accessToken);
-		Drive service = new Drive.Builder(httpTransport, JSON_FACTORY, googleCredential)
-        .setApplicationName(APPLICATION_NAME)
-        .build();
+		Drive service = null;
+		try{
+			String accessToken = getAccessToken(false);
+			GoogleCredential googleCredential = new GoogleCredential().setAccessToken(accessToken);
+			service = new Drive.Builder(httpTransport, JSON_FACTORY, googleCredential).setApplicationName(APPLICATION_NAME).build();
+		}catch(Exception e){
+			String accessToken = getAccessToken(true);
+			GoogleCredential googleCredential = new GoogleCredential().setAccessToken(accessToken);
+			service = new Drive.Builder(httpTransport, JSON_FACTORY, googleCredential).setApplicationName(APPLICATION_NAME).build();
+		}
 		return service;
 	}
 

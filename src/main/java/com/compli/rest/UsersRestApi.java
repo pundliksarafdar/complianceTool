@@ -97,6 +97,16 @@ public class UsersRestApi extends Application{
 		
 	}
 	
+	@POST
+	@Path("/registeruser")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response registerUser(RegisterBean registerBean) throws ExecutionException{ 
+		System.out.println(registerBean);
+		RegistrationManager registrationManager = new RegistrationManager();
+		boolean success = registrationManager.registerUser(registerBean.getUserBean());
+		return Response.ok(success).build();		
+	}
+	
 	@GET
 	@Path("/userAvailaible/{username}")
 	public Response isUserNameExist(@PathParam("username")String username){

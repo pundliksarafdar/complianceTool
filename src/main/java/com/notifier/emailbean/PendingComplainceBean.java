@@ -6,10 +6,19 @@ public class PendingComplainceBean {
 	String user;
 	String email;
 	String companyId;
+	String companyName;
 	List<PendingActivitiesForMail> pendingEmail;
 	String serverUrl;
 	String googleId;
 	
+	
+	
+	public String getCompanyName() {
+		return companyName;
+	}
+	public void setCompanyName(String companyName) {
+		this.companyName = companyName;
+	}
 	public String getGoogleId() {
 		return googleId;
 	}

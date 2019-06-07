@@ -37,6 +37,10 @@ public class StorageManager {
 		return filesDao.getFileById(fileId);
 	}
 	
+	public boolean markFileAsDeleted(String fileId) {
+		return filesDao.markFileAsDeleted(fileId);
+	}
+	
 	public boolean saveFile(String activityId,String companyId,String fileId,String filename) {
 		return filesDao.saveFile(activityId, companyId, fileId, filename,new Date());		
 	}

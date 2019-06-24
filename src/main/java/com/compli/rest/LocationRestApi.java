@@ -14,6 +14,7 @@ import javax.ws.rs.core.Response;
 
 import com.compli.annotation.Authorised;
 import com.compli.annotation.Authorised.ROLE;
+import com.compli.bean.CompanyLocations;
 import com.compli.db.bean.LocationBean;
 import com.compli.managers.LocationManager;
 
@@ -50,4 +51,13 @@ public class LocationRestApi extends Application{
 		LocationManager locationManager = new LocationManager();
 		return Response.ok(locationManager.getCompanyLocation(companyId)).build();
 	}
+	
+	//This is for master user
+		@POST
+		@Path("/addCompanylocation")
+		public Response addCompanyLocation(CompanyLocations companylocation){
+			LocationManager locationManager = new LocationManager();
+			boolean isCompanyAdded = locationManager.addCompanyLocation(companylocation);
+			return Response.ok(isCompanyAdded).build();
+		}
 }

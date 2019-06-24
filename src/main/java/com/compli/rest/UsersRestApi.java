@@ -28,6 +28,7 @@ import com.compli.managers.AuthorisationManager;
 import com.compli.managers.NotificationManager;
 import com.compli.managers.RegistrationManager;
 import com.compli.managers.SettingsManager;
+import com.compli.managers.UserManager;
 
 @Path("/user")
 @Produces(MediaType.APPLICATION_JSON)
@@ -107,6 +108,15 @@ public class UsersRestApi extends Application{
 		return Response.ok(success).build();		
 	}
 	
+	@POST
+	@Path("/registeruserformaster/{companyId}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response registerUserForMasterUser(RegisterBean registerBean,@PathParam("companyId")String companyId) throws ExecutionException{ 
+		RegistrationManager registrationManager = new RegistrationManager();
+		boolean success = registrationManager.insertUserValuesForMaster(registerBean.getUserBean(),companyId);
+		return Response.ok(success).build();		
+	}
+	
 	@GET
 	@Path("/userAvailaible/{username}")
 	public Response isUserNameExist(@PathParam("username")String username){
@@ -149,5 +159,13 @@ public class UsersRestApi extends Application{
 		java.util.List<UsersForCompany> users = settingsManager.getUserForCompany(companyId);
 		return Response.ok(users).build();
 	}
+	
+	@GET
+	@Path("/allUser")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Authorised(role=Authorised.ROLE.ALL)
+	public Response getAllUser(){
+		UserManager userManager = new UserManager();
+		return Response.ok(userManager.getAllUser()).build();
+	}
 }
-

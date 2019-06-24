@@ -54,6 +54,7 @@ public class LocationDao {
 		return this.jdbcTemplate.update(sql,locationBean.getLocationId(),locationBean.getLocationName())>0;
 	}
 	
+	//THis methoid will be used for upload and master user
 	public boolean addCompanyLocationForUpload(String locationId,String companyId){
 		String sql = "insert into companylocation(locationId,companyId) values(?,?)";
 		try{

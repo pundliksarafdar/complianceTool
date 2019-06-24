@@ -1,28 +1,18 @@
 package com.compli.rest;
 
-import java.awt.List;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.concurrent.ExecutionException;
 
-import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Application;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
-
-import com.compli.annotation.Authorised;
-import com.compli.bean.RegisterBean;
-import com.compli.bean.UserBean;
+import com.compli.bean.CompanyBean;
 import com.compli.managers.AuthorisationManager;
-import com.compli.managers.NotificationManager;
 import com.compli.managers.RegistrationManager;
 
 @Path("/company")
@@ -44,5 +34,14 @@ public class CompaniesRestApi extends Application{
 		return Response.ok(authorisationManager.getUserCatche(auth)).header("Access-Control-Allow-Origin", "*").build();
 	}
 	
+	//THis is for master user
+	@POST
+	@Path("/addcompany")
+	public Response addCompany(CompanyBean companyBean){
+		RegistrationManager registrationManager = new RegistrationManager();
+		boolean isCompanyAdded = registrationManager.addCompany(companyBean);
+		return Response.ok(isCompanyAdded).build();
+	}
+			
 	}
 

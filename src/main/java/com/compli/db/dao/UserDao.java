@@ -44,33 +44,14 @@ public class UserDao {
 	}
 	
 	public boolean insertUserValues(UserBean userBean){
-		/*
-		try {
-			HashMap<String, List> instval = DatabaseUtils.formInsertStatement(userBean);
-			System.out.println(instval);
-			int[] dest = new int[instval.get("type").toArray().length];
-			//System.arraycopy(instval.get("type").toArray(), 0, dest, 0, instval.get("type").toArray().length);
-			int index = 0;
-			for(Object objInt:instval.get("type")){
-				int objIntI = (Integer)objInt;
-				System.out.println(objIntI);
-				dest[index++] = objIntI;
-			}
-			this.jdbcTemplate.update(instval.get("query").get(0).toString(), 
-					instval.get("value").toArray(), 
-					dest);
-		} catch (IllegalArgumentException | IllegalAccessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace(); 
-		}
-		*/
 		String insertUserQuery = "INSERT INTO user(isPrimaryUser, phone, regId, userId, isDeleted, email, pass, firstName, lastName, isactive) VALUES(?,?,?,?,?,?,?,?,?,?)";
 		return this.jdbcTemplate.update(insertUserQuery,true,userBean.getPhone(),userBean.getRegId(),userBean.getUserId(),false,userBean.getEmail(),
 				userBean.getPass(),userBean.getFirstName(),userBean.getLastName(),false)>0;
 	}
 	
 	
-	/** This method is used to insert user, User will be added directly without activation 
+	/** This method is used to insert user, User will be added directly without activation
+	 * This is to inset user into data base written for master user admin panel add user 
 	 * @param userBean
 	 * @return
 	 */

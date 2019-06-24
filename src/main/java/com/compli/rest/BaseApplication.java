@@ -22,7 +22,7 @@ public class BaseApplication extends Application{
         singletons.add(new SettingsRestApi());
         singletons.add(new AlertsRestApi());
         singletons.add(new ApplicationExceptionMapper());
-        
+        singletons.add(new CompaniesRestApi());
         RunSchedular.startSchedular();
     }
     @Override

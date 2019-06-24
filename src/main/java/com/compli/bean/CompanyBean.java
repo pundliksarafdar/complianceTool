@@ -1,7 +1,16 @@
 package com.compli.bean;
 
 public class CompanyBean {
-	String companyName,city,state,location;
+	String companyName,city,state,location,abbr;
+
+	
+	public String getAbbr() {
+		return abbr;
+	}
+
+	public void setAbbr(String abbr) {
+		this.abbr = abbr;
+	}
 
 	public String getCompanyName() {
 		return companyName;

@@ -52,6 +52,12 @@ public class CompanyDao {
 		return true;
 	}
 	
+	//This function is used for master user to add company
+	public boolean addCompanyForMasterUser(CompanyBean companyBean){
+		String sql = "insert into company(companyId,name,abbriviation) values(?,?,?)";
+		return this.jdbcTemplate.update(sql,companyBean.getCompanyId(),companyBean.getName(),companyBean.getAbbriviation())>0;		
+	}
+	
 	public boolean addCompanyForUpload(CompanyBean companyBean){
 		String sql = "insert into company(companyId,name,abbriviation) values(?,?,?)";
 		return this.jdbcTemplate.update(sql,companyBean.getCompanyId(),companyBean.getName(),companyBean.getAbbriviation())>0;

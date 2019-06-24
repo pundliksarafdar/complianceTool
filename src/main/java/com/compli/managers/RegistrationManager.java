@@ -27,8 +27,17 @@ public class RegistrationManager {
 		return this.userDao.insertUserValues(registerBean);
 	}
 	
-	public boolean insertUserValuesForMaster(com.compli.db.bean.UserBean userBean){
-		return this.userDao.insertUserValuesForMaster(userBean);
+	public boolean insertUserValuesForMaster(com.compli.db.bean.UserBean userBean,String companyId){
+		boolean isAdded = false;
+		isAdded = this.userDao.insertUserValuesForMaster(userBean);
+		
+		if(isAdded){
+			UserCompanyBean userCompanyBean = new UserCompanyBean();
+			userCompanyBean.setUserId(userBean.getUserId());
+			userCompanyBean.setCompanyId(companyId);
+			this.companyDao.setUserCompany(userCompanyBean);
+		}
+		return isAdded;
 	}
 	
 	public boolean isUserExists(String userid){
@@ -53,6 +62,14 @@ public class RegistrationManager {
 			SendMailSSL mailSSL = new SendMailSSL();
 			mailSSL.sendRegistrationMail(userBean.getRegId(), userBean.getUserId(), userBean.getEmail());
 		}
+		return true;
+	}
+	
+	public boolean addCompany(CompanyBean companyBean){
+		com.compli.db.bean.CompanyBean companyBeanDb = new com.compli.db.bean.CompanyBean();
+		companyBeanDb.setName(companyBean.getCompanyName());
+		companyBeanDb.setAbbriviation(companyBean.getAbbr());
+		boolean successFull = this.companyDao.addCompanyForMasterUser(companyBeanDb);
 		return true;
 	}
 	

@@ -6,6 +6,7 @@ import java.util.Map;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import com.compli.bean.CompanyLocations;
 import com.compli.db.bean.LocationBean;
 import com.compli.db.dao.LocationDao;
 
@@ -36,5 +37,18 @@ public class LocationManager {
 	
 	public List getCompanyLocation(String companyId){
 		return locationDao.getCompanyLocation(companyId);
+	}
+	
+	public boolean addCompanyLocation(CompanyLocations companyLocations ){
+		boolean isLocationAdded = true;
+		List<String> locations = companyLocations.getLocationIds();
+		for(String locationId:locations){
+			try{
+			isLocationAdded &= locationDao.addCompanyLocationForUpload(locationId, companyLocations.getCompanyId());
+			}catch(Exception e){
+				System.out.println("Location is already present");
+			}
+		}
+		return isLocationAdded;
 	}
 }

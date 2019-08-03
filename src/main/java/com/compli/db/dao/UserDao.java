@@ -22,6 +22,7 @@ public class UserDao {
 	private JdbcTemplate jdbcTemplate;
 	
 	private String UPDATE_USER_DATA = "update user set firstname=? , lastname=? , image=? , googleId = ? where userId=?";
+	private String UPDATE_USER_DATA_FOR_MASTER = "update user set firstname=? ,lastname=? , email=? , pass=? , phone = ?,userTypeId = ? where userId=?";
 	private String UPDATE_USER_PASS = "update user set pass=? where userId=?";
 
 	public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
@@ -56,9 +57,9 @@ public class UserDao {
 	 * @return
 	 */
 	public boolean insertUserValuesForMaster(UserBean userBean){
-		String insertUserQuery = "INSERT INTO user(isPrimaryUser, phone, regId, userId, isDeleted, email, pass, firstName, lastName, isactive) VALUES(?,?,?,?,?,?,?,?,?,?)";
+		String insertUserQuery = "INSERT INTO user(isPrimaryUser, phone, regId, userId, isDeleted, email, pass, firstName, lastName, isactive,isFullUser) VALUES(?,?,?,?,?,?,?,?,?,?,?)";
 		return this.jdbcTemplate.update(insertUserQuery,true,userBean.getPhone(),userBean.getRegId(),userBean.getUserId(),false,userBean.getEmail(),
-				userBean.getPass(),userBean.getFirstName(),userBean.getLastName(),true)>0;
+				userBean.getPass(),userBean.getFirstName(),userBean.getLastName(),true,true)>0;
 	}
 	
 	public boolean insertUserValuesForUpload(UserBean userBean){
@@ -102,6 +103,14 @@ public class UserDao {
 	
 	public boolean updateUserData(UserBean userBean){
 		this.jdbcTemplate.update(UPDATE_USER_DATA,userBean.getFirstName(),userBean.getLastName(),userBean.getImage(),userBean.getGoogleId(),userBean.getUserId());
+		if(userBean.getPass()!=null && !userBean.getPass().trim().isEmpty()){
+			this.jdbcTemplate.update(UPDATE_USER_PASS,userBean.getPass(),userBean.getUserId());
+		}
+		return true;
+	}
+	
+	public boolean updateUserDataForMaster(UserBean userBean){
+		this.jdbcTemplate.update(UPDATE_USER_DATA_FOR_MASTER,userBean.getFirstName(),userBean.getLastName(),userBean.getEmail(),userBean.getPass(),userBean.getPhone(),userBean.getUserTypeId(),userBean.getUserId());
 		if(userBean.getPass()!=null && !userBean.getPass().trim().isEmpty()){
 			this.jdbcTemplate.update(UPDATE_USER_PASS,userBean.getPass(),userBean.getUserId());
 		}

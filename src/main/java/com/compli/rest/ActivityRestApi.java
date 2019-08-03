@@ -17,12 +17,16 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
+import javax.ws.rs.core.Response.Status;
 
 import com.compli.annotation.Authorised;
 import com.compli.annotation.Authorised.ROLE;
+import com.compli.bean.ActivityUser;
+import com.compli.bean.AddNewActivitiesBean;
 import com.compli.bean.ComplyStatusBean;
 import com.compli.managers.ActivityManager;
 import com.compli.managers.AuthorisationManager;
+import com.compli.managers.DataManager;
 
 @Path("activity")
 @Produces(MediaType.APPLICATION_JSON)
@@ -169,5 +173,25 @@ public class ActivityRestApi {
 		ActivityManager activityManager = new ActivityManager(auth);
 		boolean reOpened = activityManager.changeToOpen(activityId, companyId);
 		return Response.ok(reOpened).build();
+	}
+	
+	@POST
+	@Path("/addActivitiesToCompany")
+	public Response addActivitiesToCompany(AddNewActivitiesBean addNewActivitiesBean){
+		DataManager dataManager = new DataManager();
+		Map<String, Map<String, List<String>>> errorMap = dataManager.uploadActivities(addNewActivitiesBean);
+		if(errorMap==null || errorMap.isEmpty()){
+			return Response.ok().build();
+		}else{
+			return Response.status(Status.BAD_REQUEST).entity(errorMap).build();
+		}
+	}
+	
+	@POST
+	@Path("/setActivityUser")
+	public Response setActivityUser(@HeaderParam("auth")String auth,ActivityUser activityUser){
+		ActivityManager activityManager = new ActivityManager(auth);
+		activityManager.setActivityUser(activityUser);
+		return Response.ok().build();
 	}
 }

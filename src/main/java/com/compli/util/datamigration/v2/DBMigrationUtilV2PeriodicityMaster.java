@@ -13,6 +13,7 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import com.compli.bean.ActivityForAddNewActivity;
 import com.compli.db.bean.migration.v2.PeriodicityMasterBean;
 import com.compli.db.dao.PeriodicityMasterDao;
 import com.compli.util.Util;
@@ -54,6 +55,34 @@ public class DBMigrationUtilV2PeriodicityMaster {
 			Cell periodictyDesc = currentRow.getCell(PERIODICITY_DESC, Row.CREATE_NULL_AS_BLANK);
 			String periodicityId = Util.getPeriodicityId(periodictyDesc.toString());
 			PeriodicityMasterBean periodicityMasterBean = new PeriodicityMasterBean(periodicityId, periodictyDesc.toString());
+			periodicityMasterBeans.add(periodicityMasterBean);
+		}
+		//Get unique items
+		periodicityMasterBeansSet.addAll(periodicityMasterBeans);
+		periodicityMasterBeans.clear();
+		periodicityMasterBeans.addAll(periodicityMasterBeansSet);
+		
+		//Get all data from user table
+		List<com.compli.db.bean.PeriodicityMasterBean> periodicityMasterDataDB = periodicityMasterDao.getAllPeriodicty();
+		List<PeriodicityMasterBean> filteredPeriMasterData = periodicityMasterBeans.parallelStream().filter(periodicityMasterBean->{
+			return !periodicityMasterDataDB.parallelStream().anyMatch(periodicityMasterDataDBObj->{
+				return periodicityMasterDataDBObj.getPeriodicityId().equals(periodicityMasterBean.getPeriodicityId());
+			});
+		}).distinct().collect(Collectors.toList());
+		
+		DataBaseMigrationUtilV2UpdateDB updateDB = new DataBaseMigrationUtilV2UpdateDB();
+		updateDB.updatePeriodicity(filteredPeriMasterData);
+		System.out.println(filteredPeriMasterData);
+	}
+	
+	public static void createPeriodicityMaster(List<ActivityForAddNewActivity> activities){
+		List<com.compli.db.bean.migration.v2.PeriodicityMasterBean> periodicityMasterBeans = new ArrayList<com.compli.db.bean.migration.v2.PeriodicityMasterBean>(); 
+		Set<com.compli.db.bean.migration.v2.PeriodicityMasterBean> periodicityMasterBeansSet = new HashSet<com.compli.db.bean.migration.v2.PeriodicityMasterBean>();
+		boolean isFirst = false;
+		//Form userBean from uploaded sheet
+		for (ActivityForAddNewActivity activity:activities) {
+			String periodicityId = Util.getPeriodicityId(activity.getPeriodicityDesc());
+			PeriodicityMasterBean periodicityMasterBean = new PeriodicityMasterBean(periodicityId, activity.getPeriodicityDesc());
 			periodicityMasterBeans.add(periodicityMasterBean);
 		}
 		//Get unique items

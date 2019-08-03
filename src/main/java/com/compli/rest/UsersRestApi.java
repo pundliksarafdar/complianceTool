@@ -168,4 +168,13 @@ public class UsersRestApi extends Application{
 		UserManager userManager = new UserManager();
 		return Response.ok(userManager.getAllUser()).build();
 	}
+	
+	@POST
+	@Path("/updateUserForMaster")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response updateUserForMaster(@HeaderParam("auth")String auth,com.compli.db.bean.UserBean userBean) throws ExecutionException{ 
+		RegistrationManager registrationManager = new RegistrationManager();
+		boolean success = registrationManager.updateUserForMaster(auth, userBean);
+		return Response.ok().build();		
+	}
 }

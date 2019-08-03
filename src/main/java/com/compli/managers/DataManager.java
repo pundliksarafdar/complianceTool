@@ -21,9 +21,13 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import com.compli.bean.ActivityForAddNewActivity;
+import com.compli.bean.AddNewActivitiesBean;
 import com.compli.db.bean.UserBean;
 import com.compli.db.dao.ActivityDao;
+import com.compli.db.dao.LocationDao;
 import com.compli.db.dao.UserDao;
+import com.compli.util.Util;
 import com.compli.util.datamigration.v2.DBMigrationUtilV2ActivityAssignmentUpload;
 import com.compli.util.datamigration.v2.DBMigrationUtilV2ActivityAssociationUpload;
 import com.compli.util.datamigration.v2.DBMigrationUtilV2ActivityMasterUpload;
@@ -31,6 +35,7 @@ import com.compli.util.datamigration.v2.DBMigrationUtilV2ActivityUpload;
 import com.compli.util.datamigration.v2.DBMigrationUtilV2LawMaster;
 import com.compli.util.datamigration.v2.DBMigrationUtilV2PeriodicityDateMaster;
 import com.compli.util.datamigration.v2.DBMigrationUtilV2PeriodicityMaster;
+import com.google.api.services.drive.model.File.ImageMediaMetadata.Location;
 
 public class DataManager {
 	private static int ROW_COUNT = 15;
@@ -46,15 +51,34 @@ public class DataManager {
 	private static int MAX_ACTIVITY_COUNT = 50000;
 	UserDao userDao;
 	ActivityDao activityDao;
+	LocationDao locationDao;
 	public DataManager() {
 		ApplicationContext ctx=new ClassPathXmlApplicationContext("applicationContext.xml");
 		this.userDao = (UserDao) ctx.getBean("udao");
 		this.activityDao = (ActivityDao) ctx.getBean("activityDao");
+		this.locationDao = (LocationDao) ctx.getBean("locationDao");
 	}
 	
 	public static void main(String[] args) throws IOException {
 		FileInputStream excelFile = new FileInputStream(new File("C:\\report\\Table Tracker_Online Tyari_final_FY 2019-20-Modified.xlsx"));
         new DataManager().uploadData(excelFile,"0498d16340aa4f9e");        
+	}
+	
+	public Map<String, Map<String, List<String>>> uploadActivities(AddNewActivitiesBean activitiesBean){
+		Map<String, Map<String, List<String>>> errors = precheck(activitiesBean);
+		
+		if(!errors.isEmpty()){
+			return errors;
+		}
+		int maxActivityCount = activityDao.getMaximumActivityId();
+		maxActivityCount++;
+		setPeriodicityMaster(activitiesBean.getActivities());
+		setPeriodicityDate(activitiesBean.getActivities());
+		setLawMaster(activitiesBean.getActivities());
+		uploadActivityMaster(activitiesBean.getActivities(), activitiesBean.getCompanies(), maxActivityCount);
+		uploadActivityAssociation(activitiesBean.getActivities(), activitiesBean.getCompanies(), maxActivityCount);
+		uploadActivity(activitiesBean.getActivities(), activitiesBean.getCompanies(), maxActivityCount);
+		return null;
 	}
 	
 	public List<String> uploadData(InputStream excelFile,String companyId) throws IOException{
@@ -77,10 +101,57 @@ public class DataManager {
 		return reasonToReject;
 	}
 	
+	public Map<String,Map<String, List<String>>> precheck(AddNewActivitiesBean activitiesBean){
+		Map<String,Map<String, List<String>>> errors = new HashMap<String, Map<String, List<String>>>();
+		List<String> location = new ArrayList<String>();
+		activitiesBean.getActivities().forEach((activity)->{
+			location.add(activity.getLocation());
+		});
+		List<String> companies = activitiesBean.getCompanies();
+		
+		Map<String, List<String>>companyAndUnavailableLocationMap = new HashMap<String, List<String>>();
+		for(String company:companies){
+			List<String>unavailableLoc = checkLocationForCompany(location, company);
+			if(unavailableLoc.size() != 0){
+				companyAndUnavailableLocationMap.put(company, unavailableLoc);
+			}
+		}
+		if(!companyAndUnavailableLocationMap.isEmpty()){
+			errors.put("companyAndUnavailableLocationMap", companyAndUnavailableLocationMap);
+		}
+		return errors;
+	}
+	
+	//This method will return locations which are not present in 
+	public List<String> checkLocationForCompany(List<String>location,String companyId){
+		location.replaceAll(loc->Util.formLocationId(loc));
+		List locationForCompany = this.locationDao.getCompanyLocation(companyId);
+		List<String>locationFromDb = new ArrayList<String>();
+		List<String>fullLocationName = new ArrayList<String>();
+		Map<String, String>locationMap = new HashMap<String, String>();
+		
+		locationForCompany.forEach(loc->{
+			locationFromDb.add((String)((Map)loc).get("locationId"));
+			locationMap.put((String)((Map)loc).get("locationId"), (String)((Map)loc).get("locationName"));
+		});
+		location.removeAll(locationFromDb);
+		
+		location.forEach(loc->{
+			fullLocationName.add(locationMap.get(loc));
+		});
+		return fullLocationName;
+	}
+	
 	public static void setPeriodicityMaster(Sheet sheet){
 		System.out.println("Upload periodicty master");
 		DBMigrationUtilV2PeriodicityMaster.init(PERIODICITY_ROW_NO);
 		DBMigrationUtilV2PeriodicityMaster.createPeriodicityMaster(sheet);
+	}
+	
+	public static void setPeriodicityMaster(List<ActivityForAddNewActivity> activities){
+		DBMigrationUtilV2PeriodicityMaster.init(PERIODICITY_ROW_NO);
+		System.out.println("Upload periodicty master");
+		DBMigrationUtilV2PeriodicityMaster.createPeriodicityMaster(activities);
 	}
 	
 	private static void setPeriodicityDate(Sheet sheet){
@@ -89,10 +160,22 @@ public class DataManager {
 		DBMigrationUtilV2PeriodicityDateMaster.createPeriodicityDateMaster(sheet);		
 	}
 	
+	private static void setPeriodicityDate(List<ActivityForAddNewActivity> activities){
+		System.out.println("Upload periodicity date");
+		DBMigrationUtilV2PeriodicityDateMaster.init(PERIODICITY_DATE_ROW_NO);
+		DBMigrationUtilV2PeriodicityDateMaster.createPeriodicityDateMaster(activities);		
+	}
+	
 	private static void setLawMaster(Sheet sheet){
 		System.out.println("Upload Law master");
 		DBMigrationUtilV2LawMaster.init(LAW_DESC,COMPLAINCE_AREA);
 		DBMigrationUtilV2LawMaster.createLawMaster(sheet);		
+	}
+	
+	private static void setLawMaster(List<ActivityForAddNewActivity> activities){
+		System.out.println("Upload Law master");
+		DBMigrationUtilV2LawMaster.init(LAW_DESC,COMPLAINCE_AREA);
+		DBMigrationUtilV2LawMaster.createLawMaster(activities);		
 	}
 	
 	private static void uploadActivityMaster(Sheet sheet,String companyId,int activityCount){
@@ -101,16 +184,49 @@ public class DataManager {
 		DBMigrationUtilV2ActivityMasterUpload.createActivityMaster(sheet,activityCount);		
 	}
 	
+	private static void uploadActivityMaster(List<ActivityForAddNewActivity> activities,List<String> companyIds,int activityCount){
+		System.out.println("Upload Activity master");
+		int index=0;
+		for(String companyId:companyIds){
+			activityCount = activities.size()*index+activityCount;
+			DBMigrationUtilV2ActivityMasterUpload.init(companyId);
+			DBMigrationUtilV2ActivityMasterUpload.createActivityMaster(activities,activityCount);
+			index++;
+		}
+	}
+	
 	private static void uploadActivityAssociation(Sheet sheet,int activityCount){
 		System.out.println("Upload Activity association");
 		DBMigrationUtilV2ActivityAssociationUpload.init();
 		DBMigrationUtilV2ActivityAssociationUpload.createActivityAssociation(sheet,activityCount);		
 	}
 	
+	private static void uploadActivityAssociation(List<ActivityForAddNewActivity> activities,List<String> companyIds,int activityCount){
+		System.out.println("Upload Activity association");
+		int index=0;
+		for(String companyId:companyIds){
+			activityCount = activities.size()*index+activityCount;
+			DBMigrationUtilV2ActivityAssociationUpload.init();
+			DBMigrationUtilV2ActivityAssociationUpload.createActivityAssociation(activities,activityCount);
+			index++;
+		}
+	}
+	
 	private static void uploadActivity(Sheet sheet,int activityCount,String companyId){
 		System.out.println("Upload Activity");
 		DBMigrationUtilV2ActivityUpload.init();
 		DBMigrationUtilV2ActivityUpload.createActivity(sheet,activityCount,companyId);		
+	}
+	
+	private static void uploadActivity(List<ActivityForAddNewActivity> activities,List<String> companyIds,int activityCount){
+		System.out.println("Upload Activity");
+		int index=0;
+		for(String companyId:companyIds){
+			activityCount = activities.size()*index+activityCount;
+			DBMigrationUtilV2ActivityUpload.init();
+			DBMigrationUtilV2ActivityUpload.createActivity(activities,activityCount,companyId);
+			index++;
+		}
 	}
 	
 	private static void uploadActivityAssignement(Sheet sheet,int activityCount){

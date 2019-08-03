@@ -64,6 +64,11 @@ public class CompanyDao {
 		
 	}
 	
+	public boolean updateCompanyDetails(String name,String abbr,String id){
+		String sql = "update company set name=?, abbriviation=? where companyId=?";
+		return this.jdbcTemplate.update(sql,name,abbr,id)>0;
+	}
+	
 	public boolean setUserCompany(UserCompanyBean userCompanyBean){
 		/*try {
 			HashMap<String, List> instval = DatabaseUtils.formInsertStatement(userCompanyBean);

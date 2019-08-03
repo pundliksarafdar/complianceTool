@@ -23,6 +23,10 @@ public class RegistrationManager {
 		this.companyDao = (CompanyDao) ctx.getBean("companyDao");
 		
 	}
+	
+	public boolean updateCompanyDetails(String name,String abbr,String id){
+		return this.companyDao.updateCompanyDetails(name, abbr, id);
+	}
 	public boolean registerUser(com.compli.db.bean.UserBean registerBean){
 		return this.userDao.insertUserValues(registerBean);
 	}
@@ -30,13 +34,6 @@ public class RegistrationManager {
 	public boolean insertUserValuesForMaster(com.compli.db.bean.UserBean userBean,String companyId){
 		boolean isAdded = false;
 		isAdded = this.userDao.insertUserValuesForMaster(userBean);
-		
-		if(isAdded){
-			UserCompanyBean userCompanyBean = new UserCompanyBean();
-			userCompanyBean.setUserId(userBean.getUserId());
-			userCompanyBean.setCompanyId(companyId);
-			this.companyDao.setUserCompany(userCompanyBean);
-		}
 		return isAdded;
 	}
 	
@@ -94,6 +91,28 @@ public class RegistrationManager {
 		}
 		
 		boolean isSuccess = this.userDao.updateUserData(userBean);
+		if(isSuccess){
+			//Update event only if goole email is changed
+			if(null==googleIdOld || !googleIdOld.equals(userBeanToUpdate.getGoogleId())){
+				AlertsManager alertsManager = new AlertsManager();
+				alertsManager.sendInitialCalendarEvents(userBeanToUpdate.getGoogleId());
+			}
+		}
+		return isSuccess;
+	}
+	
+	public boolean updateUserForMaster(String auth,com.compli.db.bean.UserBean userBeanToUpdate) throws ExecutionException{
+		com.compli.db.bean.UserBean userBean = AuthorisationManager.getUserCatche(auth);
+		String googleIdOld = userBean.getGoogleId();
+		userBean.setFirstName(userBeanToUpdate.getFirstName());
+		userBean.setLastName(userBeanToUpdate.getLastName());
+		userBean.setPass(userBeanToUpdate.getPass());
+		userBean.setEmail(userBeanToUpdate.getEmail());
+		userBean.setPhone(userBeanToUpdate.getPhone());
+		userBean.setUserTypeId(userBeanToUpdate.getUserTypeId());
+		userBean.setPass(userBeanToUpdate.getPass());
+		userBean.setUserId(userBeanToUpdate.getUserId());
+		boolean isSuccess = this.userDao.updateUserDataForMaster(userBean);
 		if(isSuccess){
 			//Update event only if goole email is changed
 			if(null==googleIdOld || !googleIdOld.equals(userBeanToUpdate.getGoogleId())){

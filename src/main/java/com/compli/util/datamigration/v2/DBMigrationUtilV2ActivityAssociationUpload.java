@@ -15,6 +15,7 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import com.compli.bean.ActivityForAddNewActivity;
 import com.compli.db.bean.migration.v2.ActivityAssociationBean;
 import com.compli.db.bean.migration.v2.ActivityMasterBean;
 import com.compli.db.bean.migration.v2.LawMasterBean;
@@ -69,6 +70,32 @@ public class DBMigrationUtilV2ActivityAssociationUpload {
 			if(companyLocationId.equals("")){
 				System.out.println(companyLocation);
 			}
+			ActivityAssociationBean activityAssociationBean = new ActivityAssociationBean(activityId, activityId, "AAA", companyLocationId);
+			activityAssociationBeans.add(activityAssociationBean);
+			activityCountStart++;
+		}
+		
+		List<ActivityAssociationBean> associationFromDb = activityAssociationDao.getAllActivityAssociationData();
+		List<ActivityAssociationBean> filterdAssociations = activityAssociationBeans.parallelStream().filter(activityAssociation->{
+			return !associationFromDb.parallelStream().anyMatch(associationDb->{
+				return associationDb.getActivityId().equals(activityAssociation.getActivityId()) &&
+						associationDb.getAssociationId().equals(activityAssociation.getAssociationId());
+			});
+		}).collect(Collectors.toList());
+		
+		DataBaseMigrationUtilV2UpdateDB updateDB = new DataBaseMigrationUtilV2UpdateDB();
+		updateDB.updateActivityAssociation(filterdAssociations);
+		
+	}
+	
+	public static void createActivityAssociation(List<ActivityForAddNewActivity> activities,int activityCountStart){
+		List<ActivityAssociationBean> activityAssociationBeans = new ArrayList<ActivityAssociationBean>();
+		//Form userBean from uploaded sheet
+		for (ActivityForAddNewActivity activity:activities) {
+			String activityId = activityCountStart+"";
+			String companyLocation = activity.getLocation();
+			String lawDesc = activity.getLawDescription();
+			String companyLocationId = Util.formLocationId(companyLocation);//getCompanyLocationId(companyLocation);
 			ActivityAssociationBean activityAssociationBean = new ActivityAssociationBean(activityId, activityId, "AAA", companyLocationId);
 			activityAssociationBeans.add(activityAssociationBean);
 			activityCountStart++;

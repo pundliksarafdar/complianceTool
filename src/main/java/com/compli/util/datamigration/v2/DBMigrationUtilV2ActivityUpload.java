@@ -6,11 +6,13 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import com.compli.bean.ActivityForAddNewActivity;
 import com.compli.db.bean.CompanyBean;
 import com.compli.db.bean.migration.v2.ActivityBean;
 import com.compli.db.dao.ActivityDao;
@@ -52,6 +54,34 @@ public class DBMigrationUtilV2ActivityUpload {
 			String activityId = activityCountStart+"";
 			
 			String assignedUser = currentRow.getCell(ASSIGNED_USER, Row.CREATE_NULL_AS_BLANK).toString().trim();
+			String remark = "";
+			Date completionDate = null;
+			
+			ActivityBean  activityBean = new ActivityBean(activityId, companyId, remark, assignedUser, completionDate,false, false, false, false, false,Constants.PENDING_COMPLIE);
+				
+			activityBeanSheet.add(activityBean);
+			activityCountStart++;
+		}
+		
+		List<ActivityBean> activitiesFromDb = activityDao.getAllActivityData();
+		List<ActivityBean> filterdActivities = activityBeanSheet.parallelStream().filter(activityBean->{
+			return !activitiesFromDb.parallelStream().anyMatch(activityDb->{ 
+				return activityDb.getActivityId().equals(activityBean.getActivityId()) &&
+						activityDb.getCompanyId().equals(activityBean.getCompanyId());
+			});
+		}).collect(Collectors.toList());
+		
+		DataBaseMigrationUtilV2UpdateDB updateDB = new DataBaseMigrationUtilV2UpdateDB();
+		updateDB.updateActivity(filterdActivities);
+	}
+	
+	public static void createActivity(List<ActivityForAddNewActivity> activities,int activityCountStart,String companyId){
+		List<ActivityBean> activityBeanSheet = new ArrayList<ActivityBean>();
+		
+		for (ActivityForAddNewActivity activity:activities) {
+			String activityId = activityCountStart+"";
+			
+			String assignedUser = "";
 			String remark = "";
 			Date completionDate = null;
 			

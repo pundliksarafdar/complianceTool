@@ -13,6 +13,7 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import com.compli.bean.ActivityForAddNewActivity;
 import com.compli.db.bean.migration.v2.PeriodicityDateMasterBean;
 import com.compli.db.bean.migration.v2.PeriodicityMasterBean;
 import com.compli.db.dao.PeriodicityDateMasterDao;
@@ -59,6 +60,34 @@ public class DBMigrationUtilV2PeriodicityDateMaster {
 			}
 			
 			String periodicityDateId = Util.getPeriodicityDateId(periodictyDate.toString());
+			PeriodicityDateMasterBean periodicityMasterBean = new PeriodicityDateMasterBean(periodicityDateId, periodicityDateId);
+			periodicityDateMasterBeans.add(periodicityMasterBean);
+		}
+		//Get unique items
+		periodicityDateMasterBeansSet.addAll(periodicityDateMasterBeans);
+		periodicityDateMasterBeans.clear();
+		periodicityDateMasterBeans.addAll(periodicityDateMasterBeansSet);
+		
+		//Get all data from user table
+		List<com.compli.db.bean.PeriodicityDateMasterBean> periodicityDateMasterDataDB = periodicityDateMasterDao.getAllPeriodictyDate();
+		List<PeriodicityDateMasterBean> filteredPeriMasterData = periodicityDateMasterBeans.parallelStream().filter(periodicityDateMasterBean->{
+			return !periodicityDateMasterDataDB.parallelStream().anyMatch(periodicityDateMasterDataDBObj->{
+				return periodicityDateMasterDataDBObj.getPeriodicityDateId().equals(periodicityDateMasterBean.getPeriodicityDateId());
+			});
+		}).distinct().collect(Collectors.toList());
+		
+		DataBaseMigrationUtilV2UpdateDB updateDB = new DataBaseMigrationUtilV2UpdateDB();
+		updateDB.updatePeriodicityDateMaster(filteredPeriMasterData);
+		System.out.println(filteredPeriMasterData);
+	}
+	
+	public static void createPeriodicityDateMaster(List<ActivityForAddNewActivity> activities){
+		List<com.compli.db.bean.migration.v2.PeriodicityDateMasterBean> periodicityDateMasterBeans = new ArrayList<com.compli.db.bean.migration.v2.PeriodicityDateMasterBean>(); 
+		Set<com.compli.db.bean.migration.v2.PeriodicityDateMasterBean> periodicityDateMasterBeansSet = new HashSet<com.compli.db.bean.migration.v2.PeriodicityDateMasterBean>();
+		boolean isFirst = false;
+		//Form userBean from uploaded sheet
+		for (ActivityForAddNewActivity activity : activities) {
+			String periodicityDateId = Util.getPeriodicityDateId(activity.getPeriodicity());
 			PeriodicityDateMasterBean periodicityMasterBean = new PeriodicityDateMasterBean(periodicityDateId, periodicityDateId);
 			periodicityDateMasterBeans.add(periodicityMasterBean);
 		}

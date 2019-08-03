@@ -152,4 +152,28 @@ public class SettingsRestApi {
 		activityManager.removeUserForActivity(activityAssignnmentBean);
 		return Response.ok().build();
 	}
+	
+	@POST
+	@Path("/removeUserFromCompany")
+	@Authorised(role=ROLE.ALL)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public static Response removeUserFromCompany(Map<String,String>dataMap,@HeaderParam("auth")String auth){
+		ActivityManager activityManager = new ActivityManager(auth);
+		String userId = dataMap.get("userId");
+		String companyId = dataMap.get("companyId");
+		activityManager.removeUserFromCompany(userId, companyId);
+		return Response.ok().build();
+	}
+	
+	@POST
+	@Path("/addUserToCompany")
+	@Authorised(role=ROLE.ALL)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public static Response addUserToCompany(Map<String,String>dataMap,@HeaderParam("auth")String auth){
+		ActivityManager activityManager = new ActivityManager(auth);
+		String userId = dataMap.get("userId");
+		String companyId = dataMap.get("companyId");
+		activityManager.addUserToCompany(userId, companyId);
+		return Response.ok().build();
+	}
 }

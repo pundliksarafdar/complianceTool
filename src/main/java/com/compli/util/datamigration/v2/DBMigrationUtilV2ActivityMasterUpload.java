@@ -13,6 +13,7 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import com.compli.bean.ActivityForAddNewActivity;
 import com.compli.bean.CompanyBean;
 import com.compli.db.bean.migration.v2.ActivityMasterBean;
 import com.compli.db.bean.migration.v2.LawMasterBean;
@@ -109,6 +110,72 @@ public class DBMigrationUtilV2ActivityMasterUpload {
 			String consequences = currentRow.getCell(CONSEQUENCES, Row.CREATE_NULL_AS_BLANK).toString().trim();
 			String dueDate = currentRow.getCell(DUE_DATE, Row.CREATE_NULL_AS_BLANK).toString().trim();
 			String periodicity = currentRow.getCell(PERODICITY, Row.CREATE_NULL_AS_BLANK).toString().trim();
+			
+			//Get lawId here
+			com.compli.db.bean.LawMasterBean lawMasterBean = new com.compli.db.bean.LawMasterBean(compalinceArea, lawDesc);
+			int lawIndex = allLaw.indexOf(lawMasterBean);
+			if(lawIndex==-1){
+				System.out.println(lawMasterBean);
+			}
+			lawMasterBean = allLaw.get(lawIndex);
+			String lawId = lawMasterBean.getLawId();
+			
+			//Get periodicityId
+			com.compli.db.bean.PeriodicityMasterBean periodicityMasterBean = new com.compli.db.bean.PeriodicityMasterBean();
+			periodicityMasterBean.setDescription(periodicity);
+			int periodicityIndex = periodicityMasterBeans.indexOf(periodicityMasterBean);
+			periodicityMasterBean = periodicityMasterBeans.get(periodicityIndex);
+			String periodicityId = periodicityMasterBean.getPeriodicityId();
+			//System.out.println(periodicityId);
+			
+			//Get periodicityDateId
+			String periodicityDateId = Util.getPeriodicityDateId(dueDate);
+			
+			ActivityMasterBean activityBean = new ActivityMasterBean(activityId, companyName, companyAbbr, companyLocation, compalinceArea, activityName, activityDesc, lawDesc, risk, consequences, dueDate, periodicity, lawId, periodicityId, periodicityDateId);
+			
+			
+			activityBeans.add(activityBean);
+			//INcreament activityid
+			activityCountStart++;
+		}
+		//All activity from db;
+		List<ActivityMasterBean> activitiesDb = activityMasterDao.getAllActivityMasterData();
+		
+		List<ActivityMasterBean> filteredActivities = activityBeans.parallelStream().filter(activityBean->{
+			return !activitiesDb.parallelStream().anyMatch(activityDb->{
+				return activityDb.getActivityId().equals(activityBean.getActivityId());
+			});
+		}).collect(Collectors.toList());
+		
+		DataBaseMigrationUtilV2UpdateDB updateDB = new DataBaseMigrationUtilV2UpdateDB();
+		updateDB.updateActivityMaster(filteredActivities);
+		System.out.println(filteredActivities);
+	}
+	
+	public static void createActivityMaster(List<ActivityForAddNewActivity> activities,int activityCountStart){
+		List<ActivityMasterBean> activityBeans = new ArrayList<ActivityMasterBean>();
+		//Form userBean from uploaded sheet
+		for (ActivityForAddNewActivity activity:activities) {
+			String activityId = activityCountStart+"";
+			String companyName = companyBean.getName();
+			if(companyName.equals("")){
+				continue;
+			}
+			String companyAbbr = companyBean.getAbbriviation();
+			String companyLocation = activity.getLocation();
+			
+			String compalinceArea = activity.getCompArea();
+			
+			String activityName = activity.getActivityName();
+			String activityDesc = activity.getDescription();
+			
+			String lawDesc  = activity.getLawDescription();
+			
+			String risk = activity.getRisk();
+			
+			String consequences = activity.getConsequence();
+			String dueDate = activity.getPeriodicity();
+			String periodicity = activity.getPeriodicityDesc();
 			
 			//Get lawId here
 			com.compli.db.bean.LawMasterBean lawMasterBean = new com.compli.db.bean.LawMasterBean(compalinceArea, lawDesc);

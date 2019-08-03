@@ -1,6 +1,7 @@
 package com.compli.rest;
 
 import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 import javax.ws.rs.GET;
@@ -11,6 +12,8 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Application;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+
+import com.compli.annotation.Authorised;
 import com.compli.bean.CompanyBean;
 import com.compli.managers.AuthorisationManager;
 import com.compli.managers.RegistrationManager;
@@ -37,10 +40,23 @@ public class CompaniesRestApi extends Application{
 	//THis is for master user
 	@POST
 	@Path("/addcompany")
+	@Authorised(role=Authorised.ROLE.ALL)
 	public Response addCompany(CompanyBean companyBean){
 		RegistrationManager registrationManager = new RegistrationManager();
 		boolean isCompanyAdded = registrationManager.addCompany(companyBean);
 		return Response.ok(isCompanyAdded).build();
+	}
+	
+	@POST
+	@Path("/updateCompanyDetails")
+	@Authorised(role=Authorised.ROLE.ALL)
+	public Response updateCompanyDetails(Map<String,String>companyDetails){
+		RegistrationManager registrationManager = new RegistrationManager();
+		String name = companyDetails.get("name");
+		String abbr = companyDetails.get("abbr");
+		String id = companyDetails.get("id");
+		boolean res = registrationManager.updateCompanyDetails(name,abbr,id);
+		return Response.ok().build();
 	}
 			
 	}

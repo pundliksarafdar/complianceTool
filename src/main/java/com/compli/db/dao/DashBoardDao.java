@@ -276,16 +276,16 @@ public class DashBoardDao {
 	//THis will be used by only master user
 	private String activityForMonthQueryMasterUser =
 			"select * from "+		
-		"(select companyWithPerDate.companyId,abbriviation,lawId,lawDesc,lawName,locationId,locationName,companyWithPerDate.activityId,activityName,riskId,riskDes,periodicityId,periodicityDesc,periodicityDateId,consequence,duedate,month(dueDate) as dueMonth,ifnull(isComplied,false)as isComplied ,ifnull(isComplianceApproved,false) as isComplianceApproved,ifnull(isComplianceRejected,false) as isComplianceRejected,ifnull(isComplainceDelayed,false) as isComplainceDelayed,ifnull(isProofRequired,false) as isProofRequired,ifnull(reOpen,false) as reOpen,arTechRemark,assignedUser,remark,completionDate from activity inner join "+
-			"(select companyId,abbriviation,lawId,lawDesc,lawName,locationId,locationName,activityId,activityName,riskId,riskDes,periodicityId,periodicityDesc,periodicitydatemaster.periodicityDateId,consequence,periodicitydatemaster.duedate from periodicitydatemaster inner join "+
-				"(select companyId,abbriviation,lawId,lawDesc,lawName,locationId,locationName,activityId,activityName,riskId,riskDes,periodicitymaster.periodicityId,periodicitymaster.description as periodicityDesc,periodicityDateId,consequence from periodicitymaster inner join "+
-					"(select companyId,abbriviation,lawId,lawDesc,lawName,locationId,locationName,activityId,activityName,riskmaster.riskId,riskmaster.description riskDes,periodicityId,periodicityDateId,consequence from riskmaster inner join "+
-						"(select companyId,abbriviation,locationId,locationName,activityId,activityName,riskId,lawmaster.lawName,lawmaster.lawId,lawmaster.lawDesc,periodicityId,periodicityDateId,consequence from lawmaster inner join "+
-							"(select companyId,abbriviation,lawId,locationId,locationName,activitymaster.activityId,activitymaster.activityName,riskId,periodicityId,periodicityDateId,consequence from activitymaster inner join "+
-								"(select companyId,abbriviation,activityassociation.locationId,locationName,activityId from activityassociation inner join "+ 
-									"(select companyId,abbriviation,location.locationId,locationName from location inner join	"+
-										"(select cc.companyId,abbriviation,locationId from company cc inner join companylocation "+
-										"on cc.companyId = companylocation.companyId where cc.companyId in (?)) companyWithLocation "+
+		"(select companyWithPerDate.companyId,abbriviation,name,lawId,lawDesc,lawName,locationId,locationName,companyWithPerDate.activityId,activityName,riskId,riskDes,periodicityId,periodicityDesc,periodicityDateId,consequence,duedate,month(dueDate) as dueMonth,ifnull(isComplied,false)as isComplied ,ifnull(isComplianceApproved,false) as isComplianceApproved,ifnull(isComplianceRejected,false) as isComplianceRejected,ifnull(isComplainceDelayed,false) as isComplainceDelayed,ifnull(isProofRequired,false) as isProofRequired,ifnull(reOpen,false) as reOpen,arTechRemark,assignedUser,remark,completionDate from activity inner join "+
+			"(select companyId,abbriviation,name,lawId,lawDesc,lawName,locationId,locationName,activityId,activityName,riskId,riskDes,periodicityId,periodicityDesc,periodicitydatemaster.periodicityDateId,consequence,periodicitydatemaster.duedate from periodicitydatemaster inner join "+
+				"(select companyId,abbriviation,name,lawId,lawDesc,lawName,locationId,locationName,activityId,activityName,riskId,riskDes,periodicitymaster.periodicityId,periodicitymaster.description as periodicityDesc,periodicityDateId,consequence from periodicitymaster inner join "+
+					"(select companyId,abbriviation,name,lawId,lawDesc,lawName,locationId,locationName,activityId,activityName,riskmaster.riskId,riskmaster.description riskDes,periodicityId,periodicityDateId,consequence from riskmaster inner join "+
+						"(select companyId,abbriviation,name,locationId,locationName,activityId,activityName,riskId,lawmaster.lawName,lawmaster.lawId,lawmaster.lawDesc,periodicityId,periodicityDateId,consequence from lawmaster inner join "+
+							"(select companyId,abbriviation,name,lawId,locationId,locationName,activitymaster.activityId,activitymaster.activityName,riskId,periodicityId,periodicityDateId,consequence from activitymaster inner join "+
+								"(select companyId,abbriviation,name,activityassociation.locationId,locationName,activityId from activityassociation inner join "+ 
+									"(select companyId,abbriviation,name,location.locationId,locationName from location inner join	"+
+										"(select cc.companyId,abbriviation,name,locationId from company cc inner join companylocation "+
+										"on cc.companyId = companylocation.companyId where cc.companyId in (?)  or 'all'=:companyId) companyWithLocation "+
 									"on location.locationId = companyWithLocation.locationId) companyWithLocationName "+
 								"on companyWithLocationName.locationId = activityassociation.locationId   and (activityassociation.locationId=:locationId or 'all'=:locationId)) companyWithActivityId "+
 							"on companyWithActivityId.activityId = activitymaster.activityId) companyWithActivity "+
@@ -864,6 +864,7 @@ private String activityQueryByMonthAndStatusFullUser =
 	
 	//THis method is only used by master user 
 	public List<Map<String, Object>> getAllActivitiesWithDescriptionForCompanyByMonthWithRejected(String companyId, String month,String year) {
+		String companyIdStr = companyId;
 		companyId = "('"+companyId.replace(",", "','")+"')";
 			int mon = 4;
 			String fromYear = "2014-"+mon+"-01";
@@ -878,6 +879,7 @@ private String activityQueryByMonthAndStatusFullUser =
 			//namedMap.put("dueYear", Util.getFinnancialYearForMonth(mon));
 			namedMap.put("fromYear", fromYear);
 			namedMap.put("toYear", toYear);
+			namedMap.put("companyId", companyIdStr);
 			namedMap.put("locationId", "all");
 			this.activityForMonthQueryMasterUser = this.activityForMonthQueryMasterUser.replace("and activity.isComplianceRejected=false", "");
 			this.activityForMonthQueryMasterUser = this.activityForMonthQueryMasterUser.replace("(?)", companyId);

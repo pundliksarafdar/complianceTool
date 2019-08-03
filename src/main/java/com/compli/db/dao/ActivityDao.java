@@ -8,6 +8,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
+import com.compli.bean.ActivityUser;
 import com.compli.db.bean.UserBean;
 import com.compli.db.bean.migration.v2.ActivityAssociationBean;
 import com.compli.db.bean.migration.v2.ActivityBean;
@@ -26,6 +27,14 @@ public class ActivityDao {
 	
 	public void setNamedParameterJdbcTemplate(NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
 		this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
+	}
+	
+	public void setActivityUser(ActivityUser activityUser){
+		String updateSql = "update activity set assignedUser=:assignedUser where activityId in (:ids);";
+		MapSqlParameterSource param = new MapSqlParameterSource();
+		param.addValue("ids", activityUser.getActivityIds());
+		param.addValue("assignedUser", activityUser.getActivityUser());
+		this.namedParameterJdbcTemplate.update(updateSql, param);		
 	}
 	//Using migration beans only
 	String ACTIVITY_ID = "select user.userId,firstname,lastname,email,userTypeId from user join	(select userId from activity_assignment where activityId=?)userforactivity on user.userId=userforactivity.userId;";
@@ -139,5 +148,15 @@ public class ActivityDao {
 		param.addValue("ids", activityIds);
 		param.addValue("date", date);
 		this.namedParameterJdbcTemplate.update(updateSql, param);
+	}
+	
+	public void removeUserForCompany(String userId,String companyId){
+		String deleteQueryToDeleteActivityAssignement = "delete from activity_assignment where activityId in(select activityId from activity where companyId=:companyId) and userId=:userId";
+		String deleteUserFromCompany = "delete from usercompany where userId=:userId and companyId=:companyId";
+		MapSqlParameterSource param = new MapSqlParameterSource();
+		param.addValue("userId", userId);
+		param.addValue("companyId", companyId);
+		this.namedParameterJdbcTemplate.update(deleteQueryToDeleteActivityAssignement, param);
+		this.namedParameterJdbcTemplate.update(deleteUserFromCompany, param);
 	}
 }

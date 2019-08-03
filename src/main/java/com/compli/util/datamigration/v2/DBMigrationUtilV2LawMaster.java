@@ -13,6 +13,7 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import com.compli.bean.ActivityForAddNewActivity;
 import com.compli.db.bean.migration.v2.LawMasterBean;
 import com.compli.db.bean.migration.v2.PeriodicityMasterBean;
 import com.compli.db.dao.LawMasterDao;
@@ -70,6 +71,34 @@ public class DBMigrationUtilV2LawMaster {
 				lawName = complainceArea.getStringCellValue();
 			}
 			LawMasterBean lawMasterBean = new LawMasterBean(lawName.trim(), lawDesc.toString().trim());
+			lawMasterBeans.add(lawMasterBean);
+		}
+		//Get unique items
+		lawMasterBeansSet.addAll(lawMasterBeans);
+		lawMasterBeans.clear();
+		lawMasterBeans.addAll(lawMasterBeansSet);
+		
+		//Get all data from user table
+		List<com.compli.db.bean.LawMasterBean> lawMasterDataDB = lawMasterDao.getAllLaw();
+		List<LawMasterBean> filteredLawMasterData = lawMasterBeans.parallelStream().filter(lawMasterBean->{
+			return !lawMasterDataDB.parallelStream().anyMatch(lawMasterDataDBObj->{
+				return lawMasterDataDBObj.getLawName().equals(lawMasterBean.getLawName()) &&
+						lawMasterDataDBObj.getLawDesc().equals(lawMasterBean.getLawDesc()); 
+			});
+		}).distinct().collect(Collectors.toList());
+		
+		DataBaseMigrationUtilV2UpdateDB updateDB = new DataBaseMigrationUtilV2UpdateDB();
+		updateDB.updateLawMaster(filteredLawMasterData);
+		System.out.println(filteredLawMasterData);
+	}
+	
+	public static void createLawMaster(List<ActivityForAddNewActivity> activities){
+		List<com.compli.db.bean.migration.v2.LawMasterBean>lawMasterBeans = new ArrayList<com.compli.db.bean.migration.v2.LawMasterBean>(); 
+		Set<com.compli.db.bean.migration.v2.LawMasterBean>lawMasterBeansSet = new HashSet<com.compli.db.bean.migration.v2.LawMasterBean>();
+		boolean isFirst = false;
+		//Form userBean from uploaded sheet
+		for (ActivityForAddNewActivity activity:activities) {
+			LawMasterBean lawMasterBean = new LawMasterBean(activity.getCompArea(), activity.getLawDescription());
 			lawMasterBeans.add(lawMasterBean);
 		}
 		//Get unique items

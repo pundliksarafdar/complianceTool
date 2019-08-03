@@ -9,13 +9,17 @@ import java.util.Map;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import com.compli.bean.ActivityUser;
 import com.compli.bean.ChangeDateBean;
+import com.compli.bean.CompanyBean;
 import com.compli.db.bean.UserBean;
 import com.compli.db.bean.migration.v2.ActivityBean;
+import com.compli.db.bean.migration.v2.UserCompanyBean;
 import com.compli.db.bean.PeriodicityDateMasterBean;
 import com.compli.db.dao.ActivityDao;
 import com.compli.db.dao.DashBoardDao;
 import com.compli.db.dao.PeriodicityDateMasterDao;
+import com.compli.db.dao.UserCompanyDao;
 import com.compli.util.Constants;
 import com.compli.util.bean.ActivityAssignnmentBean;
 import com.compli.util.datamigration.v2.DataBaseMigrationUtilV2UpdateDB;
@@ -25,6 +29,7 @@ public class ActivityManager {
 	DashBoardDao dashBoardDao;
 	ActivityDao activityDao;
 	PeriodicityDateMasterDao periodicityDateMasterDao;
+	UserCompanyDao userCompanyDao;
 	boolean isFullUser;
 	String locationId;
 	private String userId;
@@ -34,9 +39,14 @@ public class ActivityManager {
 		this.dashBoardDao = (DashBoardDao) ctx.getBean("dashBoardDao");
 		this.activityDao = (ActivityDao) ctx.getBean("activityDao");		
 		this.periodicityDateMasterDao = (PeriodicityDateMasterDao) ctx.getBean("periodicityDateDao");
+		this.userCompanyDao = (UserCompanyDao) ctx.getBean("userCompanyDao");
 		this.isFullUser = AuthorisationManager.cache.getIfPresent(auth).isFullUser();
 		this.userId  = AuthorisationManager.cache.getIfPresent(auth).getUserId();
 		
+	}
+	
+	public void setActivityUser(ActivityUser activityUser){
+		this.activityDao.setActivityUser(activityUser);
 	}
 	
 	public ActivityManager(String auth,String locationId) {
@@ -327,5 +337,16 @@ public boolean changeActivityStatus(String companyId,String activityId,boolean i
 		activityAssignnmentBeans.add(activityAssignnmentBean);
 		DataBaseMigrationUtilV2UpdateDB updateDB = new DataBaseMigrationUtilV2UpdateDB();
 		updateDB.removeActivityAssignment(activityAssignnmentBeans);	
+	}
+	
+	public void removeUserFromCompany(String userId,String companyId){
+		this.activityDao.removeUserForCompany(userId,companyId);
+	}
+	
+	public void addUserToCompany(String userId,String companyId){
+		UserCompanyBean companyBean = new UserCompanyBean();
+		companyBean.setCompanyId(companyId);
+		companyBean.setUserId(userId);
+		boolean isSucess = this.userCompanyDao.addUserCompanyForUpload(companyBean);
 	}
 }

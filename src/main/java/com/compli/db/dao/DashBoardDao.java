@@ -796,9 +796,18 @@ private String activityQueryByMonthAndStatusFullUser =
 		}
 	}
 	
-	public List<Map<String, Object>> getAllActivitiesWithDescriptionForCompanyByMonth(String companyId, String month,String userId,boolean isFullUser,String location) {
+	/*	If year is null then current finnancial year will be considered
+	 * other wise for year and month data will be returned
+	 */
+	public List<Map<String, Object>> getAllActivitiesWithDescriptionForCompanyByMonthAndYear(String companyId, String month,String year,String userId,boolean isFullUser,String location) {
 		companyId = "('"+companyId.replace(",", "','")+"')";
 		int mon = Integer.parseInt(month);
+		
+		//Year is null then we need data for specific month and year combination other wise send data for current finnancial year
+		int yearData = Util.getFinnancialYearForMonth(mon);
+		if(year != null){
+			yearData = Integer.parseInt(year);
+		}
 		if(isFullUser){
 			//Sql date formater need date i nYYYY-mm-dd hence forming date
 			String dateFormatted = Util.getFinnancialYearForMonth(mon)+"-"+month+"-01";
@@ -806,7 +815,7 @@ private String activityQueryByMonthAndStatusFullUser =
 			HashMap namedMap = new HashMap();
 			namedMap.put("userId", userId);
 			namedMap.put("dueMonth", month);
-			namedMap.put("dueYear", Util.getFinnancialYearForMonth(mon));
+			namedMap.put("dueYear", yearData);
 			namedMap.put("dueDate", dateFormatted);
 			namedMap.put("locationId", location);
 			List<Map<String, Object>> activities = this.namedParameterJdbcTemplate.queryForList(activityForMonthQueryFullUser,namedMap);
@@ -840,15 +849,20 @@ private String activityQueryByMonthAndStatusFullUser =
 		}
 	}
 	
-	public List<Map<String, Object>> getAllActivitiesWithDescriptionForCompanyByMonthWithRejected(String companyId, String month,boolean isFullUser,String location,String userId) {
+	public List<Map<String, Object>> getAllActivitiesWithDescriptionForCompanyByMonthWithRejected(String companyId, String month,String year,boolean isFullUser,String location,String userId) {
 		companyId = "('"+companyId.replace(",", "','")+"')";
+		//Year is null then we need data for specific month and year combination other wise send data for current finnancial year
 		int mon = Integer.parseInt(month);
+		int yearData = Util.getFinnancialYearForMonth(mon);
+		if(year != null){
+			yearData = Integer.parseInt(year);
+		}
 		if(isFullUser){
 			String dateFormatted = Util.getFinnancialYearForMonth(mon)+"-"+month+"-01";
 			Map namedMap = new HashMap();
 			namedMap.put("userId", userId);
 			namedMap.put("dueMonth", month);
-			namedMap.put("dueYear", Util.getFinnancialYearForMonth(mon));
+			namedMap.put("dueYear", yearData);
 			namedMap.put("dueDate", dateFormatted);
 			namedMap.put("locationId", location);
 			this.activityForMonthQueryFullUser = this.activityForMonthQueryFullUser.replace("and activity.isComplianceRejected=false", "");
@@ -920,7 +934,7 @@ private String activityQueryByMonthAndStatusFullUser =
 */	
 	//This function is only for repository
 		public List<Map<String, Object>> getAllActivitiesWithDescriptionForCompanyByQuarterWithRejected(String companyId, String quarter,boolean isFullUser,String location,String userId) {
-			companyId = "('"+companyId.replace(",", "','")+"')";
+			//companyId = "('"+companyId.replace(",", "','")+"')";
 			int year = Calendar.getInstance().get(Calendar.YEAR);
 			//Indian quarter start at April so adding 1 
 			int quarterInt = Integer.parseInt(quarter);

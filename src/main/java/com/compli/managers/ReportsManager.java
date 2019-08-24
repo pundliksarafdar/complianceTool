@@ -111,7 +111,7 @@ public class ReportsManager {
 	
 	
 	public List<Map<String, Object>> getAllActivitiesWithDescriptionForCompanyByMonth(String companyId,String month,String userId){
-		return this.dashBoardDao.getAllActivitiesWithDescriptionForCompanyByMonth(companyId,month,userId,this.isFullUser,userId);
+		return this.dashBoardDao.getAllActivitiesWithDescriptionForCompanyByMonthAndYear(companyId,month,null,userId,this.isFullUser,userId);
 	}
 	
 	public List<Map<String, Object>> getAllActivitiesWithDescriptionForCompanyByMonth(String companyId,String month,String location,String userId){

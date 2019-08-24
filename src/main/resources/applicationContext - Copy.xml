@@ -63,8 +63,7 @@ http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 </bean>
 
 <bean id="activityDao" class="com.compli.db.dao.ActivityDao">  
-	<property name="jdbcTemplate" ref="jdbcTemplate"></property>
-	<property name="namedParameterJdbcTemplate" ref="namedParameterJdbcTemplate"></property>  
+	<property name="jdbcTemplate" ref="jdbcTemplate"></property>  
 </bean>
 
 <bean id="userCompanyDao" class="com.compli.db.dao.UserCompanyDao">  
@@ -78,9 +77,4 @@ http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 <bean id="activityAssignementDao" class="com.compli.db.dao.AcivityAssignmentDao">  
 	<property name="jdbcTemplate" ref="jdbcTemplate"></property>  
 </bean>
-
-<bean id="userAccessDao" class="com.compli.db.dao.UserAccessDao">  
-	<property name="namedParameterJdbcTemplate" ref="namedParameterJdbcTemplate"></property>  
-</bean>
-
 </beans>  

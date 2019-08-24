@@ -6,9 +6,11 @@ import java.util.TimeZone;
 import java.util.Timer;
 
 public class RunSchedular {
+	static long _24HOURTIME = 24*60*60*1000L;
 	public static void startSchedular(){
 		Timer timer = new Timer();
-		timer.schedule(new Executer(), getStartTime(),24*60*60*1000);
+		timer.schedule(new Executer(), getStartTime(),_24HOURTIME);
+		timer.schedule(new LawUpdateExecuter(),getStartTime(), _24HOURTIME);
 	}
 	
 	public static Date getStartTime(){

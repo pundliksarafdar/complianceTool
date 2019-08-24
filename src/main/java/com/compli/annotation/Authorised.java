@@ -5,6 +5,6 @@ import java.lang.annotation.RetentionPolicy;
 
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Authorised{
-	public enum ROLE{ALL,ADMIN,CUSTOMER}
+	public enum ROLE{ALL,ADMIN,CUSTOMER,MASTER}
 	public ROLE role();
 }

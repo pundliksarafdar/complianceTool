@@ -19,8 +19,10 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
 import com.compli.annotation.Authorised;
+import com.compli.annotation.Authorised.ROLE;
 import com.compli.bean.RegisterBean;
 import com.compli.bean.UserBean;
+import com.compli.bean.access.UserAccess;
 import com.compli.db.bean.UsersForCompany;
 import com.compli.db.bean.migration.v2.UserCompanyBean;
 import com.compli.db.dao.UserCompanyDao;
@@ -176,5 +178,31 @@ public class UsersRestApi extends Application{
 		RegistrationManager registrationManager = new RegistrationManager();
 		boolean success = registrationManager.updateUserForMaster(auth, userBean);
 		return Response.ok().build();		
+	}
+	
+	@GET
+	@Path("/getAllAccess")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response getUserAccess(@HeaderParam("auth")String auth,com.compli.db.bean.UserBean userBean) throws ExecutionException{ 
+		UserManager userManager = new UserManager();
+		java.util.List<String> access = userManager.getUserAccess(auth);
+		return Response.ok(access).build();		
+	}
+	
+	@GET
+	@Path("/getAllUsersAccess")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response getAllUsersAccess(){
+		UserManager userManager = new UserManager();
+		return Response.ok(userManager.getAllUserAccess()).build();
+	}
+	
+	@POST
+	@Authorised(role=ROLE.ALL)
+	@Path("/updateUsersAccess")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response updateUsersAccess(UserAccess userAccess){
+		UserManager userManager = new UserManager();
+		return Response.ok(userManager.updateUserAccess(userAccess)).build();
 	}
 }

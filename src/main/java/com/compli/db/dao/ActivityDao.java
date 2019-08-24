@@ -9,6 +9,7 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
 import com.compli.bean.ActivityUser;
+import com.compli.bean.stats.RiskIdCount;
 import com.compli.db.bean.UserBean;
 import com.compli.db.bean.migration.v2.ActivityAssociationBean;
 import com.compli.db.bean.migration.v2.ActivityBean;
@@ -158,5 +159,29 @@ public class ActivityDao {
 		param.addValue("companyId", companyId);
 		this.namedParameterJdbcTemplate.update(deleteQueryToDeleteActivityAssignement, param);
 		this.namedParameterJdbcTemplate.update(deleteUserFromCompany, param);
+	}
+	
+	public void updateActivityRisk(String lawId,String updateToLaw){
+		String udateQuery = "update activitymaster set activitymaster.riskId=:updateToLaw where activityId in ( "+
+				  "select activityId from(	 "+
+					"select activityId from activitymaster "+ 
+					"join periodicityDateMaster on periodicityDateMaster.periodicityDateId=activitymaster.periodicityDateId "+ 
+					"where activityId in (select activityId from activity where activityStatus='pendingCompliance') "+ 
+					"and periodicityDateMaster.dueDate = date(now()-interval 3 month) "+
+					"and activitymaster.riskId=:lawId)as c "+
+				");";
+		
+		MapSqlParameterSource param = new MapSqlParameterSource();
+		param.addValue("lawId", lawId);
+		param.addValue("updateToLaw", updateToLaw);
+		this.namedParameterJdbcTemplate.update(udateQuery, param);	
+	}
+	
+	public List<RiskIdCount> getRiskUpdateCountForToday(){
+		String query = "select riskId,count(riskId)as count from activitymaster "+
+			"join periodicityDateMaster on periodicityDateMaster.periodicityDateId=activitymaster.periodicityDateId "+ 
+			"where activityId in (select activityId from activity where activityStatus='pendingCompliance')  "+
+			"and periodicityDateMaster.dueDate = date(now()-interval 3 month) group by riskId";
+		return this.jdbcTemplate.query(query, new BeanPropertyRowMapper(RiskIdCount.class));
 	}
 }

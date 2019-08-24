@@ -33,6 +33,16 @@ public class ActivityManager {
 	boolean isFullUser;
 	String locationId;
 	private String userId;
+	
+	public ActivityManager(){
+		String path = getClass().getResource("/applicationContext.xml").getPath();
+		ApplicationContext ctx=new ClassPathXmlApplicationContext("applicationContext.xml");
+		this.dashBoardDao = (DashBoardDao) ctx.getBean("dashBoardDao");
+		this.activityDao = (ActivityDao) ctx.getBean("activityDao");		
+		this.periodicityDateMasterDao = (PeriodicityDateMasterDao) ctx.getBean("periodicityDateDao");
+		this.userCompanyDao = (UserCompanyDao) ctx.getBean("userCompanyDao");		
+	}
+	
 	public ActivityManager(String auth) {
 		String path = getClass().getResource("/applicationContext.xml").getPath();
 		ApplicationContext ctx=new ClassPathXmlApplicationContext("applicationContext.xml");
@@ -145,9 +155,42 @@ public class ActivityManager {
 	public List<Map<String, Object>> getAllActivitiesWithDescriptionForCompanyWithSeverityForMonth(String companyId,String severity,String month){
 		List<Map<String, Object>> allActivity = null;
 		if(this.locationId==null){
-			allActivity = this.dashBoardDao.getAllActivitiesWithDescriptionForCompanyByMonth(companyId,month,this.userId,true,"all");
+			allActivity = this.dashBoardDao.getAllActivitiesWithDescriptionForCompanyByMonthAndYear(companyId,month,null,this.userId,true,"all");
 		}else{
-			allActivity = this.dashBoardDao.getAllActivitiesWithDescriptionForCompanyByMonth(companyId,month,this.userId,true,this.locationId);
+			allActivity = this.dashBoardDao.getAllActivitiesWithDescriptionForCompanyByMonthAndYear(companyId,month,null,this.userId,true,this.locationId);
+		}
+		List<Map<String, Object>> filteredActivity = new ArrayList<Map<String,Object>>();
+		for(int i=0;i<allActivity.size();i++){
+			Map<String,Object> activity = allActivity.get(i);
+			if((activity.get("isComplied")!=null && "0".equals(activity.get("isComplied").toString())) &&
+					(activity.get("isComplianceApproved")!=null && "0".equals(activity.get("isComplianceApproved").toString())) 
+					&& (activity.get("isComplianceRejected")!=null && "0".equals(activity.get("isComplianceRejected").toString())) && "Pending compliance".equalsIgnoreCase(severity)){
+				//complainceOverview.put(PENDING_COMPLIANCE, complainceOverview.get(PENDING_COMPLIANCE)+1);
+				filteredActivity.add(activity);
+			}else if((activity.get("isComplainceDelayed")!=null && "1".equals(activity.get("isComplainceDelayed").toString())) && "Complied-Delayed".equalsIgnoreCase(severity)){
+				//complainceOverview.put(COMPLIANCE_DELAYED, complainceOverview.get(COMPLIANCE_DELAYED)+1);
+				filteredActivity.add(activity);
+			}else if((activity.get("isComplied")!=null && "1".equals(activity.get("isComplied").toString())) &&
+					(activity.get("isComplianceApproved")!=null && "0".equals(activity.get("isComplianceApproved").toString())) 
+					&& (activity.get("isComplianceRejected")!=null && "0".equals(activity.get("isComplianceRejected").toString())) && "Pending for review".equalsIgnoreCase(severity)){
+				//complainceOverview.put(COMPLAINCE_REVEIW, complainceOverview.get(COMPLAINCE_REVEIW)+1);
+				filteredActivity.add(activity);
+			}else if((activity.get("isComplied")!=null && "1".equals(activity.get("isComplied").toString()) && activity.get("isComplainceDelayed")!=null && "0".equals(activity.get("isComplainceDelayed").toString())  
+					&& activity.get("isComplianceApproved")!=null && "1".equals(activity.get("isComplianceApproved").toString()) && activity.get("isComplianceRejected")!=null)
+					&& "Complied- In time".equalsIgnoreCase(severity) ){
+				//complainceOverview.put(COMPLAINCE_INTIME, complainceOverview.get(COMPLAINCE_INTIME)+1);
+				filteredActivity.add(activity);
+			}
+		}
+		return filteredActivity;
+	}
+	
+	public List<Map<String, Object>> getAllActivitiesWithDescriptionForCompanyWithSeverityForMonthAndYear(String companyId,String severity,String month,String year){
+		List<Map<String, Object>> allActivity = null;
+		if(this.locationId==null){
+			allActivity = this.dashBoardDao.getAllActivitiesWithDescriptionForCompanyByMonthAndYear(companyId,month,year,this.userId,true,"all");
+		}else{
+			allActivity = this.dashBoardDao.getAllActivitiesWithDescriptionForCompanyByMonthAndYear(companyId,month,year,this.userId,true,this.locationId);
 		}
 		List<Map<String, Object>> filteredActivity = new ArrayList<Map<String,Object>>();
 		for(int i=0;i<allActivity.size();i++){
@@ -188,9 +231,19 @@ public class ActivityManager {
 	public List<Map<String, Object>> getAllActivitiesWithDescriptionForCompanyForMonth(String companyId,String month){
 		List<Map<String, Object>> allActivity = null;
 		if(this.locationId==null){
-			allActivity = this.dashBoardDao.getAllActivitiesWithDescriptionForCompanyByMonthWithRejected(companyId,month,true,"all",this.userId);
+			allActivity = this.dashBoardDao.getAllActivitiesWithDescriptionForCompanyByMonthWithRejected(companyId,month,null,true,"all",this.userId);
 		}else{
-			allActivity = this.dashBoardDao.getAllActivitiesWithDescriptionForCompanyByMonthWithRejected(companyId,month,true,this.locationId,this.userId);
+			allActivity = this.dashBoardDao.getAllActivitiesWithDescriptionForCompanyByMonthWithRejected(companyId,month,null,true,this.locationId,this.userId);
+		}
+		return allActivity;
+	}
+	
+	public List<Map<String, Object>> getAllActivitiesWithDescriptionForCompanyForMonthAndYear(String companyId,String month,String year){
+		List<Map<String, Object>> allActivity = null;
+		if(this.locationId==null){
+			allActivity = this.dashBoardDao.getAllActivitiesWithDescriptionForCompanyByMonthWithRejected(companyId,month,year,true,"all",this.userId);
+		}else{
+			allActivity = this.dashBoardDao.getAllActivitiesWithDescriptionForCompanyByMonthWithRejected(companyId,month,year,true,this.locationId,this.userId);
 		}
 		return allActivity;
 	}
@@ -348,5 +401,14 @@ public boolean changeActivityStatus(String companyId,String activityId,boolean i
 		companyBean.setCompanyId(companyId);
 		companyBean.setUserId(userId);
 		boolean isSucess = this.userCompanyDao.addUserCompanyForUpload(companyBean);
+	}
+	
+	public void updateActivities(){
+		this.activityDao.updateActivityRisk( "medium","high");
+		this.activityDao.updateActivityRisk("low", "medium");		
+	}
+	
+	public void getActivityForMonthAndYear(List<String>seviarity,int year,int month){
+		
 	}
 }

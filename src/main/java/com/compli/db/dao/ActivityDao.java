@@ -165,9 +165,9 @@ public class ActivityDao {
 		String udateQuery = "update activitymaster set activitymaster.riskId=:updateToLaw where activityId in ( "+
 				  "select activityId from(	 "+
 					"select activityId from activitymaster "+ 
-					"join periodicityDateMaster on periodicityDateMaster.periodicityDateId=activitymaster.periodicityDateId "+ 
+					"join periodicitydatemaster on periodicitydatemaster.periodicityDateId=activitymaster.periodicityDateId "+ 
 					"where activityId in (select activityId from activity where activityStatus='pendingCompliance') "+ 
-					"and periodicityDateMaster.dueDate = date(now()-interval 3 month) "+
+					"and periodicitydatemaster.dueDate = date(now()-interval 3 month) "+
 					"and activitymaster.riskId=:lawId)as c "+
 				");";
 		
@@ -179,9 +179,9 @@ public class ActivityDao {
 	
 	public List<RiskIdCount> getRiskUpdateCountForToday(){
 		String query = "select riskId,count(riskId)as count from activitymaster "+
-			"join periodicityDateMaster on periodicityDateMaster.periodicityDateId=activitymaster.periodicityDateId "+ 
+			"join periodicitydatemaster on periodicitydatemaster.periodicityDateId=activitymaster.periodicityDateId "+ 
 			"where activityId in (select activityId from activity where activityStatus='pendingCompliance')  "+
-			"and periodicityDateMaster.dueDate = date(now()-interval 3 month) group by riskId";
+			"and periodicitydatemaster.dueDate = date(now()-interval 3 month) group by riskId";
 		return this.jdbcTemplate.query(query, new BeanPropertyRowMapper(RiskIdCount.class));
 	}
 }

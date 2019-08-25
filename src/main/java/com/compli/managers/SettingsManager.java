@@ -135,7 +135,7 @@ public class SettingsManager {
 	}
 	
 	public static SettingsBean getStaticSettings(){
-		if(null==SettingsManager.settingsBean){
+		if(null==SettingsManager.settingsBean || true){
 			refreshSettings();
 		}
 		return SettingsManager.settingsBean;

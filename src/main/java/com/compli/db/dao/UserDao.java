@@ -57,9 +57,9 @@ public class UserDao {
 	 * @return
 	 */
 	public boolean insertUserValuesForMaster(UserBean userBean){
-		String insertUserQuery = "INSERT INTO user(isPrimaryUser, phone, regId, userId, isDeleted, email, pass, firstName, lastName, isactive,isFullUser) VALUES(?,?,?,?,?,?,?,?,?,?,?)";
+		String insertUserQuery = "INSERT INTO user(isPrimaryUser, phone, regId, userId, isDeleted, email, pass, firstName, lastName, isactive,isFullUser,userTypeId) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)";
 		return this.jdbcTemplate.update(insertUserQuery,true,userBean.getPhone(),userBean.getRegId(),userBean.getUserId(),false,userBean.getEmail(),
-				userBean.getPass(),userBean.getFirstName(),userBean.getLastName(),true,true)>0;
+				userBean.getPass(),userBean.getFirstName(),userBean.getLastName(),true,true,userBean.getUserTypeId())>0;
 	}
 	
 	public boolean insertUserValuesForUpload(UserBean userBean){

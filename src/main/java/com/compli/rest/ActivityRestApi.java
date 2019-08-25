@@ -24,6 +24,7 @@ import com.compli.annotation.Authorised.ROLE;
 import com.compli.bean.ActivityUser;
 import com.compli.bean.AddNewActivitiesBean;
 import com.compli.bean.ComplyStatusBean;
+import com.compli.bean.ativityassignment.ActivityAssignment;
 import com.compli.managers.ActivityManager;
 import com.compli.managers.AuthorisationManager;
 import com.compli.managers.DataManager;
@@ -192,6 +193,14 @@ public class ActivityRestApi {
 	public Response setActivityUser(@HeaderParam("auth")String auth,ActivityUser activityUser){
 		ActivityManager activityManager = new ActivityManager(auth);
 		activityManager.setActivityUser(activityUser);
+		return Response.ok().build();
+	}
+	
+	@POST
+	@Path("/setActivityForUser")
+	public Response setActivityForUser(@HeaderParam("auth")String auth,ActivityAssignment activityAssignment){
+		ActivityManager activityManager = new ActivityManager(auth);
+		activityManager.updateUserAccess(activityAssignment.getUserId(), activityAssignment.getFromDate(), activityAssignment.getLaws());
 		return Response.ok().build();
 	}
 }

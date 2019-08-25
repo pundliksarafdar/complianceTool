@@ -184,4 +184,20 @@ public class ActivityDao {
 			"and periodicitydatemaster.dueDate = date(now()-interval 3 month) group by riskId";
 		return this.jdbcTemplate.query(query, new BeanPropertyRowMapper(RiskIdCount.class));
 	}
+	
+	//this method will give access to userId from "fromDate"
+	public void updateUserAccess(String userId,String fromDate,List<String> lawIds){
+		String query = "insert into activity_assignment(activityId,userId,modifiedOn) "+ 
+										"select activityId,:userId,now() from periodicitydatemaster inner join "+ 
+											"(select activitymaster.activityId,activitymaster.periodicityDateId from activitymaster inner join lawmaster on activitymaster.lawId=lawmaster.lawId "+ 
+											"where lawmaster.lawName in (:lawIds)) aMaster "+
+										"on aMaster.periodicityDateId=periodicitydatemaster.periodicityDateId where DATE_FORMAT(periodicitydatemaster.dueDate,'%Y%m')>=DATE_FORMAT(:fromDate,'%Y%m') "+
+									"on duplicate key UPDATE modifiedOn=now()";
+		
+		MapSqlParameterSource param = new MapSqlParameterSource();
+		param.addValue("userId", userId);
+		param.addValue("fromDate", fromDate);
+		param.addValue("lawIds", lawIds);
+		this.namedParameterJdbcTemplate.update(query, param);
+	}
 }

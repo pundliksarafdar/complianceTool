@@ -3,6 +3,7 @@ package com.compli.managers;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -410,5 +411,22 @@ public boolean changeActivityStatus(String companyId,String activityId,boolean i
 	
 	public void getActivityForMonthAndYear(List<String>seviarity,int year,int month){
 		
+	}
+	
+	private Map<String,String>LSQIDS = new HashMap<String, String>(){{
+		put("labourLaw", "Labour Law");
+		put("indirecttax", "Indirect Tax");
+		put("directTax", "Direct Tax");
+		put("corporateLaw", "Corporate Law");
+	}} ;
+	public void updateUserAccess(List<String> userIds,String fromDate,List<String> lawIds){
+		List<String>laws = new ArrayList<String>();
+		
+		for(String lawId:lawIds){
+			laws.add(LSQIDS.get(lawId));
+		}
+		for(String userId:userIds){
+			this.activityDao.updateUserAccess(userId, fromDate, laws);	
+		}		
 	}
 }

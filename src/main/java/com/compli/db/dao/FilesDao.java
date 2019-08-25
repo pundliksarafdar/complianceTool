@@ -12,6 +12,7 @@ import com.compli.db.bean.UserBean;
 
 public class FilesDao {
 	private JdbcTemplate jdbcTemplate;
+	//in this query delete=false and null are same
 	private String filesForUser = "select * from files where activityId=? and companyId=? and (isDeleted=false or isNull(isDeleted))"; 
 	private String savefilesForUser = "INSERT INTO files(activityId,companyId,fileId,filename,createdOn,isDeleted)VALUES(?,?,?,?,?,false);";
 	private String updateFileIdForUser = "UPDATE files SET fileId=? WHERE filename=?;";

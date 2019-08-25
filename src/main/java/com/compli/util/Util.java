@@ -24,7 +24,7 @@ public class Util {
 		}else{
 			fyYear = month>3?fyYear:fyYear+1;
 		}		
-		return 2019;
+		return fyYear;
 	}
 	
 	public static int getFYForQuarter(int quarterInt){

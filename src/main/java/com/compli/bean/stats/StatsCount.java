@@ -6,7 +6,16 @@ import java.util.List;
 public class StatsCount implements Serializable{
 	public List<RiskIdCount> riskIdCounts;
 	public EmailCounts emailCounts;
+	public DriveData driveData;
 	
+	public DriveData getDriveData() {
+		return driveData;
+	}
+
+	public void setDriveData(DriveData driveData) {
+		this.driveData = driveData;
+	}
+
 	public List<RiskIdCount> getRiskIdCounts() {
 		return riskIdCounts;
 	}

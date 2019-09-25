@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -47,6 +48,15 @@ public class LocationDao {
 		}
 		return locationStatus;
 		
+	}
+
+	public Map<String,String> getAllLocationsAndId(){
+		List<Map<String, Object>> allLoc = getAllLocation();
+		HashMap<String,String> locMap = new HashMap<>();
+		for(Map<String, Object> loc:allLoc){
+			locMap.put(loc.get("locationId").toString(),loc.get("locationName").toString());
+		}
+	return locMap;
 	}
 	
 	public boolean addCompanyForUpload(LocationBean locationBean){

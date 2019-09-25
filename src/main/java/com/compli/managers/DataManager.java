@@ -2,16 +2,10 @@ package com.compli.managers;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -35,7 +29,6 @@ import com.compli.util.datamigration.v2.DBMigrationUtilV2ActivityUpload;
 import com.compli.util.datamigration.v2.DBMigrationUtilV2LawMaster;
 import com.compli.util.datamigration.v2.DBMigrationUtilV2PeriodicityDateMaster;
 import com.compli.util.datamigration.v2.DBMigrationUtilV2PeriodicityMaster;
-import com.google.api.services.drive.model.File.ImageMediaMetadata.Location;
 
 public class DataManager {
 	private static int ROW_COUNT = 15;
@@ -43,12 +36,26 @@ public class DataManager {
 	private static int CM_MAIL = 12;
 	private static int SM_MAIL = 13;
 	private static int CO_MAIL = 14;
+	private static int LOCATION = 0;
 	
 	private static int PERIODICITY_ROW_NO = 9;
 	private static int PERIODICITY_DATE_ROW_NO = 8;
 	private static int LAW_DESC = 4;
 	private static int COMPLAINCE_AREA = 1;
 	private static int MAX_ACTIVITY_COUNT = 50000;
+
+	private static int ALL_COM_LOCATION = 0;
+	private static int ALL_COM_COM_AREA = 1;
+	private static int ALL_COM_ACT_NAME = 2;
+	private static int ALL_COM_DESC = 3;
+	private static int ALL_COM_LAW_DESC = 4;
+	private static int ALL_COM_RISK = 5;
+	private static int ALL_COM_CONS = 6;
+	private static int ALL_COM_FORM = 7;
+	private static int ALL_COM_PERIODICITY = 8;
+	private static int ALL_COM_PERIODICITY_DESC = 9;
+
+
 	UserDao userDao;
 	ActivityDao activityDao;
 	LocationDao locationDao;
@@ -62,6 +69,53 @@ public class DataManager {
 	public static void main(String[] args) throws IOException {
 		FileInputStream excelFile = new FileInputStream(new File("C:\\report\\Table Tracker_Online Tyari_final_FY 2019-20-Modified.xlsx"));
         new DataManager().uploadData(excelFile,"0498d16340aa4f9e");        
+	}
+
+	public AddNewActivitiesBean loadActivitiesForCompanies(InputStream excelFile,List<String> companies){
+		Workbook workbook = null;
+		AddNewActivitiesBean activitiesBean = new AddNewActivitiesBean();
+		try {
+			workbook = new XSSFWorkbook(excelFile);
+			Sheet datatypeSheet = workbook.getSheetAt(0);
+			Iterator<Row> iterator = datatypeSheet.iterator();
+			List<com.compli.db.bean.migration.v2.PeriodicityMasterBean> periodicityMasterBeans = new ArrayList<com.compli.db.bean.migration.v2.PeriodicityMasterBean>();
+			Set<com.compli.db.bean.migration.v2.PeriodicityMasterBean> periodicityMasterBeansSet = new HashSet<com.compli.db.bean.migration.v2.PeriodicityMasterBean>();
+			boolean isFirst = false;
+			//Form userBean from uploaded sheet
+			List<ActivityForAddNewActivity> activities = new ArrayList<>();
+			while (iterator.hasNext()) {
+				if(!isFirst){
+					isFirst = true;
+					iterator.next();
+					continue;
+				}
+
+				Row currentRow = iterator.next();
+				String loc = currentRow.getCell(ALL_COM_LOCATION, Row.CREATE_NULL_AS_BLANK).getStringCellValue();
+				String cArea = currentRow.getCell(ALL_COM_COM_AREA, Row.CREATE_NULL_AS_BLANK).getStringCellValue();
+				String aName = currentRow.getCell(ALL_COM_ACT_NAME, Row.CREATE_NULL_AS_BLANK).getStringCellValue();
+				String desc = currentRow.getCell(ALL_COM_DESC, Row.CREATE_NULL_AS_BLANK).getStringCellValue();
+				String lawDesc = currentRow.getCell(ALL_COM_LAW_DESC, Row.CREATE_NULL_AS_BLANK).getStringCellValue();
+				String risk = currentRow.getCell(ALL_COM_RISK, Row.CREATE_NULL_AS_BLANK).getStringCellValue();
+				String cons = currentRow.getCell(ALL_COM_CONS, Row.CREATE_NULL_AS_BLANK).getStringCellValue();
+				Date timeD = currentRow.getCell(ALL_COM_PERIODICITY, Row.CREATE_NULL_AS_BLANK).getDateCellValue();
+
+				SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd/yyyy");
+				String dateFormat = simpleDateFormat.format(timeD);
+
+				String form = currentRow.getCell(ALL_COM_FORM, Row.CREATE_NULL_AS_BLANK).getStringCellValue();
+				String perDesc = currentRow.getCell(ALL_COM_PERIODICITY_DESC, Row.CREATE_NULL_AS_BLANK).getStringCellValue();
+
+				ActivityForAddNewActivity activityForAddNewActivity = new ActivityForAddNewActivity(loc,cArea,aName,desc,lawDesc,risk,cons,form,dateFormat,perDesc);
+				activities.add(activityForAddNewActivity);
+			}
+			activitiesBean.setActivities(activities);
+			activitiesBean.setCompanies(companies);
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return activitiesBean;
 	}
 	
 	public Map<String, Map<String, List<String>>> uploadActivities(AddNewActivitiesBean activitiesBean){
@@ -80,11 +134,16 @@ public class DataManager {
 		uploadActivity(activitiesBean.getActivities(), activitiesBean.getCompanies(), maxActivityCount);
 		return null;
 	}
+
+	public Map<String, Map<String, List<String>>> uploadDataForMultipleCompanies(InputStream excelFile,List<String> companyId) throws IOException{
+		AddNewActivitiesBean activities = loadActivitiesForCompanies(excelFile, companyId);
+		return uploadActivities(activities);
+	}
 	
-	public List<String> uploadData(InputStream excelFile,String companyId) throws IOException{
+	public Map<String, Map<String, List<String>>> uploadData(InputStream excelFile,String companyId) throws IOException{
 		Workbook workbook = new XSSFWorkbook(excelFile);
         Sheet datatypeSheet = workbook.getSheetAt(0);
-        List<String> reasonToReject = checkSheet(datatypeSheet);
+        Map<String, Map<String, List<String>>> reasonToReject = checkSheet(datatypeSheet,companyId);
        
         int maxActivityCount = activityDao.getMaximumActivityId();
         
@@ -100,7 +159,9 @@ public class DataManager {
         }
 		return reasonToReject;
 	}
-	
+
+
+	//This pre-check method is only for upload files for multiple companies
 	public Map<String,Map<String, List<String>>> precheck(AddNewActivitiesBean activitiesBean){
 		Map<String,Map<String, List<String>>> errors = new HashMap<String, Map<String, List<String>>>();
 		List<String> location = new ArrayList<String>();
@@ -127,7 +188,7 @@ public class DataManager {
 		location.replaceAll(loc->Util.formLocationId(loc));
 		List locationForCompany = this.locationDao.getCompanyLocation(companyId);
 		List<String>locationFromDb = new ArrayList<String>();
-		List<String>fullLocationName = new ArrayList<String>();
+		Set<String>fullLocationName = new HashSet<>();
 		Map<String, String>locationMap = new HashMap<String, String>();
 		
 		locationForCompany.forEach(loc->{
@@ -135,11 +196,12 @@ public class DataManager {
 			locationMap.put((String)((Map)loc).get("locationId"), (String)((Map)loc).get("locationName"));
 		});
 		location.removeAll(locationFromDb);
-		
+
+		Map<String, String> allLocations = this.locationDao.getAllLocationsAndId();
 		location.forEach(loc->{
-			fullLocationName.add(locationMap.get(loc));
+			fullLocationName.add(allLocations.get(loc));
 		});
-		return fullLocationName;
+		return new ArrayList<>(fullLocationName);
 	}
 	
 	public static void setPeriodicityMaster(Sheet sheet){
@@ -235,7 +297,8 @@ public class DataManager {
 		DBMigrationUtilV2ActivityAssignmentUpload.updateUserDetails(sheet,activityCount);		
 	}
 	
-	public List<String> checkSheet(Sheet uploadedSheet){
+	public Map<String, Map<String, List<String>>> checkSheet(Sheet uploadedSheet, String companyId){
+		Map<String,Map<String, List<String>>> errors = new HashMap<String, Map<String, List<String>>>();
 		List<String> invalidReson = new ArrayList<String>();
 		boolean isCountValid = validateSheet(uploadedSheet);
 		if(!isCountValid){
@@ -243,14 +306,48 @@ public class DataManager {
 		}
 		
 		List<String> invalidUsers = checkUserEmails(uploadedSheet);
+		List<String> invalidLocation = checkLocations(uploadedSheet,companyId);
 		if(invalidUsers.size()>0){
 			invalidReson.add(invalidUsers.toString()+"User emails are wrong");
 		}
-		return invalidReson;
+
+		if(invalidLocation.size()>0){
+			errors.put("companyAndUnavailableLocationMap",new HashMap(){{put(companyId,invalidLocation);}});
+		}
+		if(invalidReson.size()>0){
+			errors.put("invalidEmails",new HashMap(){{put(companyId,invalidReson);}});
+		}
+		return errors;
 	}
-	
+
+	//This method will check user and there type in sheet
+	public List<String> checkLocations(Sheet sheet,String companyId){
+		List<String> companyLocation = new ArrayList<>();
+		Iterator<Row> iterator = sheet.iterator();
+		int rowCount = 0;
+		Set<Integer>count = new HashSet<Integer>();
+		while (iterator.hasNext()) {
+			if(rowCount==0){
+				rowCount++;
+				Row currentRow = iterator.next();
+				continue;
+			}
+			rowCount++;
+			Row currentRow = iterator.next();
+
+			Cell cell = currentRow.getCell(LOCATION, Row.CREATE_NULL_AS_BLANK);
+			String location = cell.getStringCellValue();
+			if(!companyLocation.contains(location)){
+				companyLocation.add(location);
+			}
+		}
+		companyLocation.replaceAll(loc->Util.formLocationId(loc));
+		return checkLocationForCompany(companyLocation, companyId);
+	}
+
+	//This method will check user and there type in sheet
 	public List<String> checkUserEmails(Sheet sheet){
-		List<String> wrongEmail = new ArrayList<String>();
+		Set<String> wrongEmail = new HashSet<>();
 		Map<String,List<String>> userTypeAndMailMap = new HashMap<String, List<String>>();
 		List<UserBean> allUsers = this.userDao.getAllData();
 		Map<String,String> userType = new HashMap<String, String>();
@@ -291,7 +388,7 @@ public class DataManager {
         		wrongEmail.add(coEmail);
         	}        	
         }      
-		return wrongEmail;
+		return new ArrayList<>(wrongEmail);
 	}
 	
 	public static boolean validateSheet(Sheet datatypeSheet){

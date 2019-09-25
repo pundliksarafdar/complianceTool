@@ -11,6 +11,28 @@ public class ActivityForAddNewActivity{
 		String form;
 		String periodicity;
 		String periodicityDesc;
+
+		public ActivityForAddNewActivity(String location,
+				String compArea,
+				String activityName,
+				String description,
+				String lawDescription,
+				String risk,
+				String consequence,
+				String form,
+				String periodicity,
+				String periodicityDesc){
+			this.location = location;
+			this.compArea = compArea;
+			this.activityName = activityName;
+			this.description = description;
+			this.lawDescription = lawDescription;
+			this.risk = risk;
+			this.consequence = consequence;
+			this.form = form;
+			this.periodicity = periodicity;
+			this.periodicityDesc = periodicityDesc;
+		}
 		
 		public String getLocation() {
 			return location;

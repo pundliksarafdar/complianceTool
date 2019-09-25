@@ -5,11 +5,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.security.GeneralSecurityException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -23,7 +19,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 
-import org.apache.commons.io.IOUtils;
 import org.jboss.resteasy.plugins.providers.multipart.InputPart;
 import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
 
@@ -110,7 +105,7 @@ public class SettingsRestApi {
 	public Response uploadFile(@PathParam("companyId")String companyId,MultipartFormDataInput  input){
 		Map<String, List<InputPart>> uploadForm = input.getFormDataMap();
 		List<InputPart> inputParts = uploadForm.get("uploadedFile");
-		List<String> rejectReasons = new ArrayList<String>();
+		Map<String, Map<String, List<String>>> rejectReasons = new HashMap<>();
 		for (InputPart inputPart : inputParts) {
 			 try {
 				java.io.InputStream inputStream = inputPart.getBody(java.io.InputStream.class,null);
@@ -119,10 +114,46 @@ public class SettingsRestApi {
 			}catch(Exception e){
 				 e.printStackTrace();
 			 }
-		} 
-		return Response.ok(rejectReasons).build();
+		}
+
+		if(!rejectReasons.isEmpty()){
+			return Response.status(Response.Status.BAD_REQUEST).entity(rejectReasons).build();
+		}else{
+			return Response.ok(rejectReasons).build();
+		}
+
 	}
-	
+
+	@POST
+	@Path("/uploadActivityForMultipleCompany")
+	@Authorised(role=ROLE.ALL)
+	@Consumes(MediaType.MULTIPART_FORM_DATA)
+	public Response uploadActivityForMultipleCompany(MultipartFormDataInput  input) throws IOException {
+		Map<String, List<InputPart>> uploadForm = input.getFormDataMap();
+		List<InputPart> inputParts = uploadForm.get("uploadedFile");
+		List<InputPart> companyIds = uploadForm.get("companyId");
+		String cId = companyIds.get(0).getBodyAsString();
+
+		List<String>cIds = Arrays.asList(cId.split(","));
+		Map<String, Map<String, List<String>>> rejectReasons = new HashMap<>();
+
+		for (InputPart inputPart : inputParts) {
+			try {
+				java.io.InputStream inputStream = inputPart.getBody(java.io.InputStream.class,null);
+				DataManager dataManager = new DataManager();
+				rejectReasons = dataManager.uploadDataForMultipleCompanies(inputStream, cIds);
+			}catch(Exception e){
+				e.printStackTrace();
+			}
+		}
+		if(null!=rejectReasons){
+			return Response.status(Response.Status.BAD_REQUEST).entity(rejectReasons).build();
+		}else{
+			return Response.ok(rejectReasons).build();
+		}
+
+	}
+
 	@POST
 	@Path("/changeDate")
 	@Authorised(role=ROLE.ALL)

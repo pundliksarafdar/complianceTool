@@ -66,7 +66,7 @@ public class DBMigrationUtilV2PeriodicityMaster {
 		List<com.compli.db.bean.PeriodicityMasterBean> periodicityMasterDataDB = periodicityMasterDao.getAllPeriodicty();
 		List<PeriodicityMasterBean> filteredPeriMasterData = periodicityMasterBeans.parallelStream().filter(periodicityMasterBean->{
 			return !periodicityMasterDataDB.parallelStream().anyMatch(periodicityMasterDataDBObj->{
-				return periodicityMasterDataDBObj.getPeriodicityId().equals(periodicityMasterBean.getPeriodicityId());
+				return periodicityMasterDataDBObj.getPeriodicityId().equalsIgnoreCase(periodicityMasterBean.getPeriodicityId());
 			});
 		}).distinct().collect(Collectors.toList());
 		

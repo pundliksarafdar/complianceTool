@@ -37,7 +37,7 @@ public class PeriodicityDateMasterBean {
 		if (periodicityDateId == null) {
 			if (other.periodicityDateId != null)
 				return false;
-		} else if (!periodicityDateId.equals(other.periodicityDateId))
+		} else if (!periodicityDateId.equalsIgnoreCase(other.periodicityDateId))
 			return false;
 		return true;
 	}

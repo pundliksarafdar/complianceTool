@@ -40,7 +40,7 @@ public class PeriodicityMasterBean {
 		if (description == null) {
 			if (other.description != null)
 				return false;
-		} else if (!description.equals(other.description))
+		} else if (!description.equalsIgnoreCase(other.description))
 			return false;
 		return true;
 	}

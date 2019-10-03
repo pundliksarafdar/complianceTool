@@ -21,7 +21,7 @@ import com.mysql.cj.api.jdbc.Statement;
 public class UserDao {
 	private JdbcTemplate jdbcTemplate;
 	
-	private String UPDATE_USER_DATA = "update user set firstname=? , lastname=? , image=? , googleId = ? where userId=?";
+	private String UPDATE_USER_DATA = "update user set firstname=? , lastname=? , image=? , googleId = ? , phone = ? where userId=?";
 	private String UPDATE_USER_DATA_FOR_MASTER = "update user set firstname=? ,lastname=? , email=? , pass=? , phone = ?,userTypeId = ? where userId=?";
 	private String UPDATE_USER_PASS = "update user set pass=? where userId=?";
 
@@ -102,7 +102,7 @@ public class UserDao {
 	}
 	
 	public boolean updateUserData(UserBean userBean){
-		this.jdbcTemplate.update(UPDATE_USER_DATA,userBean.getFirstName(),userBean.getLastName(),userBean.getImage(),userBean.getGoogleId(),userBean.getUserId());
+		this.jdbcTemplate.update(UPDATE_USER_DATA,userBean.getFirstName(),userBean.getLastName(),userBean.getImage(),userBean.getGoogleId(),userBean.getPhone() , userBean.getUserId());
 		if(userBean.getPass()!=null && !userBean.getPass().trim().isEmpty()){
 			this.jdbcTemplate.update(UPDATE_USER_PASS,userBean.getPass(),userBean.getUserId());
 		}

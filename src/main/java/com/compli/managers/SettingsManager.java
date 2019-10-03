@@ -62,17 +62,21 @@ public class SettingsManager {
 		SettingsBean settingsBean = new SettingsBean();
 		List<Pair> settings = this.settingsDao.getSettings();
 		try {
-			settings.parallelStream().forEach(setting->{ 
-				try {
-					Field field = settingsBean.getClass().getDeclaredField(setting.getKeyfordata());
-					if(field.getType().equals(List.class)){
-						List<SettingsScheduleBean> scheduleBeans = new Gson().fromJson(setting.getVal(), new TypeToken<List<SettingsScheduleBean>>(){}.getType());
-						field.set(settingsBean, scheduleBeans);
-					}else{
-						field.set(settingsBean, setting.getVal());
+			settings.parallelStream().forEach(setting->{
+				if (setting.getKeyfordata()!=null && !setting.getKeyfordata().trim().equals("")) {
+					try {
+						Field field = settingsBean.getClass().getDeclaredField(setting.getKeyfordata());
+						if (field.getType().equals(List.class)) {
+							List<SettingsScheduleBean> scheduleBeans = new Gson().fromJson(setting.getVal(), new TypeToken<List<SettingsScheduleBean>>() {
+							}.getType());
+							field.set(settingsBean, scheduleBeans);
+						} else {
+							field.set(settingsBean, setting.getVal());
+						}
+					} catch (Exception e) {
+						//System.out.println("Field not found " + setting.getKeyfordata());
+						e.printStackTrace();
 					}
-				} catch (Exception e) {
-					e.printStackTrace();
 				}
 			});
 			

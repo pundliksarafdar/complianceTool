@@ -85,8 +85,9 @@ public class RegistrationManager {
 		userBean.setFirstName(userBeanToUpdate.getFirstName());
 		userBean.setLastName(userBeanToUpdate.getLastName());
 		userBean.setImage(userBeanToUpdate.getImage());
+		userBean.setPhone(userBeanToUpdate.getPhone());
 		userBean.setGoogleId(userBeanToUpdate.getGoogleId());
-		if(userBeanToUpdate.getPass()!=null && userBeanToUpdate.getPass().trim().isEmpty()){
+		if(userBeanToUpdate.getPass()!=null && !userBeanToUpdate.getPass().trim().isEmpty()){
 			userBean.setPass(userBeanToUpdate.getPass());
 		}
 		

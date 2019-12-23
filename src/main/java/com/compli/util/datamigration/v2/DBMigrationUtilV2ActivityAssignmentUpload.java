@@ -49,7 +49,21 @@ public class DBMigrationUtilV2ActivityAssignmentUpload {
 	public static void init(){
 		new DBMigrationUtilV2ActivityAssignmentUpload();
 	}
-	
+
+	public static void assigneActivities(int activityidStart,int activityIdEnd,String userId){
+			List<ActivityAssignnmentBean> activityAssignnmentBeans = new ArrayList<>();
+
+			for (int i=activityidStart; i<activityIdEnd; i++){
+				ActivityAssignnmentBean bean = new ActivityAssignnmentBean();
+				bean.setActivityId(i+"");
+				bean.setUserId(userId);
+				activityAssignnmentBeans.add(bean);
+			}
+
+		DataBaseMigrationUtilV2UpdateDB updateDB = new DataBaseMigrationUtilV2UpdateDB();
+		updateDB.saveActivityAssignment(activityAssignnmentBeans);
+	}
+
 	public static void updateUserDetails(Sheet datatypeSheet,int activityCountStart){
 		Iterator<Row> iterator = datatypeSheet.iterator();
 		List<UserBean> userBeans = new ArrayList<UserBean>();

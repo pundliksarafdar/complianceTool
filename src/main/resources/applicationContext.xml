@@ -86,5 +86,7 @@ http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 <bean id="backupDao" class="com.compli.db.dao.BackupDao">  
 	<property name="namedParameterJdbcTemplate" ref="namedParameterJdbcTemplate"></property>  
 </bean>
-
+<bean id="masterDataDao" class="com.compli.db.dao.MasterDataDao">
+	<property name="namedParameterJdbcTemplate" ref="namedParameterJdbcTemplate"></property>
+</bean>
 </beans>  

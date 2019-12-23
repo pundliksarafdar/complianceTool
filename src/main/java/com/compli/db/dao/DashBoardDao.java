@@ -754,20 +754,14 @@ private String activityQueryByMonthAndStatusFullUser =
 	
 	public List<Map<String, Object>> getAllActivitiesWithDescriptionForCompany(String companyId,boolean isFullUser,boolean tillDate,boolean tillMonthEnd,String userId,String locationId){
 		companyId = "('"+companyId.replace(",", "','")+"')";
-		if(isFullUser){
-			MapSqlParameterSource namedParameter = new MapSqlParameterSource();
-			namedParameter.addValue("tillDate",tillDate );
-			namedParameter.addValue("tillMonthEnd",tillMonthEnd );
-			namedParameter.addValue("userId",userId );
-			namedParameter.addValue("locationId",locationId );
-			activityQueryFullUser = activityQueryFullUser.replace("(?)", companyId);
-			List<Map<String, Object>> activities = this.namedParameterJdbcTemplate.queryForList(activityQueryFullUser,namedParameter);
-			return activities;
-		}else{
-			activityQuery = activityQuery.replace("(?)", companyId);
-			List<Map<String, Object>> activities = this.jdbcTemplate.queryForList(activityQuery);
-			return activities;
-		}
+		MapSqlParameterSource namedParameter = new MapSqlParameterSource();
+		namedParameter.addValue("tillDate",tillDate );
+		namedParameter.addValue("tillMonthEnd",tillMonthEnd );
+		namedParameter.addValue("userId",userId );
+		namedParameter.addValue("locationId",locationId );
+		activityQueryFullUser = activityQueryFullUser.replace("(?)", companyId);
+		List<Map<String, Object>> activities = this.namedParameterJdbcTemplate.queryForList(activityQueryFullUser,namedParameter);
+		return activities;
 	}
 	
 	/*public List<Map<String, Object>> getAllActivitiesWithDescriptionForCompany(String companyId,boolean isFullUser,String locationId,boolean tillDate,boolean tillMonthEnd){
@@ -1032,18 +1026,12 @@ private String activityQueryByMonthAndStatusFullUser =
 	public List<Map<String, Object>> getAllActivitiesWithDescriptionForCompanyLast3Months(String companyId,
 			int month,String userId,boolean isFullUser,String locationId) {
 		companyId = "('"+companyId.replace(",", "','")+"')";
-		if(isFullUser){
-			HashMap< String, String>namedParameter = new HashMap<String, String>();
-			namedParameter.put("userId", userId);
-			namedParameter.put("locationId", locationId);
-			activityLast3MonthQueryFullUser = activityLast3MonthQueryFullUser.replace("(?)", companyId);
-			List<Map<String, Object>> activities = this.namedParameterJdbcTemplate.queryForList(activityLast3MonthQueryFullUser,namedParameter);
-			return activities;
-		}else{
-			activityLast3MonthQuery = activityLast3MonthQuery.replace("(?)", companyId);
-			List<Map<String, Object>> activities = this.jdbcTemplate.queryForList(activityLast3MonthQuery);
-			return activities;
-		}
+		HashMap< String, String>namedParameter = new HashMap<String, String>();
+		namedParameter.put("userId", userId);
+		namedParameter.put("locationId", locationId);
+		activityLast3MonthQueryFullUser = activityLast3MonthQueryFullUser.replace("(?)", companyId);
+		List<Map<String, Object>> activities = this.namedParameterJdbcTemplate.queryForList(activityLast3MonthQueryFullUser,namedParameter);
+		return activities;
 	}
 	
 	/*public List<Map<String, Object>> getAllActivitiesWithDescriptionForCompanyLast3Months(String companyId,
@@ -1062,29 +1050,17 @@ private String activityQueryByMonthAndStatusFullUser =
 	
 	public List<Map<String, Object>> getPendingActivityCoutForNext10Days(String companyId,String userId,boolean isFullUser){
 		companyId = "('"+companyId.replace(",", "','")+"')";
-		if(isFullUser){
-			rCountPending10DaysFullUser = rCountPending10DaysFullUser.replace("(?)", companyId);
-			MapSqlParameterSource parameters = new MapSqlParameterSource();
-			List<Map<String, Object>> activitiesCount = this.jdbcTemplate.queryForList(rCountPending10DaysFullUser,userId);
-			return activitiesCount;
-		}else{
-			rCountPending10Days = rCountPending10Days.replace("(?)", companyId);
-			List<Map<String, Object>> activitiesCount = this.jdbcTemplate.queryForList(rCountPending10Days);
-			return activitiesCount;
-		}
+		rCountPending10DaysFullUser = rCountPending10DaysFullUser.replace("(?)", companyId);
+		MapSqlParameterSource parameters = new MapSqlParameterSource();
+		List<Map<String, Object>> activitiesCount = this.jdbcTemplate.queryForList(rCountPending10DaysFullUser,userId);
+		return activitiesCount;
 	}
 	
 	public List<Map<String, Object>> getPendingActivityCoutForNext10Days(String companyId,boolean isFullUser,String locationId){
 		companyId = "('"+companyId.replace(",", "','")+"')";
-		if(isFullUser){
-			rCountPending10DaysFullUserWithLocation = rCountPending10DaysFullUserWithLocation.replace("(?)", companyId);
-			List<Map<String, Object>> activitiesCount = this.jdbcTemplate.queryForList(rCountPending10DaysFullUserWithLocation,locationId);
-			return activitiesCount;
-		}else{
-			rCountPending10DaysWithLocation = rCountPending10DaysWithLocation.replace("(?)", companyId);
-			List<Map<String, Object>> activitiesCount = this.jdbcTemplate.queryForList(rCountPending10DaysWithLocation,locationId);
-			return activitiesCount;
-		}
+		rCountPending10DaysFullUserWithLocation = rCountPending10DaysFullUserWithLocation.replace("(?)", companyId);
+		List<Map<String, Object>> activitiesCount = this.jdbcTemplate.queryForList(rCountPending10DaysFullUserWithLocation,locationId);
+		return activitiesCount;
 	}
 	
 	//THis function is always for full user

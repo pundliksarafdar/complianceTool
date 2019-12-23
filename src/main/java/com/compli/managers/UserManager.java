@@ -75,7 +75,12 @@ public class UserManager {
 			break;
 		case "demoUser":
 			userAccess = getUsersAccess(userId);
-			break;			
+			break;
+		case "demo":
+			userAccess = new ArrayList<>(CommonAccess);
+			userAccess.add("reportLnk");
+			userAccess.add("repositoriesLnk");
+			break;
 		default:
 			break;
 		}

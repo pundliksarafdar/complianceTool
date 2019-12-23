@@ -55,7 +55,7 @@ public class UserDao {
 	}
 	
 	public boolean insertUserValues(UserBean userBean){
-		String insertUserQuery = "INSERT INTO user(isPrimaryUser, phone, regId, userId, isDeleted, email, pass, firstName, lastName, isactive) VALUES(?,?,?,?,?,?,?,?,?,?)";
+		String insertUserQuery = "INSERT INTO user(isPrimaryUser, phone, regId, userId, isDeleted, email, pass, firstName, lastName, isactive, userTypeId) VALUES(?,?,?,?,?,?,?,?,?,?,'demo')";
 		return this.jdbcTemplate.update(insertUserQuery,true,userBean.getPhone(),userBean.getRegId(),userBean.getUserId(),false,userBean.getEmail(),
 				userBean.getPass(),userBean.getFirstName(),userBean.getLastName(),false)>0;
 	}

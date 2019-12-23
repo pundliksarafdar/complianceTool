@@ -11,13 +11,6 @@
         <maven.compiler.target>1.8</maven.compiler.target>
         <maven.compiler.source>1.8</maven.compiler.source>
     </properties>
-	
-	<repositories>
-      <repository>
-         <id>companyname.lib1</id>
-         <url>https://repo1.maven.org/maven2</url>
-      </repository>      
-   </repositories>
   <dependencies>
     <dependency>
       <groupId>junit</groupId>
@@ -97,23 +90,24 @@
 	    <artifactId>google-oauth-client-java6</artifactId>
 	    <version>1.23.0</version>
 	</dependency>
-      				   <!-- https://mvnrepository.com/artifact/net.sourceforge.dynamicreports/dynamicreports-core -->
-<!-- <dependency>
+	  <!-- https://mvnrepository.com/artifact/com.google.apis/google-api-services-plus -->
+	  <dependency>
+		  <groupId>com.google.apis</groupId>
+		  <artifactId>google-api-services-plus</artifactId>
+		  <version>v1-rev590-1.25.0</version>
+	  </dependency>
+	  <!-- https://mvnrepository.com/artifact/com.google.apis/google-api-services-gmail -->
+	  <dependency>
+		  <groupId>com.google.apis</groupId>
+		  <artifactId>google-api-services-gmail</artifactId>
+		  <version>v1-rev105-1.25.0</version>
+	  </dependency>
+
+	  <!-- https://mvnrepository.com/artifact/net.sourceforge.dynamicreports/dynamicreports-core -->
+<dependency>
     <groupId>net.sourceforge.dynamicreports</groupId>
     <artifactId>dynamicreports-core</artifactId>
     <version>5.1.0</version>
-</dependency> -->
-<!-- https://mvnrepository.com/artifact/com.lowagie/itext -->
-<dependency>
-    <groupId>com.lowagie</groupId>
-    <artifactId>itext</artifactId>
-    <version>2.1.7</version>
-</dependency>
-
-<dependency>
-   <groupId>net.sf.jasperreports</groupId>
-   <artifactId>jasperreports</artifactId>
-   <version>6.7.0</version>
 </dependency>
       				    <!-- https://mvnrepository.com/artifact/org.apache.poi/poi-ooxml -->
 <dependency>
@@ -139,7 +133,7 @@
     <artifactId>google-api-services-drive</artifactId>
     <version>v3-rev136-1.25.0</version>
 </dependency>
-      				    
+
   </dependencies>
   <build>
     <finalName>ROOT</finalName>

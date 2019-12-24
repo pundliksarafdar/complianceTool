@@ -122,9 +122,10 @@ public class SendMailSSL {
 			dataObject.setValidationCode(registrationId);
 			
 			String someHtmlMessage = Mail.getResendMailContent(dataObject);
-			message.setContent(someHtmlMessage, "text/html; charset=utf-8");
+			message.setText(someHtmlMessage, "utf-8","html");
 			//Transport.send(message);
 			com.google.api.services.gmail.model.Message msg = createMessageWithEmail(message);
+
 			com.google.api.services.gmail.model.Message sendResult = GoogleServices.getGmailService().users().messages().send("me",msg).execute();
 
 			System.out.println("Done");

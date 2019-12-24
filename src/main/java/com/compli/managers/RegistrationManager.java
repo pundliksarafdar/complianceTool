@@ -35,7 +35,8 @@ public class RegistrationManager {
 		boolean isSuccess = this.userDao.insertUserValues(userBean);
 		if(isSuccess){
 			SendMailSSL mailSSL = new SendMailSSL();
-			mailSSL.sendRegistrationMail(userBean.getRegId(), userBean.getUserId(), userBean.getEmail());
+			//mailSSL.sendRegistrationMail(userBean.getRegId(), userBean.getUserId(), userBean.getEmail());
+			mailSSL.reSendRegistrationMail(userBean.getRegId(), userBean.getUserId(), userBean.getEmail());
 		}
 		return isSuccess;
 	}

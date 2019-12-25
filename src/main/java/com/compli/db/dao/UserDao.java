@@ -132,7 +132,7 @@ public class UserDao {
 	}
 
 	public boolean createUserForGoogleId(GoogleRegistrationBean bean){
-		return this.jdbcTemplate.update("INSERT  INTO user(firstname,lastname,image,googleId,userId,userTypeId,isactive) values (?,?,?,?,?,'cManager',true)",
+		return this.jdbcTemplate.update("INSERT  INTO user(firstname,lastname,image,googleId,userId,userTypeId,isactive) values (?,?,?,?,?,'demo',true)",
 				bean.getFirstname(),bean.getLastname(),bean.getImageUrl(),bean.getEmail(),bean.getUserId())>0;
 
 	}

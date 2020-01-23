@@ -98,9 +98,11 @@ public class RegistrationManager {
 
 		//Set activities for location
 		List<String> locations = new ArrayList<>();
-		locations.addAll(addCompany.getBranchLocation());
 		locations.add(addCompany.getHeadQuarterLocation());
 		boolean activities = MasterManager.startLoadingActivityForLocationForMonth(locations,addCompany.getId(),addCompany.getUserId());
+		List<String> branchLocations = new ArrayList<>();
+		branchLocations.addAll(addCompany.getBranchLocation());
+		activities = MasterManager.startLoadingActivityForBranchLocationForMonth(branchLocations,addCompany.getId(),addCompany.getUserId());
 		return true;
 	}
 

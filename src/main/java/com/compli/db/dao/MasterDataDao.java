@@ -24,4 +24,12 @@ public class MasterDataDao {
         masterData = this.namedParameterJdbcTemplate.query(sql,datamap, new BeanPropertyRowMapper<MasterDataBean>(MasterDataBean.class));
         return masterData;
     }
+
+    public List<MasterDataBean> getMasterDataForBranchLocations(List<String>locationId){
+        List<MasterDataBean> masterData = new ArrayList<>();
+        String sql = "select * from masterdata where locationId in (:locationId) and (complianceArea='Indirect tax' OR (complianceArea='Labour Law' AND (lawdescription like '%Labour Welfare Fund%' OR lawdescription like '%Professional Tax%')))";
+        Map datamap = new HashMap(){{put("locationId",locationId);}};
+        masterData = this.namedParameterJdbcTemplate.query(sql,datamap, new BeanPropertyRowMapper<MasterDataBean>(MasterDataBean.class));
+        return masterData;
+    }
 }

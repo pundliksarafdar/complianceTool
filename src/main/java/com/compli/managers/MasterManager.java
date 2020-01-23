@@ -39,6 +39,14 @@ public class MasterManager {
         return true;
     }
 
+    public static boolean startLoadingActivityForBranchLocationForMonth(List<String> location,String companyId,String userId){
+        MasterManager masterManager = new MasterManager();
+        Date currentDate = new Date();
+        List<MasterDataBean> mDataoforLoc = masterManager.masterDataDao.getMasterDataForBranchLocations(location);
+        masterManager.setActivity(mDataoforLoc,companyId, userId);
+        return true;
+    }
+
     //This method is written for demo user when it creates id and company then all data will be added
     private void setActivity(List<MasterDataBean> mDataoforLoc,String compnyid,String userId){
         DataManager dataManager = new DataManager();

@@ -1,12 +1,6 @@
 package com.compli.util;
 
-import com.compli.db.bean.MasterDataBean;
-import com.compli.db.dao.BackupDao;
-import com.compli.db.dao.MasterDataDao;
-import com.compli.managers.MasterManager;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
-
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class MasterDataUtil {
@@ -30,7 +24,9 @@ public class MasterDataUtil {
                 break;
             }
             case QUARTERLY:{
-
+                Calendar calendar = new GregorianCalendar();
+                calendar.setTime(date);
+                periodicityDate = getDateForQuarter(periodicity,dueDate,mmdd);
                 break;
             }
             case MONTHLY:{
@@ -86,8 +82,38 @@ public class MasterDataUtil {
     }
 
     //TBD
-    public String getDateForQuarter(int year,int quarter,PERIODICITY periodicity,DUE_DATE dueDate,String mmdd){
-        return null;
+    public static String getDateForQuarter(PERIODICITY periodicity, DUE_DATE dueDate, String mmdd){
+        String dateOfCompliance = "";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy/MM/dd");
+        Date date = new Date();
+        if (DUE_DATE.FIRST_DAY.equals(dueDate)){
+            //Added 1 in month as month start from 0 here
+            Date firstDay = getFirstDayOfQuarter(date);
+            dateOfCompliance = simpleDateFormat.format(firstDay);
+        }else if (DUE_DATE.LAST_DAY.equals(dueDate)){
+            //Added 1 in month as month start from 0 here
+            Date firstDay = getLastDayOfQuarter(date);
+            dateOfCompliance = simpleDateFormat.format(firstDay);
+        }else if (mmdd !=null){
+            dateOfCompliance = 0 + "/" + mmdd;
+        }
+        return dateOfCompliance;
+    }
+
+    private static Date getFirstDayOfQuarter(Date date) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        cal.set(Calendar.MONTH, cal.get(Calendar.MONTH)/3 * 3);
+        cal.set(Calendar.DAY_OF_MONTH, 1);
+        return cal.getTime();
+    }
+
+    private static Date getLastDayOfQuarter(Date date) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        cal.set(Calendar.MONTH, cal.get(Calendar.MONTH)/3 * 3 + 2);
+        cal.set(Calendar.DAY_OF_MONTH, cal.getActualMaximum(Calendar.DAY_OF_MONTH));
+        return cal.getTime();
     }
 
     public static void main(String[] args) {
@@ -95,6 +121,8 @@ public class MasterDataUtil {
         String firstDayOfMonth = getDueDateForPeriodicity(date,PERIODICITY.MONTHLY,DUE_DATE.FIRST_DAY,null);
         String lastDayOfMonth = getDueDateForPeriodicity(date,PERIODICITY.MONTHLY,DUE_DATE.LAST_DAY,null);
         String specificDayOfMonth = getDueDateForPeriodicity(date,PERIODICITY.MONTHLY,null,"01-12");
+        String lastDayOfQuarter = getDueDateForPeriodicity(date,PERIODICITY.QUARTERLY,DUE_DATE.LAST_DAY,null);
+        String firstayOfQuarter = getDueDateForPeriodicity(date,PERIODICITY.QUARTERLY,DUE_DATE.FIRST_DAY,null);
 /*
         System.out.println(firstDayOfMonth);
         System.out.println(lastDayOfMonth);

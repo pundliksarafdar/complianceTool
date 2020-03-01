@@ -676,7 +676,6 @@ private String activityQueryByMonthAndStatusFullUser =
 		namedParameter.addValue("userId",userId );
 		locationId = locationId == null ? "all":locationId;
 		namedParameter.addValue("locationId",locationId );
-		this.jdbcTemplate.execute("set session sql_mode='TRADITIONAL'");
 		List<Map<String, Object>> activities = this.namedParameterJdbcTemplate.queryForList(activityCountByLaw,namedParameter);
 		return activities;
 	}

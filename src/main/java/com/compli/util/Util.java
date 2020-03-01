@@ -96,7 +96,7 @@ public class Util {
 
 	public static String getFyStartDateForForBean(DashboardparamsBean bean){
 		if ("year".equalsIgnoreCase(bean.getView())){
-			return bean.getYear().split("-")[0]+"04-01";
+			return bean.getYear().split("-")[0]+"-04-01";
 		}else if("quarter".equalsIgnoreCase(bean.getView())){
 			return getFirstDateOfQuarter(bean.getQuarter());
 		}else if("month".equalsIgnoreCase(bean.getView())){
@@ -109,7 +109,7 @@ public class Util {
 
 	public static String getFyLastDateForForBean(DashboardparamsBean bean){
 		if ("year".equalsIgnoreCase(bean.getView())){
-			return "20"+bean.getYear().split("-")[1]+"03-31";
+			return "20"+bean.getYear().split("-")[1]+"-03-31";
 		}else if("quarter".equalsIgnoreCase(bean.getView())){
 			return getLastDateOfQuarter(bean.getQuarter());
 		}else if("month".equalsIgnoreCase(bean.getView())){

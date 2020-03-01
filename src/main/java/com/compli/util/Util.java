@@ -1,5 +1,7 @@
 package com.compli.util;
 
+import com.compli.bean.dashboard.DashboardparamsBean;
+
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -24,6 +26,13 @@ public class Util {
 		}else{
 			fyYear = month>3?fyYear:fyYear+1;
 		}		
+		return fyYear;
+	}
+
+	public static int getFinancialYearForMonth(int month,String fyYearStr){
+		fyYearStr = fyYearStr.split("-")[0];
+		int fyYear = Integer.parseInt(fyYearStr);
+		fyYear = month>3 ? fyYear : (fyYear+1);
 		return fyYear;
 	}
 	
@@ -52,6 +61,21 @@ public class Util {
 		}
 		return date;
 	}
+
+	public static String getFirstDateOfQuarter(int quarterNo){
+		int year = getFYForQuarter(quarterNo);
+		String date = null;
+		if(quarterNo==0){
+			date = year+"-04-01";
+		}else if(quarterNo==1){
+			date = year+"-07-01";
+		}else if(quarterNo==2){
+			date = year+"-10-01";
+		}else {
+			date = year+"-01-01";
+		}
+		return date;
+	}
 	
 	public static String getPeriodicityDateId(String periodicityDate){
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -68,5 +92,33 @@ public class Util {
 	public static void main(String[] args) {
 		int fyY = getFinnancialYearForMonth(4);
 		System.out.println(fyY);
+	}
+
+	public static String getFyStartDateForForBean(DashboardparamsBean bean){
+		if ("year".equalsIgnoreCase(bean.getView())){
+			return bean.getYear().split("-")[0]+"04-01";
+		}else if("quarter".equalsIgnoreCase(bean.getView())){
+			return getFirstDateOfQuarter(bean.getQuarter());
+		}else if("month".equalsIgnoreCase(bean.getView())){
+			return getFinancialYearForMonth(bean.getMonth(),bean.getYear())+"-"+bean.getMonth()+"-01";
+		}else{
+			//This is lowest possible date on tool
+			return "2014-01-01";
+		}
+	}
+
+	public static String getFyLastDateForForBean(DashboardparamsBean bean){
+		if ("year".equalsIgnoreCase(bean.getView())){
+			return "20"+bean.getYear().split("-")[1]+"03-31";
+		}else if("quarter".equalsIgnoreCase(bean.getView())){
+			return getLastDateOfQuarter(bean.getQuarter());
+		}else if("month".equalsIgnoreCase(bean.getView())){
+			Calendar cal = Calendar.getInstance();
+			cal.set(Calendar.MONTH,bean.getMonth()-1);
+			return getFinancialYearForMonth((bean.getMonth()),bean.getYear())+"-"+bean.getMonth()+"-"+cal.getActualMaximum(Calendar.DATE);
+		}else {
+			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+			return dateFormat.format(new Date());
+		}
 	}
 }

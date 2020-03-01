@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.compli.bean.dashboard.DashboardparamsBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -55,31 +56,31 @@ public class DashBoardManager {
 		this.userId =  AuthorisationManager.cache.getIfPresent(auth).getUserId();
 	}
 	
-	public HashMap<String,Object> getDashBoardData(){
-		HashMap<String, Integer> riskCountMap = getRiskCount();
+	public HashMap<String,Object> getDashBoardData(DashboardparamsBean dparam){
+		HashMap<String, Integer> riskCountMap = getRiskCount(dparam);
 		HashMap<String,Object> dashBoardData = new HashMap<String,Object>();
 		dashBoardData.put("riskCount", riskCountMap);
 		
-		Map<String, Integer> compliceOverview = getComplianceOverview();
+		Map<String, Integer> compliceOverview = getComplianceOverview(dparam);
 		dashBoardData.put("compliceOverview", compliceOverview);
 		
-		Map<Integer,Map<String, Integer>> compliceOverviewLast3Month = getComplianceOverviewLast3Month();
+		Map<Integer,Map<String, Integer>> compliceOverviewLast3Month = getComplianceOverviewLast3Month(dparam);
 		dashBoardData.put("compliceOverviewLast3Month", compliceOverviewLast3Month);
 		
-		Map<String, Map<String, Integer>> complainceOverviewByLaw = getComplainceOverviewByLaw();
+		Map<String, Map<String, Integer>> complainceOverviewByLaw = getComplainceOverviewByLaw(dparam);
 		dashBoardData.put("complainceOverviewByLaw", complainceOverviewByLaw);
 		
 		return dashBoardData;
 	}
 	
-	public HashMap<String, Integer> getRiskCount(){
+	public HashMap<String, Integer> getRiskCount(DashboardparamsBean dashboardparamsBean){
 		HashMap<String, Integer> riskCountMap = new HashMap<String, Integer>();
 		riskCountMap.put(HIGH, 0);
 		riskCountMap.put(MEDIUM, 0);
 		riskCountMap.put(LOW, 0);
 		List<Map<String, Object>> counts;
 		if(null == this.locationId){
-			counts = this.dashBoardDao.getPendingActivityCoutForNext10Days(this.companyId,this.userId,this.isFullUser);
+			counts = this.dashBoardDao.getPendingActivityCoutForNext10Days(this.companyId,this.userId,this.isFullUser,dashboardparamsBean);
 		}else{
 			counts = this.dashBoardDao.getPendingActivityCoutForNext10Days(this.companyId,this.isFullUser,this.locationId);
 		}
@@ -91,12 +92,12 @@ public class DashBoardManager {
 		return riskCountMap;
 	}
 	
-	public Map<String,Integer> getComplianceOverview(){
+	public Map<String,Integer> getComplianceOverview(DashboardparamsBean dparam){
 		ActivityManager activityManager = new ActivityManager(this.auth);
 		Map<String,Integer> complainceOverview = new HashMap<>();
 		boolean isFullUser = true;
 		if(isFullUser){
-			Map<String, Object> counts = this.dashBoardDao.getComplianceOverview(this.companyId,this.locationId,this.userId);
+            Map<String, Object> counts = this.dashBoardDao.getComplianceOverview(this.companyId, this.locationId, this.userId,dparam);
 			complainceOverview.put(PENDING_COMPLIANCE, Integer.parseInt((counts.get(PENDING_COMPLIANCE)!=null?counts.get(PENDING_COMPLIANCE):0)+""));
 			complainceOverview.put(COMPLIANCE_DELAYED, Integer.parseInt((counts.get(COMPLIANCE_DELAYED)!=null?counts.get(COMPLIANCE_DELAYED):0)+""));
 			complainceOverview.put(COMPLAINCE_INTIME, Integer.parseInt((counts.get(COMPLAINCE_INTIME)!=null?counts.get(COMPLAINCE_INTIME):0)+""));
@@ -111,7 +112,7 @@ public class DashBoardManager {
 		
 		List<Map<String, Object>> allActivity;
 		if(null == this.locationId){
-			 allActivity = activityManager.getAllActivitiesWithDescriptionForCompany(this.companyId);
+             allActivity = activityManager.getAllActivitiesWithDescriptionForCompany(this.companyId);
 		}else{
 			 allActivity = activityManager.getAllActivitiesWithDescriptionForCompany(this.companyId,this.locationId);
 		}
@@ -137,7 +138,7 @@ public class DashBoardManager {
 		}
 	}
 	
-	Map<Integer,Map<String, Integer>> getComplianceOverviewLast3Month(){
+	Map<Integer,Map<String, Integer>> getComplianceOverviewLast3Month(DashboardparamsBean dparam){
 		
 		//Month starts from 1
 		int month = Calendar.getInstance().get(Calendar.MONTH)+1; 
@@ -186,50 +187,22 @@ public class DashBoardManager {
 		return complianceOverviewForLast3Month;
 	}
 	
-	public Map<String,Map<String,Integer>> getComplainceOverviewByLaw(){
+	public Map<String,Map<String,Integer>> getComplainceOverviewByLaw(DashboardparamsBean dparam){
 		Map<String,Map<String,Integer>> complianceDetailByLaw = new HashMap<>();
 		ActivityManager activityManager = new ActivityManager(this.auth);
 		List<Map<String, Object>> allActivity;
-		if(null == this.locationId){
-			 allActivity = activityManager.getAllActivitiesWithDescriptionForCompany(this.companyId);
-		}else{
-			 allActivity = activityManager.getAllActivitiesWithDescriptionForCompany(this.companyId,this.locationId);
-		}
-		
-		for(int i=0;i<allActivity.size();i++){
-			Map<String,Object> activity = allActivity.get(i);
+		List<Map<String, Object>> overViewByLaw = dashBoardDao.getComplianceOverviewByLaw(this.userId, this.locationId, this.companyId, dparam);
+
+		for(int i=0;i<overViewByLaw.size();i++){
+			Map<String,Object> activity = overViewByLaw.get(i);
 			String lawId = (String) activity.get("lawName");
-			//lawId = getActivityType(lawId);
-			
+			String activityStatus = (String) activity.get("activityStatus");
+			Long count = (Long) activity.get("count");
 			if(!complianceDetailByLaw.containsKey(lawId)){
 				Map<String,Integer> complainceOverview = new HashMap<>();
-				complainceOverview.put(PENDING_COMPLIANCE, 0);
-				complainceOverview.put(COMPLIANCE_DELAYED, 0);
-				complainceOverview.put(COMPLAINCE_INTIME, 0);
-				complainceOverview.put(COMPLAINCE_REVEIW, 0);
-				complainceOverview.put(PENDING_DESCREPANCY, 0);
 				complianceDetailByLaw.put(lawId, complainceOverview);
 			}
-			
-			Map<String,Integer>  complainceOverview = complianceDetailByLaw.get(lawId);
-			//System.out.println(activity.get("activityId")+"::"+i);
-			if((activity.get("isComplied")!=null && "0".equals(activity.get("isComplied").toString())) &&
-					(activity.get("isComplianceApproved")!=null && "0".equals(activity.get("isComplianceApproved").toString())) 
-					&& (activity.get("isComplianceRejected")!=null && "0".equals(activity.get("isComplianceRejected").toString()))){
-				complainceOverview.put(PENDING_COMPLIANCE, complainceOverview.get(PENDING_COMPLIANCE)+1);
-			}else if(activity.get("isComplainceDelayed")!=null && "1".equals(activity.get("isComplainceDelayed").toString())){
-				complainceOverview.put(COMPLIANCE_DELAYED, complainceOverview.get(COMPLIANCE_DELAYED)+1);
-			}else if((activity.get("isComplied")!=null && "1".equals(activity.get("isComplied").toString())) &&
-					(activity.get("isComplianceApproved")!=null && "0".equals(activity.get("isComplianceApproved").toString()))
-					&& (activity.get("reOpen")==null || "0".equals(activity.get("reOpen").toString()))
-					&&  (activity.get("isProofRequired")==null || "0".equals(activity.get("isProofRequired").toString()))
-					&& (activity.get("isComplianceRejected")!=null && "0".equals(activity.get("isComplianceRejected").toString()))){
-				complainceOverview.put(COMPLAINCE_REVEIW, complainceOverview.get(COMPLAINCE_REVEIW)+1);
-			}else if(activity.get("isComplied")!=null &&  activity.get("isProofRequired")!=null && "1".equals(activity.get("isProofRequired").toString())){
-				complainceOverview.put(PENDING_DESCREPANCY, complainceOverview.get(PENDING_DESCREPANCY)+1);
-			}else if(activity.get("isComplied")!=null && activity.get("isComplainceDelayed")!=null && activity.get("isComplianceApproved")!=null && activity.get("isComplianceRejected")!=null ){
-				complainceOverview.put(COMPLAINCE_INTIME, complainceOverview.get(COMPLAINCE_INTIME)+1);
-			}
+			complianceDetailByLaw.get(lawId).put(activityStatus,count.intValue());
 		} 
 		
 		return complianceDetailByLaw;

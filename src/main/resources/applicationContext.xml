@@ -8,7 +8,8 @@ http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
   
 <bean id="ds" class="org.springframework.jdbc.datasource.DriverManagerDataSource">  
 	<property name="driverClassName" value="com.mysql.jdbc.Driver" />  
-	<property name="url" value="jdbc:mysql://jws-app-mysql:3306/compli?sql_mode=TRADITIONAL" />  
+	<property name="url" value="jdbc:mysql://jws-app-mysql:3306/compli" />  
+	<property name="sql_mode" value="TRADITIONAL" />
 	<property name="username" value="user" />  
 	<property name="password" value="password" />  
 </bean>  

@@ -534,7 +534,7 @@ public class DashBoardDao {
 			+ "activityId in(select activitymaster.activityId from activitymaster right join activity_assignment on activitymaster.activityId=activity_assignment.activityId "+
             "where userId=:userId and CAST(activitymaster.periodicityDateId AS datetime)<=CAST(:endDate AS datetime) and CAST(activitymaster.periodicityDateId AS datetime)>=CAST(:startDate AS datetime));";
 
-	private String activityCountByLaw = "select activityStatus,count(activityStatus) as count,lawmaster.lawId,lawmaster.lawname from lawmaster join (" +
+	private String activityCountByLaw = "select activityStatus,count(activityStatus) as count,lawmaster.lawname from lawmaster join (" +
 			"select activityStatus,lawId,companyId from activity join (" +
 				"select actAssociation.activityId,lawId from activitymaster join (" +
 					"select activityassociation.activityId,activityassociation.locationId from activityassociation join activity_assignment on activityassociation.activityId = activity_assignment.activityId where activity_assignment.userId=:userId" +

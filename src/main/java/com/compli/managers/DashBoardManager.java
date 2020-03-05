@@ -1,10 +1,9 @@
 package com.compli.managers;
 
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
+import com.compli.bean.dashboard.DashboardMonthlyOverview;
+import com.compli.bean.dashboard.DashboardMonthlyOverviewObject;
 import com.compli.bean.dashboard.DashboardparamsBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -64,8 +63,13 @@ public class DashBoardManager {
 		Map<String, Integer> compliceOverview = getComplianceOverview(dparam);
 		dashBoardData.put("compliceOverview", compliceOverview);
 		
+		/*New method is at line no 70
 		Map<Integer,Map<String, Integer>> compliceOverviewLast3Month = getComplianceOverviewLast3Month(dparam);
 		dashBoardData.put("compliceOverviewLast3Month", compliceOverviewLast3Month);
+		*/
+		List<Map<String, Object>> data = dashBoardDao.getActivityLast3MonthQueryPerMonth(dparam, this.locationId, this.userId, this.companyId);
+		DashboardMonthlyOverviewObject monthlyDashBoardData = getDashboardMonthlyOverview(data);
+		dashBoardData.put("monthlyDashBoardData", monthlyDashBoardData);
 		
 		Map<String, Map<String, Integer>> complainceOverviewByLaw = getComplainceOverviewByLaw(dparam);
 		dashBoardData.put("complainceOverviewByLaw", complainceOverviewByLaw);
@@ -137,9 +141,55 @@ public class DashBoardManager {
 		return complainceOverview;
 		}
 	}
+
+	public DashboardMonthlyOverviewObject getDashboardMonthlyOverview(List<Map<String, Object>> overviewList){
+		DashboardMonthlyOverviewObject object = new DashboardMonthlyOverviewObject();
+		List<Map<String,Integer>> monthlyOverviewMap = new ArrayList<>();
+		List<String>labels = new ArrayList<>();
+		for(Map<String, Object> overviewData : overviewList){
+			String dDate = overviewData.get("dDate").toString();
+			String status = overviewData.get("activityStatus").toString();
+			Long count = (Long)overviewData.get("count");
+
+			int indx = 0;
+			if ((indx = labels.indexOf(dDate)) == -1){
+				labels.add(dDate);
+				Map<String,Integer> statusMap = new HashMap<>();
+				monthlyOverviewMap.add(statusMap);
+			}
+			int indxL = labels.indexOf(dDate);
+			Map<String,Integer> statusMap = monthlyOverviewMap.get(indxL);
+			statusMap.put(status,count.intValue());
+		}
+
+		List<Integer>pendingL = new ArrayList<>();
+		List<Integer>compliedL = new ArrayList<>();
+		List<Integer>pendingReviewL = new ArrayList<>();
+
+		monthlyOverviewMap.forEach(overviewM->{
+			int pendingCompliance = overviewM.getOrDefault("pendingCompliance",0);
+			int compliedInTime = overviewM.getOrDefault("compliedInTime",0);
+			int compliedDelayed = overviewM.getOrDefault("compliedDelayed",0);
+			int pendingReview = overviewM.getOrDefault("pendingReview",0);
+
+			pendingReviewL.add(pendingReview);
+			pendingL.add(pendingCompliance);
+			compliedL.add(compliedInTime + compliedDelayed);
+		});
+		DashboardMonthlyOverview pendingReviewD = new DashboardMonthlyOverview("Pending for review",pendingReviewL);
+		DashboardMonthlyOverview pendingLD = new DashboardMonthlyOverview("Pending compliance",pendingL);
+		DashboardMonthlyOverview compliedLD = new DashboardMonthlyOverview("Complied",compliedL);
+		ArrayList<DashboardMonthlyOverview> list = new ArrayList<DashboardMonthlyOverview>() {{
+			add(pendingLD);
+			add(pendingReviewD);
+			add(compliedLD);
+		}};
+		object.setDashboardMonthlyOverviewList(list);
+		object.setMonths(labels);
+		return object;
+	}
 	
-	Map<Integer,Map<String, Integer>> getComplianceOverviewLast3Month(DashboardparamsBean dparam){
-		
+	/*Map<Integer,Map<String, Integer>> getComplianceOverviewLast3Month(DashboardparamsBean dparam){
 		//Month starts from 1
 		int month = Calendar.getInstance().get(Calendar.MONTH)+1; 
 		Map<Integer,Map<String, Integer>> complianceOverviewForLast3Month = new HashMap<>();
@@ -185,7 +235,7 @@ public class DashBoardManager {
 			}
 		}
 		return complianceOverviewForLast3Month;
-	}
+	}*/
 	
 	public Map<String,Map<String,Integer>> getComplainceOverviewByLaw(DashboardparamsBean dparam){
 		Map<String,Map<String,Integer>> complianceDetailByLaw = new HashMap<>();

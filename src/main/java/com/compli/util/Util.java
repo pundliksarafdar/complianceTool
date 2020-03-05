@@ -3,10 +3,7 @@ package com.compli.util;
 import com.compli.bean.dashboard.DashboardparamsBean;
 
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 public class Util {
 	public static String formLocationId(String location){
@@ -105,6 +102,38 @@ public class Util {
 			//This is lowest possible date on tool
 			return "2014-01-01";
 		}
+	}
+
+	public static String getFyStartDateForDashboardOverviewBean(DashboardparamsBean bean){
+		if ("year".equalsIgnoreCase(bean.getView())){
+			return bean.getYear().split("-")[0]+"-04-01";
+		}else if("quarter".equalsIgnoreCase(bean.getView())){
+			return getFirstDateOfQuarter(bean.getQuarter());
+		}else if("month".equalsIgnoreCase(bean.getView())){
+			int fyYearForMonth = getFinancialYearForMonth(bean.getMonth(),bean.getYear());
+			String dateStr = get3MonthOldDate(fyYearForMonth+"",bean.getMonth()+"");
+			return dateStr;
+		}else{
+			// 3 month old date
+			Calendar instance = Calendar.getInstance(TimeZone.getTimeZone("IST"));
+			// instance.get(Calendar.MONTH) month start at 0 hence adding 1
+			String dateStr = get3MonthOldDate(instance.get(Calendar.YEAR)+"",(instance.get(Calendar.MONTH)+1)+"");
+			return dateStr;
+		}
+	}
+
+	public static String get3MonthOldDate(String year,String month){
+		Date referenceDate = new Date();
+		Calendar c = Calendar.getInstance();
+		int yearInt = Integer.parseInt(year.split("-")[0]);
+		int monthInt = Integer.parseInt(month);
+		c.set(Calendar.YEAR,yearInt);
+		c.set(Calendar.MONTH,monthInt);
+		c.set(Calendar.DAY_OF_MONTH,1);
+		c.add(Calendar.MONTH, -3);
+		Date endDate = c.getTime();
+		SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
+		return sf.format(endDate);
 	}
 
 	public static String getFyLastDateForForBean(DashboardparamsBean bean){

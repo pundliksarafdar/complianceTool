@@ -190,7 +190,13 @@ public class DashBoardDao {
 	"on periodicitydatemaster.periodicityDateId = companyWithPeriodicity.periodicityDateId WHERE DATE_FORMAT(periodicitydatemaster.duedate,'%Y%m') >= DATE_FORMAT(DATE_ADD(NOW(), INTERVAL -2 MONTH),'%Y%m') and DATE_FORMAT(periodicitydatemaster.duedate,'%Y%m') <= DATE_FORMAT(DATE_ADD(NOW(), INTERVAL 0 MONTH),'%Y%m')) companyWithPerDate  "+
 		"on companyWithPerDate.companyId = activity.companyId and companyWithPerDate.activityId = activity.activityId and activity.isComplianceRejected=false)allActivities " +
 	"on allActivities.activityId=activity_assignment.activityId where userId=:userId";
-	
+
+	private String monthlyActivityStatus = "select DATE_FORMAT(activityNLocation.periodicityDateId,\"%b %Y\")as dDate,activityStatus,count(activityStatus) as count  from activity join (" +
+			" select actAssociation.activityId,lawId,periodicityDateId from activitymaster join (" +
+			" select activityassociation.activityId,activityassociation.locationId from activityassociation join activity_assignment on activityassociation.activityId = activity_assignment.activityId where activity_assignment.userId=:userId" +
+			" )actAssociation on actAssociation.activityId = activitymaster.activityId where (actAssociation.locationId=:locationId or 'all' = :locationId) and cast(periodicityDateId as date)<=:endDate and cast(periodicityDateId as date)>=:startDate" +
+			" )activityNLocation on activityNLocation.activityId=activity.activityId where (companyId=:companyId or 'all'=:companyId) and (activityStatus='pendingCompliance' or activityStatus='pendingReview' or activityStatus='compliedInTime'  or activityStatus='compliedDelayed' ) group by DATE_FORMAT(activityNLocation.periodicityDateId,\"%M %Y\"),activityStatus order by activityNLocation.periodicityDateId";
+
 	private String activityLast3MonthQueryWithLocation = "select companyWithPerDate.companyId,abbriviation,lawId,lawDesc,lawName,locationId,locationName,companyWithPerDate.activityId,activityName,riskId,riskDes,periodicityId,periodicityDesc,periodicityDateId,consequence,duedate,month(dueDate) as dueMonth,ifnull(isComplied,false)as isComplied ,ifnull(isComplianceApproved,false) as isComplianceApproved,ifnull(isComplianceRejected,false) as isComplianceRejected,ifnull(isComplainceDelayed,false) as isComplainceDelayed,ifnull(isProofRequired,false) as isProofRequired,ifnull(reOpen,false) as reOpen,arTechRemark,assignedUser,remark,completionDate from activity right join "+
 			"(select companyId,abbriviation,lawId,lawDesc,lawName,locationId,locationName,activityId,activityName,riskId,riskDes,periodicityId,periodicityDesc,periodicitydatemaster.periodicityDateId,consequence,periodicitydatemaster.duedate from periodicitydatemaster inner join "+
 		"(select companyId,abbriviation,lawId,lawDesc,lawName,locationId,locationName,activityId,activityName,riskId,riskDes,periodicitymaster.periodicityId,periodicitymaster.description as periodicityDesc,periodicityDateId,consequence from periodicitymaster inner join "+
@@ -676,6 +682,7 @@ private String activityQueryByMonthAndStatusFullUser =
 		namedParameter.addValue("userId",userId );
 		locationId = locationId == null ? "all":locationId;
 		namedParameter.addValue("locationId",locationId );
+		this.jdbcTemplate.execute("set session sql_mode='TRADITIONAL'");
 		List<Map<String, Object>> activities = this.namedParameterJdbcTemplate.queryForList(activityCountByLaw,namedParameter);
 		return activities;
 	}
@@ -925,9 +932,27 @@ private String activityQueryByMonthAndStatusFullUser =
 		this.jdbcTemplate.update(changeActivityRejectedForDescripancyStatusQueryArtec,Constants.COM_REJE,companyId,activityId);
 		return true;
 	}
-	
+
+	public List<Map<String, Object>> getActivityLast3MonthQueryPerMonth(DashboardparamsBean dParam, String locationId, String userId, String companyId){
+		String startDate = Util.getFyStartDateForDashboardOverviewBean(dParam);
+		String endDate = Util.getFyLastDateForForBean(dParam);
+		HashMap< String, String>namedParameter = new HashMap<String, String>();
+		namedParameter.put("startDate",startDate);
+		namedParameter.put("endDate",endDate);
+		locationId = (null == locationId)?"all":locationId;
+		namedParameter.put("locationId",locationId);
+		namedParameter.put("userId",userId);
+		if (companyId == null || companyId.contains(",")){
+			companyId = "all";
+		}
+		namedParameter.put("companyId",companyId);
+		List<Map<String, Object>> activityStataus = this.namedParameterJdbcTemplate.queryForList(monthlyActivityStatus,namedParameter);
+		return activityStataus;
+	}
+
+
 	public List<Map<String, Object>> getAllActivitiesWithDescriptionForCompanyLast3Months(String companyId,
-			int month,String userId,boolean isFullUser,String locationId) {
+																						  int month, String userId, boolean isFullUser, String locationId) {
 		companyId = "('"+companyId.replace(",", "','")+"')";
 		if(isFullUser){
 			HashMap< String, String>namedParameter = new HashMap<String, String>();

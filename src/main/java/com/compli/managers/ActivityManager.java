@@ -249,12 +249,12 @@ public class ActivityManager {
 		return allActivity;
 	}
 	//This function is for repository with tracker
-	public List<Map<String, Object>> getAllActivitiesWithDescriptionForCompanyForQuarter(String companyId,String month){
+	public List<Map<String, Object>> getAllActivitiesWithDescriptionForCompanyForQuarter(String companyId,String yearStr,String month){
 		List<Map<String, Object>> allActivity = null;
 		if(this.locationId==null){
-			allActivity = this.dashBoardDao.getAllActivitiesWithDescriptionForCompanyByQuarterWithRejected(companyId,month,true,"all",this.userId);
+			allActivity = this.dashBoardDao.getAllActivitiesWithDescriptionForCompanyByQuarterWithRejected(companyId,yearStr,month,true,"all",this.userId);
 		}else{
-			allActivity = this.dashBoardDao.getAllActivitiesWithDescriptionForCompanyByQuarterWithRejected(companyId,month,true,this.locationId,this.userId);
+			allActivity = this.dashBoardDao.getAllActivitiesWithDescriptionForCompanyByQuarterWithRejected(companyId,yearStr, month,true,this.locationId,this.userId);
 		}
 		return allActivity;
 	}
@@ -291,13 +291,14 @@ public class ActivityManager {
 		}
 		return filteredActivity;
 	}
-	
-	public List<Map<String, Object>> getAllActivitiesWithDescriptionForCompanyWithSeverityForQuarter(String companyId,String severity,String quarter){
+
+	//Year should be finnancial year e.g. 2019-20
+	public List<Map<String, Object>> getAllActivitiesWithDescriptionForCompanyWithSeverityForQuarter(String companyId, String yearStr, String severity,String quarter){
 		List<Map<String, Object>> allActivity = null;
 		if(this.locationId==null){
-			allActivity = this.dashBoardDao.getAllActivitiesWithDescriptionForCompanyByQuarter(companyId,true,quarter,"all",this.userId);
+			allActivity = this.dashBoardDao.getAllActivitiesWithDescriptionForCompanyByQuarter(companyId,yearStr,true,quarter,"all",this.userId);
 		}else{
-			allActivity = this.dashBoardDao.getAllActivitiesWithDescriptionForCompanyByQuarter(companyId,true,quarter,this.locationId,this.userId);
+			allActivity = this.dashBoardDao.getAllActivitiesWithDescriptionForCompanyByQuarter(companyId,yearStr,true,quarter,this.locationId,this.userId);
 		}
 		List<Map<String, Object>> filteredActivity = new ArrayList<Map<String,Object>>();
 		for(int i=0;i<allActivity.size();i++){

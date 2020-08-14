@@ -59,13 +59,14 @@ public class RepositoryManager {
 		this.userId = AuthorisationManager.cache.getIfPresent(auth).getUserId();
 	}
 
+	//Year should be finnancial year e.g. 2019-20
 	public List<Map<String, Object>> getAllActivitiesWithDescriptionForCompanyByQuarter(
-			String companyId, boolean isFullUser,String quarter,List<String> activityStatus) {
+			String companyId, boolean isFullUser, String yearStr, String quarter,List<String> activityStatus) {
 		List<Map<String, Object>> allActivity = null;
 		if (this.locationId == null) {
-			allActivity = this.repositoryDao.getAllActivitiesWithDescriptionForCompanyByQuarter(companyId, isFullUser, quarter, "all", this.userId, activityStatus);
+			allActivity = this.repositoryDao.getAllActivitiesWithDescriptionForCompanyByQuarter(companyId,yearStr, isFullUser, quarter, "all", this.userId, activityStatus);
 		} else {
-			allActivity = this.repositoryDao.getAllActivitiesWithDescriptionForCompanyByQuarter(companyId, isFullUser, quarter, this.locationId, this.userId, activityStatus);
+			allActivity = this.repositoryDao.getAllActivitiesWithDescriptionForCompanyByQuarter(companyId,yearStr, isFullUser, quarter, this.locationId, this.userId, activityStatus);
 		}
 
 		return allActivity;

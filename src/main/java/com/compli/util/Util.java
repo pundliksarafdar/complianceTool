@@ -33,19 +33,18 @@ public class Util {
 		return fyYear;
 	}
 	
-	public static int getFYForQuarter(int quarterInt){
+	public static int getFYForQuarter(int quarterInt, String yearStr){
 		//For quarted 3(STARTS WITH 0 AND JAN TO MARCH IS LAST QUARTER) fy is for month jan other for may
-		int year ;
+		String yearStart = yearStr.split("-")[0];
+		int year = Integer.parseInt(yearStart);
 		if(quarterInt == 3){
-			year = Util.getFinnancialYearForMonth(1);
-		}else{
-			year = Util.getFinnancialYearForMonth(4);
+			year++;
 		}
 		return year;
 	}
 	
-	public static String getLastDateOfQuarter(int quarterNo){
-		int year = getFYForQuarter(quarterNo);
+	public static String getLastDateOfQuarter(int quarterNo, String yearStr){
+		int year = getFYForQuarter(quarterNo, yearStr);
 		String date = null;
 		if(quarterNo==0){
 			date = year+"-6-30";
@@ -59,8 +58,8 @@ public class Util {
 		return date;
 	}
 
-	public static String getFirstDateOfQuarter(int quarterNo){
-		int year = getFYForQuarter(quarterNo);
+	public static String getFirstDateOfQuarter(int quarterNo, String yearStr){
+		int year = getFYForQuarter(quarterNo,yearStr);
 		String date = null;
 		if(quarterNo==0){
 			date = year+"-04-01";
@@ -95,7 +94,7 @@ public class Util {
 		if ("year".equalsIgnoreCase(bean.getView())){
 			return bean.getYear().split("-")[0]+"-04-01";
 		}else if("quarter".equalsIgnoreCase(bean.getView())){
-			return getFirstDateOfQuarter(bean.getQuarter());
+			return getFirstDateOfQuarter(bean.getQuarter(),bean.getYear());
 		}else if("month".equalsIgnoreCase(bean.getView())){
 			return getFinancialYearForMonth(bean.getMonth(),bean.getYear())+"-"+bean.getMonth()+"-01";
 		}else{
@@ -108,7 +107,7 @@ public class Util {
 		if ("year".equalsIgnoreCase(bean.getView())){
 			return bean.getYear().split("-")[0]+"-04-01";
 		}else if("quarter".equalsIgnoreCase(bean.getView())){
-			return getFirstDateOfQuarter(bean.getQuarter());
+			return getFirstDateOfQuarter(bean.getQuarter(), bean.getYear());
 		}else if("month".equalsIgnoreCase(bean.getView())){
 			int fyYearForMonth = getFinancialYearForMonth(bean.getMonth(),bean.getYear());
 			String dateStr = get3MonthOldDate(fyYearForMonth+"",bean.getMonth()+"");
@@ -140,7 +139,7 @@ public class Util {
 		if ("year".equalsIgnoreCase(bean.getView())){
 			return "20"+bean.getYear().split("-")[1]+"-03-31";
 		}else if("quarter".equalsIgnoreCase(bean.getView())){
-			return getLastDateOfQuarter(bean.getQuarter());
+			return getLastDateOfQuarter(bean.getQuarter(), bean.getYear());
 		}else if("month".equalsIgnoreCase(bean.getView())){
 			Calendar cal = Calendar.getInstance();
 			cal.set(Calendar.MONTH,bean.getMonth()-1);

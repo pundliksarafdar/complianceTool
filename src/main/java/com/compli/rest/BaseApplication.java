@@ -25,6 +25,7 @@ public class BaseApplication extends Application{
         singletons.add(new CompaniesRestApi());
         singletons.add(new StatsRestApi());
         singletons.add(new RepositioryRestApi());
+        singletons.add(new NotificationRestApi());
         RunSchedular.startSchedular();
     }
     @Override

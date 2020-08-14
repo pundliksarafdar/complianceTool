@@ -73,7 +73,7 @@ public class DashBoardManager {
 		
 		Map<String, Map<String, Integer>> complainceOverviewByLaw = getComplainceOverviewByLaw(dparam);
 		dashBoardData.put("complainceOverviewByLaw", complainceOverviewByLaw);
-		
+
 		return dashBoardData;
 	}
 	
@@ -157,9 +157,12 @@ public class DashBoardManager {
 				Map<String,Integer> statusMap = new HashMap<>();
 				monthlyOverviewMap.add(statusMap);
 			}
+			//DDate variable is like Jan 16 , Feb 16 it can get repeat for same status so need to get count if already present and sum it with new count
 			int indxL = labels.indexOf(dDate);
 			Map<String,Integer> statusMap = monthlyOverviewMap.get(indxL);
-			statusMap.put(status,count.intValue());
+            //DDate variable is like Jan 16 , Feb 16 it can get repeat for same status so need to get count if already present and sum it with new count
+			int statusCount = statusMap.getOrDefault(status,0);
+			statusMap.put(status, statusCount + count.intValue());
 		}
 
 		List<Integer>pendingL = new ArrayList<>();

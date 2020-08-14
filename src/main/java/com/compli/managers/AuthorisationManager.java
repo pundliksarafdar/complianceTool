@@ -10,6 +10,7 @@ import java.util.concurrent.TimeUnit;
 
 import javax.management.RuntimeErrorException;
 
+import com.compli.bean.notification.Notification;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -37,10 +38,17 @@ public class AuthorisationManager {
 		com.compli.db.bean.UserBean userBean2 = authorisationManager.loginData(userBean.getUsername(), userBean.getPassword());
 		String authId = null;
 		if(userBean2!=null){
+			NotificationManager notificationManager = new NotificationManager();
+			int unreadCount = notificationManager.getCountOfUnreadMessageForUser(userBean2.getUserId());
 			authId = UUID.randomUUID().toString();
+			userBean2.setUnreadMessage(unreadCount);
 			cache.put(authId, userBean2);
 		}
 		return authId;
+	}
+
+	public static void setUserBean(String auth,com.compli.db.bean.UserBean userBean){
+		cache.put(auth,userBean);
 	}
 	
 	public static boolean isUserActive(String authId) throws ExecutionException{

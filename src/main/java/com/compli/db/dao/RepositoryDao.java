@@ -137,13 +137,13 @@ public class RepositoryDao {
 
 
 	public List<Map<String, Object>> getAllActivitiesWithDescriptionForCompanyByQuarter(
-			String companyId, boolean isFullUser,String quarter,String location,String userId,List<String> activityStatus) {
+			String companyId, String yearStr, boolean isFullUser,String quarter,String location,String userId,List<String> activityStatus) {
 		companyId = "('"+companyId.replace(",", "','")+"')";
 		int year = Calendar.getInstance().get(Calendar.YEAR);
 		//Indian quarter start at April so adding 1
 		int quarterInt = Integer.parseInt(quarter);
-		year = Util.getFYForQuarter(quarterInt);
-		String lastdayOfQuarter = Util.getLastDateOfQuarter(quarterInt);
+		year = Util.getFYForQuarter(quarterInt, yearStr);
+		String lastdayOfQuarter = Util.getLastDateOfQuarter(quarterInt, yearStr);
 		//UI quarter starts with 0 so adding 1 in quarter
 		quarterInt++;
 		if(quarterInt == 4){

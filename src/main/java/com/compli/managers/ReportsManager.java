@@ -66,25 +66,26 @@ public class ReportsManager {
 		this.companyDao = (CompanyDao)ctx.getBean("companyDao");
 	}
 	
-	public HashMap<String,Object> getReportsObject(String companyId,String month){
+	public HashMap<String,Object> getReportsObject(String companyId,String month, String year){
 		 HashMap<String,Object> reportsMap = new HashMap<>();
 		 List<Map<String, Object>> activities = null;
 		 String locationH = (this.location==null)?"all":this.location;		 
-		 activities = getAllActivitiesWithDescriptionForCompanyByMonth(companyId, month,locationH,this.userId);
+		 activities = getAllActivitiesWithDescriptionForCompanyByMonth(companyId, month, year, locationH,this.userId);
 		 Map<String, Map<String, Integer>> riskCount = getComplainceOverviewByRisk(activities);
 		 
 		 reportsMap.put("activities", activities);
 		 reportsMap.put("riskCount", riskCount);
 		 return reportsMap;
 	}
-	
-	public HashMap<String,Object> getReportsObjectByQuarter(String companyId,String quarter){
+
+	//Year should be finnancial year 2019-20
+	public HashMap<String,Object> getReportsObjectByQuarter(String companyId,String yearStr, String quarter){
 		 HashMap<String,Object> reportsMap = new HashMap<>();
 		 List<Map<String, Object>> activities = null;
 		 if(this.location==null){	
-		 	activities = getAllActivitiesWithDescriptionForCompanyByQuarter(companyId, quarter,"all",this.userId);
+		 	activities = getAllActivitiesWithDescriptionForCompanyByQuarter(companyId, yearStr, quarter,"all",this.userId);
 		 }else{
-			 activities = getAllActivitiesWithDescriptionForCompanyByQuarter(companyId, quarter,this.location,this.userId);
+			 activities = getAllActivitiesWithDescriptionForCompanyByQuarter(companyId, yearStr, quarter,this.location,this.userId);
 		 }
 		 Map<String, Map<String, Integer>> riskCount = getComplainceOverviewByRisk(activities);
 		 
@@ -114,16 +115,16 @@ public class ReportsManager {
 		return this.dashBoardDao.getAllActivitiesWithDescriptionForCompanyByMonthAndYear(companyId,month,null,userId,this.isFullUser,userId);
 	}
 	
-	public List<Map<String, Object>> getAllActivitiesWithDescriptionForCompanyByMonth(String companyId,String month,String location,String userId){
-		return this.dashBoardDao.getAllActivitiesWithDescriptionForCompanyByMonth(companyId,month,this.isFullUser,location,userId);
+	public List<Map<String, Object>> getAllActivitiesWithDescriptionForCompanyByMonth(String companyId,String month,String year, String location,String userId){
+		return this.dashBoardDao.getAllActivitiesWithDescriptionForCompanyByMonth(companyId,month,year,this.isFullUser,location,userId);
 	}
 	
 	/*public List<Map<String, Object>> getAllActivitiesWithDescriptionForCompanyByQuarter(String companyId,String quarter,String userId){
 		return this.dashBoardDao.getAllActivitiesWithDescriptionForCompanyByQuarter(companyId,this.isFullUser,quarter,userId);
 	}
 	*/
-	public List<Map<String, Object>> getAllActivitiesWithDescriptionForCompanyByQuarter(String companyId,String quarter,String location,String userId){
-		return this.dashBoardDao.getAllActivitiesWithDescriptionForCompanyByQuarter(companyId,this.isFullUser,quarter,location,userId);
+	public List<Map<String, Object>> getAllActivitiesWithDescriptionForCompanyByQuarter(String companyId,String yearStr, String quarter,String location,String userId){
+		return this.dashBoardDao.getAllActivitiesWithDescriptionForCompanyByQuarter(companyId,yearStr,this.isFullUser,quarter,location,userId);
 	}
 	
 	/*public List<Map<String, Object>> getAllActivitiesWithDescriptionForCompanyByYear(String companyId,String year){
@@ -381,9 +382,11 @@ public class ReportsManager {
 		
 		return dataMap;
 	}
-	
+
+	//This method will not be useful anymore as pdf generation is moved to UI
+	@Deprecated
 	public Map<String, Object> generateReport(String companyId,String month) throws FileNotFoundException{
-		HashMap<String, Object> d = this.getReportsObject(companyId, month);
+		HashMap<String, Object> d = this.getReportsObject(companyId, month, "year");
 		
 		List<Map<String, Object>> data = (List<Map<String, Object>>) d.get("activities");
 		HashMap<String, List> formattedDataMap = format(data);
@@ -392,9 +395,10 @@ public class ReportsManager {
 				);	
 		return fileObject;
 	}
-	
-	public Map<String, Object> generateReportForQuarter(String companyId,String quarter) throws FileNotFoundException{
-		HashMap<String, Object> d = this.getReportsObjectByQuarter(companyId, quarter);
+
+	//Year should be finnancial year 2019-20
+	public Map<String, Object> generateReportForQuarter(String companyId,String yearStr, String quarter) throws FileNotFoundException{
+		HashMap<String, Object> d = this.getReportsObjectByQuarter(companyId,yearStr, quarter);
 		
 		List<Map<String, Object>> data = (List<Map<String, Object>>) d.get("activities");
 		HashMap<String, List> formattedDataMap = format(data);
@@ -416,7 +420,7 @@ public class ReportsManager {
 	}
 	
 	public static void main(String[] args) throws FileNotFoundException {
-		ReportsManager manager = new ReportsManager();
+		/*ReportsManager manager = new ReportsManager();
 		manager.userId = "akshay";
 		HashMap<String, Object> d = manager.getReportsObject("c42e21c7c70e439e", "1");
 		
@@ -424,7 +428,7 @@ public class ReportsManager {
 		HashMap<String, List> formattedDataMap = format(data);
 		manager.generateReportNew(formattedDataMap.get("compliedInTime"),formattedDataMap.get("compliedDelayed"),
 				formattedDataMap.get("compliedOpen"),formattedDataMap.get("graphBeans"),formattedDataMap.get("chartBeans"),
-				"c42e21c7c70e439e","1",null,null);		
+				"c42e21c7c70e439e","1",null,null);*/
 	}
 }
 

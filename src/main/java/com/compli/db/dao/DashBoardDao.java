@@ -837,13 +837,13 @@ private String activityQueryByMonthAndStatusFullUser =
 	}
 */	
 	//This function is only for repository
-		public List<Map<String, Object>> getAllActivitiesWithDescriptionForCompanyByQuarterWithRejected(String companyId, String quarter,boolean isFullUser,String location,String userId) {
+		public List<Map<String, Object>> getAllActivitiesWithDescriptionForCompanyByQuarterWithRejected(String companyId, String yearStr, String quarter,boolean isFullUser,String location,String userId) {
 			//companyId = "('"+companyId.replace(",", "','")+"')";
 			int year = Calendar.getInstance().get(Calendar.YEAR);
 			//Indian quarter start at April so adding 1 
 			int quarterInt = Integer.parseInt(quarter);
-			year = Util.getFYForQuarter(quarterInt);
-			String lastdayOfQuarter = Util.getLastDateOfQuarter(quarterInt);
+			year = Util.getFYForQuarter(quarterInt, yearStr);
+			String lastdayOfQuarter = Util.getLastDateOfQuarter(quarterInt, yearStr);
 			//UI quarter starts with 0 so adding 1 in quarter
 			quarterInt++;
 			if(quarterInt == 4){
@@ -861,20 +861,20 @@ private String activityQueryByMonthAndStatusFullUser =
 			namedMap.put("dueYear", year);
 			namedMap.put("quarterLastDay", lastdayOfQuarter);
 			this.activityForQuarterQueryFullUser = this.activityForQuarterQueryFullUser.replace("and activity.isComplianceRejected=false", "");
-			List<Map<String, Object>> activities = getAllActivitiesWithDescriptionForCompanyByQuarter(companyId, isFullUser, quarter,location,userId);
+			List<Map<String, Object>> activities = getAllActivitiesWithDescriptionForCompanyByQuarter(companyId, yearStr, isFullUser, quarter,location,userId);
 			return activities;
 		}
 	
 		//Need to fix
-	public List<Map<String, Object>> getAllActivitiesWithDescriptionForCompanyByMonth(String companyId, String month,boolean isFullUser,String location,String userId) {
+	public List<Map<String, Object>> getAllActivitiesWithDescriptionForCompanyByMonth(String companyId, String month, String year,boolean isFullUser,String location,String userId) {
 		companyId = "('"+companyId.replace(",", "','")+"')";
 		int mon = Integer.parseInt(month);
 		if(isFullUser){
-			String dateFormatted = Util.getFinnancialYearForMonth(mon)+"-"+month+"-01";
+			String dateFormatted = Util.getFinancialYearForMonth(mon,year)+"-"+month+"-01";
 			Map namedMap = new HashMap();
 			namedMap.put("userId", userId);
 			namedMap.put("dueMonth", month);
-			namedMap.put("dueYear", Util.getFinnancialYearForMonth(mon));
+			namedMap.put("dueYear", Util.getFinancialYearForMonth(mon,year));
 			namedMap.put("dueDate", dateFormatted);
 			namedMap.put("locationId", location);
 			
@@ -1146,13 +1146,13 @@ private String activityQueryByMonthAndStatusFullUser =
 	}
 	
 	public List<Map<String, Object>> getAllActivitiesWithDescriptionForCompanyByQuarter(
-			String companyId, boolean isFullUser,String quarter,String location,String userId) {
+			String companyId, String yearStr, boolean isFullUser,String quarter,String location,String userId) {
 		companyId = "('"+companyId.replace(",", "','")+"')";
 		int year = Calendar.getInstance().get(Calendar.YEAR);
 		//Indian quarter start at April so adding 1 
 		int quarterInt = Integer.parseInt(quarter);
-		year = Util.getFYForQuarter(quarterInt);
-		String lastdayOfQuarter = Util.getLastDateOfQuarter(quarterInt);
+		year = Util.getFYForQuarter(quarterInt,yearStr);
+		String lastdayOfQuarter = Util.getLastDateOfQuarter(quarterInt,yearStr);
 		//UI quarter starts with 0 so adding 1 in quarter
 		quarterInt++;
 		if(quarterInt == 4){

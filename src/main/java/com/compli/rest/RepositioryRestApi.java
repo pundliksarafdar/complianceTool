@@ -48,9 +48,9 @@ public class RepositioryRestApi {
 		List<Map<String, Object>> activities = null;
 		if(month != null){
 			activities = activityManager.getAllActivitiesWithDescriptionForCompanyWithSeverityForMonthAndYear(companyId, activityStatus, month, fyYear+"");
-		}else if(quarter != null){
-			activities = activityManager.getAllActivitiesWithDescriptionForCompanyByQuarter(companyId,true,quarter,activityStatus);
-		}else if(year != null){
+		}else if(quarter != null && year != null ){
+			activities = activityManager.getAllActivitiesWithDescriptionForCompanyByQuarter(companyId,true,year, quarter,activityStatus);
+		}else if(year != null ){
 			year = year.split("-")[0];
 			activities = activityManager.getAllActivitiesWithDescriptionForCompanyForYear(companyId,year,activityStatus);
 		}

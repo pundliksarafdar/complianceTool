@@ -27,7 +27,16 @@ public class UserBean {
 	boolean isFullUser;
 	String image;
 	String googleId;
-	
+	int unreadMessage;
+
+	public int getUnreadMessage() {
+		return unreadMessage;
+	}
+
+	public void setUnreadMessage(int unreadMessage) {
+		this.unreadMessage = unreadMessage;
+	}
+
 	public String getImage() {
 		return image;
 	}

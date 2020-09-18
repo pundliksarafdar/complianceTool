@@ -2,6 +2,8 @@ package com.compli.rest;
 
 import com.compli.annotation.Authorised;
 import com.compli.bean.notification.Notification;
+import com.compli.bean.notification.NotificationByLaw;
+import com.compli.bean.notification.NotificationData;
 import com.compli.db.bean.Limit;
 import com.compli.db.bean.UserBean;
 import com.compli.managers.AuthorisationManager;
@@ -17,6 +19,14 @@ import java.util.concurrent.ExecutionException;
 @Path("/notification")
 @Produces(MediaType.APPLICATION_JSON)
 public class NotificationRestApi extends Application {
+    @GET
+    @Authorised(role= Authorised.ROLE.ALL)
+    public Response getNotification(){
+        NotificationManager manager = new NotificationManager();
+        List<NotificationData> notificaionts = manager.getNotificationorForAdmin();
+        return Response.ok(notificaionts).build();
+    }
+
     @POST
     @Authorised(role= Authorised.ROLE.ALL)
     public Response saveNotification(Notification notification) {
@@ -25,9 +35,21 @@ public class NotificationRestApi extends Application {
         return Response.ok().build();
     }
 
+    @POST
+    @Authorised(role= Authorised.ROLE.ALL)
+    @Path("/saveByLaw")
+    public Response saveNotificationByLawId(NotificationByLaw notificationByLaw) {
+        NotificationManager manager = new NotificationManager();
+        manager.saveNotification(notificationByLaw);
+        return Response.ok().build();
+    }
+
     @DELETE
     @Authorised(role= Authorised.ROLE.ALL)
-    public Response deleteNotification(int notificationId) {
+    @Path("/{notificationId}")
+    public Response deleteNotification(@PathParam("notificationId") int notificationId) {
+        NotificationManager manager = new NotificationManager();
+        manager.deleteNotification(notificationId);
         return Response.ok().build();
     }
 

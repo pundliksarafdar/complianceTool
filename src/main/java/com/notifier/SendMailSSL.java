@@ -1,6 +1,7 @@
 package com.notifier;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Properties;
 
 import javax.mail.Message;
@@ -38,7 +39,8 @@ public class SendMailSSL {
 	}
 	
 	public SendMailSSL() {}
-	
+
+	@Deprecated
 	public static void sendEmail(String to,String subject,String content){
 		try {
 			message.setRecipients(Message.RecipientType.TO,
@@ -57,6 +59,19 @@ public class SendMailSSL {
 				}
 			}).start();
 
+		} catch (MessagingException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public static void sendEmail(String to,String subject,String content,boolean dummy){
+		try {
+			message.setRecipients(Message.RecipientType.TO,
+					InternetAddress.parse(to));
+			message.setSubject(subject);
+
+			message.setContent(content, "text/html; charset=utf-8");
+			Transport.send(message);
 		} catch (MessagingException e) {
 			e.printStackTrace();
 		}
@@ -127,5 +142,6 @@ public class SendMailSSL {
 			e.printStackTrace();
 		}
 	}
+
 
 }

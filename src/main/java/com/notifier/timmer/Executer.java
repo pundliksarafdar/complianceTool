@@ -8,9 +8,9 @@ public class Executer extends TimerTask{
 
 	@Override
 	public void run() {
-		/*AlertsManager manager = new AlertsManager();
+		AlertsManager manager = new AlertsManager();
 		manager.SendAlerts();
-		manager.sendCalendarEvents();*/
+		manager.sendCalendarEvents();
 	}
 	
 }

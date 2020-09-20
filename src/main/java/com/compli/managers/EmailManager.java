@@ -6,6 +6,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadPoolExecutor;
 
 import com.compli.bean.notification.EmailBean;
+import com.compli.bean.notification.EmailLogBean;
 import com.compli.db.bean.migration.v2.ActivityBean;
 import com.notifier.Mail;
 import com.notifier.SendMailSSL;
@@ -17,6 +18,9 @@ public class EmailManager {
 	public static void sendEmail(String to,String subject,String emailTemplate,Object mailContent){
 		String mailToSend = Mail.formMailContent(emailTemplate, mailContent);
 		SendMailSSL.sendEmail(to,subject,mailToSend);
+		NotificationManager notificationManager = new NotificationManager();
+		EmailLogBean emailLog = new EmailLogBean(to,subject, mailToSend);
+		notificationManager.logEmail(emailLog);
 	}
 	
 	//Send main to user and manager

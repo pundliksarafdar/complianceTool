@@ -114,6 +114,12 @@ public class NotificationManager {
 	}
 
 
+	public void logEmail(EmailLogBean emailLogBean){
+		List<EmailLogBean> emailLogBeans = new ArrayList<>();
+		emailLogBeans.add(emailLogBean);
+		this.notificationDao.logEmail(emailLogBeans);
+	}
+
 	public boolean assigneNotificationForUserOfLocation(List<String>location,int year, int notificationId){
 		return this.notificationDao.assigneNotificationForUserOfLocation(location,year,notificationId);
 	}

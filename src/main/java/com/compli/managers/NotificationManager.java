@@ -1,18 +1,22 @@
 package com.compli.managers;
 
 import com.compli.bean.SettingsBean;
-import com.compli.bean.notification.EmailBean;
-import com.compli.bean.notification.Notification;
-import com.compli.bean.notification.NotificationByLaw;
-import com.compli.bean.notification.NotificationData;
+import com.compli.bean.notification.*;
+import com.compli.db.bean.UserBean;
 import com.compli.db.dao.NotificationDao;
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.util.*;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
 
 public class NotificationManager {
+
 	NotificationDao notificationDao;
+	static Cache<String, Object> notificationCache = CacheBuilder.newBuilder().expireAfterAccess(2, TimeUnit.MINUTES).build();
 
 	ApplicationContext ctx;
 	public NotificationManager(){
@@ -33,6 +37,18 @@ public class NotificationManager {
 
 	public List<Notification> getNotifications(String userId, int from, int size){
 		return this.notificationDao.getNotification(userId,from,size);
+	}
+
+	public EmailLog getEmailLogs(int from, int size) throws ExecutionException {
+		List<EmailLogBean> emailLogBeans = this.notificationDao.getEmailLogs(from, size);
+		Object emailLog = notificationCache.get("email_logs", () -> {
+			long count = this.notificationDao.getCountOfEmailLog();
+			EmailLog emailLogs = new EmailLog(emailLogBeans,count);
+			return emailLogs;
+		});
+		EmailLog mailLogs = (EmailLog)emailLog;
+		mailLogs.setData(emailLogBeans);
+		return mailLogs;
 	}
 
 	public boolean saveNotification(Notification notification){
@@ -59,6 +75,8 @@ public class NotificationManager {
         List<EmailBean> users = this.notificationDao.getUserForNotification(notification.getLawArea(), notification.getLocations(), cyear - 1, notificationId,
                 notification.getUserType(), notification.isAllLocation());
 
+		List<EmailLogBean> emailLogBeans = new ArrayList<>();
+
         List<EmailBean> userUpdated = new ArrayList<>();
         if ("true".equals(SettingsManager.settingsBean.testingmode)){
             List<EmailBean> finalUserUpdated = userUpdated;
@@ -78,13 +96,18 @@ public class NotificationManager {
                     emailBeanUpdated.setEmailId(email);
                     finalUserUpdated.add(emailBeanUpdated);
                 }
+				emailLogBeans.add(new EmailLogBean(email+"/"+emailBean.getEmailId(), notification.getTitle(), notification.getNotification()));
             });
             userUpdated = finalUserUpdated;
         }else{
-            userUpdated = users;
+			users.forEach(emailBean -> {
+				emailLogBeans.add(new EmailLogBean(emailBean.getEmailId(), notification.getTitle(), notification.getNotification()));
+			});
+			userUpdated = users;
         }
 		if (notification.isSendEmail()){
-            EmailManager.sendMailToMultipleUsers(userUpdated,notification.getTitle(), notification.getNotification(),"true".equals(SettingsManager.settingsBean.testingmode));
+			this.notificationDao.logEmail(emailLogBeans);
+            //EmailManager.sendMailToMultipleUsers(userUpdated,notification.getTitle(), notification.getNotification(),"true".equals(SettingsManager.settingsBean.testingmode));
         }
 
 		return true;
@@ -116,5 +139,9 @@ public class NotificationManager {
 
 	public void deleteNotification(int notificationId) {
 		this.notificationDao.deleteNotification(notificationId);
+	}
+
+	public void cleanUpEmailsLog(int days){
+		this.notificationDao.cleanUpEmailsLog(days);
 	}
 }

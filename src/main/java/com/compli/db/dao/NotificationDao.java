@@ -1,15 +1,18 @@
 package com.compli.db.dao;
 
 import com.compli.bean.notification.EmailBean;
+import com.compli.bean.notification.EmailLogBean;
 import com.compli.bean.notification.Notification;
 import com.compli.bean.notification.NotificationData;
 import com.mysql.cj.api.jdbc.Statement;
+import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 
 import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.*;
 
@@ -177,5 +180,53 @@ public class NotificationDao {
                     return emailBean;
 
                 });
+    }
+
+    public void logEmail(List<EmailLogBean>emailLogBeans){
+        String sql = "insert into email_logs(email, subject, content, cdate) values(?, ?, ?, ?)";
+        this.jdbcTemplate.batchUpdate(sql,
+                new BatchPreparedStatementSetter() {
+                    @Override
+                    public void setValues(PreparedStatement ps, int i) throws SQLException {
+                        ps.setString(1, emailLogBeans.get(i).getEmail());
+                        ps.setString(2, emailLogBeans.get(i).getSubject());
+                        ps.setString(3, emailLogBeans.get(i).getContent());
+                        ps.setDate(4 ,new java.sql.Date(new Date().getTime()));
+                    }
+                    @Override
+                    public int getBatchSize() {
+                        return emailLogBeans.size();
+                    }
+                });
+    }
+
+    public List<EmailLogBean> getEmailLogs(int from, int size) {
+        String sql = "select * from email_logs order by cdate desc limit :from, :size";
+        Map<String,Object> namedMap = new HashMap<>();
+        namedMap.put("from", from);
+        namedMap.put("size", size);
+        return this.namedParameterJdbcTemplate.query(sql, namedMap,
+                (rs, rowNum) -> {
+                    EmailLogBean emailLog = new EmailLogBean();
+                    emailLog.setEmail(rs.getString(1));
+                    emailLog.setSubject(rs.getString(2));
+                    emailLog.setContent(rs.getString(3));
+                    emailLog.setCreationDate(rs.getDate(4));
+                    return emailLog;
+                });
+    }
+
+    public long getCountOfEmailLog(){
+        String sql = "select count(*) as count from email_logs";
+        Map<String,Object> namedMap = new HashMap<>();
+        Map<String, Object> countMap = this.namedParameterJdbcTemplate.queryForMap(sql, namedMap);
+        return (long)countMap.get("count");
+    }
+
+    public void cleanUpEmailsLog(int days){
+        String sql = "delete from email_logs where cdate < now() - interval :days day";
+        Map<String, Object> dateMap  = new HashMap<>();
+        dateMap.put("days",days);
+        this.namedParameterJdbcTemplate.update(sql, dateMap);
     }
 }

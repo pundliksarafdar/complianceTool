@@ -1,9 +1,7 @@
 package com.compli.rest;
 
 import com.compli.annotation.Authorised;
-import com.compli.bean.notification.Notification;
-import com.compli.bean.notification.NotificationByLaw;
-import com.compli.bean.notification.NotificationData;
+import com.compli.bean.notification.*;
 import com.compli.db.bean.Limit;
 import com.compli.db.bean.UserBean;
 import com.compli.managers.AuthorisationManager;
@@ -73,5 +71,15 @@ public class NotificationRestApi extends Application {
         userBean.setUnreadMessage(0);
         AuthorisationManager.setUserBean(auth,userBean);
         return Response.ok().build();
+    }
+
+    @POST
+    @Authorised(role= Authorised.ROLE.ALL)
+    @Path("/email_log")
+    public Response getEmailLogs(@HeaderParam("auth")String auth, Limit limit) throws ExecutionException {
+        UserBean userBean = AuthorisationManager.getUserCatche(auth);
+        NotificationManager notificationManager = new NotificationManager();
+        EmailLog notifications = notificationManager.getEmailLogs(limit.getFrom(), limit.getSize());
+        return Response.ok(notifications).build();
     }
 }

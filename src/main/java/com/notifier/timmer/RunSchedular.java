@@ -1,5 +1,7 @@
 package com.notifier.timmer;
 
+import com.compli.managers.NotificationManager;
+
 import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
@@ -11,6 +13,7 @@ public class RunSchedular {
 		Timer timer = new Timer();
 		timer.schedule(new Executer(), getStartTime(),_24HOURTIME);
 		timer.schedule(new LawUpdateExecuter(),getStartTime(), _24HOURTIME);
+		timer.schedule(new EmailLogCleanup(),getStartTime(),_24HOURTIME);
 	}
 	
 	public static Date getStartTime(){

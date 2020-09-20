@@ -107,7 +107,7 @@ public class NotificationManager {
         }
 		if (notification.isSendEmail()){
 			this.notificationDao.logEmail(emailLogBeans);
-            //EmailManager.sendMailToMultipleUsers(userUpdated,notification.getTitle(), notification.getNotification(),"true".equals(SettingsManager.settingsBean.testingmode));
+            EmailManager.sendMailToMultipleUsers(userUpdated,notification.getTitle(), notification.getNotification(),"true".equals(SettingsManager.settingsBean.testingmode));
         }
 
 		return true;

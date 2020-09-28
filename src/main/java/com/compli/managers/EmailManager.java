@@ -37,9 +37,15 @@ public class EmailManager {
 			sendEmail(email, "Request to reopen activity ", "requestToReopen.mustache", activityBean);
 		}
 		
-		//Send reminder email
-		public static void sendMailForReminder(String subject,PendingComplainceBean pendingComplainceBean,String email){
+		//Send reminder email actualMail will be used only for logging
+		public static void sendMailForReminder(String subject,PendingComplainceBean pendingComplainceBean,String email, String actualMail){
 			System.out.println("Sending mail to email "+email);
+			if (SettingsManager.settingsBean.testingmode.equals("true")){
+				String mailToSend = Mail.formMailContent("remindersEmail.mustache", pendingComplainceBean);
+				EmailLogBean emailLog = new EmailLogBean(email+ "/"+ actualMail, subject, mailToSend);
+				NotificationManager notificationManager = new NotificationManager();
+				notificationManager.logEmail(emailLog);
+			}
 			sendEmail(email, subject, "remindersEmail.mustache", pendingComplainceBean);
 		}
 

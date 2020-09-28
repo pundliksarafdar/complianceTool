@@ -78,7 +78,7 @@ public class AlertsManager {
 				boolean isEnabled = isSendEnabled(pendingComplainceBean.getCompanyId(), rType, USER_TYPE.CM);
 				if(isEnabled){
 					String emailToSend = SettingsManager.getCManagerEmail(pendingComplainceBean.getEmail());
-					EmailManager.sendMailForReminder("Reminder 1 : Pending for complaince ",pendingComplainceBean, emailToSend);
+					EmailManager.sendMailForReminder("Reminder 1 : Pending for complaince ",pendingComplainceBean, emailToSend,pendingComplainceBean.getEmail());
 				}
 			}
 		}
@@ -90,7 +90,7 @@ public class AlertsManager {
 				boolean isEnabled = isSendEnabled(pendingComplainceBean.getCompanyId(), rType, USER_TYPE.CO);
 				if(isEnabled){
 					String emailToSend = SettingsManager.getCManagerEmail(pendingComplainceBean.getEmail());
-					EmailManager.sendMailForReminder("Reminder 2 : Pending for complaince ",pendingComplainceBean, emailToSend);
+					EmailManager.sendMailForReminder("Reminder 2 : Pending for complaince ",pendingComplainceBean, emailToSend, pendingComplainceBean.getEmail());
 				}
 			}
 			//Send mail to ArTech user default no need of check
@@ -98,7 +98,7 @@ public class AlertsManager {
 			List<PendingComplainceBean> complainceBeansArTech = formatObject(activitiesArTech);
 			for(PendingComplainceBean pendingComplainceBean:complainceBeansArTech){
 					String emailToSend = SettingsManager.getArtecEmail(pendingComplainceBean.getEmail());
-					EmailManager.sendMailForReminder("Reminder 2 : Pending for complaince ",pendingComplainceBean, emailToSend);				
+					EmailManager.sendMailForReminder("Reminder 2 : Pending for complaince ",pendingComplainceBean, emailToSend, pendingComplainceBean.getEmail());
 			}
 		}
 		
@@ -112,13 +112,13 @@ public class AlertsManager {
 				boolean isEnabledCO = isSendEnabled(pendingComplainceBean.getCompanyId(), rType, USER_TYPE.CO);
 				if(isEnabledCO){
 					String emailToSend = SettingsManager.getCOwnerEmail(pendingComplainceBean.getEmail());
-					EmailManager.sendMailForReminder("Followup : Pending for complaince",pendingComplainceBean, emailToSend);
+					EmailManager.sendMailForReminder("Followup : Pending for complaince",pendingComplainceBean, emailToSend, pendingComplainceBean.getEmail());
 				}
 				
 				boolean isEnabledCM = isSendEnabled(pendingComplainceBean.getCompanyId(), rType, USER_TYPE.CM);
 				if(isEnabledCM){
 					String emailToSend = SettingsManager.getCManagerEmail(pendingComplainceBean.getEmail());
-					EmailManager.sendMailForReminder("Followup : Pending for complaince",pendingComplainceBean, emailToSend);
+					EmailManager.sendMailForReminder("Followup : Pending for complaince",pendingComplainceBean, emailToSend, pendingComplainceBean.getEmail());
 				}
 			}
 		}

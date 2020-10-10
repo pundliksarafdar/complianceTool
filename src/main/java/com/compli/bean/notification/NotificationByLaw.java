@@ -9,7 +9,7 @@ public class NotificationByLaw {
     private String type;
     private boolean allLocation;
     private List<String> locations;
-    private String userType;
+    private List<String> userType;
     private String expiry;
     private Date creationDate;
     private Boolean read;
@@ -97,11 +97,11 @@ public class NotificationByLaw {
         this.type = type;
     }
 
-    public String getUserType() {
+    public List<String> getUserType() {
         return userType;
     }
 
-    public void setUserType(String userType) {
+    public void setUserType(List<String> userType) {
         this.userType = userType;
     }
 

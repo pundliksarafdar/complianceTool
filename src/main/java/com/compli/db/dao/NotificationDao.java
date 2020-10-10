@@ -52,7 +52,11 @@ public class NotificationDao {
             ps.setBoolean(6, notification.isAllLocation());
             Date creationDate = new Date();
             ps.setTimestamp(7, new Timestamp(creationDate.getTime()));
-            ps.setTimestamp(8, new Timestamp(expiryDate.getTime()));
+            if(expiryDate!=null){
+                ps.setTimestamp(8, new Timestamp(expiryDate.getTime()));
+            }else{
+                ps.setTimestamp(8, null);
+            }
             return ps;
         },keyHolder);
         return keyHolder.getKey().intValue();
@@ -71,7 +75,7 @@ public class NotificationDao {
         return true;
     }
 
-    public boolean assignNotificationForUserOfLocationAndLaw(String lawName, List<String>locations, int year, int notificationId,String userTypeId, boolean isAllLocation){
+    public boolean assignNotificationForUserOfLocationAndLaw(String lawName, List<String>locations, int year, int notificationId,List<String> userTypeId, boolean isAllLocation){
         //Dummy is added to remove error for empty list
         if(locations.size() == 0){
             locations.add("dummy");
@@ -80,7 +84,7 @@ public class NotificationDao {
                 "select distinct(user.userId),:notificationId from activitymaster join lawmaster  on " +
                 "activitymaster.lawId = lawmaster.lawId and periodicityDateId >  concat(:yearFrom,'-03-31') and lawName=:lawName join activity_assignment on " +
                 "activity_assignment.activityId=activitymaster.activityId join activityassociation on activityassociation.activityId=activity_assignment.activityId and (activityassociation.locationId in (:locations) or 'all'=:isAllLocation) join user on " +
-                "user.userId=activity_assignment.userId and user.userTypeId=:userTypeId";
+                "user.userId=activity_assignment.userId and user.userTypeId in (:userTypeId)";
 
         HashMap namedMap = new HashMap();
         namedMap.put("locations",locations);
@@ -136,7 +140,7 @@ public class NotificationDao {
                     notification.setTitle(rs.getString(2));
                     notification.setNotification(rs.getString(3));
                     notification.setCreationDate(rs.getDate(7));
-                    notification.setExpiryDate(rs.getDate(7));
+                    notification.setExpiryDate(rs.getDate(8));
                     notification.setSeverity(rs.getString(9));
                     return notification;
                 });
@@ -158,11 +162,11 @@ public class NotificationDao {
         this.namedParameterJdbcTemplate.update(deleteNotif, namedMap);
     }
 
-    public List getUserForNotification(String lawName, List<String>locations, int year, int notificationId, String userTypeId, boolean isAllLocation){
+    public List getUserForNotification(String lawName, List<String>locations, int year, int notificationId, List<String> userTypeId, boolean isAllLocation){
         String sql = "select distinct(user.userId),user.email,user.userTypeId,user.firstname from activitymaster join lawmaster  on " +
                 "activitymaster.lawId = lawmaster.lawId and periodicityDateId >  concat(:yearFrom,'-03-31') and lawName=:lawName join activity_assignment on " +
                 "activity_assignment.activityId=activitymaster.activityId join activityassociation on activityassociation.activityId=activity_assignment.activityId and (activityassociation.locationId in (:locations) or 'all'=:isAllLocation) join user on " +
-                "user.userId=activity_assignment.userId and user.userTypeId=:userTypeId";
+                "user.userId=activity_assignment.userId and user.userTypeId in (:userTypeId)";
 
         HashMap namedMap = new HashMap();
         namedMap.put("locations",locations);

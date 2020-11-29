@@ -56,26 +56,31 @@ public class UserManager {
 			userAccess = accessList;
 			break;
 		case "cManager":
-			userAccess = CommonAccess;
+			userAccess =  new ArrayList<>(CommonAccess);
 			userAccess.add("reportLnk");
 			userAccess.add("repositoriesLnk");
 			break;
 		case "ArTechUser":
-			userAccess = CommonAccess;
+			userAccess = new ArrayList<>(CommonAccess);
 			userAccess.add("reportLnk");
 			userAccess.add("repositoriesLnk");
 			break;
 		case "cOwner":
-			userAccess = CommonAccess;
+			userAccess = new ArrayList<>(CommonAccess);
 			break;
 		case "sManager":
-			userAccess = CommonAccess;
+			userAccess = new ArrayList<>(CommonAccess);
 			userAccess.add("reportLnk");
 			userAccess.add("repositoriesLnk");
 			break;
 		case "demoUser":
 			userAccess = getUsersAccess(userId);
-			break;			
+			break;
+		case "demo":
+			userAccess = new ArrayList<>(CommonAccess);
+			userAccess.add("reportLnk");
+			userAccess.add("repositoriesLnk");
+			break;
 		default:
 			break;
 		}

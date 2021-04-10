@@ -1,13 +1,9 @@
 package com.compli.db.dao;
 
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.compli.bean.company.AddCompany;
-import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 
@@ -56,12 +52,12 @@ public class CompanyDao {
 		return true;
 	}
 	
-	//This function is used for master user and b2c user to add company
+	//This function is used for master user to add company
 	public boolean addCompanyForMasterUser(CompanyBean companyBean){
 		String sql = "insert into company(companyId,name,abbriviation) values(?,?,?)";
 		return this.jdbcTemplate.update(sql,companyBean.getCompanyId(),companyBean.getName(),companyBean.getAbbriviation())>0;		
 	}
-
+	
 	public boolean addCompanyForUpload(CompanyBean companyBean){
 		String sql = "insert into company(companyId,name,abbriviation) values(?,?,?)";
 		return this.jdbcTemplate.update(sql,companyBean.getCompanyId(),companyBean.getName(),companyBean.getAbbriviation())>0;
@@ -99,31 +95,6 @@ public class CompanyDao {
 	public boolean setCompanyLocation(CompanyLocationBean companyLocationBean){
 		String sql = "insert into companylocation(locationId,companyId) values(?,?)";
 		this.jdbcTemplate.update(sql,companyLocationBean.getLocationId(),companyLocationBean.getCompanyId());
-		return true;
-	}
-
-	public boolean setCompanyLocation(CompanyLocationBean companyLocationBean, boolean isHeadOffice){
-		String sql = "insert into companylocation(locationId,companyId,isHq) values(?,?,?)";
-		this.jdbcTemplate.update(sql,companyLocationBean.getLocationId(),companyLocationBean.getCompanyId(),isHeadOffice);
-		return true;
-	}
-
-	//This will set multiple locations to a company
-	public boolean setCompanyLocations(String companyId, List<String>locations){
-		String sql = "insert into companylocation(locationId,companyId) values(?,?)";
-		this.jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
-			@Override
-			public void setValues(PreparedStatement ps, int i) throws SQLException {
-				String locId = locations.get(i);
-				ps.setString(1,locId);
-				ps.setString(2,companyId);
-			}
-
-			@Override
-			public int getBatchSize() {
-				return locations.size();
-			}
-		});
 		return true;
 	}
 	

@@ -1,11 +1,7 @@
 package com.compli.managers;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.ExecutionException;
 
-import com.compli.bean.company.AddCompany;
-import com.compli.bean.registration.GoogleRegistrationBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -31,14 +27,8 @@ public class RegistrationManager {
 	public boolean updateCompanyDetails(String name,String abbr,String id){
 		return this.companyDao.updateCompanyDetails(name, abbr, id);
 	}
-	public boolean registerUser(com.compli.db.bean.UserBean userBean){
-		boolean isSuccess = this.userDao.insertUserValues(userBean);
-		if(isSuccess){
-			SendMailSSL mailSSL = new SendMailSSL();
-			//mailSSL.sendRegistrationMail(userBean.getRegId(), userBean.getUserId(), userBean.getEmail());
-			mailSSL.reSendRegistrationMail(userBean.getRegId(), userBean.getUserId(), userBean.getEmail());
-		}
-		return isSuccess;
+	public boolean registerUser(com.compli.db.bean.UserBean registerBean){
+		return this.userDao.insertUserValues(registerBean);
 	}
 	
 	public boolean insertUserValuesForMaster(com.compli.db.bean.UserBean userBean,String companyId){
@@ -65,47 +55,20 @@ public class RegistrationManager {
 			companyLocationBean.setCompanyId(userCompanyBean.getCompanyId());
 			companyLocationBean.setLocationId(companyBean.getLocation());
 			this.companyDao.setCompanyLocation(companyLocationBean);
-
+			
+			SendMailSSL mailSSL = new SendMailSSL();
+			mailSSL.sendRegistrationMail(userBean.getRegId(), userBean.getUserId(), userBean.getEmail());
 		}
 		return true;
 	}
 	
-	public String addCompany(CompanyBean companyBean){
+	public boolean addCompany(CompanyBean companyBean){
 		com.compli.db.bean.CompanyBean companyBeanDb = new com.compli.db.bean.CompanyBean();
 		companyBeanDb.setName(companyBean.getCompanyName());
 		companyBeanDb.setAbbriviation(companyBean.getAbbr());
 		boolean successFull = this.companyDao.addCompanyForMasterUser(companyBeanDb);
-		return successFull?companyBeanDb.getCompanyId():null;
-	}
-
-	public boolean addCompany(AddCompany addCompany){
-		CompanyBean companyBean = new CompanyBean();
-		companyBean.setAbbr(addCompany.getAbbr());
-		companyBean.setCompanyName(addCompany.getCompanyname());
-		String comanyId = addCompany(companyBean);
-		addCompany.setId(comanyId);
-		//Add Head office location
-		CompanyLocationBean locationBean = new CompanyLocationBean();
-		locationBean.setCompanyId(addCompany.getId());
-		locationBean.setLocationId(addCompany.getHeadQuarterLocation());
-		this.companyDao.setCompanyLocation(locationBean,true);
-		this.companyDao.setCompanyLocations(addCompany.getId(),addCompany.getBranchLocation());
-
-		UserCompanyBean userCompanyBean = new UserCompanyBean();
-		userCompanyBean.setCompanyId(addCompany.getId());
-		userCompanyBean.setUserId(addCompany.getUserId());
-		this.companyDao.setUserCompany(userCompanyBean);
-
-		//Set activities for location
-		List<String> locations = new ArrayList<>();
-		locations.add(addCompany.getHeadQuarterLocation());
-		boolean activities = MasterManager.startLoadingActivityForLocationForMonth(locations,addCompany.getId(),addCompany.getUserId());
-		List<String> branchLocations = new ArrayList<>();
-		branchLocations.addAll(addCompany.getBranchLocation());
-		activities = MasterManager.startLoadingActivityForBranchLocationForMonth(branchLocations,addCompany.getId(),addCompany.getUserId());
 		return true;
 	}
-
 	
 	public boolean validateEmail(String registrationId) {
 		return this.userDao.validateEmail(registrationId);		
@@ -159,9 +122,5 @@ public class RegistrationManager {
 			}
 		}
 		return isSuccess;
-	}
-
-	public boolean registerUserForGmailId(GoogleRegistrationBean bean){
-		return this.userDao.createUserForGoogleId(bean);
 	}
 }

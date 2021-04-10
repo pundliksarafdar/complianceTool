@@ -15,7 +15,6 @@ import javax.ws.rs.core.Response;
 
 import com.compli.annotation.Authorised;
 import com.compli.bean.CompanyBean;
-import com.compli.bean.company.AddCompany;
 import com.compli.managers.AuthorisationManager;
 import com.compli.managers.RegistrationManager;
 
@@ -38,28 +37,16 @@ public class CompaniesRestApi extends Application{
 		return Response.ok(authorisationManager.getUserCatche(auth)).header("Access-Control-Allow-Origin", "*").build();
 	}
 	
-	//THis is for master user and b2c user as well
+	//THis is for master user
 	@POST
 	@Path("/addcompany")
 	@Authorised(role=Authorised.ROLE.ALL)
 	public Response addCompany(CompanyBean companyBean){
 		RegistrationManager registrationManager = new RegistrationManager();
-		String isCompanyAdded = registrationManager.addCompany(companyBean);
-		return Response.ok(isCompanyAdded!=null).build();
-	}
-
-	//This method will add company then company location then add user to company
-	@POST
-	@Path("/addcompanyb2c")
-	@Authorised(role=Authorised.ROLE.ALL)
-	public Response addCompany(@HeaderParam("auth")String authToken, AddCompany companyBean) throws ExecutionException {
-		RegistrationManager registrationManager = new RegistrationManager();
-		String userId = AuthorisationManager.getUserCatche(authToken).getUserId();
-		companyBean.setUserId(userId);
 		boolean isCompanyAdded = registrationManager.addCompany(companyBean);
 		return Response.ok(isCompanyAdded).build();
 	}
-
+	
 	@POST
 	@Path("/updateCompanyDetails")
 	@Authorised(role=Authorised.ROLE.ALL)

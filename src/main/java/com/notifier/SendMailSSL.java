@@ -1,6 +1,5 @@
 package com.notifier;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Properties;
 
@@ -13,9 +12,6 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
 import com.compli.managers.SettingsManager;
-import com.compli.services.GoogleServices;
-import com.google.api.client.util.Base64;
-import com.google.api.services.gmail.Gmail;
 
 public class SendMailSSL {
 	final static String username = SettingsManager.getStaticSettings().getMailId();
@@ -23,7 +19,7 @@ public class SendMailSSL {
 
 	static Properties props = new Properties();
 	Session session;
-	static MimeMessage message;
+	static Message message;
 	
 	static{
 		props.put("mail.smtp.auth", "true");
@@ -40,17 +36,8 @@ public class SendMailSSL {
 				  });
 		message = new MimeMessage(session);
 	}
-
-	public static com.google.api.services.gmail.model.Message createMessageWithEmail(MimeMessage emailContent)
-			throws MessagingException, IOException {
-		ByteArrayOutputStream buffer = new ByteArrayOutputStream();
-		emailContent.writeTo(buffer);
-		byte[] bytes = buffer.toByteArray();
-		String encodedEmail = Base64.encodeBase64URLSafeString(bytes);
-		com.google.api.services.gmail.model.Message message = new com.google.api.services.gmail.model.Message();
-		message.setRaw(encodedEmail);
-		return message;
-	}
+	
+	public SendMailSSL() {}
 	
 	public static void sendEmail(String to,String subject,String content){
 		try {
@@ -63,10 +50,8 @@ public class SendMailSSL {
 				@Override
 				public void run() {
 					try {
-						com.google.api.services.gmail.model.Message msg = createMessageWithEmail(message);
-						GoogleServices.getGmailService().users().messages().send(to,msg);
-						//Transport.send(message);
-					} catch (IOException | MessagingException e) {
+						Transport.send(message);
+					} catch (MessagingException e) {
 						e.printStackTrace();
 					}					
 				}
@@ -111,8 +96,17 @@ public class SendMailSSL {
 	}
 
 	public void reSendRegistrationMail(String registrationId,String userFirstName,String email){
+		Session session = Session.getInstance(props,
+		  new javax.mail.Authenticator() {
+			protected PasswordAuthentication getPasswordAuthentication() {
+				return new PasswordAuthentication(username, password);
+			}
+		  });
+
 		try {
-			message.setFrom("SarafdarPundlik");
+
+			Message message = new MimeMessage(session);
+			message.setFrom(new InternetAddress("sarafdarpundlik@gmail.com"));
 			message.setRecipients(Message.RecipientType.TO,
 				InternetAddress.parse(email));
 			message.setSubject("Complete registration");
@@ -122,11 +116,8 @@ public class SendMailSSL {
 			dataObject.setValidationCode(registrationId);
 			
 			String someHtmlMessage = Mail.getResendMailContent(dataObject);
-			message.setText(someHtmlMessage, "utf-8","html");
-			//Transport.send(message);
-			com.google.api.services.gmail.model.Message msg = createMessageWithEmail(message);
-
-			com.google.api.services.gmail.model.Message sendResult = GoogleServices.getGmailService().users().messages().send("me",msg).execute();
+			message.setContent(someHtmlMessage, "text/html; charset=utf-8");
+			Transport.send(message);
 
 			System.out.println("Done");
 

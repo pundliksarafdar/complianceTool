@@ -1,14 +1,18 @@
 package com.compli.rest;
 
 import java.awt.List;
-import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.security.GeneralSecurityException;
 import java.util.HashMap;
 import java.util.concurrent.ExecutionException;
 
-import javax.ws.rs.*;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
+import javax.ws.rs.HeaderParam;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
 import javax.ws.rs.core.Application;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -27,7 +31,6 @@ import com.compli.managers.NotificationManager;
 import com.compli.managers.RegistrationManager;
 import com.compli.managers.SettingsManager;
 import com.compli.managers.UserManager;
-import com.compli.services.GoogleServices;
 
 @Path("/user")
 @Produces(MediaType.APPLICATION_JSON)
@@ -80,28 +83,6 @@ public class UsersRestApi extends Application{
 			return Response.ok(hashMap).build();
 		}
 	}
-
-	//This method gives same as login response by session id
-	@GET
-	@Path("/logindata")
-	@Consumes(MediaType.APPLICATION_JSON)
-	public Response loginData(@QueryParam("auth")String authParam) throws ExecutionException{
-		com.compli.db.bean.UserBean authData = AuthorisationManager.getUserCatche(authParam);
-		if(authData==null){
-			return Response.status(Status.UNAUTHORIZED).build();
-		}
-		HashMap<String, Object>  hashMap = new HashMap<>();
-		hashMap.put("authKey", authParam);
-		com.compli.db.bean.UserBean userBeanFull = authData;
-		AuthorisationManager authorisationManager = new AuthorisationManager();
-		hashMap.put("companies", authorisationManager.getCompanies(userBeanFull.getUserId()));
-		boolean isUserActive = AuthorisationManager.isUserActive(authParam);
-		hashMap.put("isUserActive", isUserActive);
-
-		String userType = AuthorisationManager.getUserType(authParam);
-		hashMap.put("userType", userType);
-		return Response.ok(hashMap).build();
-	}
 	
 	@POST
 	@Path("/register")
@@ -110,16 +91,13 @@ public class UsersRestApi extends Application{
 		System.out.println(registerBean);
 		RegistrationManager registrationManager = new RegistrationManager();
 		boolean success = registrationManager.registerUser(registerBean.getUserBean());
-		return Response.ok(success).build();
-
-		/*
-		* if(success){
+		if(success){
 			registrationManager.addCompany(registerBean.getCompanyBean(),registerBean.getUserBean());
 			return Response.ok(registerBean).build();
 		}else{
 			return Response.notModified().build();
 		}
-		 */
+		
 	}
 	
 	@POST
@@ -163,26 +141,6 @@ public class UsersRestApi extends Application{
 		RegistrationManager registrationManager = new RegistrationManager();
 		registrationManager.sendActivationLinkFor(auth);
 		return Response.accepted().build();
-	}
-
-	@GET
-	@Path("/register/google")
-	public Response googleUserAuth(@QueryParam("code")String code) throws URISyntaxException, GeneralSecurityException, IOException, ExecutionException {
-		if(null!=code){
-			return Response.seeOther(new URI(GoogleServices.authoriseForRegistration(code))).build();
-		}else{
-			return Response.seeOther(new URI(GoogleServices.authoriseForRegistration())).build();
-		}
-	}
-
-	@GET
-	@Path("/login/google")
-	public Response googleUserLogin(@QueryParam("code")String code) throws URISyntaxException, GeneralSecurityException, IOException, ExecutionException {
-		if(null!=code){
-			return Response.seeOther(new URI(GoogleServices.loginGoogleUser(code))).build();
-		}else{
-			return Response.seeOther(new URI(GoogleServices.loginGoogleUser())).build();
-		}
 	}
 	
 	@POST

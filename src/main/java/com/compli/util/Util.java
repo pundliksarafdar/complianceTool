@@ -1,6 +1,5 @@
 package com.compli.util;
 
-import java.text.ParseException;
 import com.compli.bean.dashboard.DashboardparamsBean;
 
 import java.text.SimpleDateFormat;
@@ -149,23 +148,5 @@ public class Util {
 			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 			return dateFormat.format(new Date());
 		}
-	}
-
-	public static boolean isDateAfter(Date compDate,Date currentDate){
-		Date cmpDate = null;
-		Date cDate = null;
-		try {
-			//Formating to yyyy-MM-dd format to avoid time difference
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-
-			String curDate = sdf.format(currentDate);
-			cDate = sdf.parse(curDate);
-
-			String compDateStr = sdf.format(compDate);
-			cmpDate = sdf.parse(compDateStr);
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
-		return cmpDate.after(cDate);
 	}
 }

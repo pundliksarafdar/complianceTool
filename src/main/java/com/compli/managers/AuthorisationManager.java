@@ -10,7 +10,7 @@ import java.util.concurrent.TimeUnit;
 
 import javax.management.RuntimeErrorException;
 
-import com.compli.bean.registration.GoogleRegistrationBean;
+import com.compli.bean.notification.Notification;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -47,24 +47,13 @@ public class AuthorisationManager {
 		return authId;
 	}
 
-	public static String setUserCacheForGmailLogin(String googleId) throws ExecutionException{
-		AuthorisationManager authorisationManager = new AuthorisationManager();
-		com.compli.db.bean.UserBean userBean2 = authorisationManager.loginDataForGoogleId(googleId);
-		String authId = null;
-		if(userBean2!=null){
-			authId = UUID.randomUUID().toString();
-			cache.put(authId, userBean2);
-		}
-		return authId;
-	}
-
 	public static void setUserBean(String auth,com.compli.db.bean.UserBean userBean){
 		cache.put(auth,userBean);
 	}
 	
 	public static boolean isUserActive(String authId) throws ExecutionException{
 		com.compli.db.bean.UserBean userBean2 = cache.getIfPresent(authId);
-		return userBean2.isIsactive()!=null && userBean2.isIsactive();
+		return userBean2.isIsactive();
 	}
 	
 	public static String getUserType(String authToken){
@@ -81,13 +70,6 @@ public class AuthorisationManager {
 		ApplicationContext ctx=new ClassPathXmlApplicationContext("applicationContext.xml");
 		this.userDao = (UserDao) ctx.getBean("udao");
 		return this.userDao.getUserData(username,password);		
-	}
-
-	public com.compli.db.bean.UserBean loginDataForGoogleId(String googleId){
-		String path = getClass().getResource("/applicationContext.xml").getPath();
-		ApplicationContext ctx=new ClassPathXmlApplicationContext("applicationContext.xml");
-		this.userDao = (UserDao) ctx.getBean("udao");
-		return this.userDao.getUserDataByGoogleId(googleId);
 	}
 	
 	/*

@@ -7,7 +7,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.compli.bean.registration.GoogleRegistrationBean;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
@@ -44,18 +43,9 @@ public class UserDao {
 		}
 		return userBean;
 	}
-
-	public UserBean getUserDataByGoogleId(String googleId){
-		UserBean userBean = null;
-		List<UserBean> userBeans = (List<UserBean>) this.jdbcTemplate.query("select * from user where ((googleId=? or email=?))",new Object[]{googleId,googleId}, new BeanPropertyRowMapper(UserBean.class));
-		if(userBeans!=null && userBeans.size() >0){
-			userBean = userBeans.get(0);
-		}
-		return userBean;
-	}
 	
 	public boolean insertUserValues(UserBean userBean){
-		String insertUserQuery = "INSERT INTO user(isPrimaryUser, phone, regId, userId, isDeleted, email, pass, firstName, lastName, isactive, userTypeId) VALUES(?,?,?,?,?,?,?,?,?,?,'demo')";
+		String insertUserQuery = "INSERT INTO user(isPrimaryUser, phone, regId, userId, isDeleted, email, pass, firstName, lastName, isactive) VALUES(?,?,?,?,?,?,?,?,?,?)";
 		return this.jdbcTemplate.update(insertUserQuery,true,userBean.getPhone(),userBean.getRegId(),userBean.getUserId(),false,userBean.getEmail(),
 				userBean.getPass(),userBean.getFirstName(),userBean.getLastName(),false)>0;
 	}
@@ -129,11 +119,5 @@ public class UserDao {
 	
 	public boolean updateUserDetails(String firstName,String lastName,String email) {
 		return this.jdbcTemplate.update("update user set firstname=?,lastname=? where email=?;",firstName,lastName,email)>-1;		
-	}
-
-	public boolean createUserForGoogleId(GoogleRegistrationBean bean){
-		return this.jdbcTemplate.update("INSERT  INTO user(firstname,lastname,image,googleId,userId,userTypeId,isactive) values (?,?,?,?,?,'demo',true)",
-				bean.getFirstname(),bean.getLastname(),bean.getImageUrl(),bean.getEmail(),bean.getUserId())>0;
-
 	}
 }

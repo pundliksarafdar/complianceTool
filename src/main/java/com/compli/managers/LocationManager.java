@@ -14,7 +14,7 @@ public class LocationManager {
 	LocationDao locationDao;
 	
 	public LocationManager() {
-		ApplicationContext ctx = DaoManager.getApplicationContext();
+		ApplicationContext ctx = new ClassPathXmlApplicationContext("applicationContext.xml");
 		locationDao = (LocationDao) ctx.getBean("locationDao");
 	}
 	

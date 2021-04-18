@@ -35,7 +35,7 @@ public class DBMigrationUtilV2Location {
 	
 	public DBMigrationUtilV2Location() {
 		String path = getClass().getResource("/applicationContext.xml").getPath();
-		ApplicationContext ctx=new ClassPathXmlApplicationContext("applicationContext.xml");
+		ApplicationContext ctx=new ClassPathXmlApplicationContext("applicationContext.xml");;
 		this.locationDao = (LocationDao) ctx.getBean("locationDao");
 	}
 	

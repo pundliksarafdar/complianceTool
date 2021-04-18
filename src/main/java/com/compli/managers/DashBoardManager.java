@@ -33,7 +33,7 @@ public class DashBoardManager {
 	 private String locationId;
 	 
 	public DashBoardManager(String companyId,String auth) {
-		ApplicationContext ctx = DaoManager.getApplicationContext();
+		ApplicationContext ctx = new ClassPathXmlApplicationContext("applicationContext.xml");
 		this.dashBoardDao = (DashBoardDao) ctx.getBean("dashBoardDao");
 		this.activities = dashBoardDao.getAllActivitiesForCompany(companyId);
 		this.companyId = companyId;
@@ -43,7 +43,7 @@ public class DashBoardManager {
 	}
 	
 	public DashBoardManager(String companyId,String auth,String locationId) {
-		ApplicationContext ctx = DaoManager.getApplicationContext();
+		ApplicationContext ctx = new ClassPathXmlApplicationContext("applicationContext.xml");
 		this.dashBoardDao = (DashBoardDao) ctx.getBean("dashBoardDao");
 		this.activities = dashBoardDao.getAllActivitiesForCompany(companyId);
 		this.companyId = companyId;

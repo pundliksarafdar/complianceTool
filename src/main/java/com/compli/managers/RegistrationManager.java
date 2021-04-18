@@ -21,7 +21,7 @@ public class RegistrationManager {
 	private UserDao userDao;
 	private CompanyDao companyDao;
 	public RegistrationManager() {
-		ApplicationContext ctx = DaoManager.getApplicationContext();
+		ApplicationContext ctx = new ClassPathXmlApplicationContext("applicationContext.xml");
 		userDao = (UserDao) ctx.getBean("udao");
 		this.companyDao = (CompanyDao) ctx.getBean("companyDao");
 		

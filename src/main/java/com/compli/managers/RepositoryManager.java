@@ -26,7 +26,7 @@ public class RepositoryManager {
 	private String userId;
 
 	public RepositoryManager() {
-		ApplicationContext ctx = DaoManager.getApplicationContext();
+		ApplicationContext ctx = new ClassPathXmlApplicationContext("applicationContext.xml");
 		this.dashBoardDao = (DashBoardDao) ctx.getBean("dashBoardDao");
 		this.activityDao = (ActivityDao) ctx.getBean("activityDao");
 		this.periodicityDateMasterDao = (PeriodicityDateMasterDao) ctx.getBean("periodicityDateDao");
@@ -35,7 +35,7 @@ public class RepositoryManager {
 	}
 
 	public RepositoryManager(String auth) {
-		ApplicationContext ctx = DaoManager.getApplicationContext();
+		ApplicationContext ctx = new ClassPathXmlApplicationContext("applicationContext.xml");
 		this.dashBoardDao = (DashBoardDao) ctx.getBean("dashBoardDao");
 		this.activityDao = (ActivityDao) ctx.getBean("activityDao");
 		this.periodicityDateMasterDao = (PeriodicityDateMasterDao) ctx.getBean("periodicityDateDao");
@@ -48,7 +48,7 @@ public class RepositoryManager {
 
 	public RepositoryManager(String auth, String locationId) {
 		this.locationId = locationId;
-		ApplicationContext ctx = DaoManager.getApplicationContext();
+		ApplicationContext ctx = new ClassPathXmlApplicationContext("applicationContext.xml");
 		this.dashBoardDao = (DashBoardDao) ctx.getBean("dashBoardDao");
 		this.activityDao = (ActivityDao) ctx.getBean("activityDao");
 		this.repositoryDao = (RepositoryDao) ctx.getBean("repositoryDao");

@@ -43,7 +43,7 @@ public class DBMigrationUtilV2FIlesDriveRefresh {
 	static FilesDao filesDao;
 	public DBMigrationUtilV2FIlesDriveRefresh() {
 		String path = getClass().getResource("/applicationContext.xml").getPath();
-		ApplicationContext ctx=new ClassPathXmlApplicationContext("applicationContext.xml");
+		ApplicationContext ctx=new ClassPathXmlApplicationContext("applicationContext.xml");;
 		filesDao = (FilesDao) ctx.getBean("filesDao");
 	}
 	public static void init(){

@@ -12,7 +12,7 @@ public class NotificationManager {
 
 	ApplicationContext ctx;
 	public NotificationManager(){
-		this.ctx = DaoManager.getApplicationContext();
+		this.ctx = new ClassPathXmlApplicationContext("applicationContext.xml");
 		this.notificationDao = (NotificationDao) ctx.getBean("notificationDao");
 
 	}

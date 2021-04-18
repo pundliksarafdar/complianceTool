@@ -33,7 +33,7 @@ public class ActivityManager {
 	private String userId;
 	
 	public ActivityManager(){
-		ApplicationContext ctx = DaoManager.getApplicationContext();
+		ApplicationContext ctx = new ClassPathXmlApplicationContext("applicationContext.xml");
 		this.dashBoardDao = (DashBoardDao) ctx.getBean("dashBoardDao");
 		this.activityDao = (ActivityDao) ctx.getBean("activityDao");		
 		this.periodicityDateMasterDao = (PeriodicityDateMasterDao) ctx.getBean("periodicityDateDao");
@@ -42,7 +42,7 @@ public class ActivityManager {
 	}
 	
 	public ActivityManager(String auth) {
-		ApplicationContext ctx = DaoManager.getApplicationContext();
+		ApplicationContext ctx = new ClassPathXmlApplicationContext("applicationContext.xml");;
 		this.dashBoardDao = (DashBoardDao) ctx.getBean("dashBoardDao");
 		this.activityDao = (ActivityDao) ctx.getBean("activityDao");		
 		this.periodicityDateMasterDao = (PeriodicityDateMasterDao) ctx.getBean("periodicityDateDao");
@@ -59,7 +59,7 @@ public class ActivityManager {
 	
 	public ActivityManager(String auth,String locationId) {
 		this.locationId = locationId;
-		ApplicationContext ctx = DaoManager.getApplicationContext();
+		ApplicationContext ctx = new ClassPathXmlApplicationContext("applicationContext.xml");
 		this.dashBoardDao = (DashBoardDao) ctx.getBean("dashBoardDao");		
 		this.activityDao = (ActivityDao) ctx.getBean("activityDao");
 		this.activityMasterDao = (ActivityMasterDao) ctx.getBean("acitvityMasterDao");

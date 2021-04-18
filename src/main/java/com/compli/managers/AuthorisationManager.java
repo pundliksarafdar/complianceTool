@@ -25,7 +25,7 @@ public class AuthorisationManager {
 	UserDao userDao;
 	
 	public AuthorisationManager() {
-		ApplicationContext ctx = DaoManager.getApplicationContext();
+		ApplicationContext ctx = new ClassPathXmlApplicationContext("applicationContext.xml");
 		this.userDao = (UserDao) ctx.getBean("udao");	
 	}
 	public static com.compli.db.bean.UserBean getUserCatche(String sessionToken) throws ExecutionException{
@@ -76,13 +76,13 @@ public class AuthorisationManager {
 	}
 	
 	public com.compli.db.bean.UserBean loginData(String username,String password){
-		ApplicationContext ctx = DaoManager.getApplicationContext();
+		ApplicationContext ctx = new ClassPathXmlApplicationContext("applicationContext.xml");
 		this.userDao = (UserDao) ctx.getBean("udao");
 		return this.userDao.getUserData(username,password);		
 	}
 
 	public com.compli.db.bean.UserBean loginDataForGoogleId(String googleId){
-		ApplicationContext ctx = DaoManager.getApplicationContext();
+		ApplicationContext ctx = new ClassPathXmlApplicationContext("applicationContext.xml");
 		this.userDao = (UserDao) ctx.getBean("udao");
 		return this.userDao.getUserDataByGoogleId(googleId);
 	}

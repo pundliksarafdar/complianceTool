@@ -28,7 +28,7 @@ public class UserManager {
 					"activitiesLnk","activities.download","activities.changestatus","activities.downloadFiles"
 					));
 	public UserManager() {
-		ApplicationContext ctx = DaoManager.getApplicationContext();
+		ApplicationContext ctx = new ClassPathXmlApplicationContext("applicationContext.xml");
 		userDao = (UserDao) ctx.getBean("udao");
 		accessDao = (UserAccessDao) ctx.getBean("userAccessDao");
 	}

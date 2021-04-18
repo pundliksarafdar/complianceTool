@@ -30,7 +30,7 @@ public class DBMigrationUtilV2LawMaster {
 	
 	public DBMigrationUtilV2LawMaster() {
 		String path = getClass().getResource("/applicationContext.xml").getPath();
-		ApplicationContext ctx=new ClassPathXmlApplicationContext("applicationContext.xml");
+		ApplicationContext ctx=new ClassPathXmlApplicationContext("applicationContext.xml");;
 		this.lawMasterDao = (LawMasterDao) ctx.getBean("lawMasterDao");
 	}
 	

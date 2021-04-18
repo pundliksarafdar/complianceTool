@@ -34,7 +34,7 @@ public class AlertsManager {
 	public static String CALENDAR_ID = "primary";
 	Map<String, String> allCompanies;
 	public AlertsManager() {
-		ApplicationContext ctx = DaoManager.getApplicationContext();
+		ApplicationContext ctx = new ClassPathXmlApplicationContext("applicationContext.xml");
 		this.activityDao = (ActivityDao) ctx.getBean("activityDao");
 		this.companyDao = (CompanyDao) ctx.getBean("companyDao");
 		this.settingsBean = SettingsManager.getStaticSettings();

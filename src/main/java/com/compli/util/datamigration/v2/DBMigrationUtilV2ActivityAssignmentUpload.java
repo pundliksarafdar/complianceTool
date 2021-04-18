@@ -38,7 +38,7 @@ public class DBMigrationUtilV2ActivityAssignmentUpload {
 	static List<ActivityAssignnmentBean> dbActivityAssignement;
 	public DBMigrationUtilV2ActivityAssignmentUpload() {
 		String path = getClass().getResource("/applicationContext.xml").getPath();
-		ApplicationContext ctx=new ClassPathXmlApplicationContext("applicationContext.xml");
+		ApplicationContext ctx=new ClassPathXmlApplicationContext("applicationContext.xml");;
 		userDao = (UserDao)ctx.getBean("udao");
 		acivityAssignmentDao = (AcivityAssignmentDao)ctx.getBean("activityAssignementDao");
 		

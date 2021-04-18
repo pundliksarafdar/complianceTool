@@ -128,7 +128,7 @@ public class MasterDataUtil {
         System.out.println(lastDayOfMonth);
         System.out.println(specificDayOfMonth);
 
-        ApplicationContext ctx=new ClassPathXmlApplicationContext("applicationContext.xml");
+        ApplicationContext ctx=new ClassPathXmlApplicationContext("applicationContext.xml");;
         MasterDataDao masterDataDao = (MasterDataDao)ctx.getBean("masterDataDao");
         List<MasterDataBean> data = masterDataDao.getMasterDataLocations(new ArrayList<String>() {{
             add("bihar");

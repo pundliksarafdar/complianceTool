@@ -60,7 +60,7 @@ public class DataManager {
 	ActivityDao activityDao;
 	LocationDao locationDao;
 	public DataManager() {
-		ApplicationContext ctx = DaoManager.getApplicationContext();
+		ApplicationContext ctx = new ClassPathXmlApplicationContext("applicationContext.xml");
 		this.userDao = (UserDao) ctx.getBean("udao");
 		this.activityDao = (ActivityDao) ctx.getBean("activityDao");
 		this.locationDao = (LocationDao) ctx.getBean("locationDao");

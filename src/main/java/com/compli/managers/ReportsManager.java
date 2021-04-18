@@ -43,13 +43,13 @@ public class ReportsManager {
 	private String userId;
 	public static String newline = System.getProperty("line.separator");
 	public ReportsManager() {
-		ApplicationContext ctx = DaoManager.getApplicationContext();
+		ApplicationContext ctx = new ClassPathXmlApplicationContext("applicationContext.xml");
 		this.dashBoardDao = (DashBoardDao) ctx.getBean("dashBoardDao");
 		this.companyDao = (CompanyDao)ctx.getBean("companyDao");
 	}
 	
 	public ReportsManager(String auth) {
-		ApplicationContext ctx = DaoManager.getApplicationContext();
+		ApplicationContext ctx = new ClassPathXmlApplicationContext("applicationContext.xml");
 		this.dashBoardDao = (DashBoardDao) ctx.getBean("dashBoardDao");
 		this.companyDao = (CompanyDao)ctx.getBean("companyDao");
 		this.userId  = AuthorisationManager.cache.getIfPresent(auth).getUserId();
@@ -57,7 +57,7 @@ public class ReportsManager {
 	
 	public ReportsManager(String location,String auth) {
 		this.location = location;
-		ApplicationContext ctx = DaoManager.getApplicationContext();
+		ApplicationContext ctx = new ClassPathXmlApplicationContext("applicationContext.xml");
 		this.dashBoardDao = (DashBoardDao) ctx.getBean("dashBoardDao");		
 		this.userId  = AuthorisationManager.cache.getIfPresent(auth).getUserId();
 		this.companyDao = (CompanyDao)ctx.getBean("companyDao");

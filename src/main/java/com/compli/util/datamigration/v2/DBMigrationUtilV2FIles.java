@@ -46,7 +46,7 @@ public class DBMigrationUtilV2FIles {
 	static List<CompanyBean> companies;
 	public DBMigrationUtilV2FIles() {
 		String path = getClass().getResource("/applicationContext.xml").getPath();
-		ApplicationContext ctx=new ClassPathXmlApplicationContext("applicationContext.xml");
+		ApplicationContext ctx=new ClassPathXmlApplicationContext("applicationContext.xml");;
 		activityDao = (ActivityDao) ctx.getBean("activityDao");
 		filesDao = (FilesDao) ctx.getBean("filesDao");
 	}

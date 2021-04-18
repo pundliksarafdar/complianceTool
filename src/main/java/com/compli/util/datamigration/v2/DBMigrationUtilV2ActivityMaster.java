@@ -55,7 +55,7 @@ public class DBMigrationUtilV2ActivityMaster {
 	
 	public DBMigrationUtilV2ActivityMaster() {
 		String path = getClass().getResource("/applicationContext.xml").getPath();
-		ApplicationContext ctx=new ClassPathXmlApplicationContext("applicationContext.xml");
+		ApplicationContext ctx=new ClassPathXmlApplicationContext("applicationContext.xml");;
 		this.lawMasterDao = (LawMasterDao) ctx.getBean("lawMasterDao");
 		this.periodicityMasterDao = (PeriodicityMasterDao) ctx.getBean("periodicityDao");
 		this.periodicityDateMasterDao = (PeriodicityDateMasterDao) ctx.getBean("periodicityDateDao");

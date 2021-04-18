@@ -51,7 +51,7 @@ public class DBMigrationUtilV2ActivityMasterUpload {
 	static com.compli.db.bean.CompanyBean companyBean;
 	public DBMigrationUtilV2ActivityMasterUpload() {
 		String path = getClass().getResource("/applicationContext.xml").getPath();
-		ApplicationContext ctx=new ClassPathXmlApplicationContext("applicationContext.xml");
+		ApplicationContext ctx=new ClassPathXmlApplicationContext("applicationContext.xml");;
 		this.lawMasterDao = (LawMasterDao) ctx.getBean("lawMasterDao");
 		this.periodicityMasterDao = (PeriodicityMasterDao) ctx.getBean("periodicityDao");
 		this.periodicityDateMasterDao = (PeriodicityDateMasterDao) ctx.getBean("periodicityDateDao");

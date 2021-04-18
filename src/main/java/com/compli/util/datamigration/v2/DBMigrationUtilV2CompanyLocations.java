@@ -30,7 +30,7 @@ public class DBMigrationUtilV2CompanyLocations {
 	
 	public DBMigrationUtilV2CompanyLocations() {
 		String path = getClass().getResource("/applicationContext.xml").getPath();
-		ApplicationContext ctx=new ClassPathXmlApplicationContext("applicationContext.xml");
+		ApplicationContext ctx=new ClassPathXmlApplicationContext("applicationContext.xml");;
 		this.companyDao = (CompanyDao) ctx.getBean("companyDao");
 	}
 	

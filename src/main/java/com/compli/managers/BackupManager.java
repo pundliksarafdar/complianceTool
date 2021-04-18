@@ -17,7 +17,7 @@ public class BackupManager {
 	BackupDao backupDao; 
 	
 	public BackupManager() {
-		ApplicationContext ctx = DaoManager.getApplicationContext();
+		ApplicationContext ctx = new ClassPathXmlApplicationContext("applicationContext.xml");
 		this.backupDao = (BackupDao)ctx.getBean("backupDao");
 	}
 	

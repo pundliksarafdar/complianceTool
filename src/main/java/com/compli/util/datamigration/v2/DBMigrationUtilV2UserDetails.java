@@ -31,7 +31,7 @@ public class DBMigrationUtilV2UserDetails {
 	static List<UserBean> filteredUser;
 	public DBMigrationUtilV2UserDetails() {
 		String path = getClass().getResource("/applicationContext.xml").getPath();
-		ApplicationContext ctx=new ClassPathXmlApplicationContext("applicationContext.xml");
+		ApplicationContext ctx=new ClassPathXmlApplicationContext("applicationContext.xml");;
 		userDao = (UserDao)ctx.getBean("udao");
 		
 		List<UserBean> allUsers = userDao.getAllData();

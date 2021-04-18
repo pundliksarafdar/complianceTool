@@ -28,7 +28,7 @@ public class DBMigrationUtilV2ActivityUpload {
 	static List<CompanyBean> companies;
 	public DBMigrationUtilV2ActivityUpload() {
 		String path = getClass().getResource("/applicationContext.xml").getPath();
-		ApplicationContext ctx=new ClassPathXmlApplicationContext("applicationContext.xml");
+		ApplicationContext ctx=new ClassPathXmlApplicationContext("applicationContext.xml");;
 		activityDao = (ActivityDao) ctx.getBean("activityDao");
 		companyDao = (CompanyDao)ctx.getBean("companyDao");
 		companies = companyDao.getAllCompany();

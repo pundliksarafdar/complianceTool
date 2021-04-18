@@ -28,7 +28,7 @@ public class DBMigrationUtilV2Company {
 	
 	public DBMigrationUtilV2Company() {
 		String path = getClass().getResource("/applicationContext.xml").getPath();
-		ApplicationContext ctx=new ClassPathXmlApplicationContext("applicationContext.xml");
+		ApplicationContext ctx=new ClassPathXmlApplicationContext("applicationContext.xml");;
 		this.companyDao = (CompanyDao) ctx.getBean("companyDao");
 	}
 	

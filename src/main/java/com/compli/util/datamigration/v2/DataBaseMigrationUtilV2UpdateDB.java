@@ -47,7 +47,7 @@ public class DataBaseMigrationUtilV2UpdateDB {
 	
 	public DataBaseMigrationUtilV2UpdateDB() {
 		String path = getClass().getResource("/applicationContext.xml").getPath();
-		ApplicationContext ctx=new ClassPathXmlApplicationContext("applicationContext.xml");
+		ApplicationContext ctx=new ClassPathXmlApplicationContext("applicationContext.xml");;
 		this.userDao = (UserDao) ctx.getBean("udao");
 		this.companyDao = (CompanyDao) ctx.getBean("companyDao");
 		this.locationDao = (LocationDao) ctx.getBean("locationDao");

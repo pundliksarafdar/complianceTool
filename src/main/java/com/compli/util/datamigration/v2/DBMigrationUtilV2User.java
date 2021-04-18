@@ -23,7 +23,7 @@ public class DBMigrationUtilV2User {
 	
 	public DBMigrationUtilV2User() {
 		String path = getClass().getResource("/applicationContext.xml").getPath();
-		ApplicationContext ctx=new ClassPathXmlApplicationContext("applicationContext.xml");
+		ApplicationContext ctx=new ClassPathXmlApplicationContext("applicationContext.xml");;
 		this.userDao = (UserDao) ctx.getBean("udao");
 	}
 	

@@ -37,7 +37,7 @@ public class DBMigrationUtilV2ActivityAssociationUpload {
 	static List<Map<String,Object>> allLocations;
 	public DBMigrationUtilV2ActivityAssociationUpload() {
 		String path = getClass().getResource("/applicationContext.xml").getPath();
-		ApplicationContext ctx=new ClassPathXmlApplicationContext("applicationContext.xml");
+		ApplicationContext ctx=new ClassPathXmlApplicationContext("applicationContext.xml");;
 		activityAssociationDao = (ActivityAssociationDao) ctx.getBean("activityAssociationDao");
 		this.locationDao = (LocationDao) ctx.getBean("locationDao");
 		this.allLocations = locationDao.getAllLocation();

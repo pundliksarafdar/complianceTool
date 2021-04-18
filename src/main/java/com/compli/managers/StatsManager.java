@@ -24,7 +24,7 @@ public class StatsManager {
 	UserCompanyDao userCompanyDao;
 	
 	public StatsManager() {
-		ApplicationContext ctx = DaoManager.getApplicationContext();
+		ApplicationContext ctx = new ClassPathXmlApplicationContext("applicationContext.xml");
 		this.dashBoardDao = (DashBoardDao) ctx.getBean("dashBoardDao");
 		this.activityDao = (ActivityDao) ctx.getBean("activityDao");		
 		this.periodicityDateMasterDao = (PeriodicityDateMasterDao) ctx.getBean("periodicityDateDao");

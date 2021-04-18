@@ -25,7 +25,7 @@ public class DBMigrationUtilV2PeriodicityMaster {
 	
 	public DBMigrationUtilV2PeriodicityMaster() {
 		String path = getClass().getResource("/applicationContext.xml").getPath();
-		ApplicationContext ctx=new ClassPathXmlApplicationContext("applicationContext.xml");
+		ApplicationContext ctx=new ClassPathXmlApplicationContext("applicationContext.xml");;
 		this.periodicityMasterDao = (PeriodicityMasterDao) ctx.getBean("periodicityDao");
 	}
 	

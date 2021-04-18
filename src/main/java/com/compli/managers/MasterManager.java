@@ -24,7 +24,7 @@ public class MasterManager {
     LocationDao locationDao;
 
     public MasterManager(){
-        ApplicationContext ctx = DaoManager.getApplicationContext();
+        ApplicationContext ctx = new ClassPathXmlApplicationContext("applicationContext.xml");
         masterDataDao = (MasterDataDao)ctx.getBean("masterDataDao");
         this.periodicityMasterDao = (PeriodicityMasterDao) ctx.getBean("periodicityDao");
         this.activityDao = (ActivityDao) ctx.getBean("activityDao");

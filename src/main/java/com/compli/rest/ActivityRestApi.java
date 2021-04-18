@@ -72,20 +72,20 @@ public class ActivityRestApi {
 			activityList1.addAll(activityManager.getAllActivitiesWithDescriptionForCompanyWithSeverity(companyId,activityStatusLink));
 			if(month!=null){
 				activityList1 = activityManager.getAllActivitiesWithDescriptionForCompanyWithSeverityForMonth(companyId,"Complied-Delayed",month);
-			}else if(year!=null){
+			}else if(year!=null && quarter==null){
 				year = year.split("-")[0];
 				activityList1 = activityManager.getAllActivitiesWithDescriptionForCompanyWithSeverityForYear(companyId,"Complied-Delayed",year);			
 			}else if(quarter!=null){
-				activityList1 = activityManager.getAllActivitiesWithDescriptionForCompanyWithSeverityForQuarter(companyId,"Complied-Delayed",quarter);
+				activityList1 = activityManager.getAllActivitiesWithDescriptionForCompanyWithSeverityForQuarter(companyId,year,"Complied-Delayed",quarter);
 			}
 			
 			if(month!=null){
 				activityList2 = activityManager.getAllActivitiesWithDescriptionForCompanyWithSeverityForMonth(companyId,"Complied- In time",month);
-			}else if(year!=null){
+			}else if(year!=null && quarter==null){
 				year = year.split("-")[0];
 				activityList2 = activityManager.getAllActivitiesWithDescriptionForCompanyWithSeverityForYear(companyId,"Complied- In time",year);			
-			}else if(quarter!=null){
-				activityList2 = activityManager.getAllActivitiesWithDescriptionForCompanyWithSeverityForQuarter(companyId,"Complied- In time",quarter);
+			}else if(quarter!=null ){
+				activityList2 = activityManager.getAllActivitiesWithDescriptionForCompanyWithSeverityForQuarter(companyId,year,"Complied- In time",quarter);
 			}
 			activityList1.addAll(activityList2);
 			return Response.ok(activityList1).build();
@@ -93,11 +93,11 @@ public class ActivityRestApi {
 			List<Map<String, Object>> activityList1 = null;
 			if(month!=null){
 				activityList1 = activityManager.getAllActivitiesWithDescriptionForCompanyForMonth(companyId,month);
-			}else if(year!=null){
+			}else if(year!=null && quarter==null){
 				year = year.split("-")[0];
 				activityList1 = activityManager.getAllActivitiesWithDescriptionForCompanyForYear(companyId,year);			
 			}else if(quarter!=null){
-				activityList1 = activityManager.getAllActivitiesWithDescriptionForCompanyForQuarter(companyId,quarter);
+				activityList1 = activityManager.getAllActivitiesWithDescriptionForCompanyForQuarter(companyId,year, quarter);
 			}
 			return Response.ok(activityList1).build();
 		}else if("low".equalsIgnoreCase(activitySeverity) || "medium".equalsIgnoreCase(activitySeverity) || "high".equalsIgnoreCase(activitySeverity) || "all".equalsIgnoreCase(activitySeverity)){
@@ -105,11 +105,11 @@ public class ActivityRestApi {
 		}else{
 			if(month!=null){
 				return Response.ok(activityManager.getAllActivitiesWithDescriptionForCompanyWithSeverityForMonth(companyId,activitySeverity,month)).build();
-			}else if(year!=null){
+			}else if(year!=null && quarter == null ){
 				year = year.split("-")[0];
 				return Response.ok(activityManager.getAllActivitiesWithDescriptionForCompanyWithSeverityForYear(companyId,activitySeverity,year)).build();
 			}else if(quarter!=null){
-				return Response.ok(activityManager.getAllActivitiesWithDescriptionForCompanyWithSeverityForQuarter(companyId,activitySeverity,quarter)).build();
+				return Response.ok(activityManager.getAllActivitiesWithDescriptionForCompanyWithSeverityForQuarter(companyId, year, activitySeverity,quarter)).build();
 			}{
 				List<String>activityType = new ArrayList<String>();
 				activityType.add(activitySeverity);

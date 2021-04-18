@@ -10,6 +10,7 @@ import java.util.concurrent.TimeUnit;
 
 import javax.management.RuntimeErrorException;
 
+import com.compli.bean.registration.GoogleRegistrationBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -24,8 +25,7 @@ public class AuthorisationManager {
 	UserDao userDao;
 	
 	public AuthorisationManager() {
-		String path = getClass().getResource("/applicationContext.xml").getPath();
-		ApplicationContext ctx=new ClassPathXmlApplicationContext("applicationContext.xml");
+		ApplicationContext ctx = DaoManager.getApplicationContext();
 		this.userDao = (UserDao) ctx.getBean("udao");	
 	}
 	public static com.compli.db.bean.UserBean getUserCatche(String sessionToken) throws ExecutionException{
@@ -37,15 +37,33 @@ public class AuthorisationManager {
 		com.compli.db.bean.UserBean userBean2 = authorisationManager.loginData(userBean.getUsername(), userBean.getPassword());
 		String authId = null;
 		if(userBean2!=null){
+			NotificationManager notificationManager = new NotificationManager();
+			int unreadCount = notificationManager.getCountOfUnreadMessageForUser(userBean2.getUserId());
+			authId = UUID.randomUUID().toString();
+			userBean2.setUnreadMessage(unreadCount);
+			cache.put(authId, userBean2);
+		}
+		return authId;
+	}
+
+	public static String setUserCacheForGmailLogin(String googleId) throws ExecutionException{
+		AuthorisationManager authorisationManager = new AuthorisationManager();
+		com.compli.db.bean.UserBean userBean2 = authorisationManager.loginDataForGoogleId(googleId);
+		String authId = null;
+		if(userBean2!=null){
 			authId = UUID.randomUUID().toString();
 			cache.put(authId, userBean2);
 		}
 		return authId;
 	}
+
+	public static void setUserBean(String auth,com.compli.db.bean.UserBean userBean){
+		cache.put(auth,userBean);
+	}
 	
 	public static boolean isUserActive(String authId) throws ExecutionException{
 		com.compli.db.bean.UserBean userBean2 = cache.getIfPresent(authId);
-		return userBean2.isIsactive();
+		return userBean2.isIsactive()!=null && userBean2.isIsactive();
 	}
 	
 	public static String getUserType(String authToken){
@@ -58,10 +76,15 @@ public class AuthorisationManager {
 	}
 	
 	public com.compli.db.bean.UserBean loginData(String username,String password){
-		String path = getClass().getResource("/applicationContext.xml").getPath();
-		ApplicationContext ctx=new ClassPathXmlApplicationContext("applicationContext.xml");
+		ApplicationContext ctx = DaoManager.getApplicationContext();
 		this.userDao = (UserDao) ctx.getBean("udao");
 		return this.userDao.getUserData(username,password);		
+	}
+
+	public com.compli.db.bean.UserBean loginDataForGoogleId(String googleId){
+		ApplicationContext ctx = DaoManager.getApplicationContext();
+		this.userDao = (UserDao) ctx.getBean("udao");
+		return this.userDao.getUserDataByGoogleId(googleId);
 	}
 	
 	/*

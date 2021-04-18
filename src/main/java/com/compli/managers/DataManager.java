@@ -60,7 +60,7 @@ public class DataManager {
 	ActivityDao activityDao;
 	LocationDao locationDao;
 	public DataManager() {
-		ApplicationContext ctx=new ClassPathXmlApplicationContext("applicationContext.xml");
+		ApplicationContext ctx = DaoManager.getApplicationContext();
 		this.userDao = (UserDao) ctx.getBean("udao");
 		this.activityDao = (ActivityDao) ctx.getBean("activityDao");
 		this.locationDao = (LocationDao) ctx.getBean("locationDao");
@@ -215,14 +215,14 @@ public class DataManager {
 		System.out.println("Upload periodicty master");
 		DBMigrationUtilV2PeriodicityMaster.createPeriodicityMaster(activities);
 	}
-	
+
 	private static void setPeriodicityDate(Sheet sheet){
 		System.out.println("Upload periodicity date");
 		DBMigrationUtilV2PeriodicityDateMaster.init(PERIODICITY_DATE_ROW_NO);
 		DBMigrationUtilV2PeriodicityDateMaster.createPeriodicityDateMaster(sheet);		
 	}
-	
-	private static void setPeriodicityDate(List<ActivityForAddNewActivity> activities){
+
+	public static void setPeriodicityDate(List<ActivityForAddNewActivity> activities){
 		System.out.println("Upload periodicity date");
 		DBMigrationUtilV2PeriodicityDateMaster.init(PERIODICITY_DATE_ROW_NO);
 		DBMigrationUtilV2PeriodicityDateMaster.createPeriodicityDateMaster(activities);		
@@ -233,8 +233,8 @@ public class DataManager {
 		DBMigrationUtilV2LawMaster.init(LAW_DESC,COMPLAINCE_AREA);
 		DBMigrationUtilV2LawMaster.createLawMaster(sheet);		
 	}
-	
-	private static void setLawMaster(List<ActivityForAddNewActivity> activities){
+
+	public static void setLawMaster(List<ActivityForAddNewActivity> activities){
 		System.out.println("Upload Law master");
 		DBMigrationUtilV2LawMaster.init(LAW_DESC,COMPLAINCE_AREA);
 		DBMigrationUtilV2LawMaster.createLawMaster(activities);		
@@ -245,8 +245,8 @@ public class DataManager {
 		DBMigrationUtilV2ActivityMasterUpload.init(companyId);
 		DBMigrationUtilV2ActivityMasterUpload.createActivityMaster(sheet,activityCount);		
 	}
-	
-	private static void uploadActivityMaster(List<ActivityForAddNewActivity> activities,List<String> companyIds,int activityCount){
+
+	public static void uploadActivityMaster(List<ActivityForAddNewActivity> activities,List<String> companyIds,int activityCount){
 		System.out.println("Upload Activity master");
 		int index=0;
 		for(String companyId:companyIds){
@@ -256,14 +256,14 @@ public class DataManager {
 			index++;
 		}
 	}
-	
+
 	private static void uploadActivityAssociation(Sheet sheet,int activityCount){
 		System.out.println("Upload Activity association");
 		DBMigrationUtilV2ActivityAssociationUpload.init();
 		DBMigrationUtilV2ActivityAssociationUpload.createActivityAssociation(sheet,activityCount);		
 	}
-	
-	private static void uploadActivityAssociation(List<ActivityForAddNewActivity> activities,List<String> companyIds,int activityCount){
+
+	public static void uploadActivityAssociation(List<ActivityForAddNewActivity> activities,List<String> companyIds,int activityCount){
 		System.out.println("Upload Activity association");
 		int index=0;
 		for(String companyId:companyIds){
@@ -279,8 +279,8 @@ public class DataManager {
 		DBMigrationUtilV2ActivityUpload.init();
 		DBMigrationUtilV2ActivityUpload.createActivity(sheet,activityCount,companyId);		
 	}
-	
-	private static void uploadActivity(List<ActivityForAddNewActivity> activities,List<String> companyIds,int activityCount){
+
+	public static void uploadActivity(List<ActivityForAddNewActivity> activities,List<String> companyIds,int activityCount){
 		System.out.println("Upload Activity");
 		int index=0;
 		for(String companyId:companyIds){
@@ -289,6 +289,11 @@ public class DataManager {
 			DBMigrationUtilV2ActivityUpload.createActivity(activities,activityCount,companyId);
 			index++;
 		}
+	}
+
+	public static void assigneActivities(int activityidStart,int activityIdEnd,String userId){
+		DBMigrationUtilV2ActivityAssignmentUpload.init();
+		DBMigrationUtilV2ActivityAssignmentUpload.assigneActivities(activityidStart,activityIdEnd,userId);
 	}
 	
 	private static void uploadActivityAssignement(Sheet sheet,int activityCount){

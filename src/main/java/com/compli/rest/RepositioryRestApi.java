@@ -1,5 +1,6 @@
 package com.compli.rest;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
@@ -16,6 +17,8 @@ import javax.ws.rs.core.Response;
 import com.compli.annotation.Authorised;
 import com.compli.annotation.Authorised.ROLE;
 import com.compli.managers.ActivityManager;
+import com.compli.managers.RepositoryManager;
+import com.compli.util.Util;
 
 @Path("repositories")
 @Produces(MediaType.APPLICATION_JSON)
@@ -24,33 +27,35 @@ public class RepositioryRestApi {
 	@Path("/{companyId}")
 	@Authorised(role=ROLE.ALL)
 	public Response getAllActivityWithDescription(@PathParam("companyId")String companyId,
-			@QueryParam("activitySeverity")String activitySeverity,@QueryParam("month")String month,@QueryParam("year")String year,
+			@QueryParam("activityStatus")List<String> activityStatus,@QueryParam("month")String month,@QueryParam("year")String year,
 			@QueryParam("quarter")String quarter, 
 			@HeaderParam("auth")String auth,@HeaderParam("location")String location) throws ExecutionException{
 		
-		ActivityManager activityManager;
+		RepositoryManager activityManager;
 		if(location==null || "all".equals(location)){
-			activityManager = new ActivityManager(auth);
+			activityManager = new RepositoryManager(auth);
 		}else{
-			activityManager = new ActivityManager(auth,location);
+			activityManager = new RepositoryManager(auth,location);
 		}
 		
 		//Activity seviarity both means both checkbox in repository is checked and complied in time and delayed
 		//all means send all reports
-		if(year!=null){
-			year = year.split("-")[0];
+		int fyYear = 0;
+		if(year!=null && month != null){
+			fyYear = Util.getFinancialYearForMonth(Integer.parseInt(month), year);
 		}
 		
 		List<Map<String, Object>> activities = null;
-		if("both".equals(activitySeverity)){
-			activities = activityManager.getAllActivitiesWithDescriptionForCompanyWithSeverityForMonthAndYear(companyId, "Complied-Delayed", month, year);
-			activities.addAll(activityManager.getAllActivitiesWithDescriptionForCompanyWithSeverityForMonthAndYear(companyId, "Complied- In time", month, year));
-		}else if("all".equals(activitySeverity)){
-			activities = activityManager.getAllActivitiesWithDescriptionForCompanyForMonthAndYear(companyId, month, year);			
-		}else{
-			activities = activityManager.getAllActivitiesWithDescriptionForCompanyWithSeverityForMonthAndYear(companyId, activitySeverity, month, year);
+		if(month != null){
+			activities = activityManager.getAllActivitiesWithDescriptionForCompanyWithSeverityForMonthAndYear(companyId, activityStatus, month, fyYear+"");
+		}else if(quarter != null && year != null ){
+			activities = activityManager.getAllActivitiesWithDescriptionForCompanyByQuarter(companyId,true,year, quarter,activityStatus);
+		}else if(year != null ){
+			year = year.split("-")[0];
+			activities = activityManager.getAllActivitiesWithDescriptionForCompanyForYear(companyId,year,activityStatus);
 		}
+
 		return Response.ok(activities).build();
 	}
-
 }
+

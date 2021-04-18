@@ -2,13 +2,13 @@ package com.compli.services;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
+import java.util.concurrent.ExecutionException;
 
 import com.compli.bean.SettingsBean;
+import com.compli.bean.registration.GoogleRegistrationBean;
+import com.compli.managers.AuthorisationManager;
+import com.compli.managers.RegistrationManager;
 import com.compli.managers.SettingsManager;
 import com.google.api.client.auth.oauth2.AuthorizationCodeRequestUrl;
 import com.google.api.client.auth.oauth2.Credential;
@@ -29,6 +29,10 @@ import com.google.api.services.calendar.Calendar;
 import com.google.api.services.calendar.CalendarScopes;
 import com.google.api.services.calendar.Calendar.Events;
 import com.google.api.services.drive.Drive;
+import com.google.api.services.gmail.Gmail;
+import com.google.api.services.gmail.GmailScopes;
+import com.google.api.services.plus.Plus;
+import com.google.api.services.plus.model.Person;
 
 public class GoogleServices {
 	private static final String APPLICATION_NAME = "Google Calendar API Quickstart";
@@ -42,6 +46,7 @@ public class GoogleServices {
 	static String clientId = "292147606397-1nj7ik7mq3mkvlqv68lgoi8vnjor5fuj.apps.googleusercontent.com";
 	static String clientSecret = "aTXw-nMM7gCAzGg4e3wXA1oq";
 	static String redirectURI = "/rest/settings/google";
+	static String redirectURIForRegistraition = "/rest/user/register/google";
 	static Details web;
 	
 	static{
@@ -63,12 +68,41 @@ public class GoogleServices {
 		Set<String> scope = new HashSet<String>();
 		scope.add(CalendarScopes.CALENDAR);
 		scope.add("https://www.googleapis.com/auth/drive");
+        scope.add(GmailScopes.GMAIL_SEND);
 		flow = new GoogleAuthorizationCodeFlow.Builder(httpTransport, JSON_FACTORY, clientSecrets,
 				scope).setAccessType("offline").build();
 	
 	authorizationUrl = flow.newAuthorizationUrl().setRedirectUri(SettingsManager.getStaticSettings().getServerName()+redirectURI);
 	System.out.println("cal authorizationUrl->" + authorizationUrl);
 	return authorizationUrl.build();
+	}
+
+	public static String authoriseForRegistration() throws GeneralSecurityException, IOException{
+		AuthorizationCodeRequestUrl authorizationUrl;
+		Set<String> scope = new HashSet<String>();
+		scope.add(CalendarScopes.CALENDAR);
+		scope.add("https://www.googleapis.com/auth/userinfo.profile");
+		scope.add("https://www.googleapis.com/auth/userinfo.email");
+		flow = new GoogleAuthorizationCodeFlow.Builder(httpTransport, JSON_FACTORY, clientSecrets,
+				scope).setAccessType("offline").build();
+
+		authorizationUrl = flow.newAuthorizationUrl().setRedirectUri(SettingsManager.getStaticSettings().getServerName()+redirectURIForRegistraition);
+		System.out.println("cal authorizationUrl->" + authorizationUrl);
+		return authorizationUrl.build();
+	}
+
+	public static String loginGoogleUser() throws GeneralSecurityException, IOException{
+		AuthorizationCodeRequestUrl authorizationUrl;
+		Set<String> scope = new HashSet<String>();
+		scope.add(CalendarScopes.CALENDAR);
+		scope.add("https://www.googleapis.com/auth/userinfo.profile");
+		scope.add("https://www.googleapis.com/auth/userinfo.email");
+		flow = new GoogleAuthorizationCodeFlow.Builder(httpTransport, JSON_FACTORY, clientSecrets,
+				scope).setAccessType("offline").build();
+
+		authorizationUrl = flow.newAuthorizationUrl().setRedirectUri(SettingsManager.getStaticSettings().getServerName()+"/rest/user/login/google");
+		System.out.println("cal authorizationUrl->" + authorizationUrl);
+		return authorizationUrl.build();
 	}
 	
 	public static String authorise(String code) throws GeneralSecurityException, IOException{
@@ -79,6 +113,73 @@ public class GoogleServices {
 		
 		saveTokens(response);
 		return SettingsManager.getStaticSettings().getServerName();
+	}
+
+	public static String authoriseForRegistration(String code) throws GeneralSecurityException, IOException, ExecutionException {
+		String googleToken = null;
+		TokenResponse response = flow.newTokenRequest(code).setRedirectUri(SettingsManager.getStaticSettings().getServerName()+redirectURIForRegistraition).execute();
+ 		credential = flow.createAndStoreCredential(response, "userID");
+		client = new com.google.api.services.calendar.Calendar.Builder(httpTransport, JSON_FACTORY, credential)
+				.setApplicationName(APPLICATION_NAME).build();
+		// Set up the main Google+ class
+		Plus plus = new Plus.Builder(httpTransport, JSON_FACTORY, credential)
+				.setApplicationName(APPLICATION_NAME)
+				.build();
+		//saveTokens(response);
+		// Make a request to access your profile and display it to console
+		Person profile = plus.people().get("me").execute();
+		List<Person.Emails> emails = profile.getEmails();
+		int emailsLen = emails.size();
+		String userEmail = null;
+		for(int i=0; i<emailsLen; i++){
+			if(emails.get(i).getType().equalsIgnoreCase("account")){
+				userEmail = emails.get(i).getValue();
+				break;
+			}
+		}
+
+		GoogleRegistrationBean googleRegistrationBean = new GoogleRegistrationBean(profile.getName().getGivenName(),profile.getName().getFamilyName(),
+				profile.getImage().getUrl(),userEmail, profile.getId());
+
+		RegistrationManager registrationManager = new RegistrationManager();
+		boolean isSuccessful = registrationManager.registerUserForGmailId(googleRegistrationBean);
+		if (isSuccessful){
+			AuthorisationManager authorisationManager = new AuthorisationManager();
+			googleToken = authorisationManager.setUserCacheForGmailLogin(googleRegistrationBean.getEmail());
+		}
+		return SettingsManager.getStaticSettings().getServerName()+"/#/addcompanies/?sessionToken="+googleToken;
+	}
+
+	public static String loginGoogleUser(String code) throws GeneralSecurityException, IOException, ExecutionException {
+		String googleToken = null;
+		TokenResponse response = flow.newTokenRequest(code).setRedirectUri(SettingsManager.getStaticSettings().getServerName()+"/rest/user/login/google").execute();
+		credential = flow.createAndStoreCredential(response, "userID");
+		client = new com.google.api.services.calendar.Calendar.Builder(httpTransport, JSON_FACTORY, credential)
+				.setApplicationName(APPLICATION_NAME).build();
+		// Set up the main Google+ class
+		Plus plus = new Plus.Builder(httpTransport, JSON_FACTORY, credential)
+				.setApplicationName(APPLICATION_NAME)
+				.build();
+		//saveTokens(response);
+		// Make a request to access your profile and display it to console
+		Person profile = plus.people().get("me").execute();
+		List<Person.Emails> emails = profile.getEmails();
+		int emailsLen = emails.size();
+		String userEmail = null;
+		for(int i=0; i<emailsLen; i++){
+			if(emails.get(i).getType().equalsIgnoreCase("account")){
+				userEmail = emails.get(i).getValue();
+				break;
+			}
+		}
+
+		GoogleRegistrationBean googleRegistrationBean = new GoogleRegistrationBean(profile.getName().getGivenName(),profile.getName().getFamilyName(),
+				profile.getImage().getUrl(),userEmail, profile.getId());
+
+		RegistrationManager registrationManager = new RegistrationManager();
+		AuthorisationManager authorisationManager = new AuthorisationManager();
+		googleToken = authorisationManager.setUserCacheForGmailLogin(googleRegistrationBean.getEmail());
+		return SettingsManager.getStaticSettings().getServerName()+"/#?sessionToken="+googleToken;
 	}
 	
 	public static Map<String,String> getAccessToken(String refreshToken, String client_id, String client_secret) throws IOException {
@@ -187,6 +288,20 @@ public class GoogleServices {
 			String accessToken = getAccessToken(true);
 			GoogleCredential googleCredential = new GoogleCredential().setAccessToken(accessToken);
 			service = new Drive.Builder(httpTransport, JSON_FACTORY, googleCredential).setApplicationName(APPLICATION_NAME).build();
+		}
+		return service;
+	}
+
+	public static Gmail getGmailService() throws IOException{
+		Gmail service = null;
+		try{
+			String accessToken = getAccessToken(false);
+			GoogleCredential googleCredential = new GoogleCredential().setAccessToken(accessToken);
+			service = new Gmail.Builder(httpTransport, JSON_FACTORY, googleCredential).setApplicationName(APPLICATION_NAME).build();
+		}catch(Exception e){
+			String accessToken = getAccessToken(true);
+			GoogleCredential googleCredential = new GoogleCredential().setAccessToken(accessToken);
+			service = new Gmail.Builder(httpTransport, JSON_FACTORY, googleCredential).setApplicationName(APPLICATION_NAME).build();
 		}
 		return service;
 	}

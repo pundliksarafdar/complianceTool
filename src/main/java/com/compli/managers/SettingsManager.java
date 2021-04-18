@@ -32,7 +32,7 @@ public class SettingsManager {
 	}
 	
 	public SettingsManager() {
-		ApplicationContext ctx=new ClassPathXmlApplicationContext("applicationContext.xml");
+		ApplicationContext ctx = DaoManager.getApplicationContext();
 		this.settingsDao = (SettingsDao) ctx.getBean("settingsDao");
 		this.companyDao = (CompanyDao) ctx.getBean("companyDao");
 		this.userCompanyDao = (UserCompanyDao) ctx.getBean("userCompanyDao");

@@ -16,18 +16,27 @@ public class UserBean {
 	String phone;
 	String pass;
 	String regId = com.compli.util.UUID.getUID();
-	boolean isactive = false;
-	boolean isDeleted = false;
+	Boolean isactive = false;
+	Boolean isDeleted = false;
 	String createdBy;
 	Date cratedOn;
 	String modifiedBy;
 	Date modifiedOn;
-	boolean isPrimaryUser;
+	Boolean isPrimaryUser;
 	String userTypeId;
-	boolean isFullUser;
+	Boolean isFullUser;
 	String image;
 	String googleId;
-	
+	int unreadMessage;
+
+	public int getUnreadMessage() {
+		return unreadMessage;
+	}
+
+	public void setUnreadMessage(int unreadMessage) {
+		this.unreadMessage = unreadMessage;
+	}
+
 	public String getImage() {
 		return image;
 	}
@@ -77,16 +86,16 @@ public class UserBean {
 		this.pass = pass;
 	}
 	
-	public boolean isIsactive() {
+	public Boolean isIsactive() {
 		return isactive;
 	}
-	public void setIsactive(boolean isactive) {
+	public void setIsactive(Boolean isactive) {
 		this.isactive = isactive;
 	}
-	public boolean isDeleted() {
+	public Boolean isDeleted() {
 		return isDeleted;
 	}
-	public void setDeleted(boolean isDeleted) {
+	public void setDeleted(Boolean isDeleted) {
 		this.isDeleted = isDeleted;
 	}
 	public String getCreatedBy() {
@@ -113,10 +122,10 @@ public class UserBean {
 	public void setModifiedOn(Date modifiedOn) {
 		this.modifiedOn = modifiedOn;
 	}
-	public boolean isPrimaryUser() {
+	public Boolean isPrimaryUser() {
 		return isPrimaryUser;
 	}
-	public void setPrimaryUser(boolean isPrimaryUser) {
+	public void setPrimaryUser(Boolean isPrimaryUser) {
 		this.isPrimaryUser = isPrimaryUser;
 	}
 	public String getUserTypeId() {
@@ -131,10 +140,10 @@ public class UserBean {
 	public void setRegId(String regId) {
 		this.regId = regId;
 	}
-	public boolean isFullUser() {
+	public Boolean isFullUser() {
 		return isFullUser;
 	}
-	public void setIsFullUser(boolean isFullUser) {
+	public void setIsFullUser(Boolean isFullUser) {
 		this.isFullUser = isFullUser;
 	}
 	

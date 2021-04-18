@@ -28,8 +28,7 @@ public class UserManager {
 					"activitiesLnk","activities.download","activities.changestatus","activities.downloadFiles"
 					));
 	public UserManager() {
-		String path = getClass().getResource("/applicationContext.xml").getPath();
-		ApplicationContext ctx=new ClassPathXmlApplicationContext("applicationContext.xml");
+		ApplicationContext ctx = DaoManager.getApplicationContext();
 		userDao = (UserDao) ctx.getBean("udao");
 		accessDao = (UserAccessDao) ctx.getBean("userAccessDao");
 	}
@@ -75,7 +74,12 @@ public class UserManager {
 			break;
 		case "demoUser":
 			userAccess = getUsersAccess(userId);
-			break;			
+			break;
+		case "demo":
+			userAccess = new ArrayList<>(CommonAccess);
+			userAccess.add("reportLnk");
+			userAccess.add("repositoriesLnk");
+			break;
 		default:
 			break;
 		}

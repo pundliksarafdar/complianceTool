@@ -25,7 +25,7 @@ import com.google.common.net.MediaType;
 public class StorageManager {
 	private static FilesDao filesDao;
 	public StorageManager() {
-		ApplicationContext ctx=new ClassPathXmlApplicationContext("applicationContext.xml");
+		ApplicationContext ctx = DaoManager.getApplicationContext();
 		filesDao = (FilesDao) ctx.getBean("filesDao");
 	}
 	

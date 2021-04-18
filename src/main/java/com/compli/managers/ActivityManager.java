@@ -1,12 +1,12 @@
 package com.compli.managers;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
+import com.compli.db.bean.migration.v2.ActivityMasterBean;
+import com.compli.db.dao.*;
+import com.compli.util.Util;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -17,10 +17,6 @@ import com.compli.db.bean.UserBean;
 import com.compli.db.bean.migration.v2.ActivityBean;
 import com.compli.db.bean.migration.v2.UserCompanyBean;
 import com.compli.db.bean.PeriodicityDateMasterBean;
-import com.compli.db.dao.ActivityDao;
-import com.compli.db.dao.DashBoardDao;
-import com.compli.db.dao.PeriodicityDateMasterDao;
-import com.compli.db.dao.UserCompanyDao;
 import com.compli.util.Constants;
 import com.compli.util.bean.ActivityAssignnmentBean;
 import com.compli.util.datamigration.v2.DataBaseMigrationUtilV2UpdateDB;
@@ -30,27 +26,28 @@ public class ActivityManager {
 	DashBoardDao dashBoardDao;
 	ActivityDao activityDao;
 	PeriodicityDateMasterDao periodicityDateMasterDao;
+	ActivityMasterDao activityMasterDao;
 	UserCompanyDao userCompanyDao;
 	boolean isFullUser;
 	String locationId;
 	private String userId;
 	
 	public ActivityManager(){
-		String path = getClass().getResource("/applicationContext.xml").getPath();
-		ApplicationContext ctx=new ClassPathXmlApplicationContext("applicationContext.xml");
-		this.dashBoardDao = (DashBoardDao) ctx.getBean("dashBoardDao");
-		this.activityDao = (ActivityDao) ctx.getBean("activityDao");		
-		this.periodicityDateMasterDao = (PeriodicityDateMasterDao) ctx.getBean("periodicityDateDao");
-		this.userCompanyDao = (UserCompanyDao) ctx.getBean("userCompanyDao");		
-	}
-	
-	public ActivityManager(String auth) {
-		String path = getClass().getResource("/applicationContext.xml").getPath();
-		ApplicationContext ctx=new ClassPathXmlApplicationContext("applicationContext.xml");
+		ApplicationContext ctx = DaoManager.getApplicationContext();
 		this.dashBoardDao = (DashBoardDao) ctx.getBean("dashBoardDao");
 		this.activityDao = (ActivityDao) ctx.getBean("activityDao");		
 		this.periodicityDateMasterDao = (PeriodicityDateMasterDao) ctx.getBean("periodicityDateDao");
 		this.userCompanyDao = (UserCompanyDao) ctx.getBean("userCompanyDao");
+		this.activityMasterDao = (ActivityMasterDao) ctx.getBean("activityMasterDao");
+	}
+	
+	public ActivityManager(String auth) {
+		ApplicationContext ctx = DaoManager.getApplicationContext();
+		this.dashBoardDao = (DashBoardDao) ctx.getBean("dashBoardDao");
+		this.activityDao = (ActivityDao) ctx.getBean("activityDao");		
+		this.periodicityDateMasterDao = (PeriodicityDateMasterDao) ctx.getBean("periodicityDateDao");
+		this.userCompanyDao = (UserCompanyDao) ctx.getBean("userCompanyDao");
+		this.activityMasterDao = (ActivityMasterDao) ctx.getBean("acitvityMasterDao");
 		this.isFullUser = AuthorisationManager.cache.getIfPresent(auth).isFullUser();
 		this.userId  = AuthorisationManager.cache.getIfPresent(auth).getUserId();
 		
@@ -62,10 +59,10 @@ public class ActivityManager {
 	
 	public ActivityManager(String auth,String locationId) {
 		this.locationId = locationId;
-		String path = getClass().getResource("/applicationContext.xml").getPath();
-		ApplicationContext ctx=new ClassPathXmlApplicationContext("applicationContext.xml");
+		ApplicationContext ctx = DaoManager.getApplicationContext();
 		this.dashBoardDao = (DashBoardDao) ctx.getBean("dashBoardDao");		
 		this.activityDao = (ActivityDao) ctx.getBean("activityDao");
+		this.activityMasterDao = (ActivityMasterDao) ctx.getBean("acitvityMasterDao");
 		this.isFullUser = AuthorisationManager.cache.getIfPresent(auth).isFullUser();
 		this.userId =  AuthorisationManager.cache.getIfPresent(auth).getUserId();
 	}
@@ -89,9 +86,9 @@ public class ActivityManager {
 	public List<Map<String, Object>> getAllActivitiesWithDescriptionForCompanyWithRisk(String companyId,String riskId){
 		List<Map<String, Object>> activities ;
 		if(!"all".equals(riskId)){
-			activities = this.dashBoardDao.getAllActivitiesWithDescriptionForCompanyWithRisk(companyId,riskId,this.userId,this.isFullUser);
+			activities = this.dashBoardDao.getAllActivitiesWithDescriptionForCompanyWithRisk(companyId,riskId,this.userId,this.isFullUser, this.locationId);
 		}else{
-			activities = this.dashBoardDao.getAllActivitiesWithDescriptionForCompanyWithRisk(companyId,"%",this.userId,this.isFullUser);
+			activities = this.dashBoardDao.getAllActivitiesWithDescriptionForCompanyWithRisk(companyId,"%",this.userId,this.isFullUser, this.locationId);
 		}
 		return activities;
 	}
@@ -249,12 +246,12 @@ public class ActivityManager {
 		return allActivity;
 	}
 	//This function is for repository with tracker
-	public List<Map<String, Object>> getAllActivitiesWithDescriptionForCompanyForQuarter(String companyId,String month){
+	public List<Map<String, Object>> getAllActivitiesWithDescriptionForCompanyForQuarter(String companyId,String yearStr,String month){
 		List<Map<String, Object>> allActivity = null;
 		if(this.locationId==null){
-			allActivity = this.dashBoardDao.getAllActivitiesWithDescriptionForCompanyByQuarterWithRejected(companyId,month,true,"all",this.userId);
+			allActivity = this.dashBoardDao.getAllActivitiesWithDescriptionForCompanyByQuarterWithRejected(companyId,yearStr,month,true,"all",this.userId);
 		}else{
-			allActivity = this.dashBoardDao.getAllActivitiesWithDescriptionForCompanyByQuarterWithRejected(companyId,month,true,this.locationId,this.userId);
+			allActivity = this.dashBoardDao.getAllActivitiesWithDescriptionForCompanyByQuarterWithRejected(companyId,yearStr, month,true,this.locationId,this.userId);
 		}
 		return allActivity;
 	}
@@ -291,13 +288,14 @@ public class ActivityManager {
 		}
 		return filteredActivity;
 	}
-	
-	public List<Map<String, Object>> getAllActivitiesWithDescriptionForCompanyWithSeverityForQuarter(String companyId,String severity,String quarter){
+
+	//Year should be finnancial year e.g. 2019-20
+	public List<Map<String, Object>> getAllActivitiesWithDescriptionForCompanyWithSeverityForQuarter(String companyId, String yearStr, String severity,String quarter){
 		List<Map<String, Object>> allActivity = null;
 		if(this.locationId==null){
-			allActivity = this.dashBoardDao.getAllActivitiesWithDescriptionForCompanyByQuarter(companyId,true,quarter,"all",this.userId);
+			allActivity = this.dashBoardDao.getAllActivitiesWithDescriptionForCompanyByQuarter(companyId,yearStr,true,quarter,"all",this.userId);
 		}else{
-			allActivity = this.dashBoardDao.getAllActivitiesWithDescriptionForCompanyByQuarter(companyId,true,quarter,this.locationId,this.userId);
+			allActivity = this.dashBoardDao.getAllActivitiesWithDescriptionForCompanyByQuarter(companyId,yearStr,true,quarter,this.locationId,this.userId);
 		}
 		List<Map<String, Object>> filteredActivity = new ArrayList<Map<String,Object>>();
 		for(int i=0;i<allActivity.size();i++){
@@ -327,29 +325,54 @@ public class ActivityManager {
 	
 public boolean changeActivityStatus(String companyId,String activityId,boolean isComplied,boolean pendingComplied,boolean compliedInTime,boolean compliedDelayed,
 		boolean pendingDescrepancy,boolean isNotDue,String remark,Date completionDate){
-		if(isComplied){
-			boolean isSuccess = this.dashBoardDao.changeActivityStatus(companyId,activityId, isComplied,remark,Constants.PENDING_REVIEW);
+		//First check if user is demo user if user is demo user check if acitvity is complied in time or delayed by date entered
+		if (!this.isFullUser){
+			List<ActivityMasterBean> activities = this.activityMasterDao.getActivityMasterDataById(activityId);
+			ActivityMasterBean bean = activities.get(0);
+			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+			Date dueDate = null;
 			try{
-				if(isSuccess){
-					AlertsManager.deleteEventForActivity(activityId);
+				dueDate = dateFormat.parse(bean.getPeriodicityDateId());
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+			boolean isDelayed = Util.isDateAfter(dueDate,completionDate);
+			if(!isDelayed){
+				boolean isSuccess = this.dashBoardDao.changeActivityStatusApproved(companyId, activityId, completionDate);
+				AlertsManager.deleteEventForActivity(activityId);
+				return isSuccess;
+			}else{
+				boolean isSuccess = this.dashBoardDao.changeActivityStatusComplainceDelayed(companyId, activityId, completionDate);
+				AlertsManager.deleteEventForActivity(activityId);
+				return isSuccess;
+			}
+		}else {
+			if (isComplied) {
+				boolean isSuccess = this.dashBoardDao.changeActivityStatus(companyId, activityId, isComplied, remark, Constants.PENDING_REVIEW);
+				try {
+					if (isSuccess) {
+						AlertsManager.deleteEventForActivity(activityId);
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
 				}
-			}catch(Exception e){e.printStackTrace();}
-			return isSuccess;
-		}else if(compliedInTime){
-			boolean isSuccess = this.dashBoardDao.changeActivityStatusApproved(companyId, activityId,completionDate);
-			AlertsManager.deleteEventForActivity(activityId);
-			return isSuccess;
-		}else if(compliedDelayed){
-			 boolean isSuccess = this.dashBoardDao.changeActivityStatusComplainceDelayed(companyId, activityId,completionDate);
-			 return isSuccess;
-		}else if(pendingDescrepancy){
-			PendingForDiscrepancy activity = activityDao.getActivityDataForMail(activityId);
-			EmailManager.sendActivityPendingForDescripancy(activity);
-			return this.dashBoardDao.changeActivityStatusPendingDecrepancy(companyId, activityId,remark);
-		}else if(isNotDue){
-			return this.dashBoardDao.changeActivityStatusRejected(companyId, activityId);
-		}else{
-			return this.dashBoardDao.changeActivityStatusPendingComplied(companyId, activityId);
+				return isSuccess;
+			} else if (compliedInTime) {
+				boolean isSuccess = this.dashBoardDao.changeActivityStatusApproved(companyId, activityId, completionDate);
+				AlertsManager.deleteEventForActivity(activityId);
+				return isSuccess;
+			} else if (compliedDelayed) {
+				boolean isSuccess = this.dashBoardDao.changeActivityStatusComplainceDelayed(companyId, activityId, completionDate);
+				return isSuccess;
+			} else if (pendingDescrepancy) {
+				PendingForDiscrepancy activity = activityDao.getActivityDataForMail(activityId);
+				EmailManager.sendActivityPendingForDescripancy(activity);
+				return this.dashBoardDao.changeActivityStatusPendingDecrepancy(companyId, activityId, remark);
+			} else if (isNotDue) {
+				return this.dashBoardDao.changeActivityStatusRejected(companyId, activityId);
+			} else {
+				return this.dashBoardDao.changeActivityStatusPendingComplied(companyId, activityId);
+			}
 		}
 	}
 	

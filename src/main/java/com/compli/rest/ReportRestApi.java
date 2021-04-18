@@ -29,7 +29,7 @@ public class ReportRestApi {
 	@Authorised(role=ROLE.ALL)
 	//mon is used to fetch report year and month
 	public Response getAllActivityWithDescription(@QueryParam("month")String month,@QueryParam("mon")String mon,@QueryParam("companyId")String companyId,
-			@QueryParam("year")String year,@QueryParam("quarter")String quarter,@HeaderParam("location")String location,
+			@QueryParam("year")String year,@QueryParam("quarter")String quarter,@QueryParam("yearforQuarterAndMonth")String yearforQuarterAndMonth,@HeaderParam("location")String location,
 			@HeaderParam("auth")String auth){
 		ReportsManager reportsManager = null;
 		if(location==null || "all".equals(location)){
@@ -38,9 +38,9 @@ public class ReportRestApi {
 			reportsManager = new ReportsManager(location,auth);
 		}
 		if(month!=null){
-			return Response.ok(reportsManager.getReportsObject(companyId, month)).build();
+			return Response.ok(reportsManager.getReportsObject(companyId, month, yearforQuarterAndMonth)).build();
 		}else if(quarter!=null){
-			return Response.ok(reportsManager.getReportsObjectByQuarter(companyId, quarter)).build();
+			return Response.ok(reportsManager.getReportsObjectByQuarter(companyId,yearforQuarterAndMonth, quarter)).build();
 		}else{
 			year = year.split("-")[0];
 			return Response.ok(reportsManager.getReportsObjectByYear(companyId, year)).build();
@@ -67,7 +67,7 @@ public class ReportRestApi {
 			filename = (String) companyReport.get("filename");
 			
 		}else if(quarter!=null){
-			Map<String, Object> companyReport = reportsManager.generateReportForQuarter(companyId, quarter);
+			Map<String, Object> companyReport = reportsManager.generateReportForQuarter(companyId,year, quarter);
 			fileBytes = (byte[]) companyReport.get("pdfFile");
 			filename = (String) companyReport.get("filename");
 		}else{

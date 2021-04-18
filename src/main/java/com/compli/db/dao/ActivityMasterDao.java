@@ -26,4 +26,9 @@ public class ActivityMasterDao {
 		String sql = "select activityId,lawId,activityName,description as activityDesc,periodicityId,riskId as risk,consequence as consequences,periodicityDateId from activitymaster";
 		return this.jdbcTemplate.query(sql,new BeanPropertyRowMapper(ActivityMasterBean.class));
 	}
+
+	public List<ActivityMasterBean> getActivityMasterDataById(String activitId){
+		String sql = "select activityId,lawId,activityName,description as activityDesc,periodicityId,riskId as risk,consequence as consequences,periodicityDateId from activitymaster where activityId = ?";
+		return this.jdbcTemplate.query(sql,new Object[]{activitId},new BeanPropertyRowMapper(ActivityMasterBean.class));
+	}
 }

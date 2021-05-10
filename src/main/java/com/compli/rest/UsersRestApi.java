@@ -45,6 +45,15 @@ public class UsersRestApi extends Application{
 	public Response getUser(@HeaderParam("auth")String auth) throws ExecutionException{
 		AuthorisationManager authorisationManager = new AuthorisationManager();
 		System.out.println("auth....."+auth);
+
+		if(auth == null){
+			return Response.status(Status.UNAUTHORIZED).header("Access-Control-Allow-Origin", "*").build();
+		}
+
+		com.compli.db.bean.UserBean userCache = authorisationManager.getUserCatche(auth);
+		if(userCache == null){
+			return Response.status(Status.UNAUTHORIZED).header("Access-Control-Allow-Origin", "*").build();
+		}
 		return Response.ok(authorisationManager.getUserCatche(auth)).header("Access-Control-Allow-Origin", "*").build();
 	}
 	
@@ -227,6 +236,9 @@ public class UsersRestApi extends Application{
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response getUserAccess(@HeaderParam("auth")String auth,com.compli.db.bean.UserBean userBean) throws ExecutionException{ 
 		UserManager userManager = new UserManager();
+		if(auth == null ){
+			return Response.status(Status.UNAUTHORIZED).build();
+		}
 		java.util.List<String> access = userManager.getUserAccess(auth);
 		return Response.ok(access).build();		
 	}

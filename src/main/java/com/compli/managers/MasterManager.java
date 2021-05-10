@@ -22,6 +22,8 @@ public class MasterManager {
     static PeriodicityMasterDao periodicityMasterDao;
     ActivityDao activityDao;
     LocationDao locationDao;
+    com.compli.db.dao.b2c.ActivityDao activityDaoB2c;
+
 
     public MasterManager(){
         ApplicationContext ctx = new ClassPathXmlApplicationContext("applicationContext.xml");
@@ -29,7 +31,11 @@ public class MasterManager {
         this.periodicityMasterDao = (PeriodicityMasterDao) ctx.getBean("periodicityDao");
         this.activityDao = (ActivityDao) ctx.getBean("activityDao");
         this.locationDao = (LocationDao) ctx.getBean("locationDao");
+
+        this.activityDaoB2c = DaoManager.getApplicationDao();
     }
+
+
 
     public static boolean startLoadingActivityForLocationForMonth(List<String> location,String companyId,String userId){
         MasterManager masterManager = new MasterManager();
@@ -37,6 +43,11 @@ public class MasterManager {
         List<MasterDataBean> mDataoforLoc = masterManager.masterDataDao.getMasterDataLocations(location);
         masterManager.setActivity(mDataoforLoc,companyId, userId);
         return true;
+    }
+
+    public static void main(String[] args) {
+        List<String> location = new ArrayList<String>(){{add("assam");}};
+        startLoadingActivityForLocationForMonth(location, "bb82ce817599494a", "");
     }
 
     public static boolean startLoadingActivityForBranchLocationForMonth(List<String> location,String companyId,String userId){
@@ -49,8 +60,7 @@ public class MasterManager {
 
     //This method is written for demo user when it creates id and company then all data will be added
     private void setActivity(List<MasterDataBean> mDataoforLoc,String compnyid,String userId){
-        DataManager dataManager = new DataManager();
-        int maxActivityCount = activityDao.getMaximumActivityId();
+        int maxActivityCount = activityDaoB2c.getMaximumActivityId();
         maxActivityCount++;
         List companies = new ArrayList(){{add(compnyid);}};
         List<ActivityForAddNewActivity> activities = new ArrayList<>();
@@ -84,7 +94,7 @@ public class MasterManager {
         DataManager.setPeriodicityDate(activities);
         DataManager.setLawMaster(activities);
 
-        DataManager.uploadActivityMaster(activities,companies,maxActivityCount);
+        com.compli.managers.b2c.DataManager.uploadActivityMaster(activities,companies,maxActivityCount);
         DataManager.uploadActivityAssociation(activities,companies,maxActivityCount);
         DataManager.uploadActivity(activities,companies,maxActivityCount);
 

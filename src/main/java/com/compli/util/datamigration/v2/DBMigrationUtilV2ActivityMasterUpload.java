@@ -198,8 +198,7 @@ public class DBMigrationUtilV2ActivityMasterUpload {
 			String periodicityDateId = Util.getPeriodicityDateId(dueDate);
 			
 			ActivityMasterBean activityBean = new ActivityMasterBean(activityId, companyName, companyAbbr, companyLocation, compalinceArea, activityName, activityDesc, lawDesc, risk, consequences, dueDate, periodicity, lawId, periodicityId, periodicityDateId);
-			
-			
+
 			activityBeans.add(activityBean);
 			//INcreament activityid
 			activityCountStart++;

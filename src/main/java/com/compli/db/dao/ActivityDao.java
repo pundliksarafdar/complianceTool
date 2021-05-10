@@ -44,7 +44,7 @@ public class ActivityDao {
 		List<Map<String, Object>> maxActivity = this.jdbcTemplate.queryForList("select CAST(activityId AS UNSIGNED)as maxactivitycount from activity order by maxactivitycount desc limit 1;");
 		return Integer.parseInt((String) maxActivity.get(0).get("maxactivitycount").toString());
 	}
-	
+
 	public List<UserBean> getUsersForActivity(String activityId){
 		return this.jdbcTemplate.query(ACTIVITY_ID,new Object[]{activityId},new BeanPropertyRowMapper(UserBean.class));
 	}
